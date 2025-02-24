@@ -1,0 +1,138 @@
+textarea {
+  resize: none;
+}
+
+.outer-container-search {
+  background-color: #C3E0E5;
+  width: auto;
+  height: 750px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner-container-search {
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 75%;
+  height: 650px;
+  display: flex;
+  justify-content: left;
+}
+
+.top-row-search {
+  display: flex;
+  gap: 60px;
+  padding: 40px;
+  color: #316872;
+  justify-content: center;
+  align-items: top;
+}
+
+.input-class {
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 5px;
+  margin: 10px;
+  border: 2px solid #C3E0E5;
+}
+
+.radio {
+  display: inline-block;
+  cursor: pointer;
+  padding: 8px;
+  margin: 8px;
+  accent-color: #85d2f0;
+}
+
+label {
+  color: #3D838F;
+}
+
+.box {
+  width: 250px;
+  background: #F1F7F9;
+  margin-top: 8px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.box:hover {
+  background: #E2F0F3;
+}
+
+/* Change background when selected */
+input[type="radio"]:checked + label.box {
+  background: #C3E0E5;
+}
+
+/* Alternative method for modern browsers */
+label.box:has(input:checked) {
+  background: #C3E0E5;
+}
+
+.top-column3-search label {
+  width: 260px;
+  color: #3D838F;
+  font-size: 16px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.top-column3-search input[type="checkbox"] {
+  margin-right: 5px; 
+}
+
+input[type="checkbox"] {
+  accent-color: #85d2f0;
+}
+
+input[type="text"] {
+  color: #43909D;
+}
+
+.submit-button input[type="submit"] {
+  background-color: #43909D;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  margin: 60px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button input[type="submit"]:hover {
+  background-color: #C3E0E5;
+  color: #43909D;
+}
+
+.submit-button-div {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 90px;
+}
+
+.bottom-column1-search {
+  margin-top: 165px;
+}

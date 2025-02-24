@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    CEU Mass Mediator
+  </title>
+  <link rel="stylesheet" href="/stylesheets/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div w3-include-html="header.html"></div>
+
+  <main>
+    <section class="full-width-section">
+      <img src="/images/CMM-Header.png" alt="CMM Header">
+    </section>
+
+    <div class="content-container">
+      <!-- First Row -->
+      <div class="first-row">
+        <div class="image-column">
+          <img src="/images/Main-Image-1.jpg" alt="First Image">
+        </div>
+        <div class="text-column">
+          <h1 class="dark-heading">Learn about CEU Mass Mediator</h1>
+          <p class="dark-p"><strong>CEU Mass Mediator</strong> (CMM) is a tool intended for the search of metabolites in
+            different
+            databases (Kegg, HMDB, LipidMaps, Metlin,
+            NP Atlas, KNApSAcK, MINE and an in-house library). It is specifically designed for searches based on
+            experimental
+            masses obtained from mass spectrometry techniques. CMM unifies compounds from different sources based on the
+            InChI Key.
+            This allows researchers to save time by avoiding having to find the compounds in the databases one by one
+            and unifying them manually,
+            as well as reducing the risk of an incorrect manual unification.</p>
+        </div>
+      </div>
+
+      <!-- Second Row -->
+      <div class="second-row">
+        <div class="text-column">
+          <h1 class="light-heading">CE-MS Services</h1>
+          <p class="light-p">The <strong>CE-MS services</strong> allow the search of compounds using experimental
+            information from
+            Capillary Electrophoresis in different set-ups (background electrolyte, polarity and ionization mode). It
+            permits searches using the
+            effective mobility, the experimental relative migration time and the predicted absolute or relative
+            migration time. Furthermore, it offers the following services:
+            1. A Lipid Annotation Service (LAS) for annotating lipids using a totally isolated docker implemented in
+            Prolog and applying the same rules than the LC-MS batch advanced search.
+            2. A pathway displayer for sorting the most relevant pathways in a previous search from CMM.
+            3. Identification of oxidized glycerophosphocholines (oxPCs) based on the MS/MS spectrum of them.
+            4. A spectral quality controller to measure the reliability of a spectrum for identification purposes.</p>
+        </div>
+        <div class="image-column">
+          <img src="/images/Main-Image-2.jpg" alt="Second Image">
+        </div>
+      </div>
+
+      <!-- Third Row -->
+      <div class="third-row">
+        <div class="image-column">
+          <img src="/images/Main-Image-3.jpg" alt="Second Image">
+        </div>
+        <div class="text-column">
+          <h1 class="dark-heading">LC-MS Batch Advanced Search</h1>
+          <p class=" dark-p">The <strong>LC-MS batch advanced search</strong> calculates a scoring for the annotations
+            based on three
+            aspects:
+            1. Probability of the compound to form a specific adduct.
+            2. Presence of other adducts coming from the same signal in the same RT window.
+            3. RT of the lipids with the same head depending on the number of carbons and double bonds (and,
+            consequently, the hydrophobicity of them).
+            A final score is calculated based on these three aspects (see manual for more information).</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div w3-include-html="footer.html"></div>
+
+  <script>
+    function includeHTML() {
+      let elements = document.querySelectorAll("[w3-include-html]");
+      elements.forEach(el => {
+        let file = el.getAttribute("w3-include-html");
+        if (file) {
+          fetch(file)
+            .then(response => response.text())
+            .then(data => {
+              el.innerHTML = data;
+              el.removeAttribute("w3-include-html");
+              includeHTML();
+            })
+            .catch(error => console.log("Error loading file: " + file, error));
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", includeHTML);
+  </script>
+</body>
+
+</html>
