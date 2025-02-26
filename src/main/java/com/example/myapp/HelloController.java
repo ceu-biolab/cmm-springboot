@@ -9,17 +9,23 @@ public class HelloController {
 
     @GetMapping("/")
     public String mainWebSearch() {
-        return "main-web";
+        return "main-web.html";
     }
 
-    @GetMapping("/batch_search")
+    @GetMapping("/main-web.html")
+    public String mainSearch() {
+        return "main-web.html";
+    }
+
+
+    @GetMapping("/batch-search.html")
     public String batchSearch() {
-        return "batch-search";
+        return "batch-search.html";
     }
 
-    @GetMapping("/simple_search")
+    @GetMapping("/simple-search.html")
     public String simpleSearch() {
-        return "simple-search";
+        return "simple-search.html";
     }
 
 
