@@ -1,37 +1,30 @@
 package com.example.myapp.api;
 
-import com.example.myapp.FormData;
-import org.springframework.http.ResponseEntity;
+import com.example.myapp.model.FormData;
+import com.example.myapp.repository.FormDataRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-/*@RestController
-@RequestMapping("/api")  // we need to prefix all JSON endpoints with "/api"
-public class HelloRestController {
-
-    @GetMapping("/hello")
-    public Map<String, String> sayHello() {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Hello from Spring Boot JSON API!");
-        return response;  // This will be returned as JSON
-    }
-
- */
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class FormController {
+    private static final Logger logger = LoggerFactory.getLogger(FormController.class);
 
-    private FormData storedData = new FormData(); // Temporary storage (Use a DB instead)
+    @Autowired
+    private FormDataRepository formDataRepository;
 
     @PostMapping("/submit-form")
-    public ResponseEntity<String> submitForm(@RequestBody FormData formData) {
-        storedData = formData; // Save data (Replace this with database storage)
-        return ResponseEntity.ok("Data received successfully!");
+    public FormData handleFormSubmission(@RequestBody FormData formData) {
+        logger.info("✅ Received JSON Data: {}", formData);
+        return formDataRepository.save(formData); // Save to PostgreSQL
     }
 
-    @GetMapping("/get-form-data")
-    public ResponseEntity<FormData> getFormData() {
-        return ResponseEntity.ok(storedData); // Send saved data
+    @GetMapping("/submissions")
+    public List<FormData> getAllSubmissions() {
+        return formDataRepository.findAll(); // Retrieve all submissions
     }
 }
-

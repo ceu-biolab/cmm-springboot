@@ -1,11 +1,10 @@
-package com.example.myapp;
+package com.example.myapp.controllers;
 
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class HelloController {
+public class WebController {
 
     @GetMapping("/")
     public String mainWebSearch() {
