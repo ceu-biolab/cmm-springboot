@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.7-SNAPSHOT</version> <!-- updated version to support java 22-->
+        <version>3.2.6</version> <!-- updated version to support java 22-->
     </parent>
 
     <groupId>com.example</groupId>
