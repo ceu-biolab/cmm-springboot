@@ -17,30 +17,20 @@ public class FormController {
     // Temporary in-memory list to store submissions
     private final List<FormData> submissions = new ArrayList<>();
 
-    @GetMapping("/ping")
-    public String ping() {
-        return "Backend is working!";
-    }
 
-    /*@PostMapping("/submit-form")
+    @PostMapping("/submit-form")
     public FormData handleFormSubmission(@RequestBody FormData formData) {
         logger.info("✅ Received JSON Data: {}", formData);
 
         // Store in memory instead of a database
-        //submissions.add(formData);
+        submissions.add(formData);
 
         return formData; // Returning the received data
     }
 
-     */
-
-    /*@GetMapping("/submissions")
+    @GetMapping("/submissions")
     public List<FormData> getAllSubmissions() {
         return submissions; // Retrieve all stored submissions
     }
-
-     */
-
-
 
 }
