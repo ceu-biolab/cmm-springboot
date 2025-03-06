@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://172.17.205.29:5432/compounds_cmm_db
-    username: alejandra
-    password: alejandra*
+    url: jdbc:postgresql://localhost:5432/test
+    username: bot
+    password: botbot
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
