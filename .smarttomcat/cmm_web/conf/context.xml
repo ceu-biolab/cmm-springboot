@@ -28,4 +28,9 @@
     <!--
     <Manager pathname="SESSIONS.ser" />
     -->
+    <Valve className="org.apache.catalina.valves.CorsValve"
+           allowedOrigins="*" allowedMethods="GET,POST,OPTIONS,PUT,DELETE"
+           allowedHeaders="Origin, X-Requested-With, Content-Type, Accept, Authorization"
+           exposedHeaders="Access-Control-Allow-Origin, Access-Control-Allow-Credentials"
+           supportsCredentials="true" maxAge="1800" />
 </Context>
