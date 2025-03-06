@@ -4,8 +4,24 @@ spring:
     username: alejandra
     password: alejandra*
     driver-class-name: org.postgresql.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    initialization-mode: always  # Ensure the datasource is always initialized
+
+  # JDBC configuration:
+  jdbc:
+
+
+  server:
+    port: 8443
+    ssl:
+      enabled: true
+      key-store: classpath:mykeystore.jks  # Keystore located in src/main/resources
+      key-store-password: alejandra       # The password of the keystore
+      key-store-type: JKS                  # Keystore type
+      key-alias: cmm-backend              # Alias for the key inside the keystore
+
+    # HTTP to HTTPS redirection configuration
+    http:
+      port: 8080  # Port for HTTP
+      redirect:
+        enabled: true  # Enable HTTP to HTTPS redirection
+        port: 8443     # Redirect to port 8443 (HTTPS)
