@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000") // Allow frontend requests
+@CrossOrigin(origins = {"http://localhost:3000", "https://localhost:3000"}) // Allow frontend requests
 public class FormController {
     private static final Logger logger = LoggerFactory.getLogger(FormController.class);
 
@@ -32,5 +32,4 @@ public class FormController {
     public List<FormData> getAllSubmissions() {
         return submissions; // Retrieve all stored submissions
     }
-
 }
