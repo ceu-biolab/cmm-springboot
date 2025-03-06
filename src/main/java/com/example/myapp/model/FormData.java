@@ -9,7 +9,7 @@ public class FormData {
     private String metabolites;
     private String mass_mode;
     private String ionization_mode;
-    private String adducts;
+    private List<String> adducts;
     private List<String> databases;
 
     // Getters and setters
@@ -31,11 +31,13 @@ public class FormData {
     public String getIonization_mode() { return this.ionization_mode; }
     public void setIonization_mode(String ionization_mode) { this.ionization_mode = ionization_mode; }
 
-    public String getAdducts() { return this.adducts; }
-    public void setAdducts(String adducts) { this.adducts = adducts; }
+    public List<String> getAdducts() { return this.adducts; }
+    public void setAdducts(List<String> adducts) { this.adducts = adducts; }
 
     public List<String> getDatabases() { return this.databases; }
-    public void setDatabases(List<String> databases) { this.databases = databases; }
+    public void setDatabases(List<String> databases) {
+        this.databases = databases;
+    }
 
     @Override
     public String toString() {
