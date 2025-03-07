@@ -1,20 +1,16 @@
 package com.example.myapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-
-@Entity
-@Table(name = "compounds")
 public class Compound {
-
-    @Id
-    @Column(name = "compound_name")
     private String compoundName;
-
-    @Column(name = "mass")
     private Double mass;
+
+    // Constructor
+    public Compound(String compoundName, Double mass) {
+        this.compoundName = compoundName;
+        this.mass = mass;
+    }
+
+    public Compound() {}
 
     // Getters and setters
     public String getCompoundName() {
