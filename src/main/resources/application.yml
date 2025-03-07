@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/compounds_cmm_db
-    username: alejandra
-    password: alejandra*
+    url: jdbc:postgresql://localhost:5432/test
+    username: bot
+    password: botbot
     driver-class-name: org.postgresql.Driver
     initialization-mode: always  # Ensure the datasource is always initialized
