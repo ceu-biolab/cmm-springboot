@@ -30,8 +30,6 @@ public class FormController {
 
     @GetMapping("/submissions")
     public List<FormData> getAllSubmissions() {
-        logger.info("✅ Reached GET: ");
         return submissions; // Retrieve all stored submissions
-
     }
 }

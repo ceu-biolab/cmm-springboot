@@ -2,15 +2,12 @@ package com.example.myapp.model.msFeature;
 
 import java.util.List;
 
-public class LCMSMSFeature implements LCMSFeature, MSMSFeature{
+public class MSMSFeatureImpl implements MSMSFeature{
 
-    @Override
-    public double getRT() {
-        return 0;
-    }
 
     @Override
     public List<MSPeak> getProductIons() {
         return null;
     }
+
 }

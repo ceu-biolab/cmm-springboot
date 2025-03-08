@@ -1,2 +1,7 @@
-package com.example.myapp.model.msFeature;public class LCMSFeature {
+package com.example.myapp.model.msFeature;
+
+public interface LCMSFeature {
+
+    public double getRT();
+
 }
