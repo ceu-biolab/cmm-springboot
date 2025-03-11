@@ -12,7 +12,7 @@ public class CompoundRepository {
     private JdbcTemplate jdbcTemplate;
 
     public Double findMassByCompoundName(String compoundName) {
-        String sql = "SELECT mass FROM compounds WHERE compound_name = ?";
+        String sql = "SELECT mass FROM compounds_cmm.compounds WHERE compound_name = ?";
         try {
             return jdbcTemplate.queryForObject(sql, Double.class, compoundName);
         } catch (EmptyResultDataAccessException e) {
