@@ -2,6 +2,7 @@ package com.example.myapp.service;
 
 import com.example.myapp.api.CcsSearchRequest;
 import com.example.myapp.model.CompoundCcsDTO;
+import com.example.myapp.model.CcsRangeMatchesDTO;
 import com.example.myapp.repository.CompoundCcsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,21 +16,39 @@ public class CompoundCcsService {
     @Autowired
     private CompoundCcsRepository compoundCcsRepository;
 
-    public List<CompoundCcsDTO> findCompoundsByCcsRanges(List<CcsSearchRequest.CcsRange> ranges) {
+    public List<CcsRangeMatchesDTO> findCompoundsByCcsRangesGrouped(List<CcsSearchRequest.CcsRange> ranges) {
         if (ranges == null || ranges.isEmpty()) {
             return new ArrayList<>();
         }
         
-        // Process each range to convert the tolerance from percentage to absolute value
-        List<CcsSearchRequest.CcsRange> processedRanges = new ArrayList<>();
+        List<CcsRangeMatchesDTO> results = new ArrayList<>();
+        
         for (CcsSearchRequest.CcsRange range : ranges) {
+            // Create processed range with absolute tolerance value
             CcsSearchRequest.CcsRange processedRange = new CcsSearchRequest.CcsRange();
             processedRange.setValue(range.getValue());
+            
+            // Store original percentage for reference
+            double tolerancePercentage = range.getTolerance();
+            
             // Convert percentage tolerance to absolute value
-            processedRange.setTolerance(range.getValue() * range.getTolerance() / 100);
-            processedRanges.add(processedRange);
+            double absoluteTolerance = range.getValue() * tolerancePercentage / 100;
+            processedRange.setTolerance(absoluteTolerance);
+            
+            // Query database for this specific range
+            List<CompoundCcsDTO> matches = compoundCcsRepository.findCompoundsByCcsRange(processedRange);
+            
+            // Create result object with the range info and its matches
+            CcsRangeMatchesDTO rangeMatches = new CcsRangeMatchesDTO(
+                range.getValue(),
+                absoluteTolerance,
+                tolerancePercentage,
+                matches
+            );
+            
+            results.add(rangeMatches);
         }
         
-        return compoundCcsRepository.findCompoundsByMultipleCcsRanges(processedRanges);
+        return results;
     }
 }

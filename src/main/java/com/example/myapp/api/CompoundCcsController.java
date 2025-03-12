@@ -1,6 +1,6 @@
 package com.example.myapp.api;
 
-import com.example.myapp.model.CompoundCcsDTO;
+import com.example.myapp.model.CcsRangeMatchesDTO;
 import com.example.myapp.service.CompoundCcsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +16,11 @@ public class CompoundCcsController {
     private CompoundCcsService compoundCcsService;
 
     @PostMapping("/ccs")
-    public List<CompoundCcsDTO> getCompoundsByCcsTolerance(@RequestBody CcsSearchRequest request) {
+    public List<CcsRangeMatchesDTO> getCompoundsByCcsTolerance(@RequestBody CcsSearchRequest request) {
         if (request.getRanges() == null || request.getRanges().isEmpty()) {
             return new ArrayList<>();
         }
         
-        return compoundCcsService.findCompoundsByCcsRanges(request.getRanges());
+        return compoundCcsService.findCompoundsByCcsRangesGrouped(request.getRanges());
     }
 }

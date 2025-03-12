@@ -14,41 +14,28 @@ public class CompoundCcsRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<CompoundCcsDTO> findCompoundsByMultipleCcsRanges(List<CcsRange> ranges) {
-        if (ranges == null || ranges.isEmpty()) {
+    public List<CompoundCcsDTO> findCompoundsByCcsRange(CcsRange range) {
+        if (range == null) {
             return new ArrayList<>();
         }
 
-        StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT c.compound_name, cc.ccs_value ")
-                 .append("FROM compounds_cmm.compounds AS c ")
-                 .append("JOIN compounds_cmm.compound_ccs AS cc ON c.compound_id = cc.compound_id ")
-                 .append("WHERE ");
+        double lowerBound = range.getValue() - range.getTolerance();
+        double upperBound = range.getValue() + range.getTolerance();
 
-        List<Object> params = new ArrayList<>();
-        
-        for (int i = 0; i < ranges.size(); i++) {
-            CcsRange range = ranges.get(i);
-            double lowerBound = range.getValue() - range.getTolerance();
-            double upperBound = range.getValue() + range.getTolerance();
-            
-            if (i > 0) {
-                sqlBuilder.append(" OR ");
-            }
-            sqlBuilder.append("(cc.ccs_value BETWEEN ? AND ?)");
-            params.add(lowerBound);
-            params.add(upperBound);
-        }
+        String sql = "SELECT c.compound_name, cc.ccs_value " +
+                     "FROM compounds_cmm.compounds AS c " +
+                     "JOIN compounds_cmm.compound_ccs AS cc ON c.compound_id = cc.compound_id " +
+                     "WHERE cc.ccs_value BETWEEN ? AND ?";
 
         return jdbcTemplate.query(
-                sqlBuilder.toString(),
+                sql,
                 (rs, _) -> {
                     CompoundCcsDTO dto = new CompoundCcsDTO();
                     dto.setCompoundName(rs.getString("compound_name"));
                     dto.setCompoundCcs(rs.getDouble("ccs_value"));
                     return dto;
                 },
-                params.toArray()
+                lowerBound, upperBound
         );
     }
 }
