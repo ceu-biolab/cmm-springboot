@@ -1,8 +1,8 @@
 package com.example.myapp.service;
 
 import com.example.myapp.api.CcsSearchRequest;
-import com.example.myapp.model.CompoundCcsDTO;
-import com.example.myapp.model.CcsRangeMatchesDTO;
+import com.example.myapp.model.ccsMatcher.CcsRangeMatchesDTO;
+import com.example.myapp.model.ccsMatcher.CompoundCcsDTO;
 import com.example.myapp.repository.CompoundCcsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

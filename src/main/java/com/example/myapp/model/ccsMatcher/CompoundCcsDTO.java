@@ -1,4 +1,4 @@
-package com.example.myapp.model;
+package com.example.myapp.model.ccsMatcher;
 
 public class CompoundCcsDTO {
     private String compoundName;

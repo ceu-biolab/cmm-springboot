@@ -1,6 +1,6 @@
 package com.example.myapp.api;
 
-import com.example.myapp.model.CcsRangeMatchesDTO;
+import com.example.myapp.model.ccsMatcher.CcsRangeMatchesDTO;
 import com.example.myapp.service.CompoundCcsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

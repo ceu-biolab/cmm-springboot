@@ -1,4 +1,4 @@
-package com.example.myapp.model;
+package com.example.myapp.model.ccsMatcher;
 
 import java.util.List;
 
