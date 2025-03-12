@@ -1,26 +1,26 @@
 package com.example.myapp.api;
 
 import com.example.myapp.model.CompoundCcsDTO;
-import com.example.myapp.repository.CompoundCcsRepository;
+import com.example.myapp.service.CompoundCcsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api")
 public class CompoundCcsController {
 
     @Autowired
-    private CompoundCcsRepository compoundCcsRepository;
+    private CompoundCcsService compoundCcsService;
 
-    @GetMapping("/ccs")
-    public List<CompoundCcsDTO> getCompoundsByCcsTolerance(
-            @RequestParam("value") double ccsValue,
-            @RequestParam("tolerance") double tolerancePercentage) {
-        // Calculate the lower and upper bounds using the tolerance percentage.
-        double lowerBound = ccsValue * (1 - tolerancePercentage / 100);
-        double upperBound = ccsValue * (1 + tolerancePercentage / 100);
-        return compoundCcsRepository.findCompoundsByCcsRange(lowerBound, upperBound);
+    @PostMapping("/ccs")
+    public List<CompoundCcsDTO> getCompoundsByCcsTolerance(@RequestBody CcsSearchRequest request) {
+        if (request.getRanges() == null || request.getRanges().isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        return compoundCcsService.findCompoundsByCcsRanges(request.getRanges());
     }
 }
