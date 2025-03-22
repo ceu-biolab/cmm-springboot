@@ -12,9 +12,6 @@ import com.example.myapp.model.compound.CMMCompound;
 import com.example.myapp.model.compound.GroupedCompoundsByAdduct;
 import com.example.myapp.model.compound.LipidMapsClassification;
 import com.example.myapp.model.msFeature.MSFeature;
-import org.apache.jena.sparql.engine.JsonIterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -26,7 +23,6 @@ import java.util.*;
 //public List<TheoreticalCompounds> findRangeSimple (simple search)
 @Repository
 public class CompoundRepository {
-    private static final Logger logger = LoggerFactory.getLogger(CompoundRepository.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -123,7 +119,6 @@ public class CompoundRepository {
                     sql += " AND " + String.join(" OR ", databaseConditions) + "";
                 }
 
-                logger.info("Monoisotopic Mass: {}", monoIsotopicMassFromMZAndAdduct);
 
                 // Calculate tolerance range based on PPM or DA
                 double monoMassWithoutAdduct = monoIsotopicMassFromMZAndAdduct - adductMass;
@@ -151,11 +146,6 @@ public class CompoundRepository {
                     }, rs -> {
                             Set<CMMCompound> compoundsSet = new HashSet<>();
 
-                            logger.info("Annotating MSFeature for mz: {}", mz);
-                            logger.info("Tolerance Mode: {}, Tolerance: {}, Ionization Mode: {}", toleranceMode, tolerance, ionizationMode);
-                            logger.info("Databases Selected: {}", databases);
-                            logger.info("Executing SQL Query: {}", finalSql);
-                            logger.info("Query Parameters - compound_type: {}, lowerBound: {}, upperBound: {}", compound_typeFinal, lowerBoundFinal, upperBoundFinal);
 
                             while (rs.next()) {
                                 Integer compoundID = rs.getInt("compound_id");
@@ -215,12 +205,9 @@ public class CompoundRepository {
                         });
 
                 for (CMMCompound cmmCompound : cmmCompounds) {
-                    logger.info("CMM compounds: {}", cmmCompound.toString());
                     groupedCompounds.getCmm_compounds().add(cmmCompound);
                     annotatedMSFeature.add(msFeature);
                 }
-                logger.info("CMM compounds size: {}", cmmCompounds.size());
-                logger.info("MSFeature: {}", msFeature.toString());
             }
             //* modify to exceptions Adducts
         }catch (Exception e) {

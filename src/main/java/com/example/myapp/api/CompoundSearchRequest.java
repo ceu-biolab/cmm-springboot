@@ -1,18 +1,15 @@
-package com.example.myapp.model.dto;
+package com.example.myapp.api;
 
 import com.example.myapp.model.*;
 import com.example.myapp.service.CompoundService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class CompoundSearchRequest {
-    private static final Logger logger = LoggerFactory.getLogger(CompoundService.class);
     private Double mz;
     private ToleranceMode toleranceMode;
     private Double tolerance;
@@ -43,13 +40,6 @@ public class CompoundSearchRequest {
         }
 
         this.metaboliteType = ParserJSON.parseMetaboliteType(metaboliteType);
-
-        logger.info("mz: {}", mz);
-        logger.info("toleranceM: {}", toleranceMode);
-        logger.info("tolerance: {}", tolerance);
-        logger.info("ionizationM: {}", ionizationMode);
-        logger.info("adductsString: {}", adductsString);
-        logger.info("DBS: {}", databases);
     }
 
 

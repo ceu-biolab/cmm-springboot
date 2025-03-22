@@ -1,9 +1,4 @@
 package com.example.myapp.api;
-import com.example.myapp.model.Databases;
-import com.example.myapp.model.IonizationMode;
-import com.example.myapp.model.MetaboliteType;
-import com.example.myapp.model.ToleranceMode;
-import com.example.myapp.model.dto.CompoundSearchRequest;
 import com.example.myapp.model.msFeature.MSFeature;
 import com.example.myapp.service.CompoundService;
 import org.springframework.web.bind.annotation.*;
