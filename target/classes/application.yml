@@ -13,6 +13,12 @@ spring:
       allowed-headers: "*"
       allow-credentials: true
 
+logging:
+  level:
+    root: DEBUG
+    com.example.myapp: DEBUG
+    org.springframework.jdbc.core: DEBUG
+
 server:
   port: 8080
   ssl:
