@@ -1,0 +1,10 @@
+package ceu.biolab.cmm.ruleAnnotator.model;
+
+unit HelloUnit;
+
+rule "Hello Rule"
+when
+    /hellos[ $v : val ]
+then
+    controlSet.add($v);
+end
