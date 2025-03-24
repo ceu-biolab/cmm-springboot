@@ -1,6 +1,4 @@
-package ceu.biolab.cmm.ruleAnnotator.repository;
-
-import ceu.biolab.cmm.ruleAnnotator.model.HelloUnit;
+package ceu.biolab.cmm.ruleAnnotator.controller;
 
 import ceu.biolab.cmm.ruleAnnotator.service.HelloRuleEngine;
 
