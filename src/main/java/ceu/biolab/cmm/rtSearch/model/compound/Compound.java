@@ -14,7 +14,7 @@ public class Compound {
     private final Double mass;
     private final Integer charge_type;
     private final Integer charge_number;
-    private final Integer formula_type;
+    private final String formula_type;
     private final Integer compound_type;
     private final Integer compound_status;
     private final Integer formula_type_int;
@@ -23,7 +23,7 @@ public class Compound {
 
 
     public Compound(Integer compound_id, String cas_id, String compound_name, String formula, Double mass,
-                    Integer charge_type, Integer charge_number, Integer formula_type, Integer compound_type,
+                    Integer charge_type, Integer charge_number, String formula_type, Integer compound_type,
                     Integer compound_status, Integer formula_type_int, Double logP, Double rt_pred) {
         this.compound_id = compound_id;
         this.cas_id = cas_id;
@@ -69,7 +69,7 @@ public class Compound {
         return charge_number;
     }
 
-    public Integer getFormula_type() {
+    public String getFormula_type() {
         return formula_type;
     }
 

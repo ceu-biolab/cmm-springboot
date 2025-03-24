@@ -83,6 +83,18 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.ceu-biolab</groupId>
+            <artifactId>FormulaValidation</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.faces</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+
 
     </dependencies>
 

@@ -1,7 +1,9 @@
 package ceu.biolab.cmm.rtSearch.model.msFeature;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 import ceu.biolab.cmm.rtSearch.model.compound.GroupedCompoundsByAdduct;
 
@@ -14,6 +16,7 @@ public class MSFeature {
     public MSFeature(double mz, double intensity) {
         this.mz = mz;
         this.intensity = intensity;
+        this.potentialAnnotations = new HashSet<>();
     }
 
     public double getMz() {
@@ -24,7 +27,9 @@ public class MSFeature {
         return intensity;
     }
 
-
+    public Set<GroupedCompoundsByAdduct> getPotentialAnnotations() {
+        return potentialAnnotations;
+    }
 
     @Override
     public String toString() {
