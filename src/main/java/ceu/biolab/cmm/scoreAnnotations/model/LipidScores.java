@@ -12,22 +12,23 @@ import lombok.Data;
 @Data
 public class LipidScores implements IScore{
     private Map<String, List<Boolean>> rtScoreMap;
-    private double ionizationScore;
-    private double adductScore;
-    private double rtScore;
+    private Optional<Double> ionizationScore;
+    private Optional<Double> adductScore;
+    private Optional<Double> rtScore;
 
     public LipidScores() {
         this.rtScoreMap = new HashMap<>();
-        this.ionizationScore = 0.0;
-        this.adductScore = 0.0;
-        this.rtScore = 0.0;
+        this.ionizationScore = Optional.empty();
+        this.adductScore = Optional.empty();
+        this.rtScore = Optional.empty();
     }
 
-    public Map<String, Double> getScores() {
-        Map<String, Double> scores = new HashMap<>();
-        scores.put("ionizationScore", ionizationScore);
-        scores.put("adductScore", adductScore);
-        scores.put("rtScore", rtScore);
+    public Map<String, String> getScores() {
+        Map<String, String> scores = new HashMap<>();
+        scores.put("ionization", ionizationScore.isPresent() ? ionizationScore.get().toString() : "");
+        scores.put("adduct", adductScore.isPresent() ? adductScore.get().toString() : "");
+        scores.put("rt", rtScore.isPresent() ? rtScore.get().toString() : "");
+        
         return scores;
     }
 

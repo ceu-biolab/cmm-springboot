@@ -1,19 +1,15 @@
 package ceu.biolab.cmm.scoreAnnotations.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.drools.ruleunits.api.RuleUnitProvider;
 import org.drools.ruleunits.api.RuleUnitInstance;
 
 import ceu.biolab.cmm.scoreAnnotations.model.*;
-import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.msFeature.ILCFeature;
-import ceu.biolab.cmm.shared.domain.msFeature.IMSFeature;
-import ceu.biolab.cmm.shared.domain.msFeature.LCMSFeature;
 
 public class ScoreLipids {
 

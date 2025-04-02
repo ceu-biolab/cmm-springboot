@@ -1,13 +1,15 @@
 package ceu.biolab.cmm.scoreAnnotations.service;
 
-import ceu.biolab.cmm.scoreAnnotations.dto.ScoredAnnotatedRTFeature;
-import ceu.biolab.cmm.scoreAnnotations.dto.ScoredAnnotationsByAdduct;
-import ceu.biolab.cmm.scoreAnnotations.dto.ScoredCompound;
 import ceu.biolab.cmm.scoreAnnotations.model.Lipid;
+import ceu.biolab.cmm.scoreAnnotations.model.LipidScores;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
+import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
+import ceu.biolab.cmm.shared.domain.msFeature.ILCFeature;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Notation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,10 @@ public class ScoreLipidsServiceTest {
     @Test
     void testScoreEmptyInput() {
         // Test handling of empty input list
-        List<ScoredAnnotatedRTFeature> result = ScoreLipids.scoreLipids(List.of());
+        List<AnnotatedFeature> features = new ArrayList<>();
+        ScoreLipids.scoreLipidAnnotations(features);
         
-        assertTrue(result.isEmpty(), "Result should be empty for empty input");
+        assertTrue(features.isEmpty(), "Result should be empty");
     }
     
     @Test
@@ -36,17 +39,23 @@ public class ScoreLipidsServiceTest {
         addLipidToAnnotations(feature, "PC", 36, 2);
         List<AnnotatedFeature> features = List.of(feature);
         
-        List<ScoredAnnotatedRTFeature> result = ScoreLipids.scoreLipids(features);
+        ScoreLipids.scoreLipidAnnotations(features);
         
-        assertEquals(1, result.size(), "Should return one feature");
-        assertEquals(1, result.get(0).getScoredAnnotationsByAdducts().size(), "Should return one adduct");
-        assertEquals(1, result.get(0).getScoredAnnotationsByAdducts().get(0).getAnnotations().size(), "Should return one scored compound");
+        assertEquals(1, features.size(), "Should return one feature");
+        assertEquals(1, features.get(0).getAnnotationsByAdducts().size(), "Should return one adduct");
+        assertEquals(1, features.get(0).getAnnotationsByAdducts().get(0).getAnnotations().size(), "Should return one scored compound");
         // No scores for a single lipid as there's nothing to compare against
-        Optional<ScoredCompound> scoredCompound = findScoredLipid(result, "PC", 36, 2, 800.5, 5.0);
-        System.out.println(result);
+        Optional<Annotation> scoredCompound = findLipidAnnotation(features, "PC", 36, 2, 800.5, 5.0);
         assertTrue(scoredCompound.isPresent(), "Should find the scored compound");
-        assertTrue(scoredCompound.get().getScores().isPresent(), "Scores should be present, even if with no matches");
-        assertTrue(scoredCompound.get().getScores().get().getRtScoreMap().isEmpty(), "The rtScoreMap should be empty for a single lipid");
+        assertTrue(scoredCompound.get().getScores().size() == 1, "Should have one score");
+        // Check that the present score is of type LipidScores
+        assertTrue(scoredCompound.get().getScores().get(0) instanceof LipidScores, "Score should be of type LipidScores");
+        // Check that the LipidScores object has no scores
+        LipidScores lipidScores = (LipidScores) scoredCompound.get().getScores().get(0);
+        assertTrue(lipidScores.getRtScoreMap().isEmpty(), "Should have no RT scores");
+        assertFalse(lipidScores.getIonizationScore().isPresent(), "Should have no ionization score");
+        assertFalse(lipidScores.getAdductScore().isPresent(), "Should have no adduct score");
+        assertFalse(lipidScores.getRtScore().isPresent(), "Should have no RT score");
     }
     
     @Test
@@ -62,32 +71,40 @@ public class ScoreLipidsServiceTest {
         addLipidToAnnotations(feature2, "PC", 36, 4);
         List<AnnotatedFeature> features = List.of(feature1, feature2);
 
-        List<ScoredAnnotatedRTFeature> result = ScoreLipids.scoreLipids(features);
+        ScoreLipids.scoreLipidAnnotations(features);
 
         // Only 2 features and 2 compounds
-        assertEquals(2, result.size(), "Should return two scored features");
-        assertEquals(2, extractScoredCompounds(result).size(), "Should return two scored compounds");
+        assertEquals(2, features.size(), "Should return two scored features");
+        assertEquals(2, extractAnnotations(features).size(), "Should return two scored compounds");
         
-        Optional<ScoredCompound> pc36_4 = findScoredLipid(result, "PC", 36, 4, 800.5, 5.0);
+        Optional<Annotation> pc36_4 = findLipidAnnotation(features, "PC", 36, 4, 800.5, 5.0);
         assertTrue(pc36_4.isPresent(), "Should find PC 36:4");
-        Optional<ScoredCompound> pc36_2 = findScoredLipid(result, "PC", 36, 2, 800.5, 6.0);
+        Optional<Annotation> pc36_2 = findLipidAnnotation(features, "PC", 36, 2, 800.5, 6.0);
         assertTrue(pc36_2.isPresent(), "Should find PC 36:2");
 
         // Check PC 36:4 (rt=5) is scored correctly - should have lower RT than PC 36:2 (rt=6) 
         // Therefore should have one true score against the rt=6 feature (rule 1)
-        assertTrue(pc36_4.get().getScores().isPresent(), "PC 36:4 should have scores");
-        Optional<List<Boolean>> pc36_4_compared = pc36_4.get().getRtScoresComparedTo(6.0, 800.5);
+        assertFalse(pc36_4.get().getScores().isEmpty(), "PC 36:4 should have scores");
+        // Check that the score is of type LipidScores
+        assertTrue(pc36_4.get().getScores().get(0) instanceof LipidScores, "PC 36:4 should have a LipidScores score");
+        LipidScores pc36_4_lipidScores = (LipidScores) pc36_4.get().getScores().get(0);
+        assertFalse(pc36_4_lipidScores.getRtScoreMap().isEmpty(), "PC 36:4 should have the RT score map");
+        Optional<List<Boolean>> pc36_4_compared = pc36_4_lipidScores.getRtScoresComparedTo(6.0, 800.5);
         assertTrue(pc36_4_compared.isPresent(), "PC 36:4 should have scores compared to PC 36:2");
         assertEquals(1, pc36_4_compared.get().size(), "PC 36:4 should have one score");
         assertTrue(pc36_4_compared.get().get(0), "PC 36:4 should have a true score against PC 36:2");
         
         // Check PC 36:2 (rt=6) is scored correctly - should have higher RT than PC 36:4 (rt=5)
         // Therefore should also have one true score against the rt=5 feature (rule 2)
-        assertTrue(pc36_2.get().getScores().isPresent(), "PC 36:2 should have scores");
-        Optional<List<Boolean>> pc36_2_compared = pc36_2.get().getRtScoresComparedTo(5.0, 800.5);
+        assertFalse(pc36_2.get().getScores().isEmpty(), "PC 36:2 should have scores");
+        // Check that the score is of type LipidScores
+        assertTrue(pc36_2.get().getScores().get(0) instanceof LipidScores, "PC 36:2 should have a LipidScores score");
+        LipidScores pc36_2_lipidScores = (LipidScores) pc36_2.get().getScores().get(0);
+        assertFalse(pc36_2_lipidScores.getRtScoreMap().isEmpty(), "PC 36:2 should have the RT score map");
+        Optional<List<Boolean>> pc36_2_compared = pc36_2_lipidScores.getRtScoresComparedTo(5.0, 800.5);
         assertTrue(pc36_2_compared.isPresent(), "PC 36:2 should have scores compared to PC 36:4");
         assertEquals(1, pc36_2_compared.get().size(), "PC 36:2 should have one score");
-        assertTrue(pc36_2_compared.get().get(0), "PC 36:2 should have a false true against PC 36:4");
+        assertTrue(pc36_2_compared.get().get(0), "PC 36:2 should have a true score against PC 36:4");
     }
 
     // Helper methods 
@@ -107,17 +124,17 @@ public class ScoreLipidsServiceTest {
         feature.addCompoundForAdduct("TEST", lipid);
     }
 
-    private Optional<ScoredCompound> findScoredLipid(List<ScoredAnnotatedRTFeature> scoredFeatures, String lipidType, int carbons, int doubleBonds, double mz, double rt) {
-        for (ScoredAnnotatedRTFeature scoredFeature : scoredFeatures) {
-            for (ScoredAnnotationsByAdduct scoredAnnotationsByAdduct : scoredFeature.getScoredAnnotationsByAdducts()) {
-                for (ScoredCompound scoredCompound : scoredAnnotationsByAdduct.getAnnotations()) {
-                    System.out.println(scoredCompound);
+    private Optional<Annotation> findLipidAnnotation(List<AnnotatedFeature> features, String lipidType, int carbons, int doubleBonds, double mz, double rt) {
+        for (AnnotatedFeature feature : features) {
+            for (AnnotationsByAdduct scoredAnnotationsByAdduct : feature.getAnnotationsByAdducts()) {
+                for (Annotation scoredCompound : scoredAnnotationsByAdduct.getAnnotations()) {
                     if (scoredCompound.getCompound() instanceof Lipid lipid &&
+                        feature.getFeature() instanceof ILCFeature lcFeature &&
                         lipid.getLipidType().equals(lipidType) &&
                         lipid.getNumberCarbons() == carbons &&
                         lipid.getNumberDoubleBonds() == doubleBonds &&
-                        scoredFeature.getRtValue() == rt &&
-                        scoredFeature.getMzValue() == mz) {
+                        lcFeature.getRtValue() == rt &&
+                        lcFeature.getMzValue() == mz) {
                         return Optional.of(scoredCompound);
                     }
                 }
@@ -127,10 +144,10 @@ public class ScoreLipidsServiceTest {
     }
 
     // Extract all scored compounds from a list of scored features
-    private List<ScoredCompound> extractScoredCompounds(List<ScoredAnnotatedRTFeature> scoredFeatures) {
-        List<ScoredCompound> scoredCompounds = new ArrayList<>();
-        for (ScoredAnnotatedRTFeature scoredFeature : scoredFeatures) {
-            for (ScoredAnnotationsByAdduct scoredAnnotationsByAdduct : scoredFeature.getScoredAnnotationsByAdducts()) {
+    private List<Annotation> extractAnnotations(List<AnnotatedFeature> features) {
+        List<Annotation> scoredCompounds = new ArrayList<>();
+        for (AnnotatedFeature feature : features) {
+            for (AnnotationsByAdduct scoredAnnotationsByAdduct : feature.getAnnotationsByAdducts()) {
                 scoredCompounds.addAll(scoredAnnotationsByAdduct.getAnnotations());
             }
         }
