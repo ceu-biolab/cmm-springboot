@@ -4,7 +4,8 @@ import ceu.biolab.cmm.scoreAnnotations.dto.ScoredAnnotatedRTFeature;
 import ceu.biolab.cmm.scoreAnnotations.dto.ScoredAnnotationsByAdduct;
 import ceu.biolab.cmm.scoreAnnotations.dto.ScoredCompound;
 import ceu.biolab.cmm.scoreAnnotations.model.Lipid;
-import ceu.biolab.cmm.shared.domain.AnnotatedRTFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,9 +32,9 @@ public class ScoreLipidsServiceTest {
     @Test
     void testScoreSingleLipid() {
         // A single lipid should have no retention time score since there's nothing to compare with
-        AnnotatedRTFeature feature = createEmptyAnnotatedFeature(800.5, 5.0);
+        AnnotatedFeature feature = createEmptyAnnotatedFeature(800.5, 5.0);
         addLipidToAnnotations(feature, "PC", 36, 2);
-        List<AnnotatedRTFeature> features = List.of(feature);
+        List<AnnotatedFeature> features = List.of(feature);
         
         List<ScoredAnnotatedRTFeature> result = ScoreLipids.scoreLipids(features);
         
@@ -55,11 +56,11 @@ public class ScoreLipidsServiceTest {
         // Same lipid type, same carbon count, fewer double bonds -> higher RT; higher double bonds -> lower RT
         // A true is added to the RT score list everytime this principle is satisfied
 
-        AnnotatedRTFeature feature1 = createEmptyAnnotatedFeature(800.5, 6.0);
+        AnnotatedFeature feature1 = createEmptyAnnotatedFeature(800.5, 6.0);
         addLipidToAnnotations(feature1, "PC", 36, 2);
-        AnnotatedRTFeature feature2 = createEmptyAnnotatedFeature(800.5, 5.0);
+        AnnotatedFeature feature2 = createEmptyAnnotatedFeature(800.5, 5.0);
         addLipidToAnnotations(feature2, "PC", 36, 4);
-        List<AnnotatedRTFeature> features = List.of(feature1, feature2);
+        List<AnnotatedFeature> features = List.of(feature1, feature2);
 
         List<ScoredAnnotatedRTFeature> result = ScoreLipids.scoreLipids(features);
 
@@ -91,11 +92,11 @@ public class ScoreLipidsServiceTest {
 
     // Helper methods 
     
-    private AnnotatedRTFeature createEmptyAnnotatedFeature(double mz, double rt) {
-        return new AnnotatedRTFeature(rt, mz);
+    private AnnotatedFeature createEmptyAnnotatedFeature(double mz, double rt) {
+        return new AnnotatedFeature(rt, mz);
     }
 
-    private void addLipidToAnnotations(AnnotatedRTFeature feature, String lipidType, int carbons, int doubleBonds) {
+    private void addLipidToAnnotations(AnnotatedFeature feature, String lipidType, int carbons, int doubleBonds) {
         // Create Lipid with builder
         Lipid lipid = Lipid.builder()
             .lipidType(lipidType)

@@ -1,27 +1,30 @@
-package ceu.biolab.cmm.shared.domain;
+package ceu.biolab.cmm.shared.domain.msFeature;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.Data;
 
 @Data
-public class AnnotatedRTFeature {
-    private double rtValue;
-    private double mzValue;
+public class AnnotatedFeature {
+    private IMSFeature feature;
     private List<AnnotationsByAdduct> annotationsByAdducts;
 
-    public AnnotatedRTFeature(double rtValue, double mzValue) {
-        this.rtValue = rtValue;
-        this.mzValue = mzValue;
+    public AnnotatedFeature(double mzValue) {
+        this.feature = new MSFeature(mzValue);
         this.annotationsByAdducts = new ArrayList<>();
     }
 
-    public AnnotatedRTFeature(double rtValue, double mzValue, List<AnnotationsByAdduct> annotationsByAdducts) {
-        this.rtValue = rtValue;
-        this.mzValue = mzValue;
-        this.annotationsByAdducts = annotationsByAdducts;
+    public AnnotatedFeature(double mzValue, double rtValue) {
+        this.feature = new LCMSFeature(mzValue, rtValue);
+        this.annotationsByAdducts = new ArrayList<>();
+    }
+
+    public AnnotatedFeature(IMSFeature feature) {
+        this.feature = feature;
+        this.annotationsByAdducts = new ArrayList<>();
     }
 
     public Optional<AnnotationsByAdduct> findAnnotationByAdduct(String adduct) {
@@ -40,10 +43,10 @@ public class AnnotatedRTFeature {
     public void addCompoundForAdduct(String adduct, Compound compound) {
         Optional<AnnotationsByAdduct> annotationsByAdduct = findAnnotationByAdduct(adduct);
         if (annotationsByAdduct.isPresent()) {
-            annotationsByAdduct.get().addScoredCompound(compound);
+            annotationsByAdduct.get().addUnannotatedCompound(compound);
         } else {
             AnnotationsByAdduct newAnnotationsByAdduct = new AnnotationsByAdduct(adduct);
-            newAnnotationsByAdduct.addScoredCompound(compound);
+            newAnnotationsByAdduct.addUnannotatedCompound(compound);
             this.annotationsByAdducts.add(newAnnotationsByAdduct);
         }
     }

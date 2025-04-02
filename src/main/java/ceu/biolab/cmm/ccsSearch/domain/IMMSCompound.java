@@ -1,9 +1,9 @@
 package ceu.biolab.cmm.ccsSearch.domain;
 
-import ceu.biolab.cmm.shared.domain.Pathway;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 
 // TODO inherit compound from shared domain
 public class IMMSCompound {

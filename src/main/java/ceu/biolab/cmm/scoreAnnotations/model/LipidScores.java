@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
+import ceu.biolab.cmm.shared.domain.msFeature.IScore;
 import lombok.Data;
 
 @Data
-public class LipidScores {
+public class LipidScores implements IScore{
     private Map<String, List<Boolean>> rtScoreMap;
     private double ionizationScore;
     private double adductScore;
@@ -20,6 +21,14 @@ public class LipidScores {
         this.ionizationScore = 0.0;
         this.adductScore = 0.0;
         this.rtScore = 0.0;
+    }
+
+    public Map<String, Double> getScores() {
+        Map<String, Double> scores = new HashMap<>();
+        scores.put("ionizationScore", ionizationScore);
+        scores.put("adductScore", adductScore);
+        scores.put("rtScore", rtScore);
+        return scores;
     }
 
     public void addRtScore(boolean value, String featKey) {

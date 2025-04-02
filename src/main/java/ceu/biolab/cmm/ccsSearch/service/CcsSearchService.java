@@ -8,10 +8,10 @@ import ceu.biolab.cmm.ccsSearch.repository.CcsSearchRepository;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
 import ceu.biolab.cmm.ccsSearch.domain.AnnotationsByAdduct;
+import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
-import ceu.biolab.cmm.shared.domain.BufferGas;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.Pathway;
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,10 +1,9 @@
 package ceu.biolab.cmm.scoreAnnotations.model;
 
+import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-
-import ceu.biolab.cmm.shared.domain.Compound;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
