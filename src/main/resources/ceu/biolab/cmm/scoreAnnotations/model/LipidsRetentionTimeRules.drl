@@ -1,0 +1,81 @@
+package ceu.biolab.cmm.scoreAnnotations.model;
+
+unit LipidsUnit;
+
+rule "Lipids Retention Time Carbons 1"
+when
+    $compA : /compounds[isSignificative() == true, getLipidType() != "", getNumberCarbons() > 0]
+    $compB : /compounds[
+                getNumberCarbons() > 0,
+                getLipidType() == $compA.getLipidType(),
+                getNumberCarbons() == $compA.getNumberCarbons(),
+                getNumberDoubleBonds() < $compA.getNumberDoubleBonds()
+            ]
+then
+    $compA.addRtScore($compA.getFeatureRtValue() < $compB.getFeatureRtValue(), $compB.getFeatureKey());
+end
+
+rule "Lipids Retention Time Carbons 2"
+when
+    $compA : /compounds[isSignificative() == true, getLipidType() != "", getNumberCarbons() > 0]
+    $compB : /compounds[
+                getNumberCarbons() > 0,
+                getLipidType() == $compA.getLipidType(),
+                getNumberCarbons() == $compA.getNumberCarbons(),
+                getNumberDoubleBonds() > $compA.getNumberDoubleBonds()
+            ]
+then
+    $compA.addRtScore($compA.getFeatureRtValue() > $compB.getFeatureRtValue(), $compB.getFeatureKey());
+end
+
+rule "Lipids Retention Time Double Bonds 1"
+when
+    $compA : /compounds[isSignificative() == true, getLipidType() != "", getNumberCarbons() > 0]
+    $compB : /compounds[
+                getNumberCarbons() > 0,
+                getLipidType() == $compA.getLipidType(),
+                getNumberDoubleBonds() == $compA.getNumberDoubleBonds(),
+                getNumberCarbons() < $compA.getNumberCarbons()
+            ]
+then
+    $compA.addRtScore($compA.getFeatureRtValue() > $compB.getFeatureRtValue(), $compB.getFeatureKey());
+end
+
+rule "Lipids Retention Time Double Bonds 2"
+when
+    $compA : /compounds[isSignificative() == true, getLipidType() != "", getNumberCarbons() > 0]
+    $compB : /compounds[
+                getNumberCarbons() > 0,
+                getLipidType() == $compA.getLipidType(),
+                lipid.getNumberDoubleBonds() == $compA.lipid.getNumberDoubleBonds(),
+                getNumberCarbons() > $compA.getNumberCarbons()
+            ]
+then
+    $compA.addRtScore($compA.getFeatureRtValue() < $compB.getFeatureRtValue(), $compB.getFeatureKey());
+end
+
+rule "Lipids Retention Time Carbons and Double Bonds 1"
+when
+    $compA : /compounds[isSignificative() == true, getLipidType() != "", getNumberCarbons() > 0]
+    $compB : /compounds[
+                getNumberCarbons() > 0,
+                getLipidType() == $compA.getLipidType(),
+                lipid.getNumberDoubleBonds() < $compA.lipid.getNumberDoubleBonds(),
+                getNumberCarbons() > $compA.getNumberCarbons()
+            ]
+then
+    $compA.addRtScore($compA.getFeatureRtValue() < $compB.getFeatureRtValue(), $compB.getFeatureKey());
+end
+
+rule "Lipids Retention Time Carbons and Double Bonds 2"
+when
+    $compA : /compounds[isSignificative() == true, getLipidType() != "", getNumberCarbons() > 0]
+    $compB : /compounds[
+                getNumberCarbons() > 0,
+                getLipidType() == $compA.getLipidType(),
+                getNumberDoubleBonds() > $compA.getNumberDoubleBonds(),
+                getNumberCarbons() < $compA.getNumberCarbons()
+            ]
+then
+    $compA.addRtScore($compA.getFeatureRtValue() > $compB.getFeatureRtValue(), $compB.getFeatureKey());
+end

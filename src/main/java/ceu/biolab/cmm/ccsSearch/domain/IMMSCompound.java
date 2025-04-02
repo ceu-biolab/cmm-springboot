@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO inherit compound from shared domain
-public class IMMSFeature {
+public class IMMSCompound {
     private int compoundId;
     private String compoundName;
     private double monoisotopicMass;
@@ -18,7 +18,7 @@ public class IMMSFeature {
     private Double logP;
     private List<Pathway> pathways;
 
-    public IMMSFeature(int compoundId, String compoundName, double monoisotopicMass, double dbCcs, String formula,
+    public IMMSCompound(int compoundId, String compoundName, double monoisotopicMass, double dbCcs, String formula,
             String formulaType, int compoundType, Double logP, List<Pathway> pathways) {
         this.compoundId = compoundId;
         this.compoundName = compoundName;
@@ -31,7 +31,7 @@ public class IMMSFeature {
         this.pathways = pathways;
     }
 
-    public IMMSFeature() {
+    public IMMSCompound() {
         this.compoundId = -1;
         this.compoundName = "";
         this.monoisotopicMass = 0.0;
