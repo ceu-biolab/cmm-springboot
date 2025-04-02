@@ -26,7 +26,7 @@ public class EvaluatedLipid {
         this.scores = scores;
         this.isSignificative = isSignificative;
 
-        this.featureKey = String.valueOf(lipid.getMass()) + String.valueOf(featureRtValue);
+        this.featureKey = String.valueOf(featureMz) + String.valueOf(featureRtValue);
     }
 
     public EvaluatedLipid(Lipid lipid, double featureMz, double featureRtValue, LipidScores scores) {
