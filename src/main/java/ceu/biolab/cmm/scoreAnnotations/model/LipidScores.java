@@ -23,6 +23,10 @@ public class LipidScores implements IScore{
         this.rtScore = Optional.empty();
     }
 
+    public static String calculateFeatureKey(double featureMzValue, double featureRtValue) {
+        return String.valueOf(featureMzValue) + String.valueOf(featureRtValue);
+    }
+
     public Map<String, String> getScores() {
         Map<String, String> scores = new HashMap<>();
         scores.put("ionization", ionizationScore.isPresent() ? ionizationScore.get().toString() : "");
@@ -43,7 +47,7 @@ public class LipidScores implements IScore{
     }
 
     public void addRtScore(boolean value, double featureRtValue, double featureMzValue) {
-        String featKey = String.valueOf(featureMzValue) + String.valueOf(featureRtValue);
+        String featKey = LipidScores.calculateFeatureKey(featureMzValue, featureRtValue);
         if (getRtScoreMap() == null) {
             setRtScoreMap(new HashMap<>());
         }
@@ -64,7 +68,7 @@ public class LipidScores implements IScore{
     }
 
     public Optional<List<Boolean>> getRtScoresComparedTo(double featureRtValue, double featureMzValue) {
-        String featureKey = String.valueOf(featureMzValue) + String.valueOf(featureRtValue);
+        String featureKey = LipidScores.calculateFeatureKey(featureMzValue, featureRtValue);
         if (rtScoreMap == null) {
             return Optional.empty();
         }

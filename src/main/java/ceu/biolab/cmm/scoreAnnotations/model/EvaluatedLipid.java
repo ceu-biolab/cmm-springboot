@@ -26,7 +26,7 @@ public class EvaluatedLipid {
         this.scores = scores;
         this.isSignificative = isSignificative;
 
-        this.featureKey = String.valueOf(featureMz) + String.valueOf(featureRtValue);
+        this.featureKey = LipidScores.calculateFeatureKey(featureMz, featureRtValue);
     }
 
     public EvaluatedLipid(Lipid lipid, double featureMz, double featureRtValue, LipidScores scores) {
@@ -36,7 +36,7 @@ public class EvaluatedLipid {
         this.scores = scores;
         this.isSignificative = true;
 
-        this.featureKey = String.valueOf(featureMz) + String.valueOf(featureRtValue);
+        this.featureKey = LipidScores.calculateFeatureKey(featureMz, featureRtValue);
     }
 
     public int getNumberCarbons() {
