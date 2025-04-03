@@ -1,8 +1,6 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.Data;
@@ -10,21 +8,21 @@ import lombok.Data;
 @Data
 public class AnnotatedFeature {
     private IMSFeature feature;
-    private List<AnnotationsByAdduct> annotationsByAdducts;
+    private Set<AnnotationsByAdduct> annotationsByAdducts;
 
     public AnnotatedFeature(double mzValue) {
         this.feature = new MSFeature(mzValue);
-        this.annotationsByAdducts = new ArrayList<>();
+        this.annotationsByAdducts = new LinkedHashSet<>();
     }
 
     public AnnotatedFeature(double mzValue, double rtValue) {
         this.feature = new LCMSFeature(mzValue, rtValue);
-        this.annotationsByAdducts = new ArrayList<>();
+        this.annotationsByAdducts = new LinkedHashSet<>();
     }
 
     public AnnotatedFeature(IMSFeature feature) {
         this.feature = feature;
-        this.annotationsByAdducts = new ArrayList<>();
+        this.annotationsByAdducts = new LinkedHashSet<>();
     }
 
     public Optional<AnnotationsByAdduct> findAnnotationByAdduct(String adduct) {

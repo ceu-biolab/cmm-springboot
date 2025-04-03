@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class LCMSFeature extends MSFeature implements ILCFeature {
+public class LCMSFeature extends MSFeature implements ILCMSFeature {
     private double rtValue;
 
     public LCMSFeature() {

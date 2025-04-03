@@ -1,15 +1,13 @@
 package ceu.biolab.cmm.rtSearch.api;
 
 import ceu.biolab.cmm.rtSearch.model.*;
-import ceu.biolab.cmm.rtSearch.service.CompoundService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class CompoundSearchRequest {
+public class CompoundSimpleSearchRequest {
     private Double mz;
     private ToleranceMode toleranceMode;
     private Double tolerance;
@@ -19,7 +17,7 @@ public class CompoundSearchRequest {
     private MetaboliteType metaboliteType;
 
     @JsonCreator
-    public CompoundSearchRequest(
+    public CompoundSimpleSearchRequest(
             @JsonProperty("mz") Double mz,
             @JsonProperty("toleranceMode") String toleranceMode,
             @JsonProperty("tolerance") Double tolerance,

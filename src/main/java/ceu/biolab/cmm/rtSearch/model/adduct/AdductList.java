@@ -91,6 +91,7 @@ public class AdductList {
         mapMZPositiveAdductsTMP.put("M+F+H", "-20.00623");
         //mapMZPositiveAdductsTMP.put("M+2", "-2.0173");
         MAPMZPOSITIVEADDUCTS = Collections.unmodifiableMap(mapMZPositiveAdductsTMP);
+        // MAPMZPOSITIVEADDUCTS = mapMZPositiveAdductsTMP;
     }
 
     public static final Map<String, String> MAPMZNEGATIVEADDUCTS;
