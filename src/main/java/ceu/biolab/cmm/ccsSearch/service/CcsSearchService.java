@@ -8,10 +8,10 @@ import ceu.biolab.cmm.ccsSearch.repository.CcsSearchRepository;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
 import ceu.biolab.cmm.ccsSearch.domain.AnnotationsByAdduct;
-import ceu.biolab.cmm.ccsSearch.domain.IMMSFeature;
-import ceu.biolab.cmm.shared.domain.BufferGas;
+import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
+import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.Pathway;
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,12 +80,12 @@ public class CcsSearchService {
                     List<CcsQueryResponse> queryResults = ccsSearchRepository.findMatchingCompounds(queryData);
                     // QueryResults may have duplicate results where the same compound is found with different pathways.
                     // We need to merge these results.
-                    List<IMMSFeature> compounds = new ArrayList<>();
+                    List<IMMSCompound> compounds = new ArrayList<>();
                     for (CcsQueryResponse queryResult : queryResults) {
                         Pathway pathway = new Pathway(queryResult.getPathwayId(), queryResult.getPathwayName(), queryResult.getPathwayMap());
 
                         boolean found = false;
-                        for (IMMSFeature compound : compounds) {
+                        for (IMMSCompound compound : compounds) {
                             if (compound.getCompoundId() == queryResult.getCompoundId()) {
                                 compound.addPathway(pathway);
                                 found = true;
@@ -94,7 +94,7 @@ public class CcsSearchService {
                         }
                         if (!found) {
                             // TODO ugly
-                            IMMSFeature compound = new IMMSFeature(queryResult.getCompoundId(), queryResult.getCompoundName(), queryResult.getMonoisotopicMass(), queryResult.getDbCcs(), queryResult.getFormula(), queryResult.getFormulaType(), queryResult.getCompoundType(), queryResult.getLogP(), new ArrayList<>());
+                            IMMSCompound compound = new IMMSCompound(queryResult.getCompoundId(), queryResult.getCompoundName(), queryResult.getMonoisotopicMass(), queryResult.getDbCcs(), queryResult.getFormula(), queryResult.getFormulaType(), queryResult.getCompoundType(), queryResult.getLogP(), new ArrayList<>());
                             compound.addPathway(pathway);
                             compounds.add(compound);
                         }

@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.shared.domain;
+package ceu.biolab.cmm.shared.domain.compound;
 
 public class Pathway {
     private Integer pathwayId;

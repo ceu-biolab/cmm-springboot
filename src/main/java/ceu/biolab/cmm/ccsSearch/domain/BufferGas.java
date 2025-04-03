@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.shared.domain;
+package ceu.biolab.cmm.ccsSearch.domain;
 
 public enum BufferGas {
     N2("N2"), 

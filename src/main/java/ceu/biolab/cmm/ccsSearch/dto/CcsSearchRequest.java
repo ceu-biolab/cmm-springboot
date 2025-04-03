@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.BufferGas;
 import ceu.biolab.cmm.shared.domain.IonMode;
 
 public class CcsSearchRequest {

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class AnnotationsByAdduct {
     private String adduct;
-    private List<IMMSFeature> compounds;
+    private List<IMMSCompound> compounds;
 
-    public AnnotationsByAdduct(String adduct, List<IMMSFeature> compounds) {
+    public AnnotationsByAdduct(String adduct, List<IMMSCompound> compounds) {
         this.adduct = adduct;
         if (compounds != null) {
             this.compounds = compounds;
@@ -29,11 +29,11 @@ public class AnnotationsByAdduct {
         this.adduct = adduct;
     }
 
-    public List<IMMSFeature> getCompounds() {
+    public List<IMMSCompound> getCompounds() {
         return compounds;
     }
 
-    public void setCompounds(List<IMMSFeature> compounds) {
+    public void setCompounds(List<IMMSCompound> compounds) {
         if (compounds == null) {
             this.compounds = new ArrayList<>();
         } else {
