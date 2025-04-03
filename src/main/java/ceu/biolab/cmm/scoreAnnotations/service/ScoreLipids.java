@@ -48,11 +48,12 @@ public class ScoreLipids {
 
                 // Map all lipids into EvaluatedLipid objects for scoring
                 for (AnnotationsByAdduct annotationsByAdduct : msFeature.getAnnotationsByAdducts()) {
+                    String adduct = annotationsByAdduct.getAdduct();
                     for (Annotation annotation : annotationsByAdduct.getAnnotations()) {
                         if (annotation.getCompound() instanceof Lipid lipid) {
                             LipidScores scores = new LipidScores();
                             annotation.addScore(scores);
-                            EvaluatedLipid evaluatedLipid = new EvaluatedLipid(lipid, featureMz, featureRtValue, scores);
+                            EvaluatedLipid evaluatedLipid = new EvaluatedLipid(lipid, featureMz, featureRtValue, adduct, scores);
                             kieSession.insert(evaluatedLipid);
                         }
                     }

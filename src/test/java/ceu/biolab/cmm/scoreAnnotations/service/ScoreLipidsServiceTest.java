@@ -54,7 +54,7 @@ public class ScoreLipidsServiceTest {
         LipidScores lipidScores = (LipidScores) scoredCompound.get().getScores().get(0);
         assertTrue(lipidScores.getRtScoreMap().isEmpty(), "Should have no RT scores");
         assertFalse(lipidScores.getIonizationScore().isPresent(), "Should have no ionization score");
-        assertFalse(lipidScores.getAdductScore().isPresent(), "Should have no adduct score");
+        assertFalse(lipidScores.getAdductRelationScore().isPresent(), "Should have no adduct score");
         assertFalse(lipidScores.getRtScore().isPresent(), "Should have no RT score");
     }
     
