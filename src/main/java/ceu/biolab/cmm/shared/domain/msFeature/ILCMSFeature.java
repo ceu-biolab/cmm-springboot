@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
-public interface ILCFeature extends IMSFeature {
+public interface ILCMSFeature extends IMSFeature {
     double getRtValue();
 
     void setRtValue(double rtValue);

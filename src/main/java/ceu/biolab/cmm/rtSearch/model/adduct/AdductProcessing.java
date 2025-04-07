@@ -16,16 +16,8 @@ public class AdductProcessing {
                 if (AdductList.MAPMZPOSITIVEADDUCTS.containsKey(adductString)) {
                     String adductFormula = "[" + adductString + "]+";
                     return new Adduct(adductFormula);
-                } else {
+                } else
                     throw new IllegalArgumentException("Adduct not found: " + adductString);
-                }
-            } else if (ionizationMode == IonizationMode.NEUTRAL) {
-                if (AdductList.MAPNEUTRALADDUCTS.containsKey(adductString)) {
-                    String adductFormula = "[" + adductString + "]";
-                    return new Adduct(adductFormula);
-                } else {
-                    throw new IllegalArgumentException("Adduct not found: " + adductString);
-                }
             }else if (AdductList.MAPMZNEGATIVEADDUCTS.containsKey(adductString)) {
                 String adductFormula = "[" + adductString + "]-";
                 return new Adduct(adductFormula);
@@ -42,8 +34,6 @@ public class AdductProcessing {
 
         if (ionizationMode == IonizationMode.POSITIVE) {
             adductMap = AdductList.MAPMZPOSITIVEADDUCTS;
-        } else if (ionizationMode == IonizationMode.NEUTRAL) {
-            adductMap = AdductList.MAPNEUTRALADDUCTS;
         } else {
             adductMap = AdductList.MAPMZNEGATIVEADDUCTS;
         }
