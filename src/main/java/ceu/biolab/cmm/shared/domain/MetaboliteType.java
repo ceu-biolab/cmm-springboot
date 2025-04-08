@@ -1,7 +1,9 @@
 package ceu.biolab.cmm.shared.domain;
 
 public enum MetaboliteType {
-    NOPEPTIDES("all-except-peptides"), 
+    //* All except peptides : metabolites (compound_type = 0)
+    ALLEXCEPTPEPTIDES("all-except-peptides"),
+    //* Only lipids (compound_type = 1)
     ONLYLIPIDS("only-lipids"),
     ALL("all-including-peptides")
     ;

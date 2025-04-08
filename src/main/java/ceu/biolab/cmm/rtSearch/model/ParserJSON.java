@@ -2,6 +2,7 @@ package ceu.biolab.cmm.rtSearch.model;
 
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 
 public class ParserJSON {
 
@@ -18,13 +19,13 @@ public class ParserJSON {
      */
 
 
-    public static ToleranceMode parseToleranceMode(String value) {
+    public static MzToleranceMode parseToleranceMode(String value) {
         if (value == null) return null;
         if (value.equalsIgnoreCase("ppm")) {
-            return ToleranceMode.PPM;
+            return MzToleranceMode.PPM;
         }
         if (value.equalsIgnoreCase("mDa")) {
-            return ToleranceMode.DA;
+            return MzToleranceMode.MDA;
         }
         throw new IllegalArgumentException("Incorrect tolerance unit: " + value);
     }

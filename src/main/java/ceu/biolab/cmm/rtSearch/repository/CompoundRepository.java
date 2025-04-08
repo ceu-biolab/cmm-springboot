@@ -1,9 +1,9 @@
 package ceu.biolab.cmm.rtSearch.repository;
 
 import ceu.biolab.*;
-import ceu.biolab.cmm.rtSearch.model.ToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
@@ -25,7 +25,7 @@ public class CompoundRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Set<MSFeature> annotateMSFeature(Double mz, ToleranceMode toleranceMode,
+    public Set<MSFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
                                             Double tolerance, IonizationMode ionizationMode,
                                             Set<String> adductsString, Set<Database> databases,
                                             MetaboliteType metaboliteType)
@@ -34,7 +34,7 @@ public class CompoundRepository {
         Set<MSFeature> annotatedMSFeature = new HashSet<>();
         Integer compound_type = null;
 
-        if (mz == null || tolerance == null || toleranceMode == null || ionizationMode == null) {
+        if (mz == null || tolerance == null || mzToleranceMode == null || ionizationMode == null) {
             return annotatedMSFeature;
         }
 
@@ -122,7 +122,7 @@ public class CompoundRepository {
                 // Calculate tolerance range based on PPM or DA
                 double monoMassWithoutAdduct = monoIsotopicMassFromMZAndAdduct - adductMass;
 
-                if (toleranceMode == ToleranceMode.DA) {
+                if (mzToleranceMode == MzToleranceMode.MDA) {
                     lowerBound = monoMassWithoutAdduct - tolerance;
                     upperBound = monoMassWithoutAdduct + tolerance;
                 } else { // PPM (Parts Per Million)

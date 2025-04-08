@@ -5,6 +5,7 @@ import ceu.biolab.cmm.rtSearch.model.*;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class CompoundBatchSearchRequest {
     private Double[] mz;
-    private ToleranceMode toleranceMode;
+    private MzToleranceMode mzToleranceMode;
     private Double tolerance;
     private IonizationMode ionizationMode;
     private Set<String> adductsString;
@@ -35,7 +36,7 @@ public class CompoundBatchSearchRequest {
             MetaboliteType metaboliteType) {
 
         this.mz = mz;
-        this.toleranceMode = ParserJSON.parseToleranceMode(toleranceMode);
+        this.mzToleranceMode = ParserJSON.parseToleranceMode(toleranceMode);
         this.tolerance = tolerance;
         this.ionizationMode = ParserJSON.parseIonizationMode(ionizationMode);
         this.adductsString = adductsString;
@@ -60,12 +61,12 @@ public class CompoundBatchSearchRequest {
         this.mz = mz;
     }
 
-    public ToleranceMode getToleranceMode() {
-        return toleranceMode;
+    public MzToleranceMode getMzToleranceMode() {
+        return mzToleranceMode;
     }
 
-    public void setToleranceMode(ToleranceMode toleranceMode) {
-        this.toleranceMode = toleranceMode;
+    public void setMzToleranceMode(MzToleranceMode toleranceMode) {
+        this.mzToleranceMode = toleranceMode;
     }
 
     public Double getTolerance() {
@@ -112,7 +113,7 @@ public class CompoundBatchSearchRequest {
     public String toString() {
         return "CompoundSearchRequest{" +
                 "mz=" + mz +
-                ", toleranceMode=" + toleranceMode +
+                ", toleranceMode=" + mzToleranceMode +
                 ", tolerance=" + tolerance +
                 ", ionizationMode=" + ionizationMode +
                 ", adductsString=" + adductsString +

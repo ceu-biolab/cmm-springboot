@@ -1,10 +1,10 @@
-package ceu.biolab.cmm.rtSearch.model.adduct;
+package ceu.biolab.cmm.shared.domain.adduct;
 
 import ceu.biolab.Adduct;
 import ceu.biolab.IncorrectAdduct;
 import ceu.biolab.IncorrectFormula;
 import ceu.biolab.NotFoundElement;
-import ceu.biolab.cmm.rtSearch.model.IonizationMode;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 
 import java.util.Map;
 

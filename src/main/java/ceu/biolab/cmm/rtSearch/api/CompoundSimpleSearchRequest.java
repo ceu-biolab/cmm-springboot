@@ -4,6 +4,7 @@ import ceu.biolab.cmm.rtSearch.model.*;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 public class CompoundSimpleSearchRequest {
     private Double mz;
-    private ToleranceMode toleranceMode;
+    private MzToleranceMode mzToleranceMode;
     private Double tolerance;
     private IonizationMode ionizationMode;
     private Set<String> adductsString;
@@ -27,7 +28,7 @@ public class CompoundSimpleSearchRequest {
             Double tolerance, String ionizationMode, Set<String> adductsString, Set<Database> databases, MetaboliteType metaboliteType) {
 
         this.mz = mz;
-        this.toleranceMode = ParserJSON.parseToleranceMode(toleranceMode);
+        this.mzToleranceMode = ParserJSON.parseToleranceMode(toleranceMode);
         this.tolerance = tolerance;
         this.ionizationMode = ParserJSON.parseIonizationMode(ionizationMode);
         this.adductsString = adductsString;
@@ -48,8 +49,8 @@ public class CompoundSimpleSearchRequest {
     public Double getMz() { return mz; }
     public void setMz(Double mz) { this.mz = mz; }
 
-    public ToleranceMode getToleranceMode() { return toleranceMode; }
-    public void setToleranceMode(ToleranceMode toleranceMode) { this.toleranceMode = toleranceMode; }
+    public MzToleranceMode getMzToleranceMode() { return mzToleranceMode; }
+    public void setToleranceMode(MzToleranceMode toleranceMode) { this.mzToleranceMode = toleranceMode; }
 
     public Double getTolerance() { return tolerance; }
     public void setTolerance(Double tolerance) { this.tolerance = tolerance; }
@@ -75,7 +76,7 @@ public class CompoundSimpleSearchRequest {
     public String toString() {
         return "CompoundSearchRequest{" +
                 "mz=" + mz +
-                ", toleranceMode=" + toleranceMode +
+                ", toleranceMode=" + mzToleranceMode +
                 ", tolerance=" + tolerance +
                 ", ionizationMode=" + ionizationMode +
                 ", adductsString=" + adductsString +
