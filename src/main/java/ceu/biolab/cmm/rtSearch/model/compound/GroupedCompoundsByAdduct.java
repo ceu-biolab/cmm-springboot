@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.rtSearch.model.compound;
 
+import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
+
 import java.util.Set;
 import java.util.TreeSet;
 

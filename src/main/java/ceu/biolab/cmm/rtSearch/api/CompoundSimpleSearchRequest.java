@@ -1,32 +1,29 @@
 package ceu.biolab.cmm.rtSearch.api;
 
 import ceu.biolab.cmm.rtSearch.model.*;
-import ceu.biolab.cmm.rtSearch.service.CompoundService;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ceu.biolab.cmm.shared.domain.Database;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class CompoundSearchRequest {
+
+public class CompoundSimpleSearchRequest {
+    private static final Logger logger = LoggerFactory.getLogger(FormController.class);
     private Double mz;
     private ToleranceMode toleranceMode;
     private Double tolerance;
     private IonizationMode ionizationMode;
     private Set<String> adductsString;
-    private Set<Databases> databases;
+    private Set<Database> databases;
     private MetaboliteType metaboliteType;
 
-    @JsonCreator
-    public CompoundSearchRequest(
-            @JsonProperty("mz") Double mz,
-            @JsonProperty("toleranceMode") String toleranceMode,
-            @JsonProperty("tolerance") Double tolerance,
-            @JsonProperty("ionizationMode") String ionizationMode,
-            @JsonProperty("adductsString") Set<String> adductsString,
-            @JsonProperty("databases") Set<String> databases,
-            @JsonProperty("metaboliteType") String metaboliteType) {
+
+    public CompoundSimpleSearchRequest(Double mz, String toleranceMode,
+            Double tolerance, String ionizationMode, Set<String> adductsString, Set<Database> databases, MetaboliteType metaboliteType) {
+
 
         this.mz = mz;
         this.toleranceMode = ParserJSON.parseToleranceMode(toleranceMode);
@@ -34,12 +31,15 @@ public class CompoundSearchRequest {
         this.ionizationMode = ParserJSON.parseIonizationMode(ionizationMode);
         this.adductsString = adductsString;
 
-        this.databases = new HashSet<>();
-        for (String db : databases) {
+        this.databases = databases;
+        /*for (String db : databases) {
             this.databases.add(ParserJSON.parseDatabases(db));
         }
 
-        this.metaboliteType = ParserJSON.parseMetaboliteType(metaboliteType);
+         */
+
+        //this.metaboliteType = ParserJSON.parseMetaboliteType(metaboliteType);
+        this.metaboliteType = metaboliteType;
     }
 
 
@@ -59,8 +59,8 @@ public class CompoundSearchRequest {
     public Set<String> getAdductsString() { return adductsString; }
     public void setAdductsString(Set<String> adductsString) { this.adductsString = adductsString; }
 
-    public Set<Databases> getDatabases() { return databases; }
-    public void setDatabases(Set<Databases> databases) { this.databases = databases; }
+    public Set<Database> getDatabases() { return databases; }
+    public void setDatabases(Set<Database> databases) { this.databases = databases; }
 
     public MetaboliteType getMetaboliteType() {
         return metaboliteType;

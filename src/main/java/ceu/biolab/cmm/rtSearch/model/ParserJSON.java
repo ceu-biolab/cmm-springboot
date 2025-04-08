@@ -1,8 +1,11 @@
 package ceu.biolab.cmm.rtSearch.model;
 
+import ceu.biolab.cmm.shared.domain.Database;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+
 public class ParserJSON {
 
-    public static MetaboliteType parseMetaboliteType(String value) {
+    /*public static MetaboliteType parseMetaboliteType(String value) {
         if (value == null) return null;
         if (value.equalsIgnoreCase("All except peptides")) {
             return MetaboliteType.ALLEXCEPTPEPTIDES;
@@ -12,6 +15,7 @@ public class ParserJSON {
         }
         throw new IllegalArgumentException("Unknown metabolite type: " + value);
     }
+     */
 
 
     public static ToleranceMode parseToleranceMode(String value) {
@@ -25,28 +29,28 @@ public class ParserJSON {
         throw new IllegalArgumentException("Incorrect tolerance unit: " + value);
     }
 
-    public static Databases parseDatabases(String value) {
+    public static Database parseDatabases(String value) {
         if (value == null) return null;
         if (value.equalsIgnoreCase("All")) {
-            return Databases.ALL;
+            return Database.ALL;
         }
         if (value.equalsIgnoreCase("LipidMaps")) {
-            return Databases.LIPIDMAPS;
+            return Database.LIPIDMAPS;
         }
         if (value.equalsIgnoreCase("Kegg")) {
-            return Databases.KEGG;
+            return Database.KEGG;
         }
         if (value.equalsIgnoreCase("Aspergillus")) {
-            return Databases.ASPERGILLUS;
+            return Database.ASPERGILLUS;
         }
         if (value.equalsIgnoreCase("FAHFA Lipids")) {
-            return Databases.FAHFALIPIDS;
+            return Database.FAHFA;
         }
         if (value.equalsIgnoreCase("Metlin")) {
             return Databases.METLIN;
         }
         if (value.equalsIgnoreCase("HMDB")) {
-            return Databases.HMDB;
+            return Database.HMDB;
         }
         throw new IllegalArgumentException("Unknown database: " + value);
     }

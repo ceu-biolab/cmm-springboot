@@ -7,7 +7,7 @@ import java.util.Objects;
 import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.IonMode;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 
 public class CcsSearchRequest {
     private List<Double> mzValues;
@@ -16,19 +16,19 @@ public class CcsSearchRequest {
     private List<Double> ccsValues;
     private double ccsTolerance;
     private CcsToleranceMode ccsToleranceMode;
-    private IonMode ionMode;
+    private IonizationMode ionMode;
     private BufferGas bufferGas;
 
     public CcsSearchRequest(List<Double> mzValues, double mzTolerance, MzToleranceMode mzToleranceMode,
                            List<Double> ccsValues, double ccsTolerance, CcsToleranceMode ccsToleranceMode,
-                           IonMode ionMode) {
+                           IonizationMode ionMode) {
         this.mzValues = mzValues != null ? mzValues : new ArrayList<>();
         this.mzTolerance = mzTolerance;
         this.mzToleranceMode = mzToleranceMode != null ? mzToleranceMode : MzToleranceMode.PPM;
         this.ccsValues = ccsValues != null ? ccsValues : new ArrayList<>();
         this.ccsTolerance = ccsTolerance;
         this.ccsToleranceMode = ccsToleranceMode != null ? ccsToleranceMode : CcsToleranceMode.PERCENTAGE;
-        this.ionMode = ionMode != null ? ionMode : IonMode.POSITIVE;
+        this.ionMode = ionMode != null ? ionMode : IonizationMode.POSITIVE;
         this.bufferGas = bufferGas != null ? bufferGas : BufferGas.N2;
     }
     
@@ -86,12 +86,12 @@ public class CcsSearchRequest {
         this.ccsToleranceMode = ccsToleranceMode != null ? ccsToleranceMode : CcsToleranceMode.PERCENTAGE;
     }
 
-    public IonMode getIonMode() {
+    public IonizationMode getIonMode() {
         return ionMode;
     }
 
-    public void setIonMode(IonMode ionMode) {
-        this.ionMode = ionMode != null ? ionMode : IonMode.POSITIVE;
+    public void setIonMode(IonizationMode ionMode) {
+        this.ionMode = ionMode != null ? ionMode : IonizationMode.POSITIVE;
     }
 
     public BufferGas getBufferGas() {
