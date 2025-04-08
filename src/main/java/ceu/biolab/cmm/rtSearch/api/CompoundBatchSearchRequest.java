@@ -1,6 +1,7 @@
 package ceu.biolab.cmm.rtSearch.api;
 
 import ceu.biolab.cmm.rtSearch.model.*;
+
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
@@ -8,6 +9,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import ceu.biolab.cmm.rtSearch.service.CompoundService;
+import java.util.List;
+
 
 public class CompoundBatchSearchRequest {
     private Double[] mz;
@@ -16,17 +22,17 @@ public class CompoundBatchSearchRequest {
     private IonizationMode ionizationMode;
     private Set<String> adductsString;
     private Set<Database> databases;
+
     private MetaboliteType metaboliteType;
 
-    @JsonCreator
     public CompoundBatchSearchRequest(
-            @JsonProperty("mz") Double[] mz,
-            @JsonProperty("toleranceMode") String toleranceMode,
-            @JsonProperty("tolerance") Double tolerance,
-            @JsonProperty("ionizationMode") String ionizationMode,
-            @JsonProperty("adductsString") Set<String> adductsString,
-            @JsonProperty("databases") Set<Database> databases,
-            @JsonProperty("metaboliteType") MetaboliteType metaboliteType) {
+            Double[] mz,
+            String toleranceMode,
+            Double tolerance,
+            String ionizationMode,
+            Set<String> adductsString,
+            Set<Database> databases,
+            MetaboliteType metaboliteType) {
 
         this.mz = mz;
         this.toleranceMode = ParserJSON.parseToleranceMode(toleranceMode);

@@ -6,12 +6,14 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashSet;
 import java.util.Set;
 
-
 public class CompoundSimpleSearchRequest {
-    private static final Logger logger = LoggerFactory.getLogger(FormController.class);
     private Double mz;
     private ToleranceMode toleranceMode;
     private Double tolerance;
@@ -23,7 +25,6 @@ public class CompoundSimpleSearchRequest {
 
     public CompoundSimpleSearchRequest(Double mz, String toleranceMode,
             Double tolerance, String ionizationMode, Set<String> adductsString, Set<Database> databases, MetaboliteType metaboliteType) {
-
 
         this.mz = mz;
         this.toleranceMode = ParserJSON.parseToleranceMode(toleranceMode);

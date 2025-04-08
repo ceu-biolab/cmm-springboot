@@ -46,9 +46,6 @@ public class ParserJSON {
         if (value.equalsIgnoreCase("FAHFA Lipids")) {
             return Database.FAHFA;
         }
-        if (value.equalsIgnoreCase("Metlin")) {
-            return Databases.METLIN;
-        }
         if (value.equalsIgnoreCase("HMDB")) {
             return Database.HMDB;
         }
@@ -58,9 +55,6 @@ public class ParserJSON {
 
     public static IonizationMode parseIonizationMode(String value) {
         if (value == null) return null;
-        if (value.equalsIgnoreCase("Neutral")) {
-            return IonizationMode.NEUTRAL;
-        }
         if (value.equalsIgnoreCase("Positive Mode")) {
             return IonizationMode.POSITIVE;
         }

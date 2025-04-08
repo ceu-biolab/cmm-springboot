@@ -52,7 +52,6 @@ public class CompoundController {
 
     @GetMapping("/simple-search")
     public Set<MSFeature> annotatedMSFeatures(@RequestBody CompoundSimpleSearchRequest request) {
-
         Set<MSFeature> features = compoundService.findCompoundsByMz(
                 request.getMz(),
                 request.getToleranceMode(),
@@ -83,3 +82,4 @@ public class CompoundController {
         return features;
     }
 }
+
