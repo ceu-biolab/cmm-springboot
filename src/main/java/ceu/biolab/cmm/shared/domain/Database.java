@@ -1,15 +1,18 @@
 package ceu.biolab.cmm.shared.domain;
 
 public enum Database {
-    KEGG("kegg"),
+    ALL("all"),
     HMDB("hmdb"),
     LIPIDMAPS("lipidmaps"),
-    METLIN("metlin"),
-    MINE("mine"),
+    KEGG("kegg"),
     INHOUSE("in-house"),
-    ASPERGUILLUS("asperguillus"),
-    FAHFA("fahfa")
+    ASPERGILLUS("aspergillus"),
+    FAHFA("fahfa"),
+    CHEBI("chebi"),
+    PUBCHEM("pubchem"),
+    NPATLAS("npatlas")
     ;
+
 
     private final String name;
 

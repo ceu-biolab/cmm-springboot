@@ -1,5 +1,5 @@
 package ceu.biolab.cmm.shared.domain;
 
-public enum IonMode {
+public enum IonizationMode {
     POSITIVE, NEGATIVE
 }

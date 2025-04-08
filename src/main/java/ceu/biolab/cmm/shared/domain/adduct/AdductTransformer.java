@@ -1,13 +1,11 @@
-package ceu.biolab.cmm.rtSearch.model.adduct;
+package ceu.biolab.cmm.shared.domain.adduct;
 
 import ceu.biolab.*;
 import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
 
-import ceu.biolab.cmm.rtSearch.model.IonizationMode;
-
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.support.AopUtils;
 
 import java.util.Map;
 

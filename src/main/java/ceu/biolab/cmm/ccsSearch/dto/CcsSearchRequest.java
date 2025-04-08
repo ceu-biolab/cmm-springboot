@@ -6,8 +6,10 @@ import java.util.Objects;
 
 import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.IonMode;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 
 public class CcsSearchRequest {
     private List<Double> mzValues;
@@ -16,19 +18,19 @@ public class CcsSearchRequest {
     private List<Double> ccsValues;
     private double ccsTolerance;
     private CcsToleranceMode ccsToleranceMode;
-    private IonMode ionMode;
+    private IonizationMode ionizationMode;
     private BufferGas bufferGas;
 
     public CcsSearchRequest(List<Double> mzValues, double mzTolerance, MzToleranceMode mzToleranceMode,
                            List<Double> ccsValues, double ccsTolerance, CcsToleranceMode ccsToleranceMode,
-                           IonMode ionMode) {
+                           IonizationMode ionizationMode) {
         this.mzValues = mzValues != null ? mzValues : new ArrayList<>();
         this.mzTolerance = mzTolerance;
         this.mzToleranceMode = mzToleranceMode != null ? mzToleranceMode : MzToleranceMode.PPM;
         this.ccsValues = ccsValues != null ? ccsValues : new ArrayList<>();
         this.ccsTolerance = ccsTolerance;
         this.ccsToleranceMode = ccsToleranceMode != null ? ccsToleranceMode : CcsToleranceMode.PERCENTAGE;
-        this.ionMode = ionMode != null ? ionMode : IonMode.POSITIVE;
+        this.ionizationMode = ionizationMode != null ? ionizationMode : ionizationMode.POSITIVE;
         this.bufferGas = bufferGas != null ? bufferGas : BufferGas.N2;
     }
     
@@ -86,12 +88,12 @@ public class CcsSearchRequest {
         this.ccsToleranceMode = ccsToleranceMode != null ? ccsToleranceMode : CcsToleranceMode.PERCENTAGE;
     }
 
-    public IonMode getIonMode() {
-        return ionMode;
+    public IonizationMode getionizationMode() {
+        return ionizationMode;
     }
 
-    public void setIonMode(IonMode ionMode) {
-        this.ionMode = ionMode != null ? ionMode : IonMode.POSITIVE;
+    public void setIonizationMode(IonizationMode ionizationMode) {
+        this.ionizationMode = ionizationMode != null ? ionizationMode : IonizationMode.POSITIVE;
     }
 
     public BufferGas getBufferGas() {
@@ -113,13 +115,13 @@ public class CcsSearchRequest {
                mzToleranceMode == that.mzToleranceMode &&
                Objects.equals(ccsValues, that.ccsValues) &&
                ccsToleranceMode == that.ccsToleranceMode &&
-               ionMode == that.ionMode &&
+               ionizationMode == that.ionizationMode &&
                bufferGas == that.bufferGas;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mzValues, mzTolerance, mzToleranceMode, ccsValues, ccsTolerance, ccsToleranceMode, ionMode, bufferGas);
+        return Objects.hash(mzValues, mzTolerance, mzToleranceMode, ccsValues, ccsTolerance, ccsToleranceMode, ionizationMode, bufferGas);
     }
 
     @Override
@@ -131,7 +133,7 @@ public class CcsSearchRequest {
                 ", ccsValues=" + ccsValues +
                 ", ccsTolerance=" + ccsTolerance +
                 ", ccsToleranceMode=" + ccsToleranceMode +
-                ", ionMode=" + ionMode +
+                ", ionizationMode=" + ionizationMode +
                 ", bufferGas=" + bufferGas +
                 '}';
     }

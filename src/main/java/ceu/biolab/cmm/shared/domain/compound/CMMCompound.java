@@ -1,4 +1,7 @@
-package ceu.biolab.cmm.rtSearch.model.compound;
+package ceu.biolab.cmm.shared.domain.compound;
+
+import ceu.biolab.FormulaType;
+import ceu.biolab.cmm.rtSearch.model.compound.LipidMapsClassification;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +14,6 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
     private final String agilentID;
     private final Integer pcID;
     private final Integer chebiID;
-
     private final String inHouseID;
     private final Integer aspergillusID;
     private final String knapsackID;
@@ -22,25 +24,17 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
     private final String meshNomenclature;
     private final String iupacClassification;
     private final String aspergillusWebName;
-    private final String inchi;
-    private final String inchiKey;
-    private final String smiles;
-    private final String lipidType;
-    private final Integer numChains;
-    private final Integer numCarbons;
-    private final Integer doubleBonds;
-    private Set<LipidMapsClassification> lipidMapsClassifications;
+    //! cambiar a compound
 
 
-
-    public CMMCompound(Integer compound_id, String cas_id, String compound_name, String formula, Double mass, Integer charge_type,
-                       Integer charge_number, String formula_type, Integer compound_type, Integer compound_status, Integer formula_type_int,
-                       Double logP, Double rt_pred, String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID,
+    public CMMCompound(int compoundId, String casId, String compoundName, String formula, double mass,
+                       int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
+                       int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
+                       Integer numChains, Integer numCarbons, Integer doubleBonds, String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID,
                        Integer aspergillusID, String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String biologicalActivity,
-                       String meshNomenclature, String iupacClassification, String aspergillusWebName, String inchi, String inchiKey, String smiles, String lipidType,
-                       Integer numChains, Integer numCarbons, Integer doubleBonds) {
+                       String meshNomenclature, String iupacClassification, String aspergillusWebName) {
 
-        super(compound_id, cas_id, compound_name, formula, mass, charge_type, charge_number, formula_type, compound_type, compound_status, formula_type_int, logP, rt_pred);
+        super(compoundId, casId, compoundName, formula, mass, chargeType, chargeNumber, formulaType, compoundType, compoundStatus, formulaTypeInt, logP, rtPred, inchi, inchiKey, smiles, lipidType, numChains, numCarbons, doubleBonds);
         this.keggID = keggID;
         this.lmID = lmID;
         this.hmdbID = hmdbID;
@@ -57,14 +51,6 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
         this.meshNomenclature = meshNomenclature;
         this.iupacClassification = iupacClassification;
         this.aspergillusWebName = aspergillusWebName;
-        this.inchi = inchi;
-        this.inchiKey = inchiKey;
-        this.smiles = smiles;
-        this.lipidType = lipidType;
-        this.numChains = numChains;
-        this.numCarbons = numCarbons;
-        this.doubleBonds = doubleBonds;
-        this.lipidMapsClassifications = new HashSet<>();
     }
 
     public String getkeggID() {
@@ -131,50 +117,14 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
         return aspergillusWebName;
     }
 
-    public String getInchi() {
-        return inchi;
-    }
-
-    public String getInchiKey() {
-        return inchiKey;
-    }
-
-    public String getSmiles() {
-        return smiles;
-    }
-
-    public String getLipidType() {
-        return lipidType;
-    }
-
-    public Integer getNumChains() {
-        return numChains;
-    }
-
-    public Integer getNumCarbons() {
-        return numCarbons;
-    }
-
-    public Integer getDoubleBonds() {
-        return doubleBonds;
-    }
-
-    public Set<LipidMapsClassification> getLipidMapsClassifications() {
-        return lipidMapsClassifications;
-    }
-
-    public void setLipidMapsClassifications(Set<LipidMapsClassification> lipidMapsClassifications) {
-        this.lipidMapsClassifications = lipidMapsClassifications;
-    }
-
 
     @Override
     public int compareTo(CMMCompound other) {
         return Integer.compare(this.getCompoundId(), other.getCompoundId());
     }
 
-    public Integer getCompoundId() {
-        return super.getCompound_id();
+    public int getCompoundId() {
+        return super.getCompoundId();
     }
 
     @Override
@@ -187,8 +137,6 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
                 ", npatlasID=" + npatlasID + ", fahfaID=" + fahfaID + ", ohPositionID=" + ohPositionID +
                 ", biologicalActivity='" + biologicalActivity + '\'' + ", meshNomenclature='" + meshNomenclature + '\''
                 + ", iupacClassification='" + iupacClassification + '\'' + ", aspergillusWebName='" + aspergillusWebName + '\'' +
-                ", inchi='" + inchi + '\'' + ", inchiKey='" + inchiKey + '\'' + ", smiles='" + smiles + '\'' +
-                ", lipidType='" + lipidType + '\'' + ", numChains=" + numChains + ", numCarbons=" + numCarbons +
-                ", doubleBonds=" + doubleBonds + ", classification='" + lipidMapsClassifications + '}';
+                '}';
     }
 }
