@@ -1,5 +1,7 @@
 target/
 .idea/
+*.yml/
 .vscode/
 .smarttomcat/
-*.iml
+*.iml/
+*.jks
