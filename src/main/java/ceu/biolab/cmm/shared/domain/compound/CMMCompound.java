@@ -20,21 +20,17 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
     private final Integer npatlasID;
     private final Integer fahfaID;
     private final Integer ohPositionID;
-    private final String biologicalActivity;
-    private final String meshNomenclature;
-    private final String iupacClassification;
     private final String aspergillusWebName;
-    //! cambiar a compound
-
 
     public CMMCompound(int compoundId, String casId, String compoundName, String formula, double mass,
                        int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
                        int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
-                       Integer numChains, Integer numCarbons, Integer doubleBonds, String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID,
-                       Integer aspergillusID, String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String biologicalActivity,
-                       String meshNomenclature, String iupacClassification, String aspergillusWebName) {
+                       Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
+                       String meshNomenclature, String iupacClassification, String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID,
+                       Integer aspergillusID, String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String aspergillusWebName) {
 
-        super(compoundId, casId, compoundName, formula, mass, chargeType, chargeNumber, formulaType, compoundType, compoundStatus, formulaTypeInt, logP, rtPred, inchi, inchiKey, smiles, lipidType, numChains, numCarbons, doubleBonds);
+        super(compoundId, casId, compoundName, formula, mass, chargeType, chargeNumber, formulaType, compoundType, compoundStatus, formulaTypeInt, logP, rtPred, inchi, inchiKey, smiles, lipidType,
+                numChains, numCarbons, doubleBonds, biologicalActivity, meshNomenclature, iupacClassification);
         this.keggID = keggID;
         this.lmID = lmID;
         this.hmdbID = hmdbID;
@@ -47,9 +43,6 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
         this.npatlasID = npatlasID;
         this.fahfaID = fahfaID;
         this.ohPositionID = ohPositionID;
-        this.biologicalActivity = biologicalActivity;
-        this.meshNomenclature = meshNomenclature;
-        this.iupacClassification = iupacClassification;
         this.aspergillusWebName = aspergillusWebName;
     }
 
@@ -101,18 +94,6 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
         return ohPositionID;
     }
 
-    public String getBiologicalActivity() {
-        return biologicalActivity;
-    }
-
-    public String getMeshNomenclature() {
-        return meshNomenclature;
-    }
-
-    public String getIupacClassification() {
-        return iupacClassification;
-    }
-
     public String getAspergillusWebName() {
         return aspergillusWebName;
     }
@@ -134,9 +115,7 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
                 "keggID='" + keggID + '\'' + ", lmID='" + lmID + '\'' + ", hmdbID='" + hmdbID + '\'' +
                 ", agilentID='" + agilentID + '\'' + ", pcID=" + pcID + ", chebiID=" + chebiID +
                 ", inHouseID='" + inHouseID + '\'' + ", aspergillusID=" + aspergillusID + ", knapsackID='" + knapsackID + '\'' +
-                ", npatlasID=" + npatlasID + ", fahfaID=" + fahfaID + ", ohPositionID=" + ohPositionID +
-                ", biologicalActivity='" + biologicalActivity + '\'' + ", meshNomenclature='" + meshNomenclature + '\''
-                + ", iupacClassification='" + iupacClassification + '\'' + ", aspergillusWebName='" + aspergillusWebName + '\'' +
+                ", npatlasID=" + npatlasID + ", fahfaID=" + fahfaID + ", ohPositionID=" + ohPositionID + ", aspergillusWebName='" + aspergillusWebName + '\'' +
                 '}';
     }
 }

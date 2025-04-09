@@ -33,11 +33,15 @@ public class Compound {
     private final Integer numCarbons;
     private final Integer doubleBonds;
     private Set<LipidMapsClassification> lipidMapsClassifications;
+    private final String biologicalActivity;
+    private final String meshNomenclature;
+    private final String iupacClassification;
 
     public Compound(int compoundId, String casId, String compoundName, String formula, double mass,
                     int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
                     int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
-                    Integer numChains, Integer numCarbons, Integer doubleBonds) {
+                    Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
+                    String meshNomenclature, String iupacClassification) {
         this.compoundId = compoundId;
         this.casId = casId;
         this.compoundName = compoundName;
@@ -59,6 +63,9 @@ public class Compound {
         this.numCarbons = numCarbons;
         this.doubleBonds = doubleBonds;
         this.lipidMapsClassifications = new HashSet<>();
+        this.biologicalActivity = biologicalActivity;
+        this.meshNomenclature = meshNomenclature;
+        this.iupacClassification = iupacClassification;
     }
 
     public int getCompoundId() {
@@ -149,6 +156,18 @@ public class Compound {
         this.lipidMapsClassifications = lipidMapsClassifications;
     }
 
+    public String getBiologicalActivity() {
+        return biologicalActivity;
+    }
+
+    public String getMeshNomenclature() {
+        return meshNomenclature;
+    }
+
+    public String getIupacClassification() {
+        return iupacClassification;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -191,6 +210,8 @@ public class Compound {
                 ", inchi='" + inchi + '\'' + ", inchiKey='" + inchiKey + '\'' + ", smiles='" + smiles + '\'' +
                 ", lipidType='" + lipidType + '\'' + ", numChains=" + numChains + ", numCarbons=" + numCarbons +
                 ", doubleBonds=" + doubleBonds + ", classification='" + lipidMapsClassifications +
+                ", biologicalActivity='" + biologicalActivity + '\'' + ", meshNomenclature='" + meshNomenclature + '\''
+                + ", iupacClassification='" + iupacClassification + '\'' +
                 '}';
     }
 }
