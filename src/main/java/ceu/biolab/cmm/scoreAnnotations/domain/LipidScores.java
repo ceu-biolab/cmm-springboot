@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.scoreAnnotations.model;
+package ceu.biolab.cmm.scoreAnnotations.domain;
 
 import java.util.List;
 import java.util.Map;

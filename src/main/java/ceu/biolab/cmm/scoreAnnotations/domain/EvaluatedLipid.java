@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.scoreAnnotations.model;
+package ceu.biolab.cmm.scoreAnnotations.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +42,10 @@ public class EvaluatedLipid {
         scores.setAdductRelationScore(value);
     }
 
+    public double getAdductRelationScore() {
+        return scores.getAdductRelationScore().orElse(0.0);
+    }
+
     public void setIonizationScore(double value) {
         scores.setIonizationScore(value);
     }
@@ -68,5 +72,17 @@ public class EvaluatedLipid {
 
     public void addRtScore(boolean value, String featKey) {
         scores.addRtScore(value, featKey);
+    }
+
+    public String getCategory() {
+        return lipid.getCategory().orElse("");
+    }
+
+    public String getMainClass() {
+        return lipid.getMainClass().orElse("");
+    }
+
+    public String getSubClass() {
+        return lipid.getSubClass().orElse("");
     }
 }

@@ -1,12 +1,14 @@
 package ceu.biolab.cmm.scoreAnnotations.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
-import ceu.biolab.cmm.scoreAnnotations.model.*;
+import ceu.biolab.cmm.scoreAnnotations.domain.*;
+import ceu.biolab.cmm.shared.domain.ExperimentParameters;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
@@ -14,7 +16,7 @@ import ceu.biolab.cmm.shared.domain.msFeature.ILCFeature;
 
 public class ScoreLipids {
 
-    public static void scoreLipidAnnotations(List<AnnotatedFeature> msFeatures) {
+    public static void scoreLipidAnnotations(List<AnnotatedFeature> msFeatures, Optional<ExperimentParameters> experimentParameters) {
         KieSession kieSession = null;
         try {
             // Create a KieSession - using the simpler approach
@@ -58,6 +60,14 @@ public class ScoreLipids {
                         }
                     }
                 }
+            }
+
+            if (experimentParameters.isPresent()) {
+                kieSession.insert(experimentParameters.get());
+            }
+            else {
+                // If experiment parameters are not present, insert a default one
+                kieSession.insert(ExperimentParameters.empty());
             }
 
             // Fire all rules and let them operate on the inserted facts
