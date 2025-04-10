@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.scoreAnnotations.model;
+package ceu.biolab.cmm.scoreAnnotations.domain;
 
 import java.util.List;
 import java.util.Map;
@@ -13,13 +13,13 @@ import lombok.Data;
 public class LipidScores implements IScore{
     private Map<String, List<Boolean>> rtScoreMap;
     private Optional<Double> ionizationScore;
-    private Optional<Double> adductScore;
+    private Optional<Double> adductRelationScore;
     private Optional<Double> rtScore;
 
     public LipidScores() {
         this.rtScoreMap = new HashMap<>();
         this.ionizationScore = Optional.empty();
-        this.adductScore = Optional.empty();
+        this.adductRelationScore = Optional.empty();
         this.rtScore = Optional.empty();
     }
 
@@ -30,7 +30,7 @@ public class LipidScores implements IScore{
     public Map<String, String> getScores() {
         Map<String, String> scores = new HashMap<>();
         scores.put("ionization", ionizationScore.isPresent() ? ionizationScore.get().toString() : "");
-        scores.put("adduct", adductScore.isPresent() ? adductScore.get().toString() : "");
+        scores.put("adduct", adductRelationScore.isPresent() ? adductRelationScore.get().toString() : "");
         scores.put("rt", rtScore.isPresent() ? rtScore.get().toString() : "");
         
         return scores;
@@ -55,6 +55,28 @@ public class LipidScores implements IScore{
             getRtScoreMap().put(featKey, new ArrayList<>());
         }
         rtScoreMap.get(featKey).add(value);
+    }
+
+    public void setAdductRelationScore(double value) {
+        this.adductRelationScore = Optional.of(value);
+    }
+
+    public void setIonizationScore(double value) {
+        if (this.ionizationScore.isEmpty()) {
+            this.ionizationScore = Optional.of(0.0);
+        }
+        
+        if (value == -2.0) {
+            if (this.ionizationScore.get() != -1.0) {
+                this.ionizationScore = Optional.of(1.0);
+            }
+        } else if (value == -3.0) {
+            if (this.ionizationScore.get() != -1.0) {
+                this.ionizationScore = Optional.of(0.1);
+            }
+        } else {
+            this.ionizationScore = Optional.of(value);
+        }
     }
 
     public Optional<List<Boolean>> getRtScoresComparedTo(String featKey) {

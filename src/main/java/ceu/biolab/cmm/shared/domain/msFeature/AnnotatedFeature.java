@@ -8,21 +8,21 @@ import lombok.Data;
 @Data
 public class AnnotatedFeature {
     private IMSFeature feature;
-    private Set<AnnotationsByAdduct> annotationsByAdducts;
+    private List<AnnotationsByAdduct> annotationsByAdducts;
 
     public AnnotatedFeature(double mzValue) {
         this.feature = new MSFeature(mzValue);
-        this.annotationsByAdducts = new LinkedHashSet<>();
+        this.annotationsByAdducts = new ArrayList<>();
     }
 
     public AnnotatedFeature(double mzValue, double rtValue) {
         this.feature = new LCMSFeature(mzValue, rtValue);
-        this.annotationsByAdducts = new LinkedHashSet<>();
+        this.annotationsByAdducts = new ArrayList<>();
     }
 
     public AnnotatedFeature(IMSFeature feature) {
         this.feature = feature;
-        this.annotationsByAdducts = new LinkedHashSet<>();
+        this.annotationsByAdducts = new ArrayList<>();
     }
 
     public Optional<AnnotationsByAdduct> findAnnotationByAdduct(String adduct) {
