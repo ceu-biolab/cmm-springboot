@@ -5,7 +5,7 @@ import ceu.biolab.cmm.scoreAnnotations.domain.LipidScores;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
-import ceu.biolab.cmm.shared.domain.msFeature.ILCFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.ILCMSFeature;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -359,7 +359,7 @@ public class ScoreLipidsServiceTest {
             for (AnnotationsByAdduct scoredAnnotationsByAdduct : feature.getAnnotationsByAdducts()) {
                 for (Annotation scoredCompound : scoredAnnotationsByAdduct.getAnnotations()) {
                     if (scoredCompound.getCompound() instanceof Lipid lipid &&
-                        feature.getFeature() instanceof ILCFeature lcFeature &&
+                        feature.getFeature() instanceof ILCMSFeature lcFeature &&
                         lipid.getLipidType().equals(lipidType) &&
                         lipid.getNumberCarbons() == carbons &&
                         lipid.getNumberDoubleBonds() == doubleBonds &&

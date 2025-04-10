@@ -1,8 +1,6 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.Data;

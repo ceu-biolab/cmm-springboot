@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.shared.domain;
 
-public enum IonMode {
+public enum IonizationMode {
 
     POSITIVE("positive"),
     NEGATIVE("negative"),
@@ -9,7 +9,7 @@ public enum IonMode {
 
     private final String value;
 
-    IonMode(String value) {
+    IonizationMode(String value) {
         this.value = value;
     }
 
@@ -17,8 +17,8 @@ public enum IonMode {
         return value;
     }
 
-    public static IonMode fromString(String value) {
-        for (IonMode mode : IonMode.values()) {
+    public static IonizationMode fromString(String value) {
+        for (IonizationMode mode : IonizationMode.values()) {
             if (mode.value == value) {
                 return mode;
             }

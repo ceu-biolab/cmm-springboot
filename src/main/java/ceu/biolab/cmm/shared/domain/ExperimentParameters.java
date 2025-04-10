@@ -11,7 +11,7 @@ public class ExperimentParameters {
      */
     // TODO - class may be incomplete. Add parameters as needed.
 
-    private Optional<IonMode> ionMode;
+    private Optional<IonizationMode> ionMode;
     private Optional<ModifierType> modifierType;
 
     public ExperimentParameters() {
@@ -25,7 +25,7 @@ public class ExperimentParameters {
     }
 
     public String getIonModeStr() {
-        return ionMode.map(IonMode::getValue).orElse("");
+        return ionMode.map(IonizationMode::getValue).orElse("");
     }
 
     public String getModifierTypeStr() {

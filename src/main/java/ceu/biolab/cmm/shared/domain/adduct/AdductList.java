@@ -1,10 +1,5 @@
-package ceu.biolab.cmm.rtSearch.model.adduct;
+package ceu.biolab.cmm.shared.domain.adduct;
 
-import ceu.biolab.Adduct;
-import ceu.biolab.IncorrectAdduct;
-import ceu.biolab.IncorrectFormula;
-import ceu.biolab.NotFoundElement;
-import ceu.biolab.cmm.rtSearch.model.IonizationMode;
 import jakarta.faces.model.SelectItem;
 
 import java.util.Collections;
@@ -91,6 +86,7 @@ public class AdductList {
         mapMZPositiveAdductsTMP.put("M+F+H", "-20.00623");
         //mapMZPositiveAdductsTMP.put("M+2", "-2.0173");
         MAPMZPOSITIVEADDUCTS = Collections.unmodifiableMap(mapMZPositiveAdductsTMP);
+        // MAPMZPOSITIVEADDUCTS = mapMZPositiveAdductsTMP;
     }
 
     public static final Map<String, String> MAPMZNEGATIVEADDUCTS;

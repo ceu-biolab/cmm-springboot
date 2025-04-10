@@ -3,6 +3,7 @@ import ceu.biolab.cmm.rtSearch.model.msFeature.MSFeature;
 import ceu.biolab.cmm.rtSearch.service.CompoundService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -16,11 +17,11 @@ public class CompoundController {
         this.compoundService = compoundService;
     }
 
-    @PostMapping("/search")
-    public Set<MSFeature> annotateMSFeatures(@RequestBody CompoundSearchRequest request) {
-        Set<MSFeature> features = compoundService.findCompoundsByMzRanges(
+    @PostMapping("/simple-search")
+    public Set<MSFeature> annotateMSFeature(@RequestBody CompoundSimpleSearchRequest request) {
+        Set<MSFeature> features = compoundService.findCompoundsByMz(
                 request.getMz(),
-                request.getToleranceMode(),
+                request.getMzToleranceMode(),
                 request.getTolerance(),
                 request.getIonizationMode(),
                 request.getAdductsString(),
@@ -28,16 +29,32 @@ public class CompoundController {
                 request.getMetaboliteType()
         );
 
-        System.out.println("Found features: " + features);
         return features;
     }
 
-    @GetMapping("/search")
-    public Set<MSFeature> annotatedMSFeatures(@RequestBody CompoundSearchRequest request) {
+    @PostMapping("/batch-search")
+    public Set<MSFeature> annotateMSFeatures(@RequestBody CompoundBatchSearchRequest request) {
+        Set<MSFeature> features = new HashSet<>();
+        for(Double mz : request.getMz()) {
+            features = compoundService.findCompoundsByMz(
+                    mz,
+                    request.getMzToleranceMode(),
+                    request.getTolerance(),
+                    request.getIonizationMode(),
+                    request.getAdductsString(),
+                    request.getDatabases(),
+                    request.getMetaboliteType()
+            );
+        }
 
-        Set<MSFeature> features = compoundService.findCompoundsByMzRanges(
+        return features;
+    }
+
+    @GetMapping("/simple-search")
+    public Set<MSFeature> annotatedMSFeatures(@RequestBody CompoundSimpleSearchRequest request) {
+        Set<MSFeature> features = compoundService.findCompoundsByMz(
                 request.getMz(),
-                request.getToleranceMode(),
+                request.getMzToleranceMode(),
                 request.getTolerance(),
                 request.getIonizationMode(),
                 request.getAdductsString(),
@@ -47,4 +64,22 @@ public class CompoundController {
         return features;
     }
 
+    @GetMapping("/batch-search")
+    public Set<MSFeature> annotatedMSFeatures(@RequestBody CompoundBatchSearchRequest request) {
+
+        Set<MSFeature> features = new HashSet<>();
+        for(Double mz : request.getMz()) {
+            features = compoundService.findCompoundsByMz(
+                    mz,
+                    request.getMzToleranceMode(),
+                    request.getTolerance(),
+                    request.getIonizationMode(),
+                    request.getAdductsString(),
+                    request.getDatabases(),
+                    request.getMetaboliteType()
+            );
+        }
+        return features;
+    }
 }
+

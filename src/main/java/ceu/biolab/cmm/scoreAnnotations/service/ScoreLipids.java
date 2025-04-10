@@ -12,7 +12,7 @@ import ceu.biolab.cmm.shared.domain.ExperimentParameters;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
-import ceu.biolab.cmm.shared.domain.msFeature.ILCFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.ILCMSFeature;
 
 public class ScoreLipids {
 
@@ -41,7 +41,7 @@ public class ScoreLipids {
             for (AnnotatedFeature msFeature : msFeatures) {
                 double featureMz, featureRtValue;
                 // Feature has to have rt value for scoring
-                if (msFeature.getFeature() instanceof ILCFeature lcFeature) {
+                if (msFeature.getFeature() instanceof ILCMSFeature lcFeature) {
                     featureMz = lcFeature.getMzValue();
                     featureRtValue = lcFeature.getRetentionTime();
                 } else {
