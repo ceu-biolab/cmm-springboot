@@ -6,6 +6,7 @@ import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.msFeature.ILCMSFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.LCMSFeature;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -318,7 +319,9 @@ public class ScoreLipidsServiceTest {
     // Helper methods 
     
     private AnnotatedFeature createEmptyAnnotatedFeature(double mz, double rt) {
-        return new AnnotatedFeature(rt, mz);
+        AnnotatedFeature feature = new AnnotatedFeature(mz);
+        feature.setFeature(new LCMSFeature(mz, rt));
+        return feature;
     }
 
     private void addRTLipidToAnnotations(AnnotatedFeature feature, String lipidType, int carbons, int doubleBonds) {
