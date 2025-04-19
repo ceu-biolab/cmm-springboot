@@ -71,6 +71,11 @@ public class AdductTransformer {
         }
     }
 
+    //  prepSt.setDouble(1, (massToSearch - tolerance));
+    //            prepSt.setDouble(2, (massToSearch + tolerance));
+    //tolerance = mass to search * tolerance * 10^-6
+
+
     public static Double getMonoMassFromSingleChargedMZ(Double experimentalMass, Double adductValue) {
         return experimentalMass - adductValue;
     }
