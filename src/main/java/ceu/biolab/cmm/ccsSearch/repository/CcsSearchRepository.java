@@ -8,8 +8,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponse;
-import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQuery;
+import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponseDTO;
+import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQueryDTO;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,7 +27,7 @@ public class CcsSearchRepository {
         this.resourceLoader = resourceLoader;
     }
 
-    public List<CcsQueryResponse> findMatchingCompounds(CcsFeatureQuery queryData) throws IOException {
+    public List<CcsQueryResponseDTO> findMatchingCompounds(CcsFeatureQueryDTO queryData) throws IOException {
         Resource resource = resourceLoader.getResource("classpath:sql/ccs_compound_search_query.sql");
 
         // TODO check materialized views
@@ -41,6 +41,6 @@ public class CcsSearchRepository {
         params.addValue("ccsLower", queryData.getCcsLower());
         params.addValue("ccsUpper", queryData.getCcsUpper());
 
-        return jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(CcsQueryResponse.class));
+        return jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(CcsQueryResponseDTO.class));
     }
 }
