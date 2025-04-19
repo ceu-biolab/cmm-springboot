@@ -15,11 +15,6 @@ public class AnnotatedFeature {
         this.annotationsByAdducts = new ArrayList<>();
     }
 
-    public AnnotatedFeature(double mzValue, double rtValue) {
-        this.feature = new LCMSFeature(mzValue, rtValue);
-        this.annotationsByAdducts = new ArrayList<>();
-    }
-
     public AnnotatedFeature(IMSFeature feature) {
         this.feature = feature;
         this.annotationsByAdducts = new ArrayList<>();

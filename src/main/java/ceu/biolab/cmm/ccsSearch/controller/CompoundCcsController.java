@@ -1,7 +1,7 @@
 package ceu.biolab.cmm.ccsSearch.controller;
 
-import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequest;
-import ceu.biolab.cmm.ccsSearch.dto.CcsSearchResponse;
+import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequestDTO;
+import ceu.biolab.cmm.ccsSearch.dto.CcsSearchResponseDTO;
 import ceu.biolab.cmm.ccsSearch.service.CcsSearchService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,9 @@ public class CompoundCcsController {
     private CcsSearchService compoundCcsService;
 
     @PostMapping("/ccs")
-    public CcsSearchResponse getCompoundsByCcsTolerance(@RequestBody CcsSearchRequest request) {
+    public CcsSearchResponseDTO getCompoundsByCcsTolerance(@RequestBody CcsSearchRequestDTO request) {
         if (request.getCcsValues() == null || request.getCcsValues().isEmpty()) {
-            return new CcsSearchResponse();
+            return new CcsSearchResponseDTO();
         }
         
         return compoundCcsService.search(request);

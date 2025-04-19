@@ -8,9 +8,6 @@ import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
-
 
 public class CcsSearchRequest {
     private List<Double> mzValues;
@@ -19,7 +16,6 @@ public class CcsSearchRequest {
     private List<Double> ccsValues;
     private double ccsTolerance;
     private CcsToleranceMode ccsToleranceMode;
-    private IonizationMode ionMode;
     private IonizationMode ionizationMode;
     private BufferGas bufferGas;
 
@@ -32,7 +28,7 @@ public class CcsSearchRequest {
         this.ccsValues = ccsValues != null ? ccsValues : new ArrayList<>();
         this.ccsTolerance = ccsTolerance;
         this.ccsToleranceMode = ccsToleranceMode != null ? ccsToleranceMode : CcsToleranceMode.PERCENTAGE;
-        this.ionizationMode = ionizationMode != null ? ionizationMode : ionizationMode.POSITIVE;
+        this.ionizationMode = ionizationMode != null ? ionizationMode : IonizationMode.POSITIVE;
         this.bufferGas = bufferGas != null ? bufferGas : BufferGas.N2;
     }
     
