@@ -6,7 +6,7 @@ import ceu.biolab.cmm.rtSearch.model.compound.LipidMapsClassification;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CMMCompound extends Compound implements Comparable<CMMCompound>{
+public class CMMCompound extends Compound implements Comparable<CMMCompound> {
 
     private final String keggID;
     private final String lmID;
@@ -21,16 +21,17 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
     private final Integer fahfaID;
     private final Integer ohPositionID;
     private final String aspergillusWebName;
+    private final String mol2;
 
     public CMMCompound(int compoundId, String casId, String compoundName, String formula, double mass,
                        int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
                        int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
                        Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
                        String meshNomenclature, String iupacClassification, String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID,
-                       Integer aspergillusID, String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String aspergillusWebName) {
+                       Integer aspergillusID, String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String aspergillusWebName, String mol2) {
 
         super(compoundId, casId, compoundName, formula, mass, chargeType, chargeNumber, formulaType, compoundType, compoundStatus, formulaTypeInt, logP, rtPred, inchi, inchiKey, smiles, lipidType,
-                numChains, numCarbons, doubleBonds, biologicalActivity, meshNomenclature, iupacClassification);
+                numChains, numCarbons, doubleBonds, biologicalActivity, meshNomenclature, iupacClassification, mol2);
         this.keggID = keggID;
         this.lmID = lmID;
         this.hmdbID = hmdbID;
@@ -44,6 +45,7 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
         this.fahfaID = fahfaID;
         this.ohPositionID = ohPositionID;
         this.aspergillusWebName = aspergillusWebName;
+        this.mol2 = mol2;
     }
 
     public String getkeggID() {
@@ -96,6 +98,10 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound>{
 
     public String getAspergillusWebName() {
         return aspergillusWebName;
+    }
+
+    public String getMol2() {
+        return mol2;
     }
 
 

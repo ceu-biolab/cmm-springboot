@@ -36,12 +36,13 @@ public class Compound {
     private final String biologicalActivity;
     private final String meshNomenclature;
     private final String iupacClassification;
+    private final String mol2;
 
     public Compound(int compoundId, String casId, String compoundName, String formula, double mass,
                     int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
                     int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
                     Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
-                    String meshNomenclature, String iupacClassification) {
+                    String meshNomenclature, String iupacClassification, String mol2) {
         this.compoundId = compoundId;
         this.casId = casId;
         this.compoundName = compoundName;
@@ -66,6 +67,7 @@ public class Compound {
         this.biologicalActivity = biologicalActivity;
         this.meshNomenclature = meshNomenclature;
         this.iupacClassification = iupacClassification;
+        this.mol2 = mol2;
     }
 
     public int getCompoundId() {
@@ -168,6 +170,10 @@ public class Compound {
         return iupacClassification;
     }
 
+    public String getMol2() {
+        return mol2;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -211,7 +217,7 @@ public class Compound {
                 ", lipidType='" + lipidType + '\'' + ", numChains=" + numChains + ", numCarbons=" + numCarbons +
                 ", doubleBonds=" + doubleBonds + ", classification='" + lipidMapsClassifications +
                 ", biologicalActivity='" + biologicalActivity + '\'' + ", meshNomenclature='" + meshNomenclature + '\''
-                + ", iupacClassification='" + iupacClassification + '\'' +
+                + ", iupacClassification='" + iupacClassification + '\'' + ", mol2='" + mol2 + '\'' +
                 '}';
     }
 }
