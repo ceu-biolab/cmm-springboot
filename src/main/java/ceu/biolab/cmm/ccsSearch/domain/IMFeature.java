@@ -1,61 +1,25 @@
 package ceu.biolab.cmm.ccsSearch.domain;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Optional;
 
-public class IMFeature {
-    private double requestMzValue;
-    private double requestCcsValue;
-    private List<AnnotationsByAdduct> annotations;
+import ceu.biolab.cmm.shared.domain.msFeature.IMSFeature;
+import lombok.Data;
 
-    public IMFeature(double requestMzValue, double requestCcsValue, List<AnnotationsByAdduct> annotations) {
-        this.requestMzValue = requestMzValue;
-        this.requestCcsValue = requestCcsValue;
-        this.annotations = annotations;
+@Data
+public class IMFeature implements IMSFeature {
+    private double mzValue;
+    private double ccsValue;
+    private Optional<Double> intensity;
+
+    public IMFeature(double mzValue, double ccsValue) {
+        this.mzValue = mzValue;
+        this.ccsValue = ccsValue;
+        this.intensity = Optional.empty();
     }
 
-    public IMFeature(double requestMzValue, double requestCcsValue) {
-        this.requestMzValue = requestMzValue;
-        this.requestCcsValue = requestCcsValue;
-        this.annotations = new ArrayList<>();
-    }
-
-    public void addAnnotations(AnnotationsByAdduct annotationsByAdduct) {
-        if (annotationsByAdduct != null) {
-            this.annotations.add(annotationsByAdduct);
-        }
-    }
-
-    public double getRequestMzValue() {
-        return requestMzValue;
-    }
-
-    public void setRequestMzValue(double requestedMzValue) {
-        this.requestMzValue = requestedMzValue;
-    }
-
-    public double getRequestCcsValue() {
-        return requestCcsValue;
-    }
-
-    public void setRequestCcsValue(double requestedCcsValue) {
-        this.requestCcsValue = requestedCcsValue;
-    }
-
-    public List<AnnotationsByAdduct> getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(List<AnnotationsByAdduct> annotations) {
-        if (annotations == null) {
-            this.annotations = new ArrayList<>();
-        } else {
-            this.annotations = new ArrayList<>(annotations);
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "IMFeature [requestMzValue=" + requestMzValue + ", requestCcsValue=" + requestCcsValue + ", annotations=" + annotations + "]";
+    public IMFeature(double mzValue, double ccsValue, double intensity) {
+        this.mzValue = mzValue;
+        this.ccsValue = ccsValue;
+        this.intensity = Optional.of(intensity);
     }
 }

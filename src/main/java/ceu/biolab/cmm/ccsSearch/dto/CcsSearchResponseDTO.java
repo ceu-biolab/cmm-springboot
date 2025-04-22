@@ -3,26 +3,26 @@ package ceu.biolab.cmm.ccsSearch.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 
-public class CcsSearchResponse {
-    private List<IMFeature> imFeatures;
+public class CcsSearchResponseDTO {
+    private List<AnnotatedFeature> imFeatures;
 
-    public CcsSearchResponse() {
+    public CcsSearchResponseDTO() {
         this.imFeatures = new ArrayList<>();
     }
 
-    public void addImFeature(IMFeature imFeature) {
+    public void addImFeature(AnnotatedFeature imFeature) {
         if (imFeature != null) {
             this.imFeatures.add(imFeature);
         }
     }
 
-    public List<IMFeature> getImFeatures() {
+    public List<AnnotatedFeature> getImFeatures() {
         return imFeatures;
     }
 
-    public void setImFeatures(List<IMFeature> imFeatures) {
+    public void setImFeatures(List<AnnotatedFeature> imFeatures) {
         this.imFeatures = imFeatures;
     }
 

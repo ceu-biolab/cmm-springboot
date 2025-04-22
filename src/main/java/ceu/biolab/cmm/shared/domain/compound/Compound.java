@@ -20,6 +20,7 @@ public class Compound {
     private final int chargeType;
     private final int chargeNumber;
     private final FormulaType formulaType;
+    // TODO this should not be an int?
     private final int compoundType;
     private final int compoundStatus;
     private final Integer formulaTypeInt;
@@ -37,6 +38,8 @@ public class Compound {
     private final String meshNomenclature;
     private final String iupacClassification;
     private final String mol2;
+
+// TODO add pathways
 
     public Compound(int compoundId, String casId, String compoundName, String formula, double mass,
                     int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
