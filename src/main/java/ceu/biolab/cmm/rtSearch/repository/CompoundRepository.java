@@ -3,6 +3,7 @@ package ceu.biolab.cmm.rtSearch.repository;
 import ceu.biolab.*;
 import ceu.biolab.cmm.rtSearch.dto.CompoundDTO;
 import ceu.biolab.cmm.rtSearch.model.compound.CompoundMapper;
+
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
@@ -30,8 +31,7 @@ public class CompoundRepository {
     public List<AnnotatedFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
                                             Double tolerance, IonizationMode ionizationMode,
                                             Set<String> adductsString, Set<Database> databases,
-                                            MetaboliteType metaboliteType)
-            throws IncorrectAdduct, NotFoundElement, IncorrectFormula {
+                                            MetaboliteType metaboliteType) {
 
         List<AnnotatedFeature> annotatedMSFeature = new ArrayList<>();
         Integer compoundType = null;
@@ -40,7 +40,7 @@ public class CompoundRepository {
             return annotatedMSFeature;
         }
 
-        if(metaboliteType == MetaboliteType.ONLYLIPIDS){
+        if (metaboliteType == MetaboliteType.ONLYLIPIDS) {
             compoundType = 1;
         }
 
@@ -122,7 +122,8 @@ public class CompoundRepository {
 
                 String sql = "SELECT c.* FROM compounds_view c WHERE ";
                 sql += "c.mass BETWEEN " + lowerBoundFinal + " AND " + upperBoundFinal;
-                if(metaboliteType == MetaboliteType.ONLYLIPIDS){
+
+                if (metaboliteType == MetaboliteType.ONLYLIPIDS) {
                     sql += " AND c.compound_type = " + compoundTypeFinal;
                 }
 
