@@ -9,7 +9,6 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.Database;
-
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
 import org.slf4j.Logger;
@@ -47,16 +46,13 @@ public class CompoundRepository {
 
         double lowerBound, upperBound;
 
-        //solo puede ser positivo: verificar : crear clase PositiveDouble en el constructor final si es menor que 0 ERROR
-        //mz en un rango: positive double (utilizando la misma clase)
-        //dto cmmcompound
+        //TODO solo puede ser positivo: verificar : crear clase PositiveDouble en el constructor final si es menor que 0 ERROR
 
         try {
             IMSFeature msFeature = new MSFeature(mz, 0.0);
             AnnotatedFeature annotatedFeature = new AnnotatedFeature(msFeature);
             for (String adductString : adductsString) {
                 Set<Compound> compoundsSet = new HashSet<>();
-
                 Adduct adduct = AdductProcessing.getAdductFromString(adductString, ionizationMode, mz);
                 double adductMass = adduct.getAdductMass();
 
@@ -107,7 +103,6 @@ public class CompoundRepository {
                     databaseConditions.add("c.npatlas_id IS NOT NULL");
                 }
 
-                // TODO CREATE QUERY CON MZS SEGUN ADUCTO LA MZ ES LA MZ +- ADUCTO (POSITIVO)
                 double monoIsotopicMassFromMZAndAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductString, ionizationMode);
 
                 // Calculate tolerance range based on PPM or DA
@@ -130,11 +125,13 @@ public class CompoundRepository {
                 if(metaboliteType == MetaboliteType.ONLYLIPIDS){
                     sql += " AND c.compound_type = " + compoundTypeFinal;
                 }
-                if (!databaseConditions.isEmpty()) {
+
+                 if (!databaseConditions.isEmpty()) {
                     sql += " AND (" + String.join(" OR ", databaseConditions) + ")";
                 }
 
                 String finalSql = sql;
+
                 Set<Compound> compounds = jdbcTemplate.query(
                         finalSql, rs -> {
                             while (rs.next()) {

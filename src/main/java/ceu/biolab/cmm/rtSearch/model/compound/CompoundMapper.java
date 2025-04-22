@@ -54,7 +54,8 @@ public class CompoundMapper {
                 rs.getInt("npatlas_id"),
                 rs.getInt("fahfa_id"),
                 rs.getInt("oh_position"),
-                rs.getString("aspergillus_web_name")
+                rs.getString("aspergillus_web_name"),
+                rs.getString("mol2")
         );
     }
 
@@ -82,7 +83,7 @@ public class CompoundMapper {
                 compoundDTO.getKeggID(), compoundDTO.getLmID(), compoundDTO.getHmdbID(), compoundDTO.getAgilentID(),
                 compoundDTO.getPcID(), compoundDTO.getChebiID(), compoundDTO.getInHouseID(), compoundDTO.getAspergillusID(),
                 compoundDTO.getKnapsackID(), compoundDTO.getNpatlasID(), compoundDTO.getFahfaID(), compoundDTO.getOhPositionID(),
-                compoundDTO.getAspergillusWebName()
+                compoundDTO.getAspergillusWebName(), compoundDTO.getMol2()
         );
 
         compound.setLipidMapsClassifications(lipidMapsClassifications);
