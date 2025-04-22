@@ -193,14 +193,14 @@ public class CompoundRepository {
                                 Set<LipidMapsClassification> lipidMapsClassifications = new HashSet<>();
                                 LipidMapsClassification lmClassification = new LipidMapsClassification(category, mainClass, subClass, classLevel4);
 
-                                CMMCompound cmmCompound = new CMMCompound(compoundID, casID, compoundName, formula, compoundMass, chargeTypeCompound,
-                                        chargeNumber, formulaType, compound_typeFinal, compoundStatus, formulaTypeInt, logP, rtPred, inchi, inchiKey, smiles,
-                                        lipidType, numChains, numCarbons, doubleBonds,
-                                        keggId, lmID, hmdbID, agilentID, pcID, chebiID, inHouseID, aspergillusID, knapsackID, npatlasID, fahfaID,
-                                        ohPositionID, biologicalActivity, meshNomenclature, iupacClassification, aspergillusWebName);
-                                cmmCompound.getLipidMapsClassifications().add(lmClassification);
+                                // CMMCompound cmmCompound = new CMMCompound(compoundID, casID, compoundName, formula, compoundMass, chargeTypeCompound,
+                                //         chargeNumber, formulaType, compound_typeFinal, compoundStatus, formulaTypeInt, logP, rtPred, inchi, inchiKey, smiles,
+                                //         lipidType, numChains, numCarbons, doubleBonds,
+                                //         keggId, lmID, hmdbID, agilentID, pcID, chebiID, inHouseID, aspergillusID, knapsackID, npatlasID, fahfaID,
+                                //         ohPositionID, biologicalActivity, meshNomenclature, iupacClassification, aspergillusWebName);
+                                // cmmCompound.getLipidMapsClassifications().add(lmClassification);
 
-                                compoundsSet.add(cmmCompound);
+                                //compoundsSet.add(cmmCompound);
                             }
                             return compoundsSet;
                         });

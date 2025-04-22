@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.ccsSearch.dto;
 
-public class CcsFeatureQuery {
+public class CcsFeatureQueryDTO {
     private double ccsLower;
     private double ccsUpper;
     private double massLower;
@@ -9,7 +9,7 @@ public class CcsFeatureQuery {
     private String adduct;
     // private BufferGas buffer_gas
 
-    public CcsFeatureQuery(double ccsLower, double ccsUpper, double massLower, double massUpper, String bufferGas, String adduct) {
+    public CcsFeatureQueryDTO(double ccsLower, double ccsUpper, double massLower, double massUpper, String bufferGas, String adduct) {
         this.ccsLower = ccsLower;
         this.ccsUpper = ccsUpper;
         this.massLower = massLower;

@@ -9,7 +9,7 @@ import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 
-public class CcsSearchRequest {
+public class CcsSearchRequestDTO {
     private List<Double> mzValues;
     private double mzTolerance;
     private MzToleranceMode mzToleranceMode;
@@ -19,7 +19,7 @@ public class CcsSearchRequest {
     private IonizationMode ionizationMode;
     private BufferGas bufferGas;
 
-    public CcsSearchRequest(List<Double> mzValues, double mzTolerance, MzToleranceMode mzToleranceMode,
+    public CcsSearchRequestDTO(List<Double> mzValues, double mzTolerance, MzToleranceMode mzToleranceMode,
                            List<Double> ccsValues, double ccsTolerance, CcsToleranceMode ccsToleranceMode,
                            IonizationMode ionizationMode) {
         this.mzValues = mzValues != null ? mzValues : new ArrayList<>();
@@ -106,7 +106,7 @@ public class CcsSearchRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CcsSearchRequest that = (CcsSearchRequest) o;
+        CcsSearchRequestDTO that = (CcsSearchRequestDTO) o;
         return Double.compare(that.mzTolerance, mzTolerance) == 0 &&
                Double.compare(that.ccsTolerance, ccsTolerance) == 0 &&
                Objects.equals(mzValues, that.mzValues) &&

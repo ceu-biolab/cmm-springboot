@@ -7,7 +7,9 @@ import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
-import ceu.biolab.cmm.scoreAnnotations.domain.*;
+import ceu.biolab.cmm.scoreAnnotations.domain.EvaluatedLipid;
+import ceu.biolab.cmm.scoreAnnotations.domain.Lipid;
+import ceu.biolab.cmm.scoreAnnotations.domain.LipidScores;
 import ceu.biolab.cmm.shared.domain.ExperimentParameters;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;

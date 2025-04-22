@@ -30,6 +30,9 @@ public class IMMSCompound extends Compound {
     }
 
     public void addPathway(Pathway pathway) {
+        if (this.pathways == null) {
+            this.pathways = new ArrayList<>();
+        }
         if (pathway != null && pathway.getPathwayId() != -1) {
             this.pathways.add(pathway);
         }

@@ -1,7 +1,8 @@
-package ceu.biolab.cmm.scoreAnnotations.service;
+package ceu.biolab.cmm.unit.scoreAnnotations.service;
 
 import ceu.biolab.cmm.scoreAnnotations.domain.Lipid;
 import ceu.biolab.cmm.scoreAnnotations.domain.LipidScores;
+import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
