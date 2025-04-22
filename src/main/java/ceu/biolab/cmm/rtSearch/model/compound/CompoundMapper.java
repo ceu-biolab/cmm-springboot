@@ -58,7 +58,7 @@ public class CompoundMapper {
         );
     }
 
-    public static Compound toDomain(CompoundDTO compoundDTO) {
+    public static Compound toCompound(CompoundDTO compoundDTO) {
         Set<LipidMapsClassification> lipidMapsClassifications = new HashSet<>();
         Set<LipidMapsClassification> lipidMapsClassificationsSet = compoundDTO.getLipidMapsClassifications();
         for(LipidMapsClassification lipidMapsClassification : lipidMapsClassificationsSet) {

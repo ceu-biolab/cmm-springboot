@@ -1,46 +1,43 @@
 package ceu.biolab.cmm.rtSearch.dto;
 
-import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
-import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
-import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequest;
-import ceu.biolab.cmm.shared.domain.Database;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.MetaboliteType;
-import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class BatchSearchRequestDTO {
+import ceu.biolab.cmm.rtSearch.model.ParserJSON;
+import ceu.biolab.cmm.shared.domain.*;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 
-    private List<Double> mzValues;
+
+public class CompoundSimpleSearchRequestDTO {
+    private Double mz;
     private MzToleranceMode mzToleranceMode;
     private Double tolerance;
     private IonizationMode ionizationMode;
     private Set<String> adductsString;
     private Set<Database> databases;
-
     private MetaboliteType metaboliteType;
 
-    public BatchSearchRequestDTO(List<Double> mzValues, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,
-                                 Set<String> adductsString, Set<Database> databases, MetaboliteType metaboliteType) {
-        this.mzValues = mzValues;
+    public CompoundSimpleSearchRequestDTO(Double mz, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,
+                                          Set<String> adductsString, Set<Database> databases, MetaboliteType metaboliteType) {
+        this.mz = mz;
         this.mzToleranceMode = mzToleranceMode;
-        this.tolerance = tolerance;
+        if (tolerance < 0) {
+            throw new IllegalArgumentException("mzTolerance must be non-negative");
+        }else {
+            this.tolerance = tolerance;
+        }
         this.ionizationMode = ionizationMode;
         this.adductsString = adductsString;
         this.databases = databases;
         this.metaboliteType = metaboliteType;
     }
 
-    public List<Double> getMzValues() {
-        return mzValues;
+    public Double getMz() {
+        return mz;
     }
 
-    public void setMzValues(List<Double> mzValues) {
-        this.mzValues = mzValues;
+    public void setMz(Double mz) {
+        this.mz = mz;
     }
 
     public MzToleranceMode getMzToleranceMode() {
@@ -91,24 +88,28 @@ public class BatchSearchRequestDTO {
         this.metaboliteType = metaboliteType;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BatchSearchRequestDTO that = (BatchSearchRequestDTO) o;
-        return Objects.equals(mzValues, that.mzValues) && mzToleranceMode == that.mzToleranceMode && Objects.equals(tolerance, that.tolerance) && ionizationMode == that.ionizationMode && Objects.equals(adductsString, that.adductsString) && Objects.equals(databases, that.databases) && metaboliteType == that.metaboliteType;
+        CompoundSimpleSearchRequestDTO that = (CompoundSimpleSearchRequestDTO) o;
+        return Objects.equals(mz, that.mz) && mzToleranceMode == that.mzToleranceMode &&
+                Objects.equals(tolerance, that.tolerance) && ionizationMode == that.ionizationMode &&
+                Objects.equals(adductsString, that.adductsString) && Objects.equals(databases, that.databases) &&
+                metaboliteType == that.metaboliteType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mzValues, mzToleranceMode, tolerance, ionizationMode, adductsString, databases, metaboliteType);
+        return Objects.hash(mz, mzToleranceMode, tolerance, ionizationMode, adductsString, databases, metaboliteType);
     }
 
 
     @Override
     public String toString() {
-        return "BatchSearchRequestDTO{" +
-                "mzValues=" + mzValues +
+        return "SimpleSearchRequestDTO{" +
+                "mz=" + mz +
                 ", mzToleranceMode=" + mzToleranceMode +
                 ", tolerance=" + tolerance +
                 ", ionizationMode=" + ionizationMode +
