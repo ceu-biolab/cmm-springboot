@@ -21,7 +21,7 @@ public class CompoundController {
     public Set<MSFeature> annotateMSFeature(@RequestBody CompoundSimpleSearchRequest request) {
         Set<MSFeature> features = compoundService.findCompoundsByMz(
                 request.getMz(),
-                request.getToleranceMode(),
+                request.getMzToleranceMode(),
                 request.getTolerance(),
                 request.getIonizationMode(),
                 request.getAdductsString(),
@@ -38,7 +38,7 @@ public class CompoundController {
         for(Double mz : request.getMz()) {
             features = compoundService.findCompoundsByMz(
                     mz,
-                    request.getToleranceMode(),
+                    request.getMzToleranceMode(),
                     request.getTolerance(),
                     request.getIonizationMode(),
                     request.getAdductsString(),
@@ -52,10 +52,9 @@ public class CompoundController {
 
     @GetMapping("/simple-search")
     public Set<MSFeature> annotatedMSFeatures(@RequestBody CompoundSimpleSearchRequest request) {
-
         Set<MSFeature> features = compoundService.findCompoundsByMz(
                 request.getMz(),
-                request.getToleranceMode(),
+                request.getMzToleranceMode(),
                 request.getTolerance(),
                 request.getIonizationMode(),
                 request.getAdductsString(),
@@ -72,7 +71,7 @@ public class CompoundController {
         for(Double mz : request.getMz()) {
             features = compoundService.findCompoundsByMz(
                     mz,
-                    request.getToleranceMode(),
+                    request.getMzToleranceMode(),
                     request.getTolerance(),
                     request.getIonizationMode(),
                     request.getAdductsString(),
@@ -82,5 +81,5 @@ public class CompoundController {
         }
         return features;
     }
-
 }
+

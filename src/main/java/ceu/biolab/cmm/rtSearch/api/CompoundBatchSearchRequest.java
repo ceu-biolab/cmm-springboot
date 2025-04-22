@@ -1,49 +1,54 @@
 package ceu.biolab.cmm.rtSearch.api;
 
 import ceu.biolab.cmm.rtSearch.model.*;
+
+import ceu.biolab.cmm.shared.domain.Database;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.HashSet;
+import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ceu.biolab.cmm.rtSearch.service.CompoundService;
-
-import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
-
-//! TO DO THE MOST INTUITIVE THING:
-//! TODO DO A FOR LOOP FOR EVERY MZ IN THE ARRAY (WHICH I CAN TAKE AS A LIST OR WHATEVER I WANT BUT NOT A SET BC THEY MIGHT BE VERY SIMILAR OR THE SAME) AND CALL THE METHOD COMPOUNDSIMPLESEARCHREQUEST!
 
 
 public class CompoundBatchSearchRequest {
     private Double[] mz;
-    private ToleranceMode toleranceMode;
+    private MzToleranceMode mzToleranceMode;
     private Double tolerance;
     private IonizationMode ionizationMode;
     private Set<String> adductsString;
-    private Set<Databases> databases;
+    private Set<Database> databases;
+
     private MetaboliteType metaboliteType;
 
-    @JsonCreator
     public CompoundBatchSearchRequest(
-            @JsonProperty("mz") Double[] mz,
-            @JsonProperty("toleranceMode") String toleranceMode,
-            @JsonProperty("tolerance") Double tolerance,
-            @JsonProperty("ionizationMode") String ionizationMode,
-            @JsonProperty("adductsString") Set<String> adductsString,
-            @JsonProperty("databases") Set<String> databases,
-            @JsonProperty("metaboliteType") String metaboliteType) {
+            Double[] mz,
+            String toleranceMode,
+            Double tolerance,
+            String ionizationMode,
+            Set<String> adductsString,
+            Set<Database> databases,
+            MetaboliteType metaboliteType) {
 
         this.mz = mz;
-        this.toleranceMode = ParserJSON.parseToleranceMode(toleranceMode);
+        this.mzToleranceMode = ParserJSON.parseToleranceMode(toleranceMode);
         this.tolerance = tolerance;
         this.ionizationMode = ParserJSON.parseIonizationMode(ionizationMode);
         this.adductsString = adductsString;
 
-        this.databases = new HashSet<>();
-        for (String db : databases) {
+        this.databases = databases;
+        /*for (String db : databases) {
             this.databases.add(ParserJSON.parseDatabases(db));
         }
+         */
 
-        this.metaboliteType = ParserJSON.parseMetaboliteType(metaboliteType);
+        //this.metaboliteType = ParserJSON.parseMetaboliteType(metaboliteType);
+        this.metaboliteType = metaboliteType;
     }
 
 
@@ -56,12 +61,12 @@ public class CompoundBatchSearchRequest {
         this.mz = mz;
     }
 
-    public ToleranceMode getToleranceMode() {
-        return toleranceMode;
+    public MzToleranceMode getMzToleranceMode() {
+        return mzToleranceMode;
     }
 
-    public void setToleranceMode(ToleranceMode toleranceMode) {
-        this.toleranceMode = toleranceMode;
+    public void setMzToleranceMode(MzToleranceMode toleranceMode) {
+        this.mzToleranceMode = toleranceMode;
     }
 
     public Double getTolerance() {
@@ -88,11 +93,11 @@ public class CompoundBatchSearchRequest {
         this.adductsString = adductsString;
     }
 
-    public Set<Databases> getDatabases() {
+    public Set<Database> getDatabases() {
         return databases;
     }
 
-    public void setDatabases(Set<Databases> databases) {
+    public void setDatabases(Set<Database> databases) {
         this.databases = databases;
     }
 
@@ -108,7 +113,7 @@ public class CompoundBatchSearchRequest {
     public String toString() {
         return "CompoundSearchRequest{" +
                 "mz=" + mz +
-                ", toleranceMode=" + toleranceMode +
+                ", toleranceMode=" + mzToleranceMode +
                 ", tolerance=" + tolerance +
                 ", ionizationMode=" + ionizationMode +
                 ", adductsString=" + adductsString +

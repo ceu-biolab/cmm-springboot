@@ -1,7 +1,8 @@
 target/
 .idea/
-*.yml/
 .vscode/
 .smarttomcat/
-*.iml/
-*.jks
+*.iml
+*.~lock.*
+application.yml
+mykeystore.jks

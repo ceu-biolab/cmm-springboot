@@ -1,17 +1,20 @@
 package ceu.biolab.cmm.ccsSearch.service;
 
-import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQuery;
-import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponse;
-import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequest;
-import ceu.biolab.cmm.ccsSearch.dto.CcsSearchResponse;
+import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQueryDTO;
+import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponseDTO;
+import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequestDTO;
+import ceu.biolab.cmm.ccsSearch.dto.CcsSearchResponseDTO;
 import ceu.biolab.cmm.ccsSearch.repository.CcsSearchRepository;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
-import ceu.biolab.cmm.ccsSearch.domain.AnnotationsByAdduct;
 import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
+import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
+import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,7 @@ public class CcsSearchService {
     @Autowired
     private CcsSearchRepository ccsSearchRepository;
 
-    public CcsSearchResponse search(CcsSearchRequest request) {
+    public CcsSearchResponseDTO search(CcsSearchRequestDTO request) {
         if (request.getCcsValues().size() != request.getMzValues().size()) {
             throw new IllegalArgumentException("Number of CCS values and m/z values must be equal.");
         }
@@ -44,13 +47,13 @@ public class CcsSearchService {
             throw new IllegalArgumentException("Invalid tolerance mode: " + request.getCcsToleranceMode());
         }
 
-        CcsSearchResponse response = new CcsSearchResponse();
+        CcsSearchResponseDTO response = new CcsSearchResponseDTO();
         for (int i = 0; i < nFeatures; i++) 
         {
-
             double mz = request.getMzValues().get(i);
             double ccs = request.getCcsValues().get(i);
-            IMFeature imFeature = new IMFeature(mz, ccs);
+            IMFeature feature = new IMFeature(mz, ccs);
+            AnnotatedFeature imAnnotatedFeature = new AnnotatedFeature(feature);
 
             // TODO: Dummy adduct. Replace with actual adducts from request. Also add IonMode check?
             ArrayList<String> adducts = new ArrayList<>(java.util.Arrays.asList("M+H"));
@@ -75,38 +78,53 @@ public class CcsSearchService {
                 double massLower = neutralMass - mzDifference;
                 double massUpper = neutralMass + mzDifference;
 
-                CcsFeatureQuery queryData = new CcsFeatureQuery(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct);
+                CcsFeatureQueryDTO queryData = new CcsFeatureQueryDTO(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct);
                 try {
-                    List<CcsQueryResponse> queryResults = ccsSearchRepository.findMatchingCompounds(queryData);
+                    List<CcsQueryResponseDTO> queryResults = ccsSearchRepository.findMatchingCompounds(queryData);
                     // QueryResults may have duplicate results where the same compound is found with different pathways.
                     // We need to merge these results.
-                    List<IMMSCompound> compounds = new ArrayList<>();
-                    for (CcsQueryResponse queryResult : queryResults) {
+                    List<Annotation> annotations = new ArrayList<>();
+                    for (CcsQueryResponseDTO queryResult : queryResults) {
                         Pathway pathway = new Pathway(queryResult.getPathwayId(), queryResult.getPathwayName(), queryResult.getPathwayMap());
 
                         boolean found = false;
-                        for (IMMSCompound compound : compounds) {
-                            if (compound.getCompoundId() == queryResult.getCompoundId()) {
-                                compound.addPathway(pathway);
-                                found = true;
-                                break;
+                        for (Annotation annotation : annotations) {
+                            Compound compound = annotation.getCompound();
+                            // TODO remove mutation after refactoring Compound
+                            if (compound instanceof IMMSCompound imCompound) {
+                                if (imCompound.getCompoundId() == queryResult.getCompoundId()) {
+                                    imCompound.addPathway(pathway);
+                                    found = true;
+                                    break;
+                                }
                             }
                         }
                         if (!found) {
-                            // TODO ugly
-                            IMMSCompound compound = new IMMSCompound(queryResult.getCompoundId(), queryResult.getCompoundName(), queryResult.getMonoisotopicMass(), queryResult.getDbCcs(), queryResult.getFormula(), queryResult.getFormulaType(), queryResult.getCompoundType(), queryResult.getLogP(), new ArrayList<>());
-                            compound.addPathway(pathway);
-                            compounds.add(compound);
+                            IMMSCompound imCompound = IMMSCompound.builder()
+                                    .compoundId(queryResult.getCompoundId())
+                                    .compoundName(queryResult.getCompoundName())
+                                    .mass(queryResult.getMonoisotopicMass())
+                                    .dbCcs(queryResult.getDbCcs())
+                                    .formula(queryResult.getFormula())
+                                    // TODO formula type in compound shouldnt be a int
+                                    //.formulaType(queryResult.getFormulaType())
+                                    .compoundType(queryResult.getCompoundType())
+                                    .logP(queryResult.getLogP())
+                                    .build();
+                            imCompound.addPathway(pathway);
+                            Annotation annotation = new Annotation(imCompound);
+                            annotations.add(annotation);
                         }
                     }
-                    AnnotationsByAdduct annotations = new AnnotationsByAdduct(adduct, compounds);
-                    imFeature.addAnnotations(annotations);
+                    //AnnotationsByAdduct annotations = new AnnotationsByAdduct(adduct, annotations);
+                    AnnotationsByAdduct annotationsByAdduct = new AnnotationsByAdduct(adduct, annotations);
+                    imAnnotatedFeature.addAnnotationByAdduct(annotationsByAdduct);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            response.addImFeature(imFeature);
+            response.addImFeature(imAnnotatedFeature);
         }
 
         return response;

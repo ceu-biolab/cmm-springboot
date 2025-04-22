@@ -2,22 +2,20 @@ package ceu.biolab.cmm.rtSearch.repository;
 
 import ceu.biolab.*;
 
-import ceu.biolab.cmm.rtSearch.model.ToleranceMode;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
+import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.rtSearch.model.compound.GroupedCompoundsByAdduct;
 import ceu.biolab.cmm.rtSearch.model.compound.LipidMapsClassification;
 import ceu.biolab.cmm.rtSearch.model.msFeature.MSFeature;
 import ceu.biolab.cmm.shared.domain.Database;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.MetaboliteType;
-import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
-import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
-import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.xmlcml.euclid.Int;
 
-import java.text.Normalizer;
 import java.util.*;
 
 
@@ -25,39 +23,36 @@ import java.util.*;
 @Repository
 public class CompoundRepository {
 
+//    private static final Logger logger = LoggerFactory.getLogger(CompoundRepository.class);
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Set<MSFeature> annotateMSFeature(Double mz, ToleranceMode toleranceMode,
+    public Set<MSFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
                                             Double tolerance, IonizationMode ionizationMode,
                                             Set<String> adductsString, Set<Database> databases,
-                                            MetaboliteType metaboliteType)
-            throws IncorrectAdduct, NotFoundElement, IncorrectFormula {
+                                            MetaboliteType metaboliteType) {
 
         Set<MSFeature> annotatedMSFeature = new HashSet<>();
         Integer compoundType = null;
 
-        if (mz == null || tolerance == null || toleranceMode == null || ionizationMode == null) {
+        if (mz == null || tolerance == null || mzToleranceMode == null || ionizationMode == null) {
             return annotatedMSFeature;
         }
 
-        if(metaboliteType == MetaboliteType.ALLEXCEPTPEPTIDES){
-            compoundType = 0;
-        }else if(metaboliteType == MetaboliteType.ONLYLIPIDS){
+        if (metaboliteType == MetaboliteType.ONLYLIPIDS) {
             compoundType = 1;
         }
 
         double lowerBound, upperBound;
 
-
         //solo puede ser positivo: verificar : crear clase PositiveDouble en el constructor final si es menor que 0 ERROR
         //mz en un rango: positive double (utilizando la misma clase)
         //dto cmmcompound
 
-
         try {
+            MSFeature msFeature = new MSFeature(mz, 0.0);
             for (String adductString : adductsString) {
-                MSFeature msFeature = new MSFeature(mz, 0.0);
                 // TODO
                 // PRIMERO COGER ADUCTOS DE LA LISTA DE ADUCTOS PREDEFINIDOS.
                 // ESTOS ADUCTOS PUEDEN SER CARGA 1, 2 o 3 y multimer 1, 2 o 3
@@ -82,9 +77,6 @@ public class CompoundRepository {
 
                 // TODO CREATE QUERY CON MZS SEGUN ADUCTO LA MZ ES LA MZ +- ADUCTO (POSITIVO)
                 double monoIsotopicMassFromMZAndAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductString, ionizationMode);
-
-                String sql = "SELECT c.* FROM compounds_view c " +
-                "WHERE c.compoundType = ? AND c.mass BETWEEN ? AND ? ";
 
                 List<String> databaseConditions = new ArrayList<>();
 
@@ -116,26 +108,31 @@ public class CompoundRepository {
                     databaseConditions.add("c.npatlas_id IS NOT NULL");
                 }
 
-                if (!databaseConditions.isEmpty()) {
-                    sql += " AND " + String.join(" OR ", databaseConditions) + "";
-                }
-
-
                 // Calculate tolerance range based on PPM or DA
                 double monoMassWithoutAdduct = monoIsotopicMassFromMZAndAdduct - adductMass;
 
-                if (toleranceMode == ToleranceMode.DA) {
-                    lowerBound = monoMassWithoutAdduct - tolerance;
-                    upperBound = monoMassWithoutAdduct + tolerance;
+                if (mzToleranceMode == MzToleranceMode.MDA) {
+                    double toleranceMDA = (monoMassWithoutAdduct * tolerance) / 1000;
+                    lowerBound = mz - toleranceMDA;
+                    upperBound = mz + toleranceMDA;
                 } else { // PPM (Parts Per Million)
                     double tolerancePPM = (monoMassWithoutAdduct * tolerance) / 1_000_000.0;
-                    lowerBound = monoMassWithoutAdduct - tolerancePPM;
-                    upperBound = monoMassWithoutAdduct + tolerancePPM;
+                    lowerBound = mz - tolerancePPM;
+                    upperBound = mz + tolerancePPM;
                 }
 
                 final Integer compoundTypeFinal = compoundType;
                 final double lowerBoundFinal = lowerBound;
                 final double upperBoundFinal = upperBound;
+
+                String sql = "SELECT c.* FROM compounds_view c WHERE ";
+                sql += "c.mass BETWEEN " + lowerBoundFinal + " AND " + upperBoundFinal;
+                if (metaboliteType == MetaboliteType.ONLYLIPIDS) {
+                    sql += " AND c.compound_type = " + compoundTypeFinal;
+                }
+                if (!databaseConditions.isEmpty()) {
+                    sql += " AND (" + String.join(" OR ", databaseConditions) + ")";
+                }
 
                 String finalSql = sql;
                 Set<CMMCompound> cmmCompounds = jdbcTemplate.query(
@@ -147,7 +144,6 @@ public class CompoundRepository {
                     }, rs -> {
                             Set<CMMCompound> compoundsSet = new HashSet<>();
 
-
                             while (rs.next()) {
                                 Integer compoundID = rs.getInt("compound_id");
                                 String casID = rs.getString("cas_id");
@@ -157,6 +153,10 @@ public class CompoundRepository {
                                 Integer chargeTypeCompound = rs.getInt("charge_type");
                                 Integer chargeNumber = rs.getInt("charge_number");
                                 FormulaType formulaType = null; //! this in compounds!
+
+                                //String formulaTypeString = rs.getString("formula_type");
+                                //FormulaType formulaType = FormulaType.valueOf(formulaTypeString);
+                                formulaType = null;
                                 Integer compoundStatus = rs.getInt("compound_status");
                                 Integer formulaTypeInt = rs.getInt("formula_type_int");
                                 Double logP = rs.getDouble("logP");
@@ -188,6 +188,8 @@ public class CompoundRepository {
                                 String mainClass = rs.getString("main_class");
                                 String subClass = rs.getString("sub_class");
                                 String classLevel4 = rs.getString("class_level4");
+                                String mol2 = rs.getString("mol2");
+
 
 
                                 // construccion de objetos de tipo no primitivo TODO
@@ -197,8 +199,9 @@ public class CompoundRepository {
                                 CMMCompound cmmCompound = new CMMCompound(compoundID, casID, compoundName, formula, compoundMass, chargeTypeCompound, chargeNumber, formulaType,
                                         compoundTypeFinal, compoundStatus, formulaTypeInt, logP, rtPred, inchi, inchiKey, smiles, lipidType,
                                         numChains, numCarbons, doubleBonds, biologicalActivity, meshNomenclature, iupacClassification, keggID, lmID, hmdbID, agilentID, pcID, chebiID, inHouseID,
-                                        aspergillusID, knapsackID, npatlasID, fahfaID, ohPositionID, aspergillusWebName);
+                                        aspergillusID, knapsackID, npatlasID, fahfaID, ohPositionID, aspergillusWebName, mol2);
                                 cmmCompound.getLipidMapsClassifications().add(lmClassification);
+                                System.out.println(compoundID + ", " + compoundName + ", " + mol2);
 
                                 compoundsSet.add(cmmCompound);
                             }
@@ -210,8 +213,7 @@ public class CompoundRepository {
                     annotatedMSFeature.add(msFeature);
                 }
             }
-            //* modify to exceptions Adducts
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return annotatedMSFeature;
