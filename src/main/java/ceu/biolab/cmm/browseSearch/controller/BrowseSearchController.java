@@ -19,7 +19,7 @@ import java.util.List;
         private BrowseSearchService browseSearchService;
 
         @PostMapping("/browse")
-        public List<BrowseQueryResponse> search(@RequestBody BrowseSearchRequest request) {
+        public BrowseQueryResponse search(@RequestBody BrowseSearchRequest request) {
             return browseSearchService.search(request);
         }
     }

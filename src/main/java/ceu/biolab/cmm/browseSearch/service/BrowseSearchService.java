@@ -17,29 +17,22 @@ public class BrowseSearchService {
     @Autowired
     private BrowseSearchRepository browseSearchRepository;
 
-    public BrowseSearchResponse search (BrowseSearchRequest request) {
+    public BrowseQueryResponse search (BrowseSearchRequest request) {
         // Validación básica
         if ((request.getCompoundName() == null || request.getCompoundName().isBlank()) &&
                 (request.getCompoundFormula() == null || request.getCompoundFormula().isBlank()) &&
                 (request.getDatabases() == null ) &&
                 (request.getMetaboliteType() == null )) {
-            return new BrowseSearchResponse();
+            return new BrowseQueryResponse();
         }
 
         try {
-            List<BrowseQueryResponse> queryResults = browseSearchRepository.findMatchingCompounds(request);
-            BrowseSearchResponse searchResults = new BrowseSearchResponse();
-            for (BrowseQueryResponse queryResult : queryResults) {
-                searchResults.addCompound(new Compound(queryResult.getCompoundId(),queryResult.getCasId(), queryResult.getCompoundName(),queryResult.getFormula(), queryResult.getMass(),
-                        queryResult.getChargeType(),queryResult.getChargeNumber(),queryResult.getFormulaType(),queryResult.getCompoundType(),queryResult.getCompoundStatus(),queryResult.getFormulaTypeInt(),
-                        queryResult.getLogP(),queryResult.getRtPred(),queryResult.getInchi(),queryResult.getInchiKey(),queryResult.getSmiles(),queryResult.getLipidType(),queryResult.getNumChains(),queryResult.getNumCarbons(),
-                        queryResult.getDoubleBonds(),queryResult.getBiologicalActivity(),queryResult.getMeshNomenclature(),queryResult.getIupacClassification()));
-            }
 
-            return  searchResults;
+
+            return browseSearchRepository.findMatchingCompounds(request);
         } catch (IOException e) {
             e.printStackTrace();
-            return new BrowseSearchResponse();
+            return new BrowseQueryResponse();
         }
 
     }

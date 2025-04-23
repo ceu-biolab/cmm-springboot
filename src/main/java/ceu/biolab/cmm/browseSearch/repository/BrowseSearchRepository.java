@@ -31,18 +31,19 @@ import java.util.stream.Collectors;
             this.resourceLoader = resourceLoader;
         }
 
-        public List<BrowseQueryResponse> findMatchingCompounds(BrowseSearchRequest queryData) throws IOException {
+        public BrowseQueryResponse findMatchingCompounds(BrowseSearchRequest queryData) throws IOException {
             Resource resource = resourceLoader.getResource("classpath:sql/browse_compound_search_query.sql");
             String sql = new String(Files.readAllBytes(Paths.get(resource.getURI())));
 
             MapSqlParameterSource params = new MapSqlParameterSource();
+
             List<Database> dbEnums = queryData.getDatabases()
                     .stream()
-                    .map(database -> Database.valueOf(database.getName().toUpperCase())) // convierte strings a enums
+                    .map(database -> Database.valueOf(database.getName().toUpperCase()))
                     .toList();
 
             List<String> dbNames = dbEnums.stream()
-                    .map(Database::name) // o .toString() — ambos devuelven "HMDB", "KEGG", etc.
+                    .map(Database::name)
                     .collect(Collectors.toList());
 
             MetaboliteType metEnum = MetaboliteType.valueOf(queryData.getMetaboliteType().getName().toUpperCase());
@@ -53,7 +54,7 @@ import java.util.stream.Collectors;
             params.addValue("databases", dbNames);
             params.addValue("metaboliteType", metEnum);
 
-            return jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(BrowseQueryResponse.class));
+            return new BrowseQueryResponse( jdbcTemplate.query(sql, params, new BeanPropertyRowMapper(BrowseQueryResponse.class)));
         }
     }
 
