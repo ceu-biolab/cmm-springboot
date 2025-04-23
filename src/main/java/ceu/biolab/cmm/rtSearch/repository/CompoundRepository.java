@@ -111,7 +111,6 @@ public class CompoundRepository {
                     upperBound = monoIsotopicMassFromMZAndAdduct + tolerance/1000;
                 } else { // PPM (Parts Per Million)
                     double tolerancePPM = mz * tolerance / 1_000_000.0;
-
                     lowerBound = monoIsotopicMassFromMZAndAdduct - tolerancePPM;
                     upperBound = monoIsotopicMassFromMZAndAdduct + tolerancePPM;
                 }
@@ -141,6 +140,8 @@ public class CompoundRepository {
                             }
                             return compoundsSet;
                         });
+
+                logger.info("QUERY: {} ", finalSql);
 
                 List<Annotation> annotations = new ArrayList<>();
                 for (Compound compound : compounds) {
