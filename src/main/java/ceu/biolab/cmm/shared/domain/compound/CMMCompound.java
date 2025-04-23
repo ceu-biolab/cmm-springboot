@@ -1,10 +1,6 @@
 package ceu.biolab.cmm.shared.domain.compound;
 
 import ceu.biolab.FormulaType;
-import ceu.biolab.cmm.rtSearch.model.compound.LipidMapsClassification;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class CMMCompound extends Compound implements Comparable<CMMCompound> {
 
