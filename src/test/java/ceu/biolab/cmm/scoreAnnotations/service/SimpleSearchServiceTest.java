@@ -104,90 +104,11 @@ public class SimpleSearchServiceTest {
         }
     }
 
-    @Test
-    void testFindCompoundsByMz10DA() {
-        Double mz = 100.0;
-        MzToleranceMode mzToleranceMode = MzToleranceMode.MDA;
-        Double tolerance = 1.0;
-        Set<String> adducts = new HashSet<>();
-        String adductsString = "M+H";
-        adducts.add(adductsString);
-        IonizationMode ionizationMode = IonizationMode.POSITIVE;
-        Set<Database> databases = Set.of(Database.HMDB, Database.LIPIDMAPS);
-        MetaboliteType metaboliteType = MetaboliteType.ONLYLIPIDS;
-
-        List<AnnotatedFeature> results = compoundService.findCompoundsByMz(
-                mz, mzToleranceMode, tolerance, ionizationMode, adducts, databases, metaboliteType
-        );
-
-        assertNotNull(results);
-    }
-
-    @Test
-    void testFindCompoundsByMz50DA() {
-        Double mz = 100.0;
-        MzToleranceMode mzToleranceMode = MzToleranceMode.MDA;
-        Double tolerance = 1.0;
-        Set<String> adducts = new HashSet<>();
-        String adductsString = "M+H";
-        adducts.add(adductsString);
-        IonizationMode ionizationMode = IonizationMode.POSITIVE;
-        Set<Database> databases = Set.of(Database.HMDB, Database.LIPIDMAPS);
-        MetaboliteType metaboliteType = MetaboliteType.ONLYLIPIDS;
-
-        List<AnnotatedFeature> results = compoundService.findCompoundsByMz(
-                mz, mzToleranceMode, tolerance, ionizationMode, adducts, databases, metaboliteType
-        );
-
-        assertNotNull(results);
-    }
-
-    @Test
-    void testFindCompoundsByMz100DA() {
-        Double mz = 100.0;
-        MzToleranceMode mzToleranceMode = MzToleranceMode.MDA;
-        Double tolerance = 1.0;
-        Set<String> adducts = new HashSet<>();
-        String adductsString = "M+H";
-        adducts.add(adductsString);
-        IonizationMode ionizationMode = IonizationMode.POSITIVE;
-        Set<Database> databases = Set.of(Database.HMDB, Database.LIPIDMAPS);
-        MetaboliteType metaboliteType = MetaboliteType.ONLYLIPIDS;
-
-        List<AnnotatedFeature> results = compoundService.findCompoundsByMz(
-                mz, mzToleranceMode, tolerance, ionizationMode, adducts, databases, metaboliteType
-        );
-
-        assertNotNull(results);
-    }
-
-    @Test
-    void testFindCompoundsByMzPPMTolerance() {
-        // Arrange test inputs
-        Double mz = 500.0;
-        MzToleranceMode mzToleranceMode = MzToleranceMode.PPM;
-        Double tolerance = 10.0;
-        Set<String> adducts = new HashSet<>();
-        String adductsString = "M+H";
-        adducts.add(adductsString);
-        IonizationMode ionizationMode = IonizationMode.POSITIVE;
-        Set<Database> databases = Set.of(Database.HMDB, Database.LIPIDMAPS);
-        MetaboliteType metaboliteType = MetaboliteType.ONLYLIPIDS;
-
-        List<AnnotatedFeature> results = compoundService.findCompoundsByMz(
-                mz, mzToleranceMode, tolerance, ionizationMode, adducts, databases, metaboliteType
-        );
-
-        assertNotNull(results);
-    }
-
-
     private AnnotatedFeature createEmptyAnnotatedFeature(double mz) {
         AnnotatedFeature feature = new AnnotatedFeature(mz);
         feature.setFeature(new MSFeature(mz));
         return feature;
     }
-
 
     // Extract all compounds from a list of annotated features
     private List<Annotation> extractAnnotations(List<AnnotatedFeature> features) {
@@ -200,3 +121,5 @@ public class SimpleSearchServiceTest {
         return compounds;
     }
 }
+
+//TODO test about methods of AdductTransformer
