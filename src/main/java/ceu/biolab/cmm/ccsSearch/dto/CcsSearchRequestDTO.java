@@ -8,22 +8,18 @@ import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 
-
-public class CcsSearchRequest {
+public class CcsSearchRequestDTO {
     private List<Double> mzValues;
     private double mzTolerance;
     private MzToleranceMode mzToleranceMode;
     private List<Double> ccsValues;
     private double ccsTolerance;
     private CcsToleranceMode ccsToleranceMode;
-    private IonizationMode ionMode;
     private IonizationMode ionizationMode;
     private BufferGas bufferGas;
 
-    public CcsSearchRequest(List<Double> mzValues, double mzTolerance, MzToleranceMode mzToleranceMode,
+    public CcsSearchRequestDTO(List<Double> mzValues, double mzTolerance, MzToleranceMode mzToleranceMode,
                            List<Double> ccsValues, double ccsTolerance, CcsToleranceMode ccsToleranceMode,
                            IonizationMode ionizationMode) {
         this.mzValues = mzValues != null ? mzValues : new ArrayList<>();
@@ -32,7 +28,7 @@ public class CcsSearchRequest {
         this.ccsValues = ccsValues != null ? ccsValues : new ArrayList<>();
         this.ccsTolerance = ccsTolerance;
         this.ccsToleranceMode = ccsToleranceMode != null ? ccsToleranceMode : CcsToleranceMode.PERCENTAGE;
-        this.ionizationMode = ionizationMode != null ? ionizationMode : ionizationMode.POSITIVE;
+        this.ionizationMode = ionizationMode != null ? ionizationMode : IonizationMode.POSITIVE;
         this.bufferGas = bufferGas != null ? bufferGas : BufferGas.N2;
     }
     
@@ -110,7 +106,7 @@ public class CcsSearchRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CcsSearchRequest that = (CcsSearchRequest) o;
+        CcsSearchRequestDTO that = (CcsSearchRequestDTO) o;
         return Double.compare(that.mzTolerance, mzTolerance) == 0 &&
                Double.compare(that.ccsTolerance, ccsTolerance) == 0 &&
                Objects.equals(mzValues, that.mzValues) &&

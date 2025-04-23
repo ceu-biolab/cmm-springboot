@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.rtSearch.model.msFeature;
 
+import ceu.biolab.cmm.shared.domain.msFeature.MSFeature;
+
 public class CEMSFeature extends MSFeature {
     private double mt;
     private double effMob;

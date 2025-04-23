@@ -1,7 +1,7 @@
 package ceu.biolab.cmm.ccsSearch.dto;
 
 // TODO inherit compound from shared domain
-public class CcsQueryResponse {
+public class CcsQueryResponseDTO {
     private int compoundId;
     private String compoundName;
     private double monoisotopicMass;
@@ -15,7 +15,7 @@ public class CcsQueryResponse {
     private String pathwayName;
     private String pathwayMap;
 
-    public CcsQueryResponse(int compoundId, String compoundName, double monoisotopicMass, double dbCcs, String formula, String formulaType, int compoundType, Double logP, String pathwayName, Integer pathwayId, String pathwayMap) {
+    public CcsQueryResponseDTO(int compoundId, String compoundName, double monoisotopicMass, double dbCcs, String formula, String formulaType, int compoundType, Double logP, String pathwayName, Integer pathwayId, String pathwayMap) {
         this.compoundId = compoundId;
         this.compoundName = compoundName;
         this.monoisotopicMass = monoisotopicMass;
@@ -29,7 +29,7 @@ public class CcsQueryResponse {
         this.pathwayMap = pathwayMap;
     }
 
-    public CcsQueryResponse() {
+    public CcsQueryResponseDTO() {
         this.compoundId = -1;
         this.compoundName = "";
         this.monoisotopicMass = 0.0;

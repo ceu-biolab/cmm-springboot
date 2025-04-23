@@ -1,63 +1,42 @@
-package ceu.biolab.cmm.rtSearch.api;
+package ceu.biolab.cmm.rtSearch.dto;
 
-import ceu.biolab.cmm.rtSearch.model.*;
-
-import ceu.biolab.cmm.shared.domain.Database;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.MetaboliteType;
-import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import ceu.biolab.cmm.rtSearch.service.CompoundService;
-import java.util.List;
+
+import ceu.biolab.cmm.rtSearch.model.ParserJSON;
+import ceu.biolab.cmm.shared.domain.*;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 
 
-public class CompoundBatchSearchRequest {
-    private Double[] mz;
+public class CompoundSimpleSearchRequestDTO {
+    private Double mz;
     private MzToleranceMode mzToleranceMode;
     private Double tolerance;
     private IonizationMode ionizationMode;
     private Set<String> adductsString;
     private Set<Database> databases;
-
     private MetaboliteType metaboliteType;
 
-    public CompoundBatchSearchRequest(
-            Double[] mz,
-            String toleranceMode,
-            Double tolerance,
-            String ionizationMode,
-            Set<String> adductsString,
-            Set<Database> databases,
-            MetaboliteType metaboliteType) {
-
+    public CompoundSimpleSearchRequestDTO(Double mz, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,
+                                          Set<String> adductsString, Set<Database> databases, MetaboliteType metaboliteType) {
         this.mz = mz;
-        this.mzToleranceMode = ParserJSON.parseToleranceMode(toleranceMode);
-        this.tolerance = tolerance;
-        this.ionizationMode = ParserJSON.parseIonizationMode(ionizationMode);
-        this.adductsString = adductsString;
-
-        this.databases = databases;
-        /*for (String db : databases) {
-            this.databases.add(ParserJSON.parseDatabases(db));
+        this.mzToleranceMode = mzToleranceMode;
+        if (tolerance < 0) {
+            throw new IllegalArgumentException("mzTolerance must be non-negative");
+        }else {
+            this.tolerance = tolerance;
         }
-         */
-
-        //this.metaboliteType = ParserJSON.parseMetaboliteType(metaboliteType);
+        this.ionizationMode = ionizationMode;
+        this.adductsString = adductsString;
+        this.databases = databases;
         this.metaboliteType = metaboliteType;
     }
 
-
-    // Getters and Setters
-    public Double[] getMz() {
+    public Double getMz() {
         return mz;
     }
 
-    public void setMz(Double[] mz) {
+    public void setMz(Double mz) {
         this.mz = mz;
     }
 
@@ -65,8 +44,8 @@ public class CompoundBatchSearchRequest {
         return mzToleranceMode;
     }
 
-    public void setMzToleranceMode(MzToleranceMode toleranceMode) {
-        this.mzToleranceMode = toleranceMode;
+    public void setMzToleranceMode(MzToleranceMode mzToleranceMode) {
+        this.mzToleranceMode = mzToleranceMode;
     }
 
     public Double getTolerance() {
@@ -109,11 +88,29 @@ public class CompoundBatchSearchRequest {
         this.metaboliteType = metaboliteType;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CompoundSimpleSearchRequestDTO that = (CompoundSimpleSearchRequestDTO) o;
+        return Objects.equals(mz, that.mz) && mzToleranceMode == that.mzToleranceMode &&
+                Objects.equals(tolerance, that.tolerance) && ionizationMode == that.ionizationMode &&
+                Objects.equals(adductsString, that.adductsString) && Objects.equals(databases, that.databases) &&
+                metaboliteType == that.metaboliteType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mz, mzToleranceMode, tolerance, ionizationMode, adductsString, databases, metaboliteType);
+    }
+
+
     @Override
     public String toString() {
-        return "CompoundSearchRequest{" +
+        return "SimpleSearchRequestDTO{" +
                 "mz=" + mz +
-                ", toleranceMode=" + mzToleranceMode +
+                ", mzToleranceMode=" + mzToleranceMode +
                 ", tolerance=" + tolerance +
                 ", ionizationMode=" + ionizationMode +
                 ", adductsString=" + adductsString +
@@ -122,3 +119,4 @@ public class CompoundBatchSearchRequest {
                 '}';
     }
 }
+
