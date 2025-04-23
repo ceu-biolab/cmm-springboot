@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.rtSearch.service;
 
+import ceu.biolab.cmm.rtSearch.dto.CompoundSimpleSearchRequestDTO;
+import ceu.biolab.cmm.rtSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
 
 import ceu.biolab.cmm.shared.domain.Database;
@@ -20,16 +22,21 @@ public class CompoundService {
     private CompoundRepository compoundRepository;
 
 
-    public List<AnnotatedFeature> findCompoundsByMz(Double mz, MzToleranceMode mzToleranceMode, Double tolerance,
-                                            IonizationMode ionizationMode, Set<String> adductsString,
-                                            Set<Database> databases, MetaboliteType metaboliteType) {
+    public RTSearchResponseDTO findCompoundsByMz(CompoundSimpleSearchRequestDTO request) {
+        RTSearchResponseDTO response = new RTSearchResponseDTO();
 
         try {
-            List<AnnotatedFeature> results = compoundRepository.annotateMSFeature(mz, mzToleranceMode, tolerance, ionizationMode, adductsString, databases, metaboliteType);
-            return results;
+            List<AnnotatedFeature> results = compoundRepository.annotateMSFeature(request.getMz(), request.getMzToleranceMode(), request.getTolerance(),
+                    request.getIonizationMode(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
+            for (AnnotatedFeature feature : results) {
+                response.addImFeature(feature);
+            }
+
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error annotating MS features", e);
         }
     }
+
 }

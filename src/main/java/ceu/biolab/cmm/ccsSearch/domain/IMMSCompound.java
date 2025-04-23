@@ -24,12 +24,15 @@ public class IMMSCompound extends Compound {
               compound.getLogP(), compound.getRtPred(), compound.getInchi(), compound.getInchiKey(),
               compound.getSmiles(), compound.getLipidType(), compound.getNumChains(), compound.getNumCarbons(),
               compound.getDoubleBonds(), compound.getBiologicalActivity(), compound.getMeshNomenclature(),
-              compound.getIupacClassification());
+              compound.getIupacClassification(), compound.getMol2());
         this.dbCcs = ccsValue;
         this.pathways = new ArrayList<>();
     }
 
     public void addPathway(Pathway pathway) {
+        if (this.pathways == null) {
+            this.pathways = new ArrayList<>();
+        }
         if (pathway != null && pathway.getPathwayId() != -1) {
             this.pathways.add(pathway);
         }

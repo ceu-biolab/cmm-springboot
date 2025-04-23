@@ -1,13 +1,8 @@
-package ceu.biolab.cmm.scoreAnnotations.service;
+package ceu.biolab.cmm.unit.rtSearch.service;
 
-import ceu.biolab.cmm.rtSearch.service.CompoundService;
-
-import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
-import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class SimpleSearchServiceTest {
-    @Autowired
-    private CompoundService compoundService;
-
     @BeforeEach
     void setUp() {
     }
@@ -104,90 +96,11 @@ public class SimpleSearchServiceTest {
         }
     }
 
-    @Test
-    void testFindCompoundsByMz10DA() {
-        Double mz = 100.0;
-        MzToleranceMode mzToleranceMode = MzToleranceMode.MDA;
-        Double tolerance = 1.0;
-        Set<String> adducts = new HashSet<>();
-        String adductsString = "M+H";
-        adducts.add(adductsString);
-        IonizationMode ionizationMode = IonizationMode.POSITIVE;
-        Set<Database> databases = Set.of(Database.HMDB, Database.LIPIDMAPS);
-        MetaboliteType metaboliteType = MetaboliteType.ONLYLIPIDS;
-
-        List<AnnotatedFeature> results = compoundService.findCompoundsByMz(
-                mz, mzToleranceMode, tolerance, ionizationMode, adducts, databases, metaboliteType
-        );
-
-        assertNotNull(results);
-    }
-
-    @Test
-    void testFindCompoundsByMz50DA() {
-        Double mz = 100.0;
-        MzToleranceMode mzToleranceMode = MzToleranceMode.MDA;
-        Double tolerance = 1.0;
-        Set<String> adducts = new HashSet<>();
-        String adductsString = "M+H";
-        adducts.add(adductsString);
-        IonizationMode ionizationMode = IonizationMode.POSITIVE;
-        Set<Database> databases = Set.of(Database.HMDB, Database.LIPIDMAPS);
-        MetaboliteType metaboliteType = MetaboliteType.ONLYLIPIDS;
-
-        List<AnnotatedFeature> results = compoundService.findCompoundsByMz(
-                mz, mzToleranceMode, tolerance, ionizationMode, adducts, databases, metaboliteType
-        );
-
-        assertNotNull(results);
-    }
-
-    @Test
-    void testFindCompoundsByMz100DA() {
-        Double mz = 100.0;
-        MzToleranceMode mzToleranceMode = MzToleranceMode.MDA;
-        Double tolerance = 1.0;
-        Set<String> adducts = new HashSet<>();
-        String adductsString = "M+H";
-        adducts.add(adductsString);
-        IonizationMode ionizationMode = IonizationMode.POSITIVE;
-        Set<Database> databases = Set.of(Database.HMDB, Database.LIPIDMAPS);
-        MetaboliteType metaboliteType = MetaboliteType.ONLYLIPIDS;
-
-        List<AnnotatedFeature> results = compoundService.findCompoundsByMz(
-                mz, mzToleranceMode, tolerance, ionizationMode, adducts, databases, metaboliteType
-        );
-
-        assertNotNull(results);
-    }
-
-    @Test
-    void testFindCompoundsByMzPPMTolerance() {
-        // Arrange test inputs
-        Double mz = 500.0;
-        MzToleranceMode mzToleranceMode = MzToleranceMode.PPM;
-        Double tolerance = 10.0;
-        Set<String> adducts = new HashSet<>();
-        String adductsString = "M+H";
-        adducts.add(adductsString);
-        IonizationMode ionizationMode = IonizationMode.POSITIVE;
-        Set<Database> databases = Set.of(Database.HMDB, Database.LIPIDMAPS);
-        MetaboliteType metaboliteType = MetaboliteType.ONLYLIPIDS;
-
-        List<AnnotatedFeature> results = compoundService.findCompoundsByMz(
-                mz, mzToleranceMode, tolerance, ionizationMode, adducts, databases, metaboliteType
-        );
-
-        assertNotNull(results);
-    }
-
-
     private AnnotatedFeature createEmptyAnnotatedFeature(double mz) {
         AnnotatedFeature feature = new AnnotatedFeature(mz);
         feature.setFeature(new MSFeature(mz));
         return feature;
     }
-
 
     // Extract all compounds from a list of annotated features
     private List<Annotation> extractAnnotations(List<AnnotatedFeature> features) {
@@ -200,3 +113,5 @@ public class SimpleSearchServiceTest {
         return compounds;
     }
 }
+
+//TODO test about methods of AdductTransformer

@@ -1,0 +1,13 @@
+{
+    "mzValues": [
+        400.3432, 281.24765
+    ],
+    "ccsValues": [
+        202.881, 178.546
+    ],
+    "mzToleranceMode": "PPM",
+    "mzTolerance": 10,
+    "ccsToleranceMode": "PERCENTAGE",
+    "ccsTolerance": 2,
+    "ionMode": "POSITIVE"
+}

@@ -1,15 +1,14 @@
 package ceu.biolab.cmm.rtSearch.dto;
 
-import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RtSearchResponse {
+public class RTSearchResponseDTO {
     private List<AnnotatedFeature> imFeatures;
 
-    public RtSearchResponse() {
+    public RTSearchResponseDTO() {
         this.imFeatures = new ArrayList<>();
     }
 
@@ -29,6 +28,6 @@ public class RtSearchResponse {
 
     @Override
     public String toString() {
-        return "CcsSearchResponse [imFeatures=" + imFeatures + "]";
+        return "RTSearchResponse [imFeatures=" + imFeatures + "]";
     }
 }

@@ -1,6 +1,8 @@
 package ceu.biolab.cmm.rtSearch.api;
+import ceu.biolab.cmm.ccsSearch.dto.CcsSearchResponseDTO;
 import ceu.biolab.cmm.rtSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.CompoundSimpleSearchRequestDTO;
+import ceu.biolab.cmm.rtSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.rtSearch.service.CompoundService;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import org.slf4j.LoggerFactory;
@@ -24,24 +26,23 @@ public class CompoundController {
     }
 
     @PostMapping("/simple-search")
-    public List<AnnotatedFeature> annotateMSFeature(@RequestBody CompoundSimpleSearchRequestDTO request) {
-        List<AnnotatedFeature> features = compoundService.findCompoundsByMz(
-                request.getMz(),
-                request.getMzToleranceMode(),
-                request.getTolerance(),
-                request.getIonizationMode(),
-                request.getAdductsString(),
-                request.getDatabases(),
-                request.getMetaboliteType()
-        );
-        return features;
+    public RTSearchResponseDTO annotateMSFeature(@RequestBody CompoundSimpleSearchRequestDTO request) {
+        if (request.getMz() == null) {
+            return new RTSearchResponseDTO();
+        }
+        return compoundService.findCompoundsByMz(request);
     }
 
     @PostMapping("/batch-search")
-    public List<AnnotatedFeature> annotateMSFeatures(@RequestBody CompoundBatchSearchRequestDTO request) {
-        List<AnnotatedFeature> features = new ArrayList<>();
-        for(Double mz : request.getMzValues()) {
-            List<AnnotatedFeature> result = compoundService.findCompoundsByMz(
+    public RTSearchResponseDTO annotateMSFeatures(@RequestBody CompoundBatchSearchRequestDTO request) {
+        if (request.getMzValues() == null || request.getMzValues().isEmpty()) {
+            return new RTSearchResponseDTO();
+        }
+
+        RTSearchResponseDTO response = new RTSearchResponseDTO();
+
+        for (Double mz : request.getMzValues()) {
+            CompoundSimpleSearchRequestDTO simpleRequest = new CompoundSimpleSearchRequestDTO(
                     mz,
                     request.getMzToleranceMode(),
                     request.getTolerance(),
@@ -51,31 +52,31 @@ public class CompoundController {
                     request.getMetaboliteType()
             );
 
-            features.addAll(result);
+            RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest);
+            response.getImFeatures().addAll(result.getImFeatures());
         }
 
-        return features;
+        return response;
     }
 
     @GetMapping("/simple-search")
-    public List<AnnotatedFeature> annotatedMSFeatures(@RequestBody CompoundSimpleSearchRequestDTO request) {
-        List<AnnotatedFeature> features = compoundService.findCompoundsByMz(
-                request.getMz(),
-                request.getMzToleranceMode(),
-                request.getTolerance(),
-                request.getIonizationMode(),
-                request.getAdductsString(),
-                request.getDatabases(),
-                request.getMetaboliteType()
-        );
-        return features;
+    public RTSearchResponseDTO annotatedMSFeature(@RequestBody CompoundSimpleSearchRequestDTO request) {
+        if (request.getMz() == null) {
+            return new RTSearchResponseDTO();
+        }
+        return compoundService.findCompoundsByMz(request);
     }
 
     @GetMapping("/batch-search")
-    public List<AnnotatedFeature> annotatedMSFeatures(@RequestBody CompoundBatchSearchRequestDTO request) {
-        List<AnnotatedFeature> features = new ArrayList<>();
-        for(Double mz : request.getMzValues()) {
-            List<AnnotatedFeature> result = compoundService.findCompoundsByMz(
+    public RTSearchResponseDTO annotatedMSFeatures(@RequestBody CompoundBatchSearchRequestDTO request) {
+        if (request.getMzValues() == null || request.getMzValues().isEmpty()) {
+            return new RTSearchResponseDTO();
+        }
+
+        RTSearchResponseDTO response = new RTSearchResponseDTO();
+
+        for (Double mz : request.getMzValues()) {
+            CompoundSimpleSearchRequestDTO simpleRequest = new CompoundSimpleSearchRequestDTO(
                     mz,
                     request.getMzToleranceMode(),
                     request.getTolerance(),
@@ -84,9 +85,12 @@ public class CompoundController {
                     request.getDatabases(),
                     request.getMetaboliteType()
             );
-            features.addAll(result);
+
+            RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest);
+            response.getImFeatures().addAll(result.getImFeatures());
         }
-        return features;
+
+        return response;
     }
 }
 
