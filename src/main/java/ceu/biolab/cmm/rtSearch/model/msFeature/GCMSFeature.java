@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.rtSearch.model.msFeature;
 
+import ceu.biolab.cmm.shared.domain.msFeature.MSFeature;
+
 public class GCMSFeature extends MSFeature {
     private double rt;
     private double ri;
