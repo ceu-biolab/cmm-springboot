@@ -1,13 +1,8 @@
-package ceu.biolab.cmm.rtSearch.service;
+package ceu.biolab.cmm.unit.rtSearch.service;
 
-import ceu.biolab.cmm.rtSearch.service.CompoundService;
-
-import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
-import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class SimpleSearchServiceTest {
-    @Autowired
-    private CompoundService compoundService;
-
     @BeforeEach
     void setUp() {
     }

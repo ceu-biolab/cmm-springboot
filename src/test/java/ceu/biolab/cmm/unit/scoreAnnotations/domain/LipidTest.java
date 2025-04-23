@@ -1,6 +1,8 @@
-package ceu.biolab.cmm.scoreAnnotations.domain;
+package ceu.biolab.cmm.unit.scoreAnnotations.domain;
 
 import org.junit.jupiter.api.Test;
+
+import ceu.biolab.cmm.scoreAnnotations.domain.Lipid;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Optional;
