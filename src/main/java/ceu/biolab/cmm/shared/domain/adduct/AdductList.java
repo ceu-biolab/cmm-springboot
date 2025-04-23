@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.shared.domain.adduct;
 
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 import jakarta.faces.model.SelectItem;
 
 import java.util.Collections;
@@ -36,7 +37,7 @@ public class AdductList {
         LISTIONIZEDMODES = Collections.unmodifiableList(listIonizedModesTMP);
     }
 
-    public static final Map<String, String> MAPMZPOSITIVEADDUCTS;
+    public static Map<String, String> MAPMZPOSITIVEADDUCTS;
 
     static {
         Map<String, String> mapMZPositiveAdductsTMP = new LinkedHashMap<>();
@@ -89,7 +90,7 @@ public class AdductList {
         // MAPMZPOSITIVEADDUCTS = mapMZPositiveAdductsTMP;
     }
 
-    public static final Map<String, String> MAPMZNEGATIVEADDUCTS;
+    public static Map<String, String> MAPMZNEGATIVEADDUCTS;
 
     static {
         Map<String, String> mapMZNegativeAdductsTMP = new LinkedHashMap<>();
@@ -115,7 +116,7 @@ public class AdductList {
         MAPMZNEGATIVEADDUCTS = Collections.unmodifiableMap(mapMZNegativeAdductsTMP);
     }
 
-    public static final Map<String, String> MAPNEUTRALADDUCTS;
+    public static Map<String, String> MAPNEUTRALADDUCTS;
 
     static {
         Map<String, String> mapNeutralAdductsTMP = new LinkedHashMap<>();
@@ -482,5 +483,29 @@ public class AdductList {
         mapMZNegativeAdductsTMP.put("M+F", possibleParents);
 
         MAPNEGATIVEADDUCTFRAGMENT = Collections.unmodifiableMap(mapMZNegativeAdductsTMP);
+    }
+
+    public static void addAdductIfMissing(IonizationMode ionizationMode, String adduct, String value) {
+        if(ionizationMode == IonizationMode.POSITIVE){
+            if (!MAPMZPOSITIVEADDUCTS.containsKey(adduct)) {
+                // Create a modifiable copy
+                Map<String, String> updatedMap = new LinkedHashMap<>(MAPMZPOSITIVEADDUCTS);
+                updatedMap.put(adduct, value);
+                // Rewrap in unmodifiable and reassign
+                MAPMZPOSITIVEADDUCTS = Collections.unmodifiableMap(updatedMap);
+            }
+        } else if (ionizationMode == IonizationMode.NEGATIVE) {
+            if (!MAPMZNEGATIVEADDUCTS.containsKey(adduct)) {
+                Map<String, String> updatedMap = new LinkedHashMap<>(MAPMZNEGATIVEADDUCTS);
+                updatedMap.put(adduct, value);
+                MAPMZNEGATIVEADDUCTS = Collections.unmodifiableMap(updatedMap);
+            }
+        }else {
+            if (!MAPNEUTRALADDUCTS.containsKey(adduct)) {
+                Map<String, String> updatedMap = new LinkedHashMap<>(MAPNEUTRALADDUCTS);
+                updatedMap.put(adduct, value);
+                MAPNEUTRALADDUCTS = Collections.unmodifiableMap(updatedMap);
+            }
+        }
     }
 }

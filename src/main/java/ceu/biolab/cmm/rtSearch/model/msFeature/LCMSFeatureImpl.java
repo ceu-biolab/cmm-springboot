@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.rtSearch.model.msFeature;
 
+import ceu.biolab.cmm.shared.domain.msFeature.MSFeature;
+
 import java.util.Objects;
 
 public class LCMSFeatureImpl extends MSFeature implements LCMSFeature{
