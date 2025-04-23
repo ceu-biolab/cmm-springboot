@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.scoreAnnotations.service;
+package ceu.biolab.cmm.rtSearch.service;
 
 import ceu.biolab.cmm.rtSearch.service.CompoundService;
 
