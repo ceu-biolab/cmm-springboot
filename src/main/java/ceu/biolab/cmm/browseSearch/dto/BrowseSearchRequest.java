@@ -29,6 +29,7 @@ public class BrowseSearchRequest {
     public void setCompoundFormula(String compoundFormula) {this.compoundFormula = compoundFormula;}
 
     public List<Database> getDatabases() {return databases;}
+
     public void setDatabases(List<Database> databases) {this.databases = databases;}
 
     public MetaboliteType getMetaboliteType() {return metaboliteType;}
