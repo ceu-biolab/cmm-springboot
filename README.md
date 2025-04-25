@@ -28,14 +28,18 @@ CEU Mass Mediator (CMM) helps scientists in the field of metabolomics match expe
 ### Steps
 
 1. Clone the repository.
-2. Update your database connection settings in:  
-   `src/main/resources/application.yml`
+2. Update your database connection settings (you need to have postgresql installed and running with our local database):
+  
+   2.1. Go to `src/main/resources/application-local.yml.template` and fill in your connection details.
+   
+   2.2. Rename the file to `application-local.yml` in the same directory.
+
 3. Run the application:
    ```bash
    mvn spring-boot:run
    ```
 
-> 🔐 Contact the admins for details on how to set up the database.
+> 🔐 Contact us for details on how to set up the database.
 
 ---
 
