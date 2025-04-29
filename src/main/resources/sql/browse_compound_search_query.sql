@@ -1,5 +1,4 @@
-SELECT *
-FROM compounds AS c
+SELECT * FROM compounds_view AS c
     LEFT JOIN compounds_hmdb h ON c.compound_id = h.compound_id
     LEFT JOIN compounds_lm  l ON c.compound_id = l.compound_id
     LEFT JOIN compounds_kegg k ON c.compound_id = k.compound_id
@@ -9,9 +8,9 @@ FROM compounds AS c
     LEFT JOIN compounds_chebi ch ON c.compound_id = ch.compound_id
     LEFT JOIN compounds_npatlas n ON c.compound_id = n.compound_id
 WHERE
-    (c.compound_name IS NULL OR c.compound_name ILIKE CONCAT('%', :name, '%'))
-  AND (c.formula IS NULL OR c.formula ILIKE CONCAT('%', :formula, '%'))
-  AND  (:databaseFilterCondition)
+    (c.compound_name IS NULL OR c.compound_name ILIKE (:compound_name))
+  AND (c.formula IS NULL OR c.formula ILIKE ( :formula))
+  (:databaseFilterCondition)
 
 
 

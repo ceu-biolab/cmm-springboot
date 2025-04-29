@@ -7,14 +7,14 @@ import java.util.List;
 
 
 public class BrowseSearchRequest {
-    private String compoundName;
-    private String compoundFormula;
+    private String compound_name;
+    private String formula;
     private List<Database> databases;
     private MetaboliteType metaboliteType;
 
     public BrowseSearchRequest(String searchTerm, String searchFormula, List<Database> databases, MetaboliteType metaboliteType) {
-        this.compoundName = searchTerm;
-        this.compoundFormula = searchFormula;
+        this.compound_name = searchTerm;
+        this.formula = searchFormula;
         this.databases = databases;
         this.metaboliteType = metaboliteType;
     }
@@ -22,11 +22,11 @@ public class BrowseSearchRequest {
     public BrowseSearchRequest() {
     }
 
-    public String getCompoundName() {return compoundName;}
-    public void setCompoundName(String compoundName) {this.compoundName = compoundName;}
+    public String getCompound_name() {return compound_name;}
+    public void setCompound_name(String compound_name) {this.compound_name = compound_name;}
 
-    public String getCompoundFormula() {return compoundFormula;}
-    public void setCompoundFormula(String compoundFormula) {this.compoundFormula = compoundFormula;}
+    public String getFormula() {return formula;}
+    public void setFormula(String formula) {this.formula = formula;}
 
     public List<Database> getDatabases() {return databases;}
 
@@ -43,8 +43,8 @@ public class BrowseSearchRequest {
     @Override
     public String toString() {
         return "BrowseSearchRequest{" +
-                "searchTerm='" + compoundName + '\'' +
-                ", searchFormula='" + compoundFormula + '\'' +
+                "searchTerm='" + compound_name + '\'' +
+                ", searchFormula='" + formula + '\'' +
                 ", databases=" + databases +
                 ", metaboliteType=" + metaboliteType +
                 '}';

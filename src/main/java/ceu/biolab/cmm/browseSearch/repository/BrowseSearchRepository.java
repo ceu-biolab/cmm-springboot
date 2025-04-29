@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,12 +20,10 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Repository
     public class BrowseSearchRepository {
@@ -43,14 +40,8 @@ import java.util.stream.Collectors;
         public BrowseQueryResponse findMatchingCompounds(BrowseSearchRequest queryData) throws IOException {
             String sql = loadSqlQuery("classpath:sql/browse_compound_search_query.sql");
 
-            // Construcción de parámetros
             List<Compound>compounds = buildParams(queryData,sql);
-
-            // Ejecución de la consulta
-
-
-            System.out.println(1);
-            // Retornar la respuesta
+            System.out.print(compounds.toString());
             return new BrowseQueryResponse(compounds);
         }
         private String loadSqlQuery(String resourcePath) throws IOException {
@@ -63,6 +54,7 @@ import java.util.stream.Collectors;
 
         if (queryData.getDatabases().contains(Database.HMDB)) {
             databaseConditions.add("h.hmdb_id IS NOT NULL");
+            System.out.println("h.hmdb_id IS NOT NULL");
         }
         if (queryData.getDatabases().contains(Database.LIPIDMAPS)) {
             databaseConditions.add("l.lm_id IS NOT NULL");
@@ -88,34 +80,39 @@ import java.util.stream.Collectors;
         if (queryData.getDatabases().contains(Database.NPATLAS)) {
             databaseConditions.add("n.npatlas_id IS NOT NULL");
         }
-        String filterCondition = databaseConditions.isEmpty() ? "TRUE" : String.join(" OR ", databaseConditions);
-
+        String filterCondition =  "";
+        if (!databaseConditions.isEmpty()) {
+            filterCondition += " AND (" + String.join(" OR ", databaseConditions) + ")";
+        }
         int metaboliteType = 0;
         if(queryData.getMetaboliteType().equals(MetaboliteType.ONLYLIPIDS)){ metaboliteType=1;};
         filterCondition += " AND c.compound_type = " + metaboliteType;
         sql = sql.replace("(:databaseFilterCondition)", filterCondition);
 
-        params.addValue("name", queryData.getCompoundName());
-        params.addValue("formula", queryData.getCompoundFormula());
+        String compoundNameParam = "%" + queryData.getCompound_name() + "%";
+        String formulaParam = "%" + queryData.getFormula() + "%";
 
-System.out.println(2);
+        params.addValue("compound_name", compoundNameParam);
+        params.addValue("formula", formulaParam);
+
         Set<Compound> compoundsSet = new HashSet<>();
+        System.out.println(params);
+        System.out.println("Database conditions: " + databaseConditions);
+        System.out.println("Metabolite type: " + metaboliteType);
 
-       jdbcTemplate.query(sql, params, rs -> {
+
+        jdbcTemplate.query(sql, params, rs -> {
+
             while (rs.next()) {
-                System.out.println(3);
                 CompoundDTO dto = CompoundMapper.fromResultSet(rs);
                 compoundsSet.add(CompoundMapper.toCompound(dto));
             }
             return compoundsSet;
         });
-        System.out.println(3);
         Logger logger = LoggerFactory.getLogger(getClass());
         logger.info("QUERY: {} ", sql);
         return new ArrayList<>(compoundsSet);
-
-
-
     }
-    }
+
+}
 
