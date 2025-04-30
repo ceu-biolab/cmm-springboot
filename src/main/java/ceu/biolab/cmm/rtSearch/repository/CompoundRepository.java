@@ -29,7 +29,7 @@ public class CompoundRepository {
     private JdbcTemplate jdbcTemplate;
 
     public List<AnnotatedFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
-                                            Double tolerance, IonizationMode ionizationMode,
+                                            Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct,
                                             Set<String> adductsString, Set<Database> databases,
                                             MetaboliteType metaboliteType) {
 
@@ -51,13 +51,23 @@ public class CompoundRepository {
         try {
             IMSFeature msFeature = new MSFeature(mz, 0.0);
             AnnotatedFeature annotatedFeature = new AnnotatedFeature(msFeature);
-            for (String adductString : adductsString) {
+            Set<String> adductsToProcess;
+
+            if (detectedAdduct != null && detectedAdduct.isPresent()) {
+                adductsToProcess = Set.of(detectedAdduct.get());
+            } else {
+                adductsToProcess = adductsString;
+            }
+
+            if (adductsToProcess == null || adductsToProcess.isEmpty()) {
+                return annotatedMSFeature;
+            }
+
+            for (String adductString : adductsToProcess) {
+
                 Set<Compound> compoundsSet = new HashSet<>();
                 Adduct adduct = AdductProcessing.getAdductFromString(adductString, ionizationMode, mz);
                 double adductMass = adduct.getAdductMass();
-
-                logger.info("adduct : {}", adductString);
-                logger.info("adduct mass: {}", adductMass);
 
                 AnnotationsByAdduct annotationsByAdduct = null;
 
@@ -110,7 +120,7 @@ public class CompoundRepository {
                     lowerBound = monoIsotopicMassFromMZAndAdduct - tolerance/1000;
                     upperBound = monoIsotopicMassFromMZAndAdduct + tolerance/1000;
                 } else { // PPM (Parts Per Million)
-                    double tolerancePPM = mz * tolerance / 1_000_000.0;
+                    double tolerancePPM = mz * tolerance / 1_000_000.0d;
                     lowerBound = monoIsotopicMassFromMZAndAdduct - tolerancePPM;
                     upperBound = monoIsotopicMassFromMZAndAdduct + tolerancePPM;
                 }

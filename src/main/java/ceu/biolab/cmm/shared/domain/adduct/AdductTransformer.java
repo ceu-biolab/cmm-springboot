@@ -58,11 +58,11 @@ public class AdductTransformer {
             logger.info("charge: {}", charge);
 
             if (charge == 1 && multimer == 1) { // Default case: Monomer with Charge +/- 1
-                return getMonoMassFromSingleChargedMZ(mz, adductValue);
+                return getMonoMassFromSingleChargedMZ(mz, adductValue, charge);
             }
 
             if (multimer > 1) { // Dimer or Trimer with a charge of +/- 2 or +/- 3
-                return getMonoMassFromMultimerMZ(mz, adductValue, multimer);
+                return getMonoMassFromMultimerMZ(mz, adductValue, charge, multimer);
             } else { // Monomer with a specified charge of +/- 2 or +/- 3
                 return getMonoMassFromMultiChargedMZ(mz, adductValue, charge);
             }
@@ -71,44 +71,87 @@ public class AdductTransformer {
         }
     }
 
-    //  prepSt.setDouble(1, (massToSearch - tolerance));
-    //            prepSt.setDouble(2, (massToSearch + tolerance));
-    //tolerance = mass to search * tolerance * 10^-6
 
-
-    public static Double getMonoMassFromSingleChargedMZ(Double experimentalMass, Double adductValue) {
-        return experimentalMass - adductValue;
+    /**
+     * This method calculates the monoisotopic mass from a multi charged experimental mass (m/z)
+     * @param experimentalMass the experimental mass as a double
+     * @param adductValue the mass of the adduct as a double
+     * @return the monoisotopic weight as a double
+     */
+    public static Double getMonoMassFromSingleChargedMZ(Double experimentalMass, Double adductValue, int charge) {
+        return experimentalMass - adductValue + charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
     }
 
+    /**
+     * This method calculates the monoisotopic mass from a multi charged experimental mass (m/z)
+     * @param experimentalMass the experimental mass as a double
+     * @param adductValue the mass of the adduct as a double
+     * @param charge the number of charges of the adduct as an integer
+     * @return the monoisotopic weight as a double
+     */
     private static Double getMonoMassFromMultiChargedMZ(double experimentalMass, double adductValue, int charge) {
         double result = experimentalMass;
         result -= adductValue;
         result *= charge;
+        result = result + charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
         return result;
     }
 
-    private static Double getMonoMassFromMultimerMZ(double experimentalMass, double adductValue, int numberAtoms) {
+    /**
+     * This method calculates the monoisotopic mass from the experimental mass (m/z)
+     * @param experimentalMass the experimental mass as a double
+     * @param adductValue the mass of the adduct as a double
+     * @param charge the number of charges of the adduct as an integer
+     * @param numberAtoms the number of atoms as an integer
+     * @return the monoisotopic weight as a double
+     */
+    private static Double getMonoMassFromMultimerMZ(double experimentalMass, double adductValue, int charge, int numberAtoms) {
         double result = experimentalMass;
         result -= adductValue;
         result /= numberAtoms;
+        result = result + charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
         return result;
     }
 
-    public static Double getMZFromSingleChargedMonoMass(Double monoisotopicWeight, Double adductValue) {
-        return monoisotopicWeight + adductValue;
+    /**
+     * This method calculates the experimental mass based on a single charged monoisotopic weight
+     * @param monoisotopicWeight monoisotopic weight as Double
+     * @param adductValue the mass of the adduct as a double
+     * @param charge the number of charges of the adduct as an integer
+     * @return the experimental mass as a double
+     */
+    public static Double getMZFromSingleChargedMonoMass(Double monoisotopicWeight, Double adductValue, int charge) {
+        return monoisotopicWeight + adductValue - charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
     }
 
+    /**
+     * This method calculates the experimental mass based on a multi charged monoisotopic weight
+     * @param monoisotopicWeight monoisotopic weight as Double
+     * @param adductValue the mass of the adduct as a double
+     * @param charge the number of charges of the adduct as an integer
+     * @return the experimental mass as a double
+     */
     private static Double getMZFromMultiChargedMonoMass(double monoisotopicWeight, double adductValue, int charge) {
         double result = monoisotopicWeight;
         result /= charge;
         result += adductValue;
+        result = result - charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
         return result;
     }
 
-    private static Double getMZFromMultimerMonoMass(double monoisotopicWeight, double adductValue, int numberMultimers) {
+    /**
+     * This method calculates the MZ based on the monoisotopic weight
+     * @param monoisotopicWeight monoisotopic weight as Double
+     * @param adductValue the mass of the adduct as a double
+     * @param charge the number of charges of the adduct as an integer
+     * @param numberMultimers the number of multimers of the adduct as an integer
+     * @return the experimental mass as a double
+     */
+    private static Double getMZFromMultimerMonoMass(double monoisotopicWeight, double adductValue, int charge, int numberMultimers) {
         double result = monoisotopicWeight;
         result *= numberMultimers;
         result += adductValue;
+        result = result - charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
         return result;
     }
 
@@ -117,29 +160,25 @@ public class AdductTransformer {
      *
      * @param monoisotopicWeight Experimental mass of the compound
      * @param adduct              adduct name (M+H, 2M+H, M+2H, etc..)
+     * @param ionizationMode  ionization mode: positive or negative
      * @return the mass difference within the tolerance respecting to the massToSearch
      */
     public static Double getMassOfAdductFromMonoMass(Double monoisotopicWeight, String adduct, IonizationMode ionizationMode) {
-        Map<String, String> adductMap = AdductProcessing.getAdduct(adduct, ionizationMode);
-        Map.Entry<String, String> entry = adductMap.entrySet().iterator().next();
-        String adductFromMap = adductMap.keySet().iterator().next();
-
         Adduct adductObj;
 
         try {
-            adductObj = new Adduct(adductFromMap);
-
+            adductObj = new Adduct(adduct);
             double adductValue = adductObj.getAdductMass();
 
             int charge = adductObj.getAdductCharge();
             int multimer = adductObj.getMultimer();
 
             if (charge == 1 && multimer == 1) { // Default case: Monomer with Charge +/- 1
-                return getMZFromSingleChargedMonoMass(monoisotopicWeight, adductValue);
+                return getMZFromSingleChargedMonoMass(monoisotopicWeight, adductValue, charge);
             }
 
             if (multimer > 1) { // Dimer or Trimer with a charge of +/- 2 or +/- 3
-                return getMZFromMultimerMonoMass(monoisotopicWeight, adductValue, multimer);
+                return getMZFromMultimerMonoMass(monoisotopicWeight, adductValue, charge, multimer);
             } else { // Monomer with a specified charge of +/- 2 or +/- 3
                 return getMZFromMultiChargedMonoMass(monoisotopicWeight, adductValue, charge);
             }
@@ -147,4 +186,21 @@ public class AdductTransformer {
             throw new RuntimeException(e);
         }
     }
+
+
+    /**
+     * This method gets the number of charges of the Adduct as a String
+     * @param adduct Adduct as a String
+     * @return number of charges as an Integer
+     */
+    public static int getChargeOfAdduct(String adduct) {
+        if (AdductList.CHARGE_3.contains(adduct)) {
+            return 3;
+        } else if (AdductList.CHARGE_2.contains(adduct)) {
+            return 2;
+        } else {
+            return 1; //default: 1 charge
+        }
+    }
+
 }

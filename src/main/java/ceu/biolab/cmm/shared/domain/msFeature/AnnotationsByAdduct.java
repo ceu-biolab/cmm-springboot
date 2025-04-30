@@ -21,6 +21,22 @@ public class AnnotationsByAdduct {
         this.annotations = annotatedCompounds;
     }
 
+    public String getAdduct() {
+        return adduct;
+    }
+
+    public void setAdduct(String adduct) {
+        this.adduct = adduct;
+    }
+
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+    }
+
     public void addAnnotation(Annotation annotation) {
         this.annotations.add(annotation);
     }

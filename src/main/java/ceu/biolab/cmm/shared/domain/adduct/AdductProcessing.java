@@ -6,51 +6,156 @@ import ceu.biolab.IncorrectFormula;
 import ceu.biolab.NotFoundElement;
 import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import java.util.*;
 
 public class AdductProcessing {
     private static final Logger logger = LoggerFactory.getLogger(CompoundRepository.class);
+    public static final double PROTON_WEIGTH = 1.0073d;
+    public static final double BIGGEST_ISOTOPE = 2.01; // Chlorine is the biggest gap for an isotope detected
+    public static double ADDUCT_AUTOMATIC_DETECTION_WINDOW = 0.05D;
 
     public static Adduct getAdductFromString(String adductString, IonizationMode ionizationMode, Double mz) throws IncorrectAdduct {
         try {
             if (ionizationMode == IonizationMode.POSITIVE) {
                 if (AdductList.MAPMZPOSITIVEADDUCTS.containsKey(adductString)) {
-                    String adductFormula = "[" + adductString + "]+";
+                    int charge = AdductTransformer.getChargeOfAdduct(adductString);
+                    String adductFormula = "[" + adductString + "]" + charge + "+";
                     logger.info("adduct Formula{}", adductFormula);
                     Adduct adj = new Adduct((adductFormula));
                     logger.info("adduct obj{}", adj);
                     return adj;
                 } else
                     throw new IllegalArgumentException("Adduct not found: " + adductString);
-            }else if (AdductList.MAPMZNEGATIVEADDUCTS.containsKey(adductString)) {
-                String adductFormula = "[" + adductString + "]-";
+            } else if (AdductList.MAPMZNEGATIVEADDUCTS.containsKey(adductString)) {
+                int charge = AdductTransformer.getChargeOfAdduct(adductString);
+                String adductFormula = "[" + adductString + "]" + charge + "-";
                 return new Adduct(adductFormula);
-                } else {
+            } else {
                 throw new IllegalArgumentException("Adduct not found: " + adductString);
-                }
+            }
         } catch (NotFoundElement | IncorrectFormula | IncorrectAdduct e) {
             throw new IncorrectAdduct("Invalid adduct: " + adductString + e.getMessage());
         }
     }
 
-    public static Map<String, String> getAdduct(String adductString, IonizationMode ionizationMode) {
-        Map<String, String> adductMap;
 
+    /**
+     * Detect the ionization adduct based on the relationships in the Composite
+     * Spectrum. The mz is handled as m/z
+     *
+     * @param ionizationMode Ionization Mode (enum): Positive or Negative
+     * @param mz             experimental masses (m/z)
+     * @param adducts        possible adducts to be formed as Set
+     * @param groupedPeaks   Signals of the metabolite M
+     * @return
+     */
+    public static String detectAdductBasedOnCompositeSpectrum(IonizationMode ionizationMode, Double mz,
+            Set<String> adducts, Map<Double, Double> groupedPeaks) {
+        if (groupedPeaks.isEmpty()) {
+            return "";
+        }
+
+        logger.info("Adducts: {}", adducts);
+
+        Map<Double, Double> groupedPeaksFiltered = filterIsotopes(groupedPeaks);
+        String adductDetected = "";
+        Map<String, String> mapAdducts = getAdductMapByIonizationMode(ionizationMode);
+        List<String> allAdductsForCheckRelation = new LinkedList<>(mapAdducts.keySet());
+
+        double adductDouble;
+        double adductDoubleForCheckRelation;
+        double massToSearchInCompositeSpectrumForCheckRelation;
+        double differenceMassAndPeak;
+
+        for (String adductName : adducts) {    //** Hypothesis -> Adduct is adductName
+            logger.info("Adduct Name: {}", adductName);
+            String adductValue = mapAdducts.get(adductName);
+            if (adductValue == null) {
+                break;
+            }
+            adductDouble = Math.abs(Double.parseDouble(adductValue));
+            Double neutralMassBasedOnAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductName, ionizationMode);
+
+            //** Hypothesis -> Peak is adductName
+            // Peak to search in Composite Spectrum is now in massToSearchInCompositeSpectrum
+            // So now is time to loop the composite spectrum searching the peak
+
+            for (String adductNameForCheckRelation : allAdductsForCheckRelation) {
+                String adductValueForCheckRelation = mapAdducts.get(adductNameForCheckRelation);
+                if (adductValueForCheckRelation == null) {
+                    break;
+                }
+                adductDoubleForCheckRelation = Double.parseDouble(adductValueForCheckRelation);
+                if (!adductName.equals(adductNameForCheckRelation)) {
+                    // get MZFomMonoisotopicMass
+                    String adductNameFormatted = "[" + adductNameForCheckRelation + "]";
+                    if(ionizationMode == IonizationMode.POSITIVE){
+                        adductNameFormatted+= "+";
+                    }else if(ionizationMode == IonizationMode.NEGATIVE){
+                        adductNameFormatted+= "-";
+                    }
+                    massToSearchInCompositeSpectrumForCheckRelation = AdductTransformer.getMassOfAdductFromMonoMass(neutralMassBasedOnAdduct, adductNameFormatted, ionizationMode);
+
+                    // Peak to search in Composite Spectrum is now in massToSearchInCompositeSpectrum
+                    // So now is time to loop the composite spectrum searching the peak
+                    for (Double peak : groupedPeaksFiltered.keySet()) {
+                      differenceMassAndPeak = Math.abs(peak - massToSearchInCompositeSpectrumForCheckRelation);
+                      if (differenceMassAndPeak < ADDUCT_AUTOMATIC_DETECTION_WINDOW) {
+                            adductDetected = adductName;
+                            return adductDetected;
+                        }
+                    }
+                }
+            }
+        }
+        logger.info("Adduct detected: {}", adductDetected);
+
+        return adductDetected;
+    }
+
+
+
+    /**
+     * Retrieves the adduct map based on the ionization mode
+     * @param ionizationMode Ionization mode (positive or negative)
+     * @return Adduct map for the given ionization mode
+     */
+    private static Map<String, String> getAdductMapByIonizationMode(IonizationMode ionizationMode) {
         if (ionizationMode == IonizationMode.POSITIVE) {
-            adductMap = AdductList.MAPMZPOSITIVEADDUCTS;
+            return AdductList.MAPMZPOSITIVEADDUCTS;
+        } else if (ionizationMode == IonizationMode.NEGATIVE) {
+            return AdductList.MAPMZNEGATIVEADDUCTS;
         } else {
-            adductMap = AdductList.MAPMZNEGATIVEADDUCTS;
+            throw new IllegalArgumentException("Unknown ionization mode: " + ionizationMode);
         }
+    }
 
-        if (adductMap.containsKey(adductString)) {
-            return Map.of(adductString, "");
-        } else {
-            adductMap.put(adductString, "");
-            return Map.of(adductString, "");
+
+    /**
+     * Method to filter the groupedPeaks and filter the adducts. It is
+     * specially useful when looking for adduct and fragment in source
+     * relations. The Map groupedPeaks should be ordered due to their
+     * intensity.
+     *
+     * @param groupedPeaks TESTED!
+     * @return
+     */
+    public static Map<Double, Double> filterIsotopes(Map<Double, Double> groupedPeaks) {
+        Map<Double, Double> deisotopedGroupedPeaks = new TreeMap();
+        Double previousPeak = 0d;
+        for (Map.Entry<Double, Double> entry : groupedPeaks.entrySet()) {
+            Double mz = entry.getKey();
+            Double intensity = entry.getValue();
+            if (previousPeak == 0d || Math.abs(mz - previousPeak) > BIGGEST_ISOTOPE * PROTON_WEIGTH) {
+                deisotopedGroupedPeaks.put(mz, intensity);
+            }
+            previousPeak = mz;
         }
+        return deisotopedGroupedPeaks;
     }
 
 

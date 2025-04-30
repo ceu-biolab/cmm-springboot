@@ -48,6 +48,7 @@ public class CompoundController {
                     request.getTolerance(),
                     request.getIonizationMode(),
                     request.getAdductsString(),
+                    request.getDetectedAdduct(),
                     request.getDatabases(),
                     request.getMetaboliteType()
             );
@@ -82,6 +83,7 @@ public class CompoundController {
                     request.getTolerance(),
                     request.getIonizationMode(),
                     request.getAdductsString(),
+                    request.getDetectedAdduct(),
                     request.getDatabases(),
                     request.getMetaboliteType()
             );
