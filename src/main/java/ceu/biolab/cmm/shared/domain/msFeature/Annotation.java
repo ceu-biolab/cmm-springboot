@@ -11,6 +11,11 @@ public class Annotation {
     private Compound compound;
     private List<IScore> scores;
 
+    // no-arg constructor for Jackson
+    public Annotation() {
+        this.scores = new ArrayList<>();
+    }
+
     public Annotation(Compound compound) {
         this.compound = compound;
         this.scores = new ArrayList<>();
