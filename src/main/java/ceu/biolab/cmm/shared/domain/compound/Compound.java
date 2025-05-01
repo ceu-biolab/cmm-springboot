@@ -12,34 +12,38 @@ import java.util.Set;
 @Data
 @SuperBuilder
 public class Compound {
-    private final int compoundId;
-    private final String casId;
-    private final String compoundName;
-    private final String formula;
-    private final double mass;
-    private final int chargeType;
-    private final int chargeNumber;
-    private final FormulaType formulaType;
+    private int compoundId;
+    private String casId;
+    private String compoundName;
+    private String formula;
+    private double mass;
+    private int chargeType;
+    private int chargeNumber;
+    private FormulaType formulaType;
     // TODO this should not be an int?
-    private final int compoundType;
-    private final int compoundStatus;
-    private final Integer formulaTypeInt;
-    private final Double logP;
-    private final Double rtPred;
-    private final String inchi;
-    private final String inchiKey;
-    private final String smiles;
-    private final String lipidType;
-    private final Integer numChains;
-    private final Integer numCarbons;
-    private final Integer doubleBonds;
+    private int compoundType;
+    private int compoundStatus;
+    private Integer formulaTypeInt;
+    private Double logP;
+    private Double rtPred;
+    private String inchi;
+    private String inchiKey;
+    private String smiles;
+    private String lipidType;
+    private Integer numChains;
+    private Integer numCarbons;
+    private Integer doubleBonds;
     private Set<LipidMapsClassification> lipidMapsClassifications;
-    private final String biologicalActivity;
-    private final String meshNomenclature;
-    private final String iupacClassification;
-    private final String mol2;
+    private String biologicalActivity;
+    private String meshNomenclature;
+    private String iupacClassification;
+    private String mol2;
 
 // TODO add pathways
+
+    public Compound() {
+        this.lipidMapsClassifications = new HashSet<>();
+    }
 
     public Compound(int compoundId, String casId, String compoundName, String formula, double mass,
                     int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,

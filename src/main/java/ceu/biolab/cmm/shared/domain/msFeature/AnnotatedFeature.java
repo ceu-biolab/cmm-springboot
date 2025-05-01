@@ -1,14 +1,19 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
 import java.util.*;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.Data;
 
 @Data
 public class AnnotatedFeature {
+    @JsonDeserialize(as = MSFeature.class)
     private IMSFeature feature;
     private List<AnnotationsByAdduct> annotationsByAdducts;
+
+    public AnnotatedFeature() {
+        this.annotationsByAdducts = new ArrayList<>();
+    }
 
     public AnnotatedFeature(double mzValue) {
         this.feature = new MSFeature(mzValue);
