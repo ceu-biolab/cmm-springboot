@@ -16,6 +16,7 @@ import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
+import ceu.biolab.cmm.shared.domain.msFeature.LCMSFeature;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,6 @@ public class BatchAdvancedSearchService {
     public List<AnnotatedFeature> annotateAndScoreCmpoundsByMz(BatchAdvancedSearchRequestDTO batchAdvancedRequest) {
         try {
             // 1. We detect adduct from composite spectrum
-            logger.info("batch advanced request{}", batchAdvancedRequest);
-            logger.info("Adducts to test: {}", batchAdvancedRequest.getAdductsString());
             Set<String> adducts = batchAdvancedRequest.getAdductsString();
             Set<String> formattedAdducts = new HashSet<>();
 
@@ -44,16 +43,12 @@ public class BatchAdvancedSearchService {
                 formattedAdducts.add(formattedAdduct);
             }
 
-            //TODO: fix adduct
-
             String detectedAdduct = AdductProcessing.detectAdductBasedOnCompositeSpectrum(
                     batchAdvancedRequest.getIonizationMode(),
                     batchAdvancedRequest.getMz(),
                     batchAdvancedRequest.getAdductsString(),
                     batchAdvancedRequest.getCompositeSpectrum()
             );
-
-            logger.info("detected adduct {}", detectedAdduct);
 
             //2. Simple search with detected Adduct
             CompoundSimpleSearchRequestDTO compoundSimpleSearchRequestDTO = new CompoundSimpleSearchRequestDTO(batchAdvancedRequest.getMz(),
@@ -63,17 +58,21 @@ public class BatchAdvancedSearchService {
             RTSearchResponseDTO response = compoundService.findCompoundsByMz(compoundSimpleSearchRequestDTO);
             List<AnnotatedFeature> annotatedFeatures = response.getImFeatures();
 
-
             //3. Score Annotations
             ExperimentParameters experimentParameters = new ExperimentParameters();
             experimentParameters.setIonMode(Optional.of(batchAdvancedRequest.getIonizationMode()));
             ModifierType modifierType = ModifierType.fromName(batchAdvancedRequest.getModifiersType());
             experimentParameters.setModifierType(Optional.of(modifierType));
 
+            for (AnnotatedFeature feature : annotatedFeatures) {
+                double mzValue = feature.getFeature().getMzValue();
+                LCMSFeature lcmsFeature = new LCMSFeature(batchAdvancedRequest.getRetentionTime(), mzValue);
+                feature.setFeature(lcmsFeature);
+            }
+
             ChemicalAlphabet chemAlphabetRequest = batchAdvancedRequest.getchemicalAlphabet();
             int formulaTypeIntValue = ChemicalAlphabet.dbValueForChemAlph(chemAlphabetRequest.name(), batchAdvancedRequest.isDeuterium());
 
-            //ScoreLipidRequest scoreLipidRequest = new ScoreLipidRequest(annotatedFeatures, experimentParameters);
             ScoreLipids.scoreLipidAnnotations(annotatedFeatures, Optional.of(experimentParameters));
 
             return annotatedFeatures;

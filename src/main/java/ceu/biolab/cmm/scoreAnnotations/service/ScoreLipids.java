@@ -3,6 +3,7 @@ package ceu.biolab.cmm.scoreAnnotations.service;
 import java.util.List;
 import java.util.Optional;
 
+import ceu.biolab.cmm.batchAdvancedSearch.service.BatchAdvancedSearchService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -17,8 +18,7 @@ import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.msFeature.ILCMSFeature;
 
 public class ScoreLipids {
-
-    public static void scoreLipidAnnotations(List<AnnotatedFeature> msFeatures, Optional<ExperimentParameters> experimentParameters) {
+    public static void scoreLipidAnnotations(List<AnnotatedFeature> msFeatures, Optional<ExperimentParameters> experimentParameters){//}, Optional<Double> retentionTimes) {
         KieSession kieSession = null;
         try {
             // Create a KieSession - using the simpler approach
@@ -38,14 +38,14 @@ public class ScoreLipids {
                 System.err.println("Failed to create KieSession: lipidKSession not found");
                 return;
             }
-            
+
             // Process the features and insert facts into the session
             for (AnnotatedFeature msFeature : msFeatures) {
                 double featureMz, featureRtValue;
                 // Feature has to have rt value for scoring
                 if (msFeature.getFeature() instanceof ILCMSFeature lcFeature) {
                     featureMz = lcFeature.getMzValue();
-                    featureRtValue = lcFeature.getRetentionTime();
+                    featureRtValue = lcFeature.getRtValue();
                 } else {
                     continue;
                 }
