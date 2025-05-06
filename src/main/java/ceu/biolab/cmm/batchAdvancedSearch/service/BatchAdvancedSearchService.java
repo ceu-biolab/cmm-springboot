@@ -7,20 +7,14 @@ import ceu.biolab.cmm.batchAdvancedSearch.dto.BatchAdvancedSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.rtSearch.service.CompoundService;
-import ceu.biolab.cmm.scoreAnnotations.dto.ScoreLipidRequest;
 import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
 import ceu.biolab.cmm.shared.domain.ExperimentParameters;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.ModifierType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
-import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
-import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.msFeature.LCMSFeature;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xmlcml.molutil.ChemicalElement;
 
 import java.util.*;
 
@@ -56,7 +50,7 @@ public class BatchAdvancedSearchService {
                     batchAdvancedRequest.getAdductsString(), Optional.of(detectedAdduct), batchAdvancedRequest.getDatabases(), batchAdvancedRequest.getMetaboliteType());
 
             RTSearchResponseDTO response = compoundService.findCompoundsByMz(compoundSimpleSearchRequestDTO);
-            List<AnnotatedFeature> annotatedFeatures = response.getImFeatures();
+            List<AnnotatedFeature> annotatedFeatures = response.getMSFeatures();
 
             //3. Score Annotations
             ExperimentParameters experimentParameters = new ExperimentParameters();
