@@ -7,7 +7,9 @@ public enum ChemicalAlphabet {
     CHNOPSD(true, 1),
     CHNOPSCL(false, 2),
     CHNOPSCLD(true, 3),
-    ALL(false, 4);
+    ALL(false, 4),
+
+    ALLD(true, 5);
 
     private final boolean deuterium;
     private final int formulaTypeIntValue;
