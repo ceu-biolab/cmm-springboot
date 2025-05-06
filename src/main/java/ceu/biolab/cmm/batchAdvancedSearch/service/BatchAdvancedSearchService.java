@@ -80,5 +80,6 @@ public class BatchAdvancedSearchService {
             throw new RuntimeException(e);
         }
     }
+    //!! reminder: TODO still verify all the adducts?
 
 }
