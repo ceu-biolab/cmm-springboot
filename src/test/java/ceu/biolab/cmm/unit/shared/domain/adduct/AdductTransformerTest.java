@@ -1,8 +1,7 @@
 package ceu.biolab.cmm.unit.shared.domain.adduct;
 
 import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.adduct.AdductList;
-import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

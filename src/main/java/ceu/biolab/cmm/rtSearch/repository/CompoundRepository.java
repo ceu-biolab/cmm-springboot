@@ -7,8 +7,8 @@ import ceu.biolab.cmm.rtSearch.model.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
-import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
+import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
@@ -21,7 +21,11 @@ import org.springframework.stereotype.Repository;
 import org.xmlcml.euclid.Int;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Optional;
 
 
 @Repository
@@ -36,7 +40,6 @@ public class CompoundRepository {
                                             Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct, Optional<Integer> formulaTypeInt,
                                             Set<String> adductsString, Set<Database> databases,
                                             MetaboliteType metaboliteType) {
-
         List<AnnotatedFeature> annotatedMSFeature = new ArrayList<>();
         Integer compoundType = null;
 
