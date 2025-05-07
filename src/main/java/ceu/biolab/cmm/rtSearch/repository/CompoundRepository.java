@@ -11,12 +11,16 @@ import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.xmlcml.euclid.Int;
+
+import java.nio.file.Path;
 import java.util.*;
 
 
@@ -29,7 +33,7 @@ public class CompoundRepository {
     private JdbcTemplate jdbcTemplate;
 
     public List<AnnotatedFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
-                                            Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct,
+                                            Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct, Optional<Integer> formulaTypeInt,
                                             Set<String> adductsString, Set<Database> databases,
                                             MetaboliteType metaboliteType) {
 
@@ -146,7 +150,10 @@ public class CompoundRepository {
                         finalSql, rs -> {
                             while (rs.next()) {
                                 CompoundDTO dto = CompoundMapper.fromResultSet(rs);
-                                compoundsSet.add(CompoundMapper.toCompound(dto));
+                                Compound compound = CompoundMapper.toCompound(dto);
+                                compound.setPathways(fetchPathwaysForCompound(compound.getCompoundId()));
+                                logger.info("Pathway: {}", compound.getPathways());
+                                compoundsSet.add(compound);
                             }
                             return compoundsSet;
                         });
@@ -165,4 +172,24 @@ public class CompoundRepository {
         }
         return annotatedMSFeature;
     }
+
+
+    private Set<Pathway> fetchPathwaysForCompound(int compoundId) {
+        String sql = """
+        SELECT p.* FROM pathways p
+        JOIN compounds_pathways cp ON cp.pathway_id = p.pathway_id
+        WHERE cp.compound_id = ?
+    """;
+
+        List<Pathway> pathwayList = jdbcTemplate.query(sql, new Object[]{compoundId}, (rs, rowNum) -> {
+            Pathway pathway = new Pathway();
+            pathway.setPathwayId(rs.getInt("pathway_id"));
+            pathway.setPathwayMap(rs.getString("pathway_map"));
+            pathway.setPathwayName(rs.getString("pathway_name"));
+            return pathway;
+        });
+
+        return new HashSet<>(pathwayList);
+    }
+
 }

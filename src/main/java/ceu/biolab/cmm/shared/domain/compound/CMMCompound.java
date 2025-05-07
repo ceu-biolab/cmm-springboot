@@ -2,6 +2,8 @@ package ceu.biolab.cmm.shared.domain.compound;
 
 import ceu.biolab.FormulaType;
 
+import java.util.Set;
+
 public class CMMCompound extends Compound implements Comparable<CMMCompound> {
 
     private final String keggID;
@@ -23,11 +25,11 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound> {
                        int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
                        int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
                        Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
-                       String meshNomenclature, String iupacClassification, String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID,
-                       Integer aspergillusID, String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String aspergillusWebName, String mol2) {
+                       String meshNomenclature, String iupacClassification, String mol2, Set<Pathway> pathwaySet, String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID,
+                       Integer aspergillusID, String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String aspergillusWebName) {
 
         super(compoundId, casId, compoundName, formula, mass, chargeType, chargeNumber, formulaType, compoundType, compoundStatus, formulaTypeInt, logP, rtPred, inchi, inchiKey, smiles, lipidType,
-                numChains, numCarbons, doubleBonds, biologicalActivity, meshNomenclature, iupacClassification, mol2);
+                numChains, numCarbons, doubleBonds, biologicalActivity, meshNomenclature, iupacClassification, mol2, pathwaySet);
         this.keggID = keggID;
         this.lmID = lmID;
         this.hmdbID = hmdbID;
