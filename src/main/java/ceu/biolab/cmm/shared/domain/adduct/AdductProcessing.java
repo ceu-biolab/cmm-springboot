@@ -24,9 +24,7 @@ public class AdductProcessing {
                 if (AdductList.MAPMZPOSITIVEADDUCTS.containsKey(adductString)) {
                     int charge = AdductTransformer.getChargeOfAdduct(adductString);
                     String adductFormula = "[" + adductString + "]" + charge + "+";
-                    logger.info("adduct Formula{}", adductFormula);
                     Adduct adj = new Adduct((adductFormula));
-                    logger.info("adduct obj{}", adj);
                     return adj;
                 } else
                     throw new IllegalArgumentException("Adduct not found: " + adductString);

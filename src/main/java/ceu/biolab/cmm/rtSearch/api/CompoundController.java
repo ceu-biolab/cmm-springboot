@@ -49,6 +49,7 @@ public class CompoundController {
                     request.getIonizationMode(),
                     request.getAdductsString(),
                     request.getDetectedAdduct(),
+                    request.getFormulaTypeInt(),
                     request.getDatabases(),
                     request.getMetaboliteType()
             );

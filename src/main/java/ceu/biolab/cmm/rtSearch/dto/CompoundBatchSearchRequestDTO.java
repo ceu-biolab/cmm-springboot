@@ -17,13 +17,15 @@ public class CompoundBatchSearchRequestDTO {
     private Double tolerance;
     private IonizationMode ionizationMode;
     private Optional<String> detectedAdduct;
+    private Optional<Integer> formulaTypeInt;
     private Set<String> adductsString;
     private Set<Database> databases;
 
     private MetaboliteType metaboliteType;
 
     public CompoundBatchSearchRequestDTO(List<Double> mzValues, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,
-                                         Set<String> adductsString, Optional<String> detectedAdduct, Set<Database> databases, MetaboliteType metaboliteType) {
+                                         Set<String> adductsString, Optional<String> detectedAdduct, Optional<Integer> formulaTypeInt,
+                                         Set<Database> databases, MetaboliteType metaboliteType) {
         this.mzValues = mzValues;
         this.mzToleranceMode = mzToleranceMode;
         if (tolerance < 0) {
@@ -34,6 +36,7 @@ public class CompoundBatchSearchRequestDTO {
         this.ionizationMode = ionizationMode;
         this.adductsString = adductsString;
         this.detectedAdduct = detectedAdduct;
+        this.formulaTypeInt = formulaTypeInt;
         this.databases = databases;
         this.metaboliteType = metaboliteType;
     }
@@ -86,6 +89,14 @@ public class CompoundBatchSearchRequestDTO {
         this.detectedAdduct = detectedAdduct;
     }
 
+    public Optional<Integer> getFormulaTypeInt() {
+        return formulaTypeInt;
+    }
+
+    public void setFormulaTypeInt(Optional<Integer> formulaTypeInt) {
+        this.formulaTypeInt = formulaTypeInt;
+    }
+
     public Set<Database> getDatabases() {
         return databases;
     }
@@ -107,12 +118,16 @@ public class CompoundBatchSearchRequestDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompoundBatchSearchRequestDTO that = (CompoundBatchSearchRequestDTO) o;
-        return Objects.equals(mzValues, that.mzValues) && mzToleranceMode == that.mzToleranceMode && Objects.equals(tolerance, that.tolerance) && ionizationMode == that.ionizationMode && Objects.equals(detectedAdduct, that.detectedAdduct) && Objects.equals(adductsString, that.adductsString) && Objects.equals(databases, that.databases) && metaboliteType == that.metaboliteType;
+        return Objects.equals(mzValues, that.mzValues) && mzToleranceMode == that.mzToleranceMode &&
+                Objects.equals(tolerance, that.tolerance) && ionizationMode == that.ionizationMode &&
+                Objects.equals(detectedAdduct, that.detectedAdduct) && Objects.equals(formulaTypeInt, that.formulaTypeInt)
+                && Objects.equals(adductsString, that.adductsString)
+                && Objects.equals(databases, that.databases) && metaboliteType == that.metaboliteType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mzValues, mzToleranceMode, tolerance, ionizationMode, detectedAdduct, adductsString, databases, metaboliteType);
+        return Objects.hash(mzValues, mzToleranceMode, tolerance, ionizationMode, detectedAdduct, formulaTypeInt, adductsString, databases, metaboliteType);
     }
 
     @Override
@@ -123,6 +138,7 @@ public class CompoundBatchSearchRequestDTO {
                 ", tolerance=" + tolerance +
                 ", ionizationMode=" + ionizationMode +
                 ", detectedAdduct=" + detectedAdduct +
+                ", formulaTypeInt=" + formulaTypeInt +
                 ", adductsString=" + adductsString +
                 ", databases=" + databases +
                 ", metaboliteType=" + metaboliteType +
