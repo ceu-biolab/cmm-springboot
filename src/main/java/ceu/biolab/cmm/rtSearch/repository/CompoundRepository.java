@@ -177,7 +177,7 @@ public class CompoundRepository {
     private Set<Pathway> fetchPathwaysForCompound(int compoundId) {
         String sql = """
         SELECT p.* FROM pathways p
-        JOIN compounds_pathways cp ON cp.pathway_id = p.pathway_id
+        INNER JOIN compounds_pathways cp ON cp.pathway_id = p.pathway_id
         WHERE cp.compound_id = ?
     """;
 
