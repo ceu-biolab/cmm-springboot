@@ -6,6 +6,8 @@ import java.util.Set;
 
 import ceu.biolab.cmm.shared.domain.*;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import com.github.jsonldjava.utils.Obj;
+import org.xmlcml.euclid.Int;
 
 
 public class CompoundSimpleSearchRequestDTO {
@@ -20,8 +22,7 @@ public class CompoundSimpleSearchRequestDTO {
     private MetaboliteType metaboliteType;
 
     public CompoundSimpleSearchRequestDTO(Double mz, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,
-                                          Set<String> adductsString, Optional<String> detectedAdduct, Optional<Integer> formulaTypeInt,
-                                          Set<Database> databases, MetaboliteType metaboliteType) {
+                                          Set<String> adductsString, Optional<String> detectedAdduct, Optional<Integer> formulaTypeInt, Set<Database> databases, MetaboliteType metaboliteType) {
         this.mz = mz;
         this.mzToleranceMode = mzToleranceMode;
         if (tolerance < 0) {
@@ -114,11 +115,9 @@ public class CompoundSimpleSearchRequestDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompoundSimpleSearchRequestDTO that = (CompoundSimpleSearchRequestDTO) o;
-        return Objects.equals(mz, that.mz) && mzToleranceMode == that.mzToleranceMode &&
-                Objects.equals(tolerance, that.tolerance) && ionizationMode == that.ionizationMode &&
-                Objects.equals(detectedAdduct, that.detectedAdduct) && Objects.equals(formulaTypeInt, that.formulaTypeInt)
-                && Objects.equals(adductsString, that.adductsString) && Objects.equals(databases, that.databases)
-                && metaboliteType == that.metaboliteType;
+        return Objects.equals(mz, that.mz) && mzToleranceMode == that.mzToleranceMode && Objects.equals(tolerance, that.tolerance)
+                && ionizationMode == that.ionizationMode && Objects.equals(detectedAdduct, that.detectedAdduct) && Objects.equals(formulaTypeInt, that.formulaTypeInt)
+                && Objects.equals(adductsString, that.adductsString) && Objects.equals(databases, that.databases) && metaboliteType == that.metaboliteType;
     }
 
     @Override

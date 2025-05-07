@@ -38,6 +38,7 @@ public class Compound {
     private String meshNomenclature;
     private String iupacClassification;
     private String mol2;
+    private Set<Pathway> pathways;
 
 // TODO add pathways
 
@@ -49,7 +50,7 @@ public class Compound {
                     int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
                     int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
                     Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
-                    String meshNomenclature, String iupacClassification, String mol2) {
+                    String meshNomenclature, String iupacClassification, String mol2, Set<Pathway> pathways) {
         this.compoundId = compoundId;
         this.casId = casId;
         this.compoundName = compoundName;
@@ -75,6 +76,7 @@ public class Compound {
         this.meshNomenclature = meshNomenclature;
         this.iupacClassification = iupacClassification;
         this.mol2 = mol2;
+        this.pathways = pathways;
     }
 
     public int getCompoundId() {
@@ -181,6 +183,14 @@ public class Compound {
         return mol2;
     }
 
+    public Set<Pathway> getPathways() {
+        return pathways;
+    }
+
+    public void setPathways(Set<Pathway> pathways) {
+        this.pathways = pathways;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -224,8 +234,8 @@ public class Compound {
                 ", lipidType='" + lipidType + '\'' + ", numChains=" + numChains + ", numCarbons=" + numCarbons +
                 ", doubleBonds=" + doubleBonds + ", classification='" + lipidMapsClassifications +
                 ", biologicalActivity='" + biologicalActivity + '\'' + ", meshNomenclature='" + meshNomenclature + '\''
-                + ", iupacClassification='" + iupacClassification + '\'' + ", mol2='" + mol2 + '\'' +
-                '}';
+                + ", iupacClassification='" + iupacClassification + '\'' + ", mol2='" + mol2 + '\''
+                + ", pathways='" + pathways + '}';
     }
 }
 
