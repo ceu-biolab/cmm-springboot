@@ -7,8 +7,8 @@ import ceu.biolab.cmm.rtSearch.model.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.adduct.AdductProcessing;
-import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
+import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
 import java.util.*;
 
 
@@ -29,9 +30,9 @@ public class CompoundRepository {
     private JdbcTemplate jdbcTemplate;
 
     public List<AnnotatedFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
-                                            Double tolerance, IonizationMode ionizationMode,
-                                            Set<String> adductsString, Set<Database> databases,
-                                            MetaboliteType metaboliteType) {
+                                                    Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct,
+                                                    Set<String> adductsString, Set<Database> databases,
+                                                    MetaboliteType metaboliteType) {
 
         List<AnnotatedFeature> annotatedMSFeature = new ArrayList<>();
         Integer compoundType = null;
@@ -51,13 +52,23 @@ public class CompoundRepository {
         try {
             IMSFeature msFeature = new MSFeature(mz, 0.0);
             AnnotatedFeature annotatedFeature = new AnnotatedFeature(msFeature);
-            for (String adductString : adductsString) {
+            Set<String> adductsToProcess;
+
+            if (detectedAdduct != null && detectedAdduct.isPresent()) {
+                adductsToProcess = Set.of(detectedAdduct.get());
+            } else {
+                adductsToProcess = adductsString;
+            }
+
+            if (adductsToProcess == null || adductsToProcess.isEmpty()) {
+                return annotatedMSFeature;
+            }
+
+            for (String adductString : adductsToProcess) {
+
                 Set<Compound> compoundsSet = new HashSet<>();
                 Adduct adduct = AdductProcessing.getAdductFromString(adductString, ionizationMode, mz);
                 double adductMass = adduct.getAdductMass();
-
-                logger.info("adduct : {}", adductString);
-                logger.info("adduct mass: {}", adductMass);
 
                 AnnotationsByAdduct annotationsByAdduct = null;
 
@@ -110,7 +121,7 @@ public class CompoundRepository {
                     lowerBound = monoIsotopicMassFromMZAndAdduct - tolerance/1000;
                     upperBound = monoIsotopicMassFromMZAndAdduct + tolerance/1000;
                 } else { // PPM (Parts Per Million)
-                    double tolerancePPM = mz * tolerance / 1_000_000.0;
+                    double tolerancePPM = mz * tolerance / 1_000_000.0d;
                     lowerBound = monoIsotopicMassFromMZAndAdduct - tolerancePPM;
                     upperBound = monoIsotopicMassFromMZAndAdduct + tolerancePPM;
                 }

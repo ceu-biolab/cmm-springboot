@@ -27,7 +27,7 @@ public class CompoundService {
 
         try {
             List<AnnotatedFeature> results = compoundRepository.annotateMSFeature(request.getMz(), request.getMzToleranceMode(), request.getTolerance(),
-                    request.getIonizationMode(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
+                    request.getIonizationMode(), request.getDetectedAdduct(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
             for (AnnotatedFeature feature : results) {
                 response.addImFeature(feature);
             }

@@ -6,28 +6,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RTSearchResponseDTO {
-    private List<AnnotatedFeature> imFeatures;
+    private List<AnnotatedFeature> msFeatures;
 
     public RTSearchResponseDTO() {
-        this.imFeatures = new ArrayList<>();
+        this.msFeatures = new ArrayList<>();
     }
 
     public void addImFeature(AnnotatedFeature imFeature) {
         if (imFeature != null) {
-            this.imFeatures.add(imFeature);
+            this.msFeatures.add(imFeature);
         }
     }
 
-    public List<AnnotatedFeature> getImFeatures() {
-        return imFeatures;
+    public List<AnnotatedFeature> getMSFeatures() {
+        return msFeatures;
     }
 
-    public void setImFeatures(List<AnnotatedFeature> imFeatures) {
-        this.imFeatures = imFeatures;
+    public void setmsFeatures(List<AnnotatedFeature> msFeatures) {
+        this.msFeatures = msFeatures;
     }
 
     @Override
     public String toString() {
-        return "RTSearchResponse [imFeatures=" + imFeatures + "]";
+        return "RTSearchResponse [Features=" + msFeatures + "]";
     }
 }
