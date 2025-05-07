@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class AdductList {
     public static final List<SelectItem> LISTNEUTRALMODESFORCEMS;
-    public static final double ELECTRON_MONOISOTOPIC_MASS = 0.0005485794321631d;
 
     static {
         List<SelectItem> listNeutralModesTMP = new LinkedList<>();

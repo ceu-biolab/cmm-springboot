@@ -1,13 +1,13 @@
-package ceu.biolab.cmm.shared.domain.adduct;
+package ceu.biolab.cmm.shared.service.adduct;
 
 import ceu.biolab.*;
 import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
 
+import ceu.biolab.cmm.shared.domain.Constants;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 public class AdductTransformer {
     private static final Logger logger = LoggerFactory.getLogger(CompoundRepository.class);
@@ -79,7 +79,7 @@ public class AdductTransformer {
      * @return the monoisotopic weight as a double
      */
     public static Double getMonoMassFromSingleChargedMZ(Double experimentalMass, Double adductValue, int charge) {
-        return experimentalMass - adductValue + charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
+        return experimentalMass - adductValue + charge * Constants.ELECTRON_MONOISOTOPIC_MASS;
     }
 
     /**
@@ -93,7 +93,7 @@ public class AdductTransformer {
         double result = experimentalMass;
         result -= adductValue;
         result *= charge;
-        result = result + charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
+        result = result + charge * Constants.ELECTRON_MONOISOTOPIC_MASS;
         return result;
     }
 
@@ -109,7 +109,7 @@ public class AdductTransformer {
         double result = experimentalMass;
         result -= adductValue;
         result /= numberAtoms;
-        result = result + charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
+        result = result + charge * Constants.ELECTRON_MONOISOTOPIC_MASS;
         return result;
     }
 
@@ -121,7 +121,7 @@ public class AdductTransformer {
      * @return the experimental mass as a double
      */
     public static Double getMZFromSingleChargedMonoMass(Double monoisotopicWeight, Double adductValue, int charge) {
-        return monoisotopicWeight + adductValue - charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
+        return monoisotopicWeight + adductValue - charge * Constants.ELECTRON_MONOISOTOPIC_MASS;
     }
 
     /**
@@ -135,7 +135,7 @@ public class AdductTransformer {
         double result = monoisotopicWeight;
         result /= charge;
         result += adductValue;
-        result = result - charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
+        result = result - charge * Constants.ELECTRON_MONOISOTOPIC_MASS;
         return result;
     }
 
@@ -151,7 +151,7 @@ public class AdductTransformer {
         double result = monoisotopicWeight;
         result *= numberMultimers;
         result += adductValue;
-        result = result - charge * AdductList.ELECTRON_MONOISOTOPIC_MASS;
+        result = result - charge * Constants.ELECTRON_MONOISOTOPIC_MASS;
         return result;
     }
 

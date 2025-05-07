@@ -1,12 +1,13 @@
-package ceu.biolab.cmm.shared.domain.adduct;
+package ceu.biolab.cmm.shared.service.adduct;
 
 import ceu.biolab.Adduct;
 import ceu.biolab.IncorrectAdduct;
 import ceu.biolab.IncorrectFormula;
 import ceu.biolab.NotFoundElement;
 import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
+import ceu.biolab.cmm.shared.domain.Constants;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +15,6 @@ import java.util.*;
 
 public class AdductProcessing {
     private static final Logger logger = LoggerFactory.getLogger(CompoundRepository.class);
-    public static final double PROTON_WEIGTH = 1.0073d;
-    public static final double BIGGEST_ISOTOPE = 2.01; // Chlorine is the biggest gap for an isotope detected
-    public static double ADDUCT_AUTOMATIC_DETECTION_WINDOW = 0.05D;
 
     public static Adduct getAdductFromString(String adductString, IonizationMode ionizationMode, Double mz) throws IncorrectAdduct {
         try {
@@ -52,7 +50,7 @@ public class AdductProcessing {
      * @return
      */
     public static String detectAdductBasedOnCompositeSpectrum(IonizationMode ionizationMode, Double mz,
-            Set<String> adducts, Map<Double, Double> groupedPeaks) {
+                                                              Set<String> adducts, Map<Double, Double> groupedPeaks) {
         if (groupedPeaks.isEmpty()) {
             return "";
         }
@@ -102,7 +100,7 @@ public class AdductProcessing {
                     // So now is time to loop the composite spectrum searching the peak
                     for (Double peak : groupedPeaksFiltered.keySet()) {
                       differenceMassAndPeak = Math.abs(peak - massToSearchInCompositeSpectrumForCheckRelation);
-                      if (differenceMassAndPeak < ADDUCT_AUTOMATIC_DETECTION_WINDOW) {
+                      if (differenceMassAndPeak < Constants.ADDUCT_AUTOMATIC_DETECTION_WINDOW) {
                             adductDetected = adductName;
                             return adductDetected;
                         }
@@ -148,7 +146,7 @@ public class AdductProcessing {
         for (Map.Entry<Double, Double> entry : groupedPeaks.entrySet()) {
             Double mz = entry.getKey();
             Double intensity = entry.getValue();
-            if (previousPeak == 0d || Math.abs(mz - previousPeak) > BIGGEST_ISOTOPE * PROTON_WEIGTH) {
+            if (previousPeak == 0d || Math.abs(mz - previousPeak) > Constants.BIGGEST_ISOTOPE * Constants.PROTON_WEIGTH) {
                 deisotopedGroupedPeaks.put(mz, intensity);
             }
             previousPeak = mz;
