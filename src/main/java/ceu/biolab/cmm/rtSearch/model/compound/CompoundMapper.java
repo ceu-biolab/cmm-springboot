@@ -1,10 +1,10 @@
 package ceu.biolab.cmm.rtSearch.model.compound;
 
-import ceu.biolab.FormulaType;
 import ceu.biolab.cmm.rtSearch.dto.CompoundDTO;
 import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +24,7 @@ public class CompoundMapper {
                 rs.getDouble("mass"),
                 rs.getInt("charge_type"),
                 rs.getInt("charge_number"),
-                formulaType,
+                formulaType = FormulaType.getFormulTypefromInt(rs.getInt("formula_type_int")),
                 rs.getInt("compound_type"),
                 rs.getInt("compound_status"),
                 rs.getInt("formula_type_int"),
@@ -78,7 +78,7 @@ public class CompoundMapper {
 
         Compound compound = new CMMCompound(
                 compoundDTO.getCompoundId(), compoundDTO.getCasId(), compoundDTO.getCompoundName(), compoundDTO.getFormula(),
-                compoundDTO.getMass(), compoundDTO.getChargeType(), compoundDTO.getChargeNumber(), null, // formulaType
+                compoundDTO.getMass(), compoundDTO.getChargeType(), compoundDTO.getChargeNumber(), compoundDTO.getFormulaType(),
                 compoundDTO.getCompoundType(), compoundDTO.getCompoundStatus(), compoundDTO.getFormulaTypeInt(),
                 compoundDTO.getLogP(), compoundDTO.getRtPred(), compoundDTO.getInchi(), compoundDTO.getInchiKey(), compoundDTO.getSmiles(),
                 compoundDTO.getLipidType(), compoundDTO.getNumChains(), compoundDTO.getNumberCarbons(), compoundDTO.getDoubleBonds(),

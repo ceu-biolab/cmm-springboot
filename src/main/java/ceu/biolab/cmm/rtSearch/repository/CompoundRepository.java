@@ -7,6 +7,7 @@ import ceu.biolab.cmm.rtSearch.model.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.Database;
@@ -37,7 +38,7 @@ public class CompoundRepository {
     private JdbcTemplate jdbcTemplate;
 
     public List<AnnotatedFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
-                                            Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct, Optional<Integer> formulaTypeInt,
+                                            Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct, Optional<FormulaType> formulaType,
                                             Set<String> adductsString, Set<Database> databases,
                                             MetaboliteType metaboliteType) {
         List<AnnotatedFeature> annotatedMSFeature = new ArrayList<>();
@@ -143,6 +144,14 @@ public class CompoundRepository {
                     sql += " AND c.compound_type = " + compoundTypeFinal;
                 }
 
+                String formulaTypeIntSql = "";
+                if(formulaType != null && formulaType.isPresent()){
+                    int formulaTypeInt = formulaType.get().getFormulaTypeIntValue();
+                    formulaTypeIntSql = " AND c.formula_type_int = " + formulaTypeInt;
+                }
+
+                sql += formulaTypeIntSql;
+
                  if (!databaseConditions.isEmpty()) {
                     sql += " AND (" + String.join(" OR ", databaseConditions) + ")";
                 }
@@ -155,7 +164,6 @@ public class CompoundRepository {
                                 CompoundDTO dto = CompoundMapper.fromResultSet(rs);
                                 Compound compound = CompoundMapper.toCompound(dto);
                                 compound.setPathways(fetchPathwaysForCompound(compound.getCompoundId()));
-                                logger.info("Pathway: {}", compound.getPathways());
                                 compoundsSet.add(compound);
                             }
                             return compoundsSet;

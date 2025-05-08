@@ -1,8 +1,8 @@
 package ceu.biolab.cmm.rtSearch.dto;
 
-import ceu.biolab.FormulaType;
 import ceu.biolab.cmm.rtSearch.model.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 import lombok.Data;
 
 import java.sql.ResultSet;
@@ -112,7 +112,7 @@ public class CompoundDTO {
         this.compoundType = rs.getInt("compound_type");
         this.compoundStatus = rs.getInt("compound_status");
         this.formulaTypeInt = rs.getInt("formula_type_int");
-        this.formulaType = null;
+        this.formulaType = FormulaType.getFormulTypefromInt(formulaTypeInt);
         this.logP = rs.getDouble("logP");
         this.rtPred = rs.getDouble("rt_pred");
         this.inchi = rs.getString("inchi");

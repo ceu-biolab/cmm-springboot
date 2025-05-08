@@ -7,7 +7,7 @@ import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
-import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
@@ -29,16 +29,10 @@ public class CompoundService {
 
         try {
             List<AnnotatedFeature> results = compoundRepository.annotateMSFeature(request.getMz(), request.getMzToleranceMode(), request.getTolerance(),
-                    request.getIonizationMode(), request.getDetectedAdduct(), request.getFormulaTypeInt(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
+                    request.getIonizationMode(), request.getDetectedAdduct(), request.getFormulaType(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
             for (AnnotatedFeature feature : results) {
                 response.addImFeature(feature);
-                for(AnnotationsByAdduct annotationsByAdduct :feature.getAnnotationsByAdducts()){
-                    for(Annotation annotations : annotationsByAdduct.getAnnotations()){
-                        //annotations.getCompound().se
-                    }
-                }
             }
-
             return response;
         } catch (Exception e) {
             e.printStackTrace();

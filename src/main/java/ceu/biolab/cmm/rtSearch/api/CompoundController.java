@@ -4,6 +4,7 @@ import ceu.biolab.cmm.rtSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.rtSearch.service.CompoundService;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class CompoundController {
                     request.getIonizationMode(),
                     request.getAdductsString(),
                     request.getDetectedAdduct(),
-                    request.getFormulaTypeInt(),
+                    request.getFormulaType(),
                     request.getDatabases(),
                     request.getMetaboliteType()
             );
