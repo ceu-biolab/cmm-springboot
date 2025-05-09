@@ -15,9 +15,9 @@ To create a new endpoint from scratch you should follow the steps:
 4. Use the `shared` package for all general classes that may be reused for other endpoints. Chances are your endpoint will require many classes from this package, so don't write them again! For example, check [`shared.compound.Compound.java`](/src/main/java/ceu/biolab/cmm/shared/domain/compound/Compound.java) which contains all the general fields to represent a compound in metabolomics. You can also extend these classes if you want to add specific fields.
 5. When you've pushed your commits and have functioning code in your branch, you can make a **pull request** to the `master` branch, which will be reviewed before merging.
 
-### Recomendations
+## MANDATORY
 
-- **Make unit tests**: While not required (for now), it is very useful to have unit tests for your main functionalities using the JUnit testing framework. This allows safety to your code in case of future changes or refactoring. Tests go in `src/test/java/ceu/biolab/cmm/`.
+- **Make unit tests**: It is mandatory to have unit tests for your main functionalities using the JUnit testing framework. This allows safety to your code in case of future changes or refactoring. Tests go in `src/test/java/ceu/biolab/cmm/`.
 
 ---
 
