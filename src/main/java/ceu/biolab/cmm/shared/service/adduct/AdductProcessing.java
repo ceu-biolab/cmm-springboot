@@ -4,7 +4,7 @@ import ceu.biolab.Adduct;
 import ceu.biolab.IncorrectAdduct;
 import ceu.biolab.IncorrectFormula;
 import ceu.biolab.NotFoundElement;
-import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
+import ceu.biolab.cmm.msSearch.repository.CompoundRepository;
 import ceu.biolab.cmm.shared.domain.Constants;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductList;

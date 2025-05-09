@@ -1,7 +1,7 @@
 package ceu.biolab.cmm.shared.service.adduct;
 
 import ceu.biolab.*;
-import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
+import ceu.biolab.cmm.msSearch.repository.CompoundRepository;
 
 import ceu.biolab.cmm.shared.domain.Constants;
 import ceu.biolab.cmm.shared.domain.IonizationMode;

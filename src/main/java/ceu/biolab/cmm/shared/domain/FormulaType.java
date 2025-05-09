@@ -31,6 +31,20 @@ public enum FormulaType {
         return formulaTypeIntValue;
     }
 
+
+    public static FormulaType resolveFormulaType(String alphabet, boolean deuterium) {
+        String normalizedAlphabet = alphabet.trim().toUpperCase();
+        // Append "D" to the alphabet if deuterium is true
+        if (deuterium) {
+            normalizedAlphabet += "D";
+        }
+        try {
+            return FormulaType.valueOf(normalizedAlphabet);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid combination of alphabet: " + alphabet + " and deuterium: " + deuterium, e);
+        }
+    }
+
     /**
      * This method gets the value that corresponds to formula_type_int in compounds_view from the Formula Type formula
      * @param alphabet name of the chamical alphabet as String such as "CHNOPS"
