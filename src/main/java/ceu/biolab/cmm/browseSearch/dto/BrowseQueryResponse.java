@@ -2,6 +2,7 @@ package ceu.biolab.cmm.browseSearch.dto;
 
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseQueryResponse {
@@ -12,6 +13,7 @@ public class BrowseQueryResponse {
     }
 
     public BrowseQueryResponse() {
+        this.compoundlist = new ArrayList<>();
     }
 
     public List<Compound> getCompoundlist() {

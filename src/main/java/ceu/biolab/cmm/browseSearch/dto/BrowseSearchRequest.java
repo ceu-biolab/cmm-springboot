@@ -11,12 +11,14 @@ public class BrowseSearchRequest {
     private String formula;
     private List<Database> databases;
     private MetaboliteType metaboliteType;
+    private boolean exact_name;
 
-    public BrowseSearchRequest(String searchTerm, String searchFormula, List<Database> databases, MetaboliteType metaboliteType) {
+    public BrowseSearchRequest(String searchTerm, String searchFormula, List<Database> databases, MetaboliteType metaboliteType, boolean exact_name) {
         this.compound_name = searchTerm;
         this.formula = searchFormula;
         this.databases = databases;
         this.metaboliteType = metaboliteType;
+        this.exact_name = exact_name;
     }
 
     public BrowseSearchRequest() {
@@ -34,6 +36,14 @@ public class BrowseSearchRequest {
 
     public MetaboliteType getMetaboliteType() {return metaboliteType;}
     public void setMetaboliteType(MetaboliteType metaboliteType) {this.metaboliteType = metaboliteType;}
+
+    public boolean isExact_name() {
+        return exact_name;
+    }
+
+    public void setExact_name(boolean exact_name) {
+        this.exact_name = exact_name;
+    }
 
     @Override
     public int hashCode() {
