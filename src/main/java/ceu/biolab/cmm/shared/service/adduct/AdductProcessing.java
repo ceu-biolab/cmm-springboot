@@ -10,11 +10,38 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AdductProcessing {
     private static final Logger logger = LoggerFactory.getLogger(CompoundRepository.class);
+
+    public static int getChargeOfAdduct(String adductName, IonizationMode ionMode) {
+        if (adductName == null || adductName.isEmpty()) return 1;
+
+        if (AdductList.CHARGE_2.contains(adductName)) {
+            return 2;
+        }
+
+        if (AdductList.CHARGE_3 != null && AdductList.CHARGE_3.contains(adductName)) {
+            return 3;
+        }
+
+        // Default: assume charge 1 if in map, otherwise return 1 as fallback
+        if (ionMode == IonizationMode.POSITIVE && AdductList.MAPMZPOSITIVEADDUCTS.containsKey(adductName)) {
+            return 1;
+        }
+
+        if (ionMode == IonizationMode.NEGATIVE && AdductList.MAPMZNEGATIVEADDUCTS.containsKey(adductName)) {
+            return 1;
+        }
+
+        return 1;
+    }
+
 
     public static Adduct getAdductFromString(String adductString, IonizationMode ionizationMode, Double mz) throws IncorrectAdduct {
         try {
@@ -23,12 +50,14 @@ public class AdductProcessing {
                     int charge = AdductTransformer.getChargeOfAdduct(adductString);
                     String adductFormula = "[" + adductString + "]" + charge + "+";
                     Adduct adj = new Adduct((adductFormula));
+                    logger.info("adduct from processing: {}", adj);
                     return adj;
                 } else
                     throw new IllegalArgumentException("Adduct not found: " + adductString);
             } else if (AdductList.MAPMZNEGATIVEADDUCTS.containsKey(adductString)) {
                 int charge = AdductTransformer.getChargeOfAdduct(adductString);
                 String adductFormula = "[" + adductString + "]" + charge + "-";
+                logger.info("adduct FORMULA from processing: {}", adductFormula);
                 return new Adduct(adductFormula);
             } else {
                 throw new IllegalArgumentException("Adduct not found: " + adductString);
@@ -39,26 +68,32 @@ public class AdductProcessing {
     }
 
 
-    /**
-     * Detect the ionization adduct based on the relationships in the Composite
-     * Spectrum. The mz is handled as m/z
-     *
-     * @param ionizationMode Ionization Mode (enum): Positive or Negative
-     * @param mz             experimental masses (m/z)
-     * @param adducts        possible adducts to be formed as Set
-     * @param groupedPeaks   Signals of the metabolite M
-     * @return
-     */
+    public static String formatAdductString(String adduct, IonizationMode ionizationMode){
+        String formattedDetectedAdduct = null;
+        int charge = AdductProcessing.getChargeOfAdduct(adduct, ionizationMode);
+        formattedDetectedAdduct = "[" + adduct + "]";
+        if (charge > 1) {
+            formattedDetectedAdduct += charge;
+        }
+        if (ionizationMode == IonizationMode.POSITIVE) {
+            formattedDetectedAdduct += "+";
+        } else if (ionizationMode == IonizationMode.NEGATIVE) {
+            formattedDetectedAdduct += "-";
+        }
+        return formattedDetectedAdduct;
+    }
+
+
     public static String detectAdductBasedOnCompositeSpectrum(IonizationMode ionizationMode, Double mz,
                                                               Set<String> adducts, Map<Double, Double> groupedPeaks) {
         if (groupedPeaks.isEmpty()) {
             return "";
         }
 
-        logger.info("Adducts: {}", adducts);
-
         Map<Double, Double> groupedPeaksFiltered = filterIsotopes(groupedPeaks);
         String adductDetected = "";
+
+        // Define adduct map for positive and negative ionization modes
         Map<String, String> mapAdducts = getAdductMapByIonizationMode(ionizationMode);
         List<String> allAdductsForCheckRelation = new LinkedList<>(mapAdducts.keySet());
 
@@ -67,40 +102,45 @@ public class AdductProcessing {
         double massToSearchInCompositeSpectrumForCheckRelation;
         double differenceMassAndPeak;
 
-        for (String adductName : adducts) {    //** Hypothesis -> Adduct is adductName
-            logger.info("Adduct Name: {}", adductName);
+        // Loop over all adducts provided
+        for (String adductName : adducts) {
             String adductValue = mapAdducts.get(adductName);
             if (adductValue == null) {
-                break;
+                continue;
             }
+
             adductDouble = Math.abs(Double.parseDouble(adductValue));
-            Double neutralMassBasedOnAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductName, ionizationMode);
 
-            //** Hypothesis -> Peak is adductName
-            // Peak to search in Composite Spectrum is now in massToSearchInCompositeSpectrum
-            // So now is time to loop the composite spectrum searching the peak
+            // Calculate neutral mass based on m/z and adduct
+            Double neutralMassBasedOnAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductName, ionizationMode);  // Formula for neutral mass from m/z
 
+            // Check relations with other adducts
             for (String adductNameForCheckRelation : allAdductsForCheckRelation) {
                 String adductValueForCheckRelation = mapAdducts.get(adductNameForCheckRelation);
                 if (adductValueForCheckRelation == null) {
-                    break;
+                    continue;
                 }
                 adductDoubleForCheckRelation = Double.parseDouble(adductValueForCheckRelation);
-                if (!adductName.equals(adductNameForCheckRelation)) {
-                    // get MZFomMonoisotopicMass
-                    String adductNameFormatted = "[" + adductNameForCheckRelation + "]";
-                    if(ionizationMode == IonizationMode.POSITIVE){
-                        adductNameFormatted+= "+";
-                    }else if(ionizationMode == IonizationMode.NEGATIVE){
-                        adductNameFormatted+= "-";
-                    }
-                    massToSearchInCompositeSpectrumForCheckRelation = AdductTransformer.getMassOfAdductFromMonoMass(neutralMassBasedOnAdduct, adductNameFormatted, ionizationMode);
+                logger.info("adduct mass check: {}", adductDoubleForCheckRelation);
 
-                    // Peak to search in Composite Spectrum is now in massToSearchInCompositeSpectrum
-                    // So now is time to loop the composite spectrum searching the peak
+                if (!adductName.equals(adductNameForCheckRelation)) {
+                    // Calculate mass to search in composite spectrum for this adduct
+                    String adductNameFormatted = "[" + adductNameForCheckRelation + "]";
+                    if (ionizationMode == IonizationMode.POSITIVE) {
+                        adductNameFormatted += "+";
+                    } else if (ionizationMode == IonizationMode.NEGATIVE) {
+                        adductNameFormatted += "-";
+                    }
+
+                    logger.info("adduct formatted: {}", adductNameFormatted);
+                    massToSearchInCompositeSpectrumForCheckRelation = neutralMassBasedOnAdduct + adductDoubleForCheckRelation;
+
+                    logger.info("mass to search in composite spectrum: {}", massToSearchInCompositeSpectrumForCheckRelation);
+
+                    // Loop through peaks in the spectrum to find a match
                     for (Double peak : groupedPeaksFiltered.keySet()) {
-                      differenceMassAndPeak = Math.abs(peak - massToSearchInCompositeSpectrumForCheckRelation);
-                      if (differenceMassAndPeak < Constants.ADDUCT_AUTOMATIC_DETECTION_WINDOW) {
+                        differenceMassAndPeak = Math.abs(peak - massToSearchInCompositeSpectrumForCheckRelation);
+                        if (differenceMassAndPeak < Constants.ADDUCT_AUTOMATIC_DETECTION_WINDOW) {
                             adductDetected = adductName;
                             return adductDetected;
                         }
@@ -108,12 +148,8 @@ public class AdductProcessing {
                 }
             }
         }
-        logger.info("Adduct detected: {}", adductDetected);
-
         return adductDetected;
     }
-
-
 
     /**
      * Retrieves the adduct map based on the ionization mode
@@ -130,10 +166,9 @@ public class AdductProcessing {
         }
     }
 
-
     /**
-     * Method to filter the groupedPeaks and filter the adducts. It is
-     * specially useful when looking for adduct and fragment in source
+     * Method to filter the groupedPeaks and filter the adducts.
+     * It is specially useful when looking for adduct and fragment in source
      * relations. The Map groupedPeaks should be ordered due to their
      * intensity.
      *
@@ -141,7 +176,7 @@ public class AdductProcessing {
      * @return
      */
     public static Map<Double, Double> filterIsotopes(Map<Double, Double> groupedPeaks) {
-        Map<Double, Double> deisotopedGroupedPeaks = new TreeMap();
+        Map<Double, Double> deisotopedGroupedPeaks = new TreeMap<>();
         Double previousPeak = 0d;
         for (Map.Entry<Double, Double> entry : groupedPeaks.entrySet()) {
             Double mz = entry.getKey();
@@ -153,6 +188,5 @@ public class AdductProcessing {
         }
         return deisotopedGroupedPeaks;
     }
-
-
 }
+
