@@ -3,7 +3,6 @@ package ceu.biolab.cmm.scoreAnnotations.service;
 import java.util.List;
 import java.util.Optional;
 
-import ceu.biolab.cmm.batchAdvancedSearch.service.BatchAdvancedSearchService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;

@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.shared.domain.compound;
 
-import ceu.biolab.FormulaType;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 
 import java.util.Set;
 
