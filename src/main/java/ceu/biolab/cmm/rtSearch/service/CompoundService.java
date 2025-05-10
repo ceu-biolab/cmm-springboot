@@ -9,6 +9,8 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
+import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +29,14 @@ public class CompoundService {
 
         try {
             List<AnnotatedFeature> results = compoundRepository.annotateMSFeature(request.getMz(), request.getMzToleranceMode(), request.getTolerance(),
-                    request.getIonizationMode(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
+                    request.getIonizationMode(), request.getDetectedAdduct(), request.getFormulaTypeInt(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
             for (AnnotatedFeature feature : results) {
                 response.addImFeature(feature);
+                for(AnnotationsByAdduct annotationsByAdduct :feature.getAnnotationsByAdducts()){
+                    for(Annotation annotations : annotationsByAdduct.getAnnotations()){
+                        //annotations.getCompound().se
+                    }
+                }
             }
 
             return response;

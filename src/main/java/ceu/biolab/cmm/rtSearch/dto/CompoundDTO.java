@@ -2,6 +2,7 @@ package ceu.biolab.cmm.rtSearch.dto;
 
 import ceu.biolab.FormulaType;
 import ceu.biolab.cmm.rtSearch.model.compound.LipidMapsClassification;
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import lombok.Data;
 
 import java.sql.ResultSet;
@@ -49,13 +50,14 @@ public class CompoundDTO {
     private final Integer ohPositionID;
     private final String aspergillusWebName;
     private final String mol2;
+    private Set<Pathway> pathways;
 
     public CompoundDTO(int compoundId, String casId, String compoundName, String formula, double mass, int chargeType, int chargeNumber,
                        FormulaType formulaType, int compoundType, int compoundStatus, Integer formulaTypeInt, Double logP, Double rtPred, String inchi,
                        String inchiKey, String smiles, String lipidType, Integer numChains, Integer numberCarbons, Integer doubleBonds, String category,
                        String mainClass, String subClass, String classLevel4, String biologicalActivity, String meshNomenclature, String iupacClassification,
                        String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID, Integer aspergillusID,
-                       String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String aspergillusWebName, String mol2) {
+                       String knapsackID, Integer npatlasID, Integer fahfaID, Integer ohPositionID, String aspergillusWebName, String mol2, Set<Pathway> pathways) {
         this.compoundId = compoundId;
         this.casId = casId;
         this.compoundName = compoundName;
@@ -96,6 +98,7 @@ public class CompoundDTO {
         LipidMapsClassification lipidMapsClassification = new LipidMapsClassification(category, mainClass, subClass, classLevel4);
         this.getLipidMapsClassifications().add(lipidMapsClassification);
         this.mol2 = mol2;
+        this.pathways = pathways;
     }
 
     public CompoundDTO(ResultSet rs) throws SQLException {
@@ -142,6 +145,7 @@ public class CompoundDTO {
         LipidMapsClassification lipidMapsClassification = new LipidMapsClassification(category, mainClass, subClass, classLevel4);
         this.getLipidMapsClassifications().add(lipidMapsClassification);
         this.mol2 = rs.getString("mol2");
+        this.pathways = new HashSet<>();
     }
 
     public Set<LipidMapsClassification> getLipidMapsClassifications() {

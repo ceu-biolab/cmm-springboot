@@ -2,12 +2,11 @@ package ceu.biolab.cmm.unit.rtSearch.service;
 
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;

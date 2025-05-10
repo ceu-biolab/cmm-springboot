@@ -11,6 +11,11 @@ public class AnnotationsByAdduct {
     private String adduct;
     private List<Annotation> annotations;
 
+    // no-arg constructor for Jackson
+    public AnnotationsByAdduct() {
+        this.annotations = new ArrayList<>();
+    }
+
     public AnnotationsByAdduct(String adduct) {
         this.adduct = adduct;
         this.annotations = new ArrayList<>();
@@ -19,6 +24,22 @@ public class AnnotationsByAdduct {
     public AnnotationsByAdduct(String adduct, List<Annotation> annotatedCompounds) {
         this.adduct = adduct;
         this.annotations = annotatedCompounds;
+    }
+
+    public String getAdduct() {
+        return adduct;
+    }
+
+    public void setAdduct(String adduct) {
+        this.adduct = adduct;
+    }
+
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
     }
 
     public void addAnnotation(Annotation annotation) {

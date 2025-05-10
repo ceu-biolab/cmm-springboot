@@ -4,6 +4,7 @@ import ceu.biolab.FormulaType;
 import ceu.biolab.cmm.rtSearch.dto.CompoundDTO;
 import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ public class CompoundMapper {
 
     public static CompoundDTO fromResultSet(ResultSet rs) throws SQLException {
         FormulaType formulaType = null;
+        Set<Pathway> pathways = new HashSet<>();
         return new CompoundDTO(
                 rs.getInt("compound_id"),
                 rs.getString("cas_id"),
@@ -55,7 +57,8 @@ public class CompoundMapper {
                 rs.getInt("fahfa_id"),
                 rs.getInt("oh_position"),
                 rs.getString("aspergillus_web_name"),
-                rs.getString("mol2")
+                rs.getString("mol2"),
+                pathways
         );
     }
 
@@ -80,10 +83,11 @@ public class CompoundMapper {
                 compoundDTO.getLogP(), compoundDTO.getRtPred(), compoundDTO.getInchi(), compoundDTO.getInchiKey(), compoundDTO.getSmiles(),
                 compoundDTO.getLipidType(), compoundDTO.getNumChains(), compoundDTO.getNumberCarbons(), compoundDTO.getDoubleBonds(),
                 compoundDTO.getBiologicalActivity(), compoundDTO.getMeshNomenclature(), compoundDTO.getIupacClassification(),
+                compoundDTO.getMol2(), compoundDTO.getPathways(),
                 compoundDTO.getKeggID(), compoundDTO.getLmID(), compoundDTO.getHmdbID(), compoundDTO.getAgilentID(),
                 compoundDTO.getPcID(), compoundDTO.getChebiID(), compoundDTO.getInHouseID(), compoundDTO.getAspergillusID(),
                 compoundDTO.getKnapsackID(), compoundDTO.getNpatlasID(), compoundDTO.getFahfaID(), compoundDTO.getOhPositionID(),
-                compoundDTO.getAspergillusWebName(), compoundDTO.getMol2()
+                compoundDTO.getAspergillusWebName()
         );
 
         compound.setLipidMapsClassifications(lipidMapsClassifications);

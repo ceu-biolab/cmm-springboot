@@ -12,40 +12,45 @@ import java.util.Set;
 @Data
 @SuperBuilder
 public class Compound {
-    private final int compoundId;
-    private final String casId;
-    private final String compoundName;
-    private final String formula;
-    private final double mass;
-    private final int chargeType;
-    private final int chargeNumber;
-    private final FormulaType formulaType;
+    private int compoundId;
+    private String casId;
+    private String compoundName;
+    private String formula;
+    private double mass;
+    private int chargeType;
+    private int chargeNumber;
+    private FormulaType formulaType;
     // TODO this should not be an int?
-    private final int compoundType;
-    private final int compoundStatus;
-    private final Integer formulaTypeInt;
-    private final Double logP;
-    private final Double rtPred;
-    private final String inchi;
-    private final String inchiKey;
-    private final String smiles;
-    private final String lipidType;
-    private final Integer numChains;
-    private final Integer numCarbons;
-    private final Integer doubleBonds;
+    private int compoundType;
+    private int compoundStatus;
+    private Integer formulaTypeInt;
+    private Double logP;
+    private Double rtPred;
+    private String inchi;
+    private String inchiKey;
+    private String smiles;
+    private String lipidType;
+    private Integer numChains;
+    private Integer numCarbons;
+    private Integer doubleBonds;
     private Set<LipidMapsClassification> lipidMapsClassifications;
-    private final String biologicalActivity;
-    private final String meshNomenclature;
-    private final String iupacClassification;
-    private final String mol2;
+    private String biologicalActivity;
+    private String meshNomenclature;
+    private String iupacClassification;
+    private String mol2;
+    private Set<Pathway> pathways;
 
 // TODO add pathways
+
+    public Compound() {
+        this.lipidMapsClassifications = new HashSet<>();
+    }
 
     public Compound(int compoundId, String casId, String compoundName, String formula, double mass,
                     int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
                     int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
                     Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
-                    String meshNomenclature, String iupacClassification, String mol2) {
+                    String meshNomenclature, String iupacClassification, String mol2, Set<Pathway> pathways) {
         this.compoundId = compoundId;
         this.casId = casId;
         this.compoundName = compoundName;
@@ -71,6 +76,7 @@ public class Compound {
         this.meshNomenclature = meshNomenclature;
         this.iupacClassification = iupacClassification;
         this.mol2 = mol2;
+        this.pathways = pathways;
     }
 
     public int getCompoundId() {
@@ -177,6 +183,14 @@ public class Compound {
         return mol2;
     }
 
+    public Set<Pathway> getPathways() {
+        return pathways;
+    }
+
+    public void setPathways(Set<Pathway> pathways) {
+        this.pathways = pathways;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -220,8 +234,8 @@ public class Compound {
                 ", lipidType='" + lipidType + '\'' + ", numChains=" + numChains + ", numCarbons=" + numCarbons +
                 ", doubleBonds=" + doubleBonds + ", classification='" + lipidMapsClassifications +
                 ", biologicalActivity='" + biologicalActivity + '\'' + ", meshNomenclature='" + meshNomenclature + '\''
-                + ", iupacClassification='" + iupacClassification + '\'' + ", mol2='" + mol2 + '\'' +
-                '}';
+                + ", iupacClassification='" + iupacClassification + '\'' + ", mol2='" + mol2 + '\''
+                + ", pathways='" + pathways + '}';
     }
 }
 

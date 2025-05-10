@@ -10,4 +10,10 @@ import lombok.Data;
 public class ScoreLipidRequest {
     private List<AnnotatedFeature> features;
     private ExperimentParameters experimentParameters;
+
+    public ScoreLipidRequest(List<AnnotatedFeature> features, ExperimentParameters experimentParameters) {
+        this.features = features;
+        this.experimentParameters = experimentParameters;
+    }
+
 }

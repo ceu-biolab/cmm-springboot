@@ -48,49 +48,18 @@ public class CompoundController {
                     request.getTolerance(),
                     request.getIonizationMode(),
                     request.getAdductsString(),
+                    request.getDetectedAdduct(),
+                    request.getFormulaTypeInt(),
                     request.getDatabases(),
                     request.getMetaboliteType()
             );
 
             RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest);
-            response.getImFeatures().addAll(result.getImFeatures());
+            response.getMSFeatures().addAll(result.getMSFeatures());
         }
 
         return response;
     }
 
-    @GetMapping("/simple-search")
-    public RTSearchResponseDTO annotatedMSFeature(@RequestBody CompoundSimpleSearchRequestDTO request) {
-        if (request.getMz() == null) {
-            return new RTSearchResponseDTO();
-        }
-        return compoundService.findCompoundsByMz(request);
-    }
-
-    @GetMapping("/batch-search")
-    public RTSearchResponseDTO annotatedMSFeatures(@RequestBody CompoundBatchSearchRequestDTO request) {
-        if (request.getMzValues() == null || request.getMzValues().isEmpty()) {
-            return new RTSearchResponseDTO();
-        }
-
-        RTSearchResponseDTO response = new RTSearchResponseDTO();
-
-        for (Double mz : request.getMzValues()) {
-            CompoundSimpleSearchRequestDTO simpleRequest = new CompoundSimpleSearchRequestDTO(
-                    mz,
-                    request.getMzToleranceMode(),
-                    request.getTolerance(),
-                    request.getIonizationMode(),
-                    request.getAdductsString(),
-                    request.getDatabases(),
-                    request.getMetaboliteType()
-            );
-
-            RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest);
-            response.getImFeatures().addAll(result.getImFeatures());
-        }
-
-        return response;
-    }
 }
 
