@@ -112,7 +112,7 @@ public class AdductProcessing {
             adductDouble = Math.abs(Double.parseDouble(adductValue));
 
             // Calculate neutral mass based on m/z and adduct
-            Double neutralMassBasedOnAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductName, ionizationMode);  // Formula for neutral mass from m/z
+            Double neutralMassBasedOnAdduct = mz-adductDouble;  // Formula for neutral mass from m/z
 
             // Check relations with other adducts
             for (String adductNameForCheckRelation : allAdductsForCheckRelation) {
@@ -134,8 +134,6 @@ public class AdductProcessing {
 
                     logger.info("adduct formatted: {}", adductNameFormatted);
                     massToSearchInCompositeSpectrumForCheckRelation = neutralMassBasedOnAdduct + adductDoubleForCheckRelation;
-
-                    logger.info("mass to search in composite spectrum: {}", massToSearchInCompositeSpectrumForCheckRelation);
 
                     // Loop through peaks in the spectrum to find a match
                     for (Double peak : groupedPeaksFiltered.keySet()) {

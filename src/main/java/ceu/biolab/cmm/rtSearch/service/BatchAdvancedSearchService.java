@@ -62,6 +62,9 @@ public class BatchAdvancedSearchService {
                 if (detectedAdduct != null && !detectedAdduct.isEmpty()) {
                     formattedDetectedAdduct = AdductProcessing.formatAdductString(detectedAdduct, batchAdvancedRequest.getIonizationMode());
                 }
+
+                logger.info("detected adduct : {}", detectedAdduct);
+                logger.info("detected adduct formatted : {}", formattedDetectedAdduct);
                 CompoundSimpleSearchRequestDTO compoundSimpleSearchRequestDTO = new CompoundSimpleSearchRequestDTO(mz,
                         batchAdvancedRequest.getMzToleranceMode(), batchAdvancedRequest.getTolerance(), batchAdvancedRequest.getIonizationMode(),
                         batchAdvancedRequest.getAdductsString(), Optional.ofNullable(formattedDetectedAdduct), Optional.of(formulaType), batchAdvancedRequest.getDatabases(), batchAdvancedRequest.getMetaboliteType());
