@@ -1,21 +1,21 @@
 package ceu.biolab.cmm.integration.browseSearch;
 
-import ceu.biolab.cmm.browseSearch.dto.BrowseSearchRequest;
-import ceu.biolab.cmm.shared.domain.Database;
-import ceu.biolab.cmm.shared.domain.MetaboliteType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.antlr.runtime.BitSet;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.test.json.JsonCompareMode;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.StreamUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -26,31 +26,62 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         @Autowired
         private MockMvc mockMvc;
 
-        @Autowired
-        private ObjectMapper objectMapper; // para convertir objetos a JSON
+        private String loadJson(String path) throws IOException {
+            Resource resource = new ClassPathResource(path);
+            return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+        }
+// this is an example that should work
+        @Test
+        void testBrowseSearchWithCompleteExample() throws Exception {
+            String requestJson = loadJson("json/browseSearch/request1.json");
+            String expectedResponse = loadJson("json/browseSearch/response1.json");
+
+            mockMvc.perform(post("/api/browseSearch")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestJson))
+                            .andExpect(status().isOk());
+        }
+        @Test
+        void testBrowseSearchWithNullName() throws Exception {
+            String requestJson = loadJson("json/browseSearch/request2.json");
+            String expectedResponse = loadJson("json/browseSearch/response2.json");
+            //TODO si el nombre esta vacio, coge todos los valores posibles que tmb tienen formula null, por lo que hay que diferenciar si tienen nombre null y formula null o se pueden filtrar esos tm
+            mockMvc.perform(post("/api/browseSearch")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestJson))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+        } @Test
+        void testBrowseSearchWithNullFromula() throws Exception {
+            String requestJson = loadJson("json/browseSearch/request3.json");
+            String expectedResponse = loadJson("json/browseSearch/response3.json");
+          mockMvc.perform(post("/api/browseSearch")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestJson))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));//TODO Pq no me coge el mismo numero de valores esperados
+        }
+        @Test
+        void testBrowseSearchWithNullDtabase() throws Exception {
+            String requestJson = loadJson("json/browseSearch/request4.json");
+            String expectedResponse = loadJson("json/browseSearch/response5.json");
+            mockMvc.perform(post("/api/browseSearch")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestJson))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());//
+
+            }
 
         @Test
-        public void testBrowseSearchReturnsOk() throws Exception {
-            // 1. Crear un request simulado
-            BrowseSearchRequest request = new BrowseSearchRequest();
-            request.setCompound_name("glucose");
-            request.setFormula("C6H12O6");
-            List<Database> list=new ArrayList<>();
-            list.add(Database.ALL);
-            request.setDatabases(list);
-            request.setMetaboliteType(MetaboliteType.ALL);
-            request.setExact_name(true);
-          //TODO comprobar como puedo hacer un constructor para cuando metabolite y database sea null
-
-            // 2. Convertir el objeto a JSON
-            String jsonRequest = objectMapper.writeValueAsString(request);
-
-            // 3. Hacer la petición POST
-            mockMvc.perform(MockMvcRequestBuilders.post("/api/browse")
+        void testBrowseSearchWithNullMetabolite() throws Exception {
+            String requestJson = loadJson("json/browseSearch/request5.json");
+            String expectedResponse = loadJson("json/browseSearch/response5.json");
+            mockMvc.perform(post("/api/browseSearch")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonRequest))
-                    .andExpect(status().isOk()) // 200 OK
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                            .content(requestJson))
+                    .andExpect(status().isBadRequest());//TODO Pq no me coge el mismo numero de valores esperados
         }
-        // cuantos test
+
+
     }

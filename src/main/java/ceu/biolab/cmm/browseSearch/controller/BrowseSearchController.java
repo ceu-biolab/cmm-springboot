@@ -18,7 +18,7 @@ import java.util.List;
         @Autowired
         private BrowseSearchService browseSearchService;
 
-        @PostMapping("/browse")
+        @PostMapping("/browseSearch")
         public BrowseQueryResponse search(@RequestBody BrowseSearchRequest request) {
             return browseSearchService.search(request);
         }

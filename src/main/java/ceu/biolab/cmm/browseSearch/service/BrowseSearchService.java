@@ -4,7 +4,9 @@ import ceu.biolab.cmm.browseSearch.dto.BrowseQueryResponse;
 import ceu.biolab.cmm.browseSearch.dto.BrowseSearchRequest;
 import ceu.biolab.cmm.browseSearch.repository.BrowseSearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
@@ -18,25 +20,33 @@ public class BrowseSearchService {
         this.browseSearchRepository = browseSearchRepository;
     }
 
-    public BrowseQueryResponse search (BrowseSearchRequest request) {
+    public BrowseQueryResponse search(BrowseSearchRequest request) {
 
+        // Validación: al menos compound_name o formula debe estar presente
         if ((request.getCompound_name() == null || request.getCompound_name().isBlank()) &&
-                (request.getFormula() == null || request.getFormula().isBlank()) &&
-                (request.getDatabases() == null ) &&
-                (request.getMetaboliteType() == null )) {
-            return new BrowseQueryResponse();
-            // TODO como hacer para q aqui no se rompa el codigo y spolo de un mensaje
+                (request.getFormula() == null || request.getFormula().isBlank())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide at least a compound name or a formula.");
         }
-        try {
 
+        // Validación: bases de datos no pueden estar vacías
+        if (request.getDatabases() == null || request.getDatabases().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide at least one database.");
+        }
+
+        // Validación: metaboliteType obligatorio
+        if (request.getMetaboliteType() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide a metabolite type.");
+        }
+
+        // Ejecución principal
+        try {
+            System.out.println("Searching compound: " + request.getCompound_name());
             return browseSearchRepository.findMatchingCompounds(request);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.printf("error en el intento de findcompournds" );
-            //TODO si crashease aqui saldria el error
-
-            return new BrowseQueryResponse();
+            System.out.println("Error during compound search.");
+            return new BrowseQueryResponse(); // vacío si hay error
         }
-
     }
+
 }
