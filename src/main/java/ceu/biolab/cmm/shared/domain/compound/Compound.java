@@ -45,6 +45,30 @@ public class Compound {
         this.lipidMapsClassifications = new HashSet<>();
     }
 
+    public Compound(Compound compound) {
+        this.compoundId = compound.compoundId;
+        this.casId = compound.casId;
+        this.compoundName = compound.compoundName;
+        this.formula = compound.formula;
+        this.mass = compound.mass;
+        this.chargeType = compound.chargeType;
+        this.chargeNumber = compound.chargeNumber;
+        this.formulaType = compound.formulaType;
+        this.compoundType = compound.compoundType;
+        this.compoundStatus = compound.compoundStatus;
+        this.formulaTypeInt = compound.formulaTypeInt;
+        this.logP = compound.logP;
+        this.rtPred = compound.rtPred;
+        this.inchi = compound.inchi;
+        this.inchiKey = compound.inchiKey;
+        this.smiles = compound.smiles;
+        this.lipidType = compound.lipidType;
+        this.numChains = compound.numChains;
+        this.numCarbons = compound.numCarbons;
+        this.doubleBonds = compound.doubleBonds;
+        this.lipidMapsClassifications = new HashSet<>(compound.lipidMapsClassifications);
+    }
+
     public Compound(int compoundId, String casId, String compoundName, String formula, double mass,
                     int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
                     int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
