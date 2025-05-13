@@ -1,5 +1,8 @@
 package ceu.biolab.cmm.ccsSearch.dto;
 
+import lombok.Data;
+
+@Data
 public class CcsFeatureQueryDTO {
     private double ccsLower;
     private double ccsUpper;
@@ -15,54 +18,6 @@ public class CcsFeatureQueryDTO {
         this.massLower = massLower;
         this.massUpper = massUpper;
         this.bufferGas = bufferGas;
-        this.adduct = adduct;
-    }
-
-    public double getCcsLower() {
-        return ccsLower;
-    }
-
-    public void setCcsLower(double ccsLower) {
-        this.ccsLower = ccsLower;
-    }
-
-    public double getCcsUpper() {
-        return ccsUpper;
-    }
-
-    public void setCcsUpper(double ccsUpper) {
-        this.ccsUpper = ccsUpper;
-    }
-
-    public double getMassLower() {
-        return massLower;
-    }
-
-    public void setMassLower(double massLower) {
-        this.massLower = massLower;
-    }
-
-    public double getMassUpper() {
-        return massUpper;
-    }
-
-    public void setMassUpper(double massUpper) {
-        this.massUpper = massUpper;
-    }
-
-    public String getBufferGas() {
-        return bufferGas;
-    }
-
-    public void setBufferGas(String bufferGas) {
-        this.bufferGas = bufferGas;
-    }
-
-    public String getAdduct() {
-        return adduct;
-    }
-
-    public void setAdduct(String adduct) {
         this.adduct = adduct;
     }
 }

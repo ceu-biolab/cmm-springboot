@@ -53,7 +53,16 @@ public class ScoreLipids {
                 for (AnnotationsByAdduct annotationsByAdduct : msFeature.getAnnotationsByAdducts()) {
                     String adduct = annotationsByAdduct.getAdduct();
                     for (Annotation annotation : annotationsByAdduct.getAnnotations()) {
-                        if (annotation.getCompound() instanceof Lipid lipid) {
+                        //if (annotation.getCompound() instanceof Lipid lipid) {
+                        if (annotation.getCompound().getCompoundType() == 1) {
+                            Lipid lipid;
+                            if (!(annotation.getCompound() instanceof Lipid)) {
+                                // Workaround for now in case lipid compounds are not send as Lipid objects
+                                lipid = new Lipid(annotation.getCompound());
+                            }
+                            else {
+                                lipid = (Lipid) annotation.getCompound();
+                            }
                             LipidScores scores = new LipidScores();
                             annotation.addScore(scores);
                             EvaluatedLipid evaluatedLipid = new EvaluatedLipid(lipid, featureMz, featureRtValue, adduct, scores);
