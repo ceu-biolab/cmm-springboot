@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
+import lombok.Data;
 
+@Data
 public class CcsSearchResponseDTO {
     private List<AnnotatedFeature> imFeatures;
 
@@ -16,14 +18,6 @@ public class CcsSearchResponseDTO {
         if (imFeature != null) {
             this.imFeatures.add(imFeature);
         }
-    }
-
-    public List<AnnotatedFeature> getImFeatures() {
-        return imFeatures;
-    }
-
-    public void setImFeatures(List<AnnotatedFeature> imFeatures) {
-        this.imFeatures = imFeatures;
     }
 
     @Override
