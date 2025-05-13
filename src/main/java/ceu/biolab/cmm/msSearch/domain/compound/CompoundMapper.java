@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.msSearch.model.compound;
+package ceu.biolab.cmm.msSearch.domain.compound;
 
 import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
 import ceu.biolab.cmm.shared.domain.compound.CMMCompound;

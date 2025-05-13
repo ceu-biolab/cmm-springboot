@@ -31,9 +31,9 @@ public class MSSearchIntegrationTest {
     }
 
     @Test
-    void testRTSearchSimpleSearchEndpoint1() throws Exception {
-        String requestJson = loadJson("json/rtSearch/requestMSSearchSimple1.json");
-        String expectedResponse = loadJson("json/rtSearch/responseMSSearchSimple1.json");
+    void testMSSearchSimpleSearchEndpoint1() throws Exception {
+        String requestJson = loadJson("json/msSearch/requestMSSearchSimple1.json");
+        String expectedResponse = loadJson("json/msSearch/responseMSSearchSimple1.json");
 
         mockMvc.perform(post("/api/compounds/simple-search")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -43,9 +43,9 @@ public class MSSearchIntegrationTest {
     }
 
     @Test
-    void testRTSearchBatchSearchEndpoint1() throws Exception {
-        String requestJson = loadJson("json/rtSearch/requestMSSearchBatch1.json");
-        String expectedResponse = loadJson("json/rtSearch/responseMSSearchBatch1.json");
+    void testMSSearchBatchSearchEndpoint1() throws Exception {
+        String requestJson = loadJson("json/msSearch/requestMSSearchBatch1.json");
+        String expectedResponse = loadJson("json/msSearch/responseMSSearchBatch1.json");
 
         mockMvc.perform(post("/api/compounds/batch-search")
                         .contentType(MediaType.APPLICATION_JSON)

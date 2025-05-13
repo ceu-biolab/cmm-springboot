@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.msSearch.model.msFeature;
+package ceu.biolab.cmm.msSearch.domain.msFeature;
 
 public interface LCMSFeature {
 

@@ -2,7 +2,7 @@ package ceu.biolab.cmm.msSearch.repository;
 
 import ceu.biolab.*;
 import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
-import ceu.biolab.cmm.msSearch.model.compound.CompoundMapper;
+import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
@@ -14,6 +14,7 @@ import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
+import com.apicatalog.jsonld.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class CompoundRepository {
                                             Set<String> adductsString, Set<Database> databases,
                                             MetaboliteType metaboliteType) {
         List<AnnotatedFeature> annotatedMSFeature = new ArrayList<>();
+        logger.info("request: {}", detectedAdduct);
         Integer compoundType = null;
 
         if (mz == null || tolerance == null || mzToleranceMode == null || ionizationMode == null) {
@@ -70,14 +72,18 @@ public class CompoundRepository {
         try {
             IMSFeature msFeature = new MSFeature(mz, 0.0);
             AnnotatedFeature annotatedFeature = new AnnotatedFeature(msFeature);
-            Set<String> adductsToProcess;
+            Set<String> adductsToProcess = new HashSet<>();
 
-            if (detectedAdduct != null && detectedAdduct.isPresent()) {
-                adductsToProcess = Set.of(detectedAdduct.get());
+            logger.info("detected adduct: {}", detectedAdduct);
+            logger.info(" adductS: {}", adductsString);
+
+            if (detectedAdduct != null && detectedAdduct.isPresent() && !detectedAdduct.isEmpty() && StringUtils.isNotBlank(detectedAdduct.get())) {
+                adductsToProcess.add(detectedAdduct.get());
             } else {
-                adductsToProcess = adductsString;
+                adductsToProcess.addAll(adductsString);
             }
 
+            logger.info(" adductS process: {}", adductsToProcess);
             if (adductsToProcess == null || adductsToProcess.isEmpty()) {
                 return annotatedMSFeature;
             }

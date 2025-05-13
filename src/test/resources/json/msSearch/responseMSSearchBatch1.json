@@ -26,7 +26,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -42,6 +42,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010859",
                 "hmdbID": "HMDB0115104",
@@ -55,7 +56,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -63,7 +63,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -76,7 +77,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -92,6 +93,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": "HMDB0115277",
@@ -105,8 +107,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             },
@@ -119,7 +121,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -135,6 +137,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010766",
                 "hmdbID": "HMDB0115301",
@@ -148,7 +151,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -156,7 +158,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -169,7 +172,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -185,6 +188,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010319",
                 "hmdbID": "HMDB0114889",
@@ -198,7 +202,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -206,7 +209,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -219,7 +223,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -235,6 +239,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010575",
                 "hmdbID": "HMDB0115543",
@@ -248,7 +253,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -256,7 +260,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -269,7 +274,7 @@
                 "mass": 756.566909,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -285,6 +290,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010736",
                 "hmdbID": null,
@@ -298,7 +304,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -306,7 +311,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -319,7 +325,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -335,6 +341,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": "HMDB0114938",
@@ -348,8 +355,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             },
@@ -362,7 +369,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -378,6 +385,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010709",
                 "hmdbID": "HMDB0115248",
@@ -391,7 +399,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -399,7 +406,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -412,7 +420,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -428,6 +436,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": "HMDB0115276",
@@ -441,8 +450,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             },
@@ -455,7 +464,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -471,6 +480,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010360",
                 "hmdbID": "HMDB0114964",
@@ -484,7 +494,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -492,7 +501,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -505,7 +515,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -521,6 +531,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": "HMDB0115459",
@@ -534,8 +545,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             },
@@ -548,7 +559,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -564,6 +575,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": "HMDB0114872",
@@ -577,8 +589,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             },
@@ -591,7 +603,7 @@
                 "mass": 756.566909,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -607,6 +619,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010335",
                 "hmdbID": null,
@@ -620,7 +633,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -628,7 +640,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -641,7 +654,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -657,6 +670,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP10010949",
                 "hmdbID": "HMDB0115528",
@@ -670,7 +684,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -678,7 +691,8 @@
                     "subClass": "GP1001",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -691,7 +705,7 @@
                 "mass": 756.566906566,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -707,6 +721,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": "HMDB0114913",
@@ -720,8 +735,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             }
@@ -739,7 +754,7 @@
                 "mass": 718.598876,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -755,6 +770,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMSP03010046",
                 "hmdbID": null,
@@ -768,7 +784,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "SP",
@@ -776,7 +791,8 @@
                     "subClass": "SP0301",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             }
@@ -798,7 +814,7 @@
                 "mass": 774.577474,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -814,6 +830,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP04030065",
                 "hmdbID": null,
@@ -827,7 +844,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -835,7 +851,8 @@
                     "subClass": "GP0403",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -848,7 +865,7 @@
                 "mass": 774.577474,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -864,6 +881,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP04020050",
                 "hmdbID": null,
@@ -877,7 +895,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -885,7 +902,8 @@
                     "subClass": "GP0402",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -898,7 +916,7 @@
                 "mass": 774.577474,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -914,6 +932,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMGP04030045",
                 "hmdbID": null,
@@ -927,7 +946,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "GP",
@@ -935,7 +953,8 @@
                     "subClass": "GP0403",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             }
@@ -961,7 +980,7 @@
                 "mass": 753.5755,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 1,
                 "formulaTypeInt": 0,
@@ -977,6 +996,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": null,
@@ -990,8 +1010,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             },
@@ -1004,7 +1024,7 @@
                 "mass": 753.5755,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 1,
                 "formulaTypeInt": 0,
@@ -1020,6 +1040,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": null,
@@ -1033,8 +1054,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             },
@@ -1047,7 +1068,7 @@
                 "mass": 753.575484,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -1063,6 +1084,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMSP0501AC24",
                 "hmdbID": null,
@@ -1076,7 +1098,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "SP",
@@ -1084,7 +1105,8 @@
                     "subClass": "SP0501",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -1097,7 +1119,7 @@
                 "mass": 753.575484,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 0,
                 "formulaTypeInt": 0,
@@ -1113,6 +1135,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": "LMSP0501AA82",
                 "hmdbID": null,
@@ -1126,7 +1149,6 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
                 "lipidMapsClassifications": [
                   {
                     "category": "SP",
@@ -1134,7 +1156,8 @@
                     "subClass": "SP0501",
                     "classLevel4": ""
                   }
-                ]
+                ],
+                "pathways": []
               },
               "scores": []
             },
@@ -1147,7 +1170,7 @@
                 "mass": 753.5755,
                 "chargeType": 0,
                 "chargeNumber": 0,
-                "formulaType": null,
+                "formulaType": "CHNOPS",
                 "compoundType": 1,
                 "compoundStatus": 1,
                 "formulaTypeInt": 0,
@@ -1163,6 +1186,7 @@
                 "biologicalActivity": null,
                 "meshNomenclature": null,
                 "iupacClassification": null,
+                "mol2": null,
                 "keggID": null,
                 "lmID": null,
                 "hmdbID": null,
@@ -1176,8 +1200,8 @@
                 "fahfaID": 0,
                 "ohPositionID": 0,
                 "aspergillusWebName": null,
-                "mol2": null,
-                "lipidMapsClassifications": []
+                "lipidMapsClassifications": [],
+                "pathways": []
               },
               "scores": []
             }

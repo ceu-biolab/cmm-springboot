@@ -53,7 +53,7 @@ public class BatchAdvancedSearchService {
                 }
 
                 String detectedAdduct = AdductProcessing.detectAdductBasedOnCompositeSpectrum(batchAdvancedRequest.getIonizationMode(),
-                        mz, formattedAdducts, compositeSpectrum);
+                        mz, batchAdvancedRequest.getAdductsString(), compositeSpectrum);
 
                 FormulaType formulaType = FormulaType.resolveFormulaType(String.valueOf(batchAdvancedRequest.getFormulaType()), batchAdvancedRequest.isDeuterium());
 
@@ -65,9 +65,10 @@ public class BatchAdvancedSearchService {
 
                 logger.info("detected adduct : {}", detectedAdduct);
                 logger.info("detected adduct formatted : {}", formattedDetectedAdduct);
+                logger.info("adducts formatted : {}", batchAdvancedRequest.getAdductsString());
                 CompoundSimpleSearchRequestDTO compoundSimpleSearchRequestDTO = new CompoundSimpleSearchRequestDTO(mz,
                         batchAdvancedRequest.getMzToleranceMode(), batchAdvancedRequest.getTolerance(), batchAdvancedRequest.getIonizationMode(),
-                        batchAdvancedRequest.getAdductsString(), Optional.ofNullable(formattedDetectedAdduct), Optional.of(formulaType), batchAdvancedRequest.getDatabases(), batchAdvancedRequest.getMetaboliteType());
+                        batchAdvancedRequest.getAdductsString(), Optional.of(detectedAdduct), Optional.of(formulaType), batchAdvancedRequest.getDatabases(), batchAdvancedRequest.getMetaboliteType());
 
                 RTSearchResponseDTO response = compoundService.findCompoundsByMz(compoundSimpleSearchRequestDTO);
                 annotatedFeatures = response.getMSFeatures();

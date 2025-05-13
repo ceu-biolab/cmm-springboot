@@ -53,7 +53,8 @@ public class AdductProcessing {
                     logger.info("adduct from processing: {}", adj);
                     return adj;
                 } else
-                    throw new IllegalArgumentException("Adduct not found: " + adductString);
+                    logger.info("adducts received: {}", adductString);
+                    throw new IllegalArgumentException("Adduct not found K: " + adductString);
             } else if (AdductList.MAPMZNEGATIVEADDUCTS.containsKey(adductString)) {
                 int charge = AdductTransformer.getChargeOfAdduct(adductString);
                 String adductFormula = "[" + adductString + "]" + charge + "-";
@@ -84,6 +85,7 @@ public class AdductProcessing {
     }
 
 
+
     public static String detectAdductBasedOnCompositeSpectrum(IonizationMode ionizationMode, Double mz,
                                                               Set<String> adducts, Map<Double, Double> groupedPeaks) {
         if (groupedPeaks.isEmpty()) {
@@ -102,49 +104,53 @@ public class AdductProcessing {
         double massToSearchInCompositeSpectrumForCheckRelation;
         double differenceMassAndPeak;
 
-        // Loop over all adducts provided
-        for (String adductName : adducts) {
+        // ** Hypothesis: adduct is adduct name
+        for (String adductName : allAdductsForCheckRelation) {
             String adductValue = mapAdducts.get(adductName);
             if (adductValue == null) {
-                continue;
+                break;
             }
 
-            adductDouble = Math.abs(Double.parseDouble(adductValue));
+            adductDouble = Double.parseDouble(adductValue);
 
             // Calculate neutral mass based on m/z and adduct
-            Double neutralMassBasedOnAdduct = mz-adductDouble;  // Formula for neutral mass from m/z
+            Double neutralMassBasedOnAdduct = getMassToSearch(mz, adductName, adductDouble);  // Formula for neutral mass from m/z
 
             // Check relations with other adducts
             for (String adductNameForCheckRelation : allAdductsForCheckRelation) {
                 String adductValueForCheckRelation = mapAdducts.get(adductNameForCheckRelation);
                 if (adductValueForCheckRelation == null) {
-                    continue;
+                    break;
                 }
                 adductDoubleForCheckRelation = Double.parseDouble(adductValueForCheckRelation);
                 logger.info("adduct mass check: {}", adductDoubleForCheckRelation);
 
                 if (!adductName.equals(adductNameForCheckRelation)) {
                     // Calculate mass to search in composite spectrum for this adduct
-                    String adductNameFormatted = "[" + adductNameForCheckRelation + "]";
-                    if (ionizationMode == IonizationMode.POSITIVE) {
-                        adductNameFormatted += "+";
-                    } else if (ionizationMode == IonizationMode.NEGATIVE) {
-                        adductNameFormatted += "-";
-                    }
+                    massToSearchInCompositeSpectrumForCheckRelation = getMassOfAdductFromMonoWeight(neutralMassBasedOnAdduct, adductNameForCheckRelation, ionizationMode);
 
-                    logger.info("adduct formatted: {}", adductNameFormatted);
-                    massToSearchInCompositeSpectrumForCheckRelation = neutralMassBasedOnAdduct + adductDoubleForCheckRelation;
-
-                    // Loop through peaks in the spectrum to find a match
+                    // ** Hypothesis: Peak
                     for (Double peak : groupedPeaksFiltered.keySet()) {
                         differenceMassAndPeak = Math.abs(peak - massToSearchInCompositeSpectrumForCheckRelation);
                         if (differenceMassAndPeak < Constants.ADDUCT_AUTOMATIC_DETECTION_WINDOW) {
                             adductDetected = adductName;
+                            String adductNameFormatted = "[" + adductDetected + "]";
+                            if (ionizationMode == IonizationMode.POSITIVE) {
+                                adductNameFormatted += "+";
+                            } else if (ionizationMode == IonizationMode.NEGATIVE) {
+                                adductNameFormatted += "-";
+                            }
                             return adductDetected;
                         }
                     }
                 }
             }
+        }
+        String adductNameFormatted = "[" + adductDetected + "]";
+        if (ionizationMode == IonizationMode.POSITIVE) {
+            adductNameFormatted += "+";
+        } else if (ionizationMode == IonizationMode.NEGATIVE) {
+            adductNameFormatted += "-";
         }
         return adductDetected;
     }
@@ -154,7 +160,7 @@ public class AdductProcessing {
      * @param ionizationMode Ionization mode (positive or negative)
      * @return Adduct map for the given ionization mode
      */
-    private static Map<String, String> getAdductMapByIonizationMode(IonizationMode ionizationMode) {
+    public static Map<String, String> getAdductMapByIonizationMode(IonizationMode ionizationMode) {
         if (ionizationMode == IonizationMode.POSITIVE) {
             return AdductList.MAPMZPOSITIVEADDUCTS;
         } else if (ionizationMode == IonizationMode.NEGATIVE) {
@@ -186,5 +192,115 @@ public class AdductProcessing {
         }
         return deisotopedGroupedPeaks;
     }
+
+    /**
+     * Calculate the mass to search depending on the adduct hypothesis
+     *
+     * @param experimentalMass Experimental mass of the compound
+     * @param adduct adduct name (M+H, 2M+H, M+2H, etc..)
+     * @param adductValue numeric value of the adduct (1.0073, etc..)
+     *
+     * @return the mass difference within the tolerance respecting to the
+     * massToSearch
+     */
+    public static Double getMassToSearch(Double experimentalMass, String adduct, Double adductValue) {
+        Double massToSearch;
+
+        if (AdductList.CHARGE_2.contains(adduct)) {
+            massToSearch = getChargedOriginalMass(experimentalMass, adductValue, 2);
+        } else if (AdductList.CHARGE_3.contains(adduct)) {
+            massToSearch = getChargedOriginalMass(experimentalMass, adductValue, 3);
+        } else if (AdductList.DIMER_2.contains(adduct)) {
+            massToSearch = getDimmerOriginalMass(experimentalMass, adductValue, 2);
+        } else if (AdductList.TRIMER_3.contains(adduct)) {
+            massToSearch = getDimmerOriginalMass(experimentalMass, adductValue, 3);
+        } else {
+            massToSearch = experimentalMass + adductValue;
+        }
+        return massToSearch;
+    }
+
+    private static Double getDimmerOriginalMass(double experimentalMass, double adductValue, int numberAtoms) {
+        double result = experimentalMass;
+
+        result = result + adductValue;
+        result = result / numberAtoms;
+
+        return result;
+    }
+
+    private static Double getChargedAdductMass(double monoisotopicWeight, double adductValue, int charge) {
+        double result = monoisotopicWeight;
+
+        result = result / charge;
+        result = result - adductValue;
+
+        return result;
+    }
+
+    private static Double getChargedOriginalMass(double experimentalMass, double adductValue, int charge) {
+        double result = experimentalMass;
+
+        result = result + adductValue;
+        result = result * charge;
+
+        return result;
+    }
+
+    /**
+     * Calculate the adduct Mass based on the monoisotopic weight, without
+     * knowing the value of the adduct.
+     *
+     * @param monoisotopic_weight Experimental mass of the compound
+     * @param adduct adduct name (M+H, 2M+H, M+2H, etc..)
+     * @param ionizationMode positive, negative or neutral
+     *
+     * @return the mass difference within the tolerance respecting to the
+     * massToSearch
+     */
+    public static Double getMassOfAdductFromMonoWeight(Double monoisotopic_weight, String adduct, IonizationMode ionizationMode) {
+        Double adductValue = getAdductValue(adduct, ionizationMode);
+        Double massToSearch;
+
+        if (AdductList.CHARGE_2.contains(adduct)) {
+            massToSearch = getChargedAdductMass(monoisotopic_weight, adductValue, 2);
+        } else if (AdductList.CHARGE_3.contains(adduct)) {
+            massToSearch = getChargedAdductMass(monoisotopic_weight, adductValue, 3);
+        } else if (AdductList.DIMER_2.contains(adduct)) {
+            massToSearch = getDimmerAdductMass(monoisotopic_weight, adductValue, 2);
+        } else if (AdductList.TRIMER_3.contains(adduct)) {
+            massToSearch = getDimmerAdductMass(monoisotopic_weight, adductValue, 3);
+        } else {
+            massToSearch = monoisotopic_weight - adductValue;
+        }
+        return massToSearch;
+    }
+
+
+    private static Double getDimmerAdductMass(double monoisotopicWeight, double adductValue, int numberAtoms) {
+        double result = monoisotopicWeight;
+        result = result * numberAtoms;
+        result = result - adductValue;
+
+        return result;
+    }
+
+
+    /**
+     * Get the value of the adduct named adductName within the ionization mode
+     * ionMode
+     *
+     * @param adductName
+     * @param ionizationMode
+     * @return
+     */
+    private static Double getAdductValue(String adductName, IonizationMode ionizationMode) {
+
+        Map<String, String> provisionalMap = getAdductMapByIonizationMode(ionizationMode);
+        String adductValue = provisionalMap.get(adductName);;
+        double adductDouble = Double.parseDouble(adductValue);
+        return adductDouble;
+    }
+
 }
 

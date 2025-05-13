@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.msSearch.dto;
 
-import ceu.biolab.cmm.msSearch.model.compound.LipidMapsClassification;
+import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import lombok.Data;

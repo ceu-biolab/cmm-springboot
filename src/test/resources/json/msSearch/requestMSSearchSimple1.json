@@ -3,7 +3,7 @@
   "mzToleranceMode": "PPM",
   "tolerance": 10,
   "ionizationMode": "POSITIVE",
-  "adductsString": ["M+H", "M+2H", "M+Na", "M+K", "M+NH4", "M+H-H2O"],
+  "adductsString": ["M+H", "M+Na", "M+K", "M+NH4", "M+H-H2O"],
   "databases": ["HMDB", "LIPIDMAPS", "ASPERGILLUS", "FAHFA", "KEGG", "INHOUSE", "CHEBI", "PUBCHEM", "NPATLAS"],
   "metaboliteType": "ALL"
 }

@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.msSearch.api;
+package ceu.biolab.cmm.msSearch.controller;
 import ceu.biolab.cmm.msSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
