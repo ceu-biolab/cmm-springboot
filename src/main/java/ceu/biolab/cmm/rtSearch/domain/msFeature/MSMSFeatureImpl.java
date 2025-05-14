@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.rtSearch.model.msFeature;
+package ceu.biolab.cmm.rtSearch.domain.msFeature;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package ceu.biolab.cmm.shared.domain.compound;
 
 import ceu.biolab.FormulaType;
-import ceu.biolab.cmm.rtSearch.model.compound.LipidMapsClassification;
+import ceu.biolab.cmm.rtSearch.domain.compound.LipidMapsClassification;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

@@ -6,8 +6,6 @@ import java.util.Set;
 
 import ceu.biolab.cmm.shared.domain.*;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
-import com.github.jsonldjava.utils.Obj;
-import org.xmlcml.euclid.Int;
 
 
 public class CompoundSimpleSearchRequestDTO {

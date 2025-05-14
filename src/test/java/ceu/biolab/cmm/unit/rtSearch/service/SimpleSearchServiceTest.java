@@ -95,6 +95,7 @@ public class SimpleSearchServiceTest {
         }
     }
 
+    @SuppressWarnings("unused")
     private AnnotatedFeature createEmptyAnnotatedFeature(double mz) {
         AnnotatedFeature feature = new AnnotatedFeature(mz);
         feature.setFeature(new MSFeature(mz));
@@ -102,6 +103,7 @@ public class SimpleSearchServiceTest {
     }
 
     // Extract all compounds from a list of annotated features
+    @SuppressWarnings("unused")
     private List<Annotation> extractAnnotations(List<AnnotatedFeature> features) {
         List<Annotation> compounds = new ArrayList<>();
         for (AnnotatedFeature feature : features) {

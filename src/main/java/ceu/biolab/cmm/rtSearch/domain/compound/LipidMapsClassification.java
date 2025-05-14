@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.rtSearch.model.compound;
+package ceu.biolab.cmm.rtSearch.domain.compound;
 
 public class LipidMapsClassification {
     protected String category;

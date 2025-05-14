@@ -3,19 +3,12 @@ package ceu.biolab.cmm.rtSearch.service;
 import ceu.biolab.cmm.rtSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
-
-import ceu.biolab.cmm.shared.domain.Database;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.MetaboliteType;
-import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
-import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
-import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class CompoundService {
@@ -32,11 +25,13 @@ public class CompoundService {
                     request.getIonizationMode(), request.getDetectedAdduct(), request.getFormulaTypeInt(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
             for (AnnotatedFeature feature : results) {
                 response.addImFeature(feature);
-                for(AnnotationsByAdduct annotationsByAdduct :feature.getAnnotationsByAdducts()){
-                    for(Annotation annotations : annotationsByAdduct.getAnnotations()){
-                        //annotations.getCompound().se
-                    }
-                }
+
+                // -- Commented it out because it wasn't doing anything but throwing a warning
+                // for(AnnotationsByAdduct annotationsByAdduct :feature.getAnnotationsByAdducts()){
+                //     for(Annotation annotations : annotationsByAdduct.getAnnotations()){
+                //         //annotations.getCompound().se
+                //     }
+                // }
             }
 
             return response;

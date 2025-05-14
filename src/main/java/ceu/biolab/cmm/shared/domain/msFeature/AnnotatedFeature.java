@@ -1,6 +1,8 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.Data;

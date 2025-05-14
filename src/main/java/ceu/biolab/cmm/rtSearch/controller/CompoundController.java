@@ -1,17 +1,10 @@
-package ceu.biolab.cmm.rtSearch.api;
-import ceu.biolab.cmm.ccsSearch.dto.CcsSearchResponseDTO;
+package ceu.biolab.cmm.rtSearch.controller;
 import ceu.biolab.cmm.rtSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.rtSearch.service.CompoundService;
-import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/compounds")
@@ -19,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 public class CompoundController {
     private final CompoundService compoundService;
-    private static final Logger logger = LoggerFactory.getLogger(CompoundController.class);
 
     public CompoundController(CompoundService compoundService) {
         this.compoundService = compoundService;

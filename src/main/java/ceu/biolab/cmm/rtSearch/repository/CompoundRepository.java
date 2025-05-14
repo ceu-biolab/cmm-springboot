@@ -1,13 +1,10 @@
 package ceu.biolab.cmm.rtSearch.repository;
 
-import ceu.biolab.*;
+import ceu.biolab.cmm.rtSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.rtSearch.dto.CompoundDTO;
-import ceu.biolab.cmm.rtSearch.model.compound.CompoundMapper;
-
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
@@ -18,9 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.xmlcml.euclid.Int;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -73,8 +68,8 @@ public class CompoundRepository {
             for (String adductString : adductsToProcess) {
 
                 Set<Compound> compoundsSet = new HashSet<>();
-                Adduct adduct = AdductProcessing.getAdductFromString(adductString, ionizationMode, mz);
-                double adductMass = adduct.getAdductMass();
+                //Adduct adduct = AdductProcessing.getAdductFromString(adductString, ionizationMode, mz);
+                //double adductMass = adduct.getAdductMass();
 
                 AnnotationsByAdduct annotationsByAdduct = null;
 
@@ -184,13 +179,13 @@ public class CompoundRepository {
         WHERE cp.compound_id = ?
     """;
 
-        List<Pathway> pathwayList = jdbcTemplate.query(sql, new Object[]{compoundId}, (rs, rowNum) -> {
+        List<Pathway> pathwayList = jdbcTemplate.query(sql, (rs, _) -> {
             Pathway pathway = new Pathway();
             pathway.setPathwayId(rs.getInt("pathway_id"));
             pathway.setPathwayMap(rs.getString("pathway_map"));
             pathway.setPathwayName(rs.getString("pathway_name"));
             return pathway;
-        });
+        }, compoundId);
 
         return new HashSet<>(pathwayList);
     }

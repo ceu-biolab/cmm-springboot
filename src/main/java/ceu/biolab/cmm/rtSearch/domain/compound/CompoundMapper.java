@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.rtSearch.model.compound;
+package ceu.biolab.cmm.rtSearch.domain.compound;
 
 import ceu.biolab.FormulaType;
 import ceu.biolab.cmm.rtSearch.dto.CompoundDTO;

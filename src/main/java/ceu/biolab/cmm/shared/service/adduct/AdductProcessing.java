@@ -11,7 +11,11 @@ import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class AdductProcessing {
     private static final Logger logger = LoggerFactory.getLogger(CompoundRepository.class);
@@ -60,10 +64,11 @@ public class AdductProcessing {
         Map<Double, Double> groupedPeaksFiltered = filterIsotopes(groupedPeaks);
         String adductDetected = "";
         Map<String, String> mapAdducts = getAdductMapByIonizationMode(ionizationMode);
-        List<String> allAdductsForCheckRelation = new LinkedList<>(mapAdducts.keySet());
+        List<String> allAdductsForCheckRelation = new ArrayList<>(mapAdducts.keySet());
 
-        double adductDouble;
-        double adductDoubleForCheckRelation;
+        // Commented out because it was not used
+        // double adductDouble;
+        // double adductDoubleForCheckRelation;
         double massToSearchInCompositeSpectrumForCheckRelation;
         double differenceMassAndPeak;
 
@@ -73,7 +78,7 @@ public class AdductProcessing {
             if (adductValue == null) {
                 break;
             }
-            adductDouble = Math.abs(Double.parseDouble(adductValue));
+            // adductDouble = Math.abs(Double.parseDouble(adductValue));
             Double neutralMassBasedOnAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductName, ionizationMode);
 
             //** Hypothesis -> Peak is adductName
@@ -85,7 +90,7 @@ public class AdductProcessing {
                 if (adductValueForCheckRelation == null) {
                     break;
                 }
-                adductDoubleForCheckRelation = Double.parseDouble(adductValueForCheckRelation);
+                // adductDoubleForCheckRelation = Double.parseDouble(adductValueForCheckRelation);
                 if (!adductName.equals(adductNameForCheckRelation)) {
                     // get MZFomMonoisotopicMass
                     String adductNameFormatted = "[" + adductNameForCheckRelation + "]";
@@ -141,7 +146,7 @@ public class AdductProcessing {
      * @return
      */
     public static Map<Double, Double> filterIsotopes(Map<Double, Double> groupedPeaks) {
-        Map<Double, Double> deisotopedGroupedPeaks = new TreeMap();
+        Map<Double, Double> deisotopedGroupedPeaks = new TreeMap<Double, Double>();
         Double previousPeak = 0d;
         for (Map.Entry<Double, Double> entry : groupedPeaks.entrySet()) {
             Double mz = entry.getKey();

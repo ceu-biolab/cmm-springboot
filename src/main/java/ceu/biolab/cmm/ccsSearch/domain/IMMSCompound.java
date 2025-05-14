@@ -1,8 +1,6 @@
 package ceu.biolab.cmm.ccsSearch.domain;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import ceu.biolab.cmm.shared.domain.compound.Compound;

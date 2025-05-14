@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.rtSearch.mzcalculator;
+package ceu.biolab.cmm.rtSearch.service;
 
 public class MZCalculator {
     public static Double getMZFromSingleChargedMonoMass(Double monoisotopicWeight, Double adductValue) {
