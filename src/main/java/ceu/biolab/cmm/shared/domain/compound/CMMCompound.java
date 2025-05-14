@@ -4,7 +4,14 @@ import ceu.biolab.FormulaType;
 
 import java.util.Set;
 
-public class CMMCompound extends Compound implements Comparable<CMMCompound> {
+import lombok.Getter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
+
+@Getter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class CMMCompound extends Compound {
 
     private final String keggID;
     private final String lmID;
@@ -46,80 +53,7 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound> {
         this.mol2 = mol2;
     }
 
-    public String getkeggID() {
-        return keggID;
-    }
-
-    public String getLmID() {
-        return lmID;
-    }
-
-    public String getHmdbID() {
-        return hmdbID;
-    }
-
-    public String getAgilentID() {
-        return agilentID;
-    }
-
-    public Integer getPcID() {
-        return pcID;
-    }
-
-    public Integer getChebiID() {
-        return chebiID;
-    }
-
-    public String getInHouseID() {
-        return inHouseID;
-    }
-
-    public Integer getAspergillusID() {
-        return aspergillusID;
-    }
-
-    public String getKnapsackID() {
-        return knapsackID;
-    }
-
-    public Integer getNpatlasID() {
-        return npatlasID;
-    }
-
-    public Integer getFahfaID() {
-        return fahfaID;
-    }
-
-    public Integer getOhPositionID() {
-        return ohPositionID;
-    }
-
-    public String getAspergillusWebName() {
-        return aspergillusWebName;
-    }
-
-    public String getMol2() {
-        return mol2;
-    }
-
-
-    @Override
-    public int compareTo(CMMCompound other) {
-        return Integer.compare(this.getCompoundId(), other.getCompoundId());
-    }
-
     public int getCompoundId() {
         return super.getCompoundId();
-    }
-
-    @Override
-    public String toString() {
-        return "CMMCompound{" +
-                super.toString() +
-                "keggID='" + keggID + '\'' + ", lmID='" + lmID + '\'' + ", hmdbID='" + hmdbID + '\'' +
-                ", agilentID='" + agilentID + '\'' + ", pcID=" + pcID + ", chebiID=" + chebiID +
-                ", inHouseID='" + inHouseID + '\'' + ", aspergillusID=" + aspergillusID + ", knapsackID='" + knapsackID + '\'' +
-                ", npatlasID=" + npatlasID + ", fahfaID=" + fahfaID + ", ohPositionID=" + ohPositionID + ", aspergillusWebName='" + aspergillusWebName + '\'' +
-                '}';
     }
 }

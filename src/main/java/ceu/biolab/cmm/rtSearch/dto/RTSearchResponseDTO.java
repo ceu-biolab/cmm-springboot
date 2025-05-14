@@ -5,6 +5,9 @@ import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class RTSearchResponseDTO {
     private List<AnnotatedFeature> msFeatures;
 
@@ -16,18 +19,5 @@ public class RTSearchResponseDTO {
         if (imFeature != null) {
             this.msFeatures.add(imFeature);
         }
-    }
-
-    public List<AnnotatedFeature> getMSFeatures() {
-        return msFeatures;
-    }
-
-    public void setmsFeatures(List<AnnotatedFeature> msFeatures) {
-        this.msFeatures = msFeatures;
-    }
-
-    @Override
-    public String toString() {
-        return "RTSearchResponse [Features=" + msFeatures + "]";
     }
 }

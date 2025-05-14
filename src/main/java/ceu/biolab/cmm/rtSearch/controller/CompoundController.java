@@ -1,21 +1,19 @@
 package ceu.biolab.cmm.rtSearch.controller;
+
 import ceu.biolab.cmm.rtSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.rtSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.rtSearch.service.CompoundService;
 import org.springframework.web.bind.annotation.*;
 
+import lombok.RequiredArgsConstructor; // Add this import
 
 @RestController
 @RequestMapping("/api/compounds")
-@CrossOrigin(origins = {"http://localhost:3000", "https://localhost:3000"}) // Allow frontend requests
-
+@CrossOrigin(origins = {"http://localhost:3000", "https://localhost:3000"})
+@RequiredArgsConstructor // Add this annotation
 public class CompoundController {
     private final CompoundService compoundService;
-
-    public CompoundController(CompoundService compoundService) {
-        this.compoundService = compoundService;
-    }
 
     @PostMapping("/simple-search")
     public RTSearchResponseDTO annotateMSFeature(@RequestBody CompoundSimpleSearchRequestDTO request) {
@@ -47,7 +45,7 @@ public class CompoundController {
             );
 
             RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest);
-            response.getMSFeatures().addAll(result.getMSFeatures());
+            response.getMsFeatures().addAll(result.getMsFeatures());
         }
 
         return response;

@@ -40,8 +40,6 @@ public class Compound {
     private String mol2;
     private Set<Pathway> pathways;
 
-// TODO add pathways
-
     public Compound() {
         this.lipidMapsClassifications = new HashSet<>();
     }
@@ -103,116 +101,13 @@ public class Compound {
         this.pathways = pathways;
     }
 
-    public int getCompoundId() {
-        return compoundId;
-    }
-
-    public String getCasId() {
-        return casId;
-    }
-
-    public String getCompoundName() {
-        return compoundName;
-    }
-
-    public String getFormula() {
-        return formula;
-    }
-
-    public double getMass() {
-        return mass;
-    }
-
-    public int getChargeType() {
-        return chargeType;
-    }
-
-    public int getChargeNumber() {
-        return chargeNumber;
-    }
-
-    public FormulaType getFormulaType() {
-        return formulaType;
-    }
-
-    public int getCompoundType() {
-        return compoundType;
-    }
-
-    public int getCompoundStatus() {
-        return compoundStatus;
-    }
-
-    public Integer getFormulaTypeInt() {
-        return formulaTypeInt;
-    }
-
-    public Double getLogP() {
-        return logP;
-    }
-
-    public Double getRtPred() {
-        return rtPred;
-    }
-
-    public String getInchi() {
-        return inchi;
-    }
-
-    public String getInchiKey() {
-        return inchiKey;
-    }
-
-    public String getSmiles() {
-        return smiles;
-    }
-
-    public String getLipidType() {
-        return lipidType;
-    }
-
-    public Integer getNumChains() {
-        return numChains;
-    }
-
-    public Integer getNumCarbons() {
-        return numCarbons;
-    }
-
-    public Integer getDoubleBonds() {
-        return doubleBonds;
-    }
-
-    public Set<LipidMapsClassification> getLipidMapsClassifications() {
-        return lipidMapsClassifications;
-    }
-
-    public void setLipidMapsClassifications(Set<LipidMapsClassification> lipidMapsClassifications) {
-        this.lipidMapsClassifications = lipidMapsClassifications;
-    }
-
-    public String getBiologicalActivity() {
-        return biologicalActivity;
-    }
-
-    public String getMeshNomenclature() {
-        return meshNomenclature;
-    }
-
-    public String getIupacClassification() {
-        return iupacClassification;
-    }
-
-    public String getMol2() {
-        return mol2;
-    }
-
-    public Set<Pathway> getPathways() {
-        return pathways;
-    }
-
-    public void setPathways(Set<Pathway> pathways) {
-        this.pathways = pathways;
+    public void addPathway(Pathway pathway) {
+        if (this.pathways == null) {
+            this.pathways = new HashSet<>();
+        }
+        if (pathway != null && pathway.getPathwayId() != -1) {
+            this.pathways.add(pathway);
+        }
     }
 
     @Override
@@ -236,31 +131,4 @@ public class Compound {
         final Compound compound = (Compound) obj;
         return Objects.equals(this.compoundId, compound.compoundId);
     }
-
-
-    @Override
-    public String toString() {
-        return "Compound{" +
-                "compoundId=" + this.compoundId +
-                ", casId='" + this.casId + '\'' +
-                ", compoundName='" + this.compoundName + '\'' +
-                ", formula='" + this.formula + '\'' +
-                ", mass=" + this.mass +
-                ", chargeType=" + this.chargeType +
-                ", chargeNumber=" + this.chargeNumber +
-                ", formulaType=" + this.formulaType +
-                ", compoundType=" + this.compoundType +
-                ", compoundStatus=" + this.compoundStatus +
-                ", formulaTypeInt=" + this.formulaTypeInt +
-                ", logP=" + this.logP +
-                ", rtPred=" + this.rtPred +
-                ", inchi='" + inchi + '\'' + ", inchiKey='" + inchiKey + '\'' + ", smiles='" + smiles + '\'' +
-                ", lipidType='" + lipidType + '\'' + ", numChains=" + numChains + ", numCarbons=" + numCarbons +
-                ", doubleBonds=" + doubleBonds + ", classification='" + lipidMapsClassifications +
-                ", biologicalActivity='" + biologicalActivity + '\'' + ", meshNomenclature='" + meshNomenclature + '\''
-                + ", iupacClassification='" + iupacClassification + '\'' + ", mol2='" + mol2 + '\''
-                + ", pathways='" + pathways + '}';
-    }
 }
-
-

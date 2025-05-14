@@ -19,6 +19,7 @@ public class Lipid extends Compound {
     // e.g. "PR010405": "PR" is category, "PR01" main class, "PR0104" subclass, "PR010405" class level 4
     public String classificationCode;
 
+    // TODO: fix after refactoring Compound
     public Lipid(Compound compound) {
         super(compound);
         this.lipidType = compound.getLipidType();
