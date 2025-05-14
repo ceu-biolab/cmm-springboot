@@ -295,13 +295,6 @@ public class ScoreLipidsServiceTest {
     private void verifyScores(LipidScores lipidScores, Map<String, List<Boolean>> expectedRtScores) {
         verifyScores(lipidScores, Optional.of(expectedRtScores), Optional.empty(), Optional.empty(), Optional.empty());
     }
-    
-    private void verifyScores(LipidScores lipidScores, 
-                              Optional<Double> expectedIonizationScore,
-                              Optional<Double> expectedAdductRelationScore,
-                              Optional<Double> expectedRtScore) {
-        verifyScores(lipidScores, Optional.empty(), expectedIonizationScore, expectedAdductRelationScore, expectedRtScore);
-    }
 
     // New overload for verifying only specific scores without RT map
     private void verifyScores(LipidScores lipidScores, 
@@ -321,7 +314,7 @@ public class ScoreLipidsServiceTest {
     
     private AnnotatedFeature createEmptyAnnotatedFeature(double mz, double rt) {
         AnnotatedFeature feature = new AnnotatedFeature(mz);
-        feature.setFeature(new LCMSFeature(mz, rt));
+        feature.setFeature(new LCMSFeature(rt, mz));
         return feature;
     }
 
@@ -349,15 +342,6 @@ public class ScoreLipidsServiceTest {
         feature.addCompoundForAdduct(adduct, lipid);
     }
     
-    /**
-     * Adds a lipid annotation with the specified compound ID using "TEST" as the default adduct
-     * @param feature The feature to annotate
-     * @param compoundId The compound ID to add
-     */
-    private void addAdductLipidToAnnotations(AnnotatedFeature feature, int compoundId) {
-        addAdductLipidToAnnotations(feature, compoundId, "TEST");
-    }
-
     private Optional<Annotation> findLipidAnnotation(List<AnnotatedFeature> features, String lipidType, int carbons, int doubleBonds, double mz, double rt) {
         for (AnnotatedFeature feature : features) {
             for (AnnotationsByAdduct scoredAnnotationsByAdduct : feature.getAnnotationsByAdducts()) {
