@@ -1,7 +1,7 @@
 package ceu.biolab.cmm.shared.service.adduct;
 
 import ceu.biolab.*;
-import ceu.biolab.cmm.rtSearch.repository.CompoundRepository;
+import ceu.biolab.cmm.msSearch.repository.CompoundRepository;
 
 import ceu.biolab.cmm.shared.domain.Constants;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
@@ -49,6 +49,7 @@ public class AdductTransformer {
     public static Double getMonoisotopicMassFromMZ(Double mz, String adduct, IonizationMode ionizationMode) {
         Adduct adductObj = null;
         try {
+            logger.info("adducts received mono: {}", adduct);
             adductObj = AdductProcessing.getAdductFromString(adduct, ionizationMode, mz);
             double adductValue = adductObj.getAdductMass();
             int charge = adductObj.getAdductCharge();
