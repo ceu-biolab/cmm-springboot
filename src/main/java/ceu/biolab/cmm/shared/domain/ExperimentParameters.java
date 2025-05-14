@@ -9,7 +9,7 @@ public class ExperimentParameters {
     /**
      * The parameters of the user's experiment.
      */
-    // TODO - class may be incomplete. Add parameters as needed.
+    // This class is in early development. Add parameters as needed.
 
     private Optional<IonizationMode> ionMode;
     private Optional<ModifierType> modifierType;

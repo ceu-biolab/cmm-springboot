@@ -90,7 +90,6 @@ public class CcsSearchService {
                         boolean found = false;
                         for (Annotation annotation : annotations) {
                             Compound compound = annotation.getCompound();
-                            // TODO remove mutation after refactoring Compound
                             if (compound instanceof IMMSCompound imCompound) {
                                 if (imCompound.getCompoundId() == queryResult.getCompoundId()) {
                                     imCompound.addPathway(pathway);
