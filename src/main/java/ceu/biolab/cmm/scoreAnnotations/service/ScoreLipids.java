@@ -67,9 +67,6 @@ public class ScoreLipids {
                             LipidScores scores = new LipidScores();
                             annotation.addScore(scores);
                             EvaluatedLipid evaluatedLipid = new EvaluatedLipid(lipid, featureMz, featureRtValue, adduct, scores);
-                            System.out.println(evaluatedLipid.getLipidType());
-                            System.out.println(evaluatedLipid.getNumberCarbons());
-                            System.out.println(evaluatedLipid.getNumberDoubleBonds());
                             kieSession.insert(evaluatedLipid);
                         }
                     }
