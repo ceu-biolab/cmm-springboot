@@ -330,5 +330,26 @@ public class AdductProcessingTest {
         assertEquals(522.99, AdductProcessing.getMassOfAdductFromMonoWeight(500.0, "M+Na", IonizationMode.POSITIVE), 0.001);
     }
 
+    @Test
+    void testGetMZFromSingleChargedMonoMass() {
+        assertEquals(502.0, AdductProcessing.getMZFromSingleChargedMonoMass(500.0, 2.0), 0.0001);
+        assertEquals(498.0, AdductProcessing.getMZFromSingleChargedMonoMass(500.0, -2.0), 0.0001);
+        assertEquals(500.0, AdductProcessing.getMZFromSingleChargedMonoMass(500.0, 0.0), 0.0001);
+    }
+
+    @Test
+    void testGetMZFromMultiChargedMonoMass() {
+        assertEquals(251.0, AdductProcessing.getMZFromMultiChargedMonoMass(500.0, 1.0, 2), 0.0001);
+        assertEquals(168.1667, AdductProcessing.getMZFromMultiChargedMonoMass(500.0, 1.5, 3), 0.0001);
+        assertEquals(125.0, AdductProcessing.getMZFromMultiChargedMonoMass(500.0, 0.0, 4), 0.0001);
+        assertEquals(500.0, AdductProcessing.getMZFromMultiChargedMonoMass(500.0, 0.0, 1), 0.0001);
+    }
+
+    @Test
+    void testGetMZFromMultimerMonoMass() {
+        assertEquals(1002.0, AdductProcessing.getMZFromMultimerMonoMass(500.0, 2.0, 2), 0.0001);
+        assertEquals(1503.0, AdductProcessing.getMZFromMultimerMonoMass(500.0, 3.0, 3), 0.0001);
+        assertEquals(2000.0, AdductProcessing.getMZFromMultimerMonoMass(500.0, 0.0, 4), 0.0001);
+    }
 
 }
