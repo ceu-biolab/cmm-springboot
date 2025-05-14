@@ -289,4 +289,46 @@ public class AdductProcessingTest {
         result = AdductProcessing.detectAdductBasedOnCompositeSpectrum(ionizationMode, inputMass, adducts, compositeSpectrum);
         assertEquals(expResult, result);
     }
+
+
+    @Test
+    void testGetChargeOfAdduct() {
+        assertEquals(1, AdductProcessing.getChargeOfAdduct("M+Na", IonizationMode.POSITIVE), "1 charge");
+        assertEquals(2, AdductProcessing.getChargeOfAdduct("M+2H", IonizationMode.POSITIVE), "2 charges");
+        assertEquals(3, AdductProcessing.getChargeOfAdduct("M+3H", IonizationMode.POSITIVE), "3 charges");
+    }
+
+
+    @Test
+    void testFormatAdductString() {
+        assertEquals("[M+2H]2+", AdductProcessing.formatAdductString("M+2H", IonizationMode.POSITIVE));
+        assertEquals("[M-H]-", AdductProcessing.formatAdductString("M-H", IonizationMode.NEGATIVE));
+    }
+
+    @Test
+    void testGetDimmerOriginalMass() {
+        double result = AdductProcessing.getDimmerOriginalMass(500.0, 10.0, 2);
+        assertEquals(255.0, result, 0.0001);
+    }
+
+    @Test
+    void testGetChargedAdductMass() {
+        double result = AdductProcessing.getChargedAdductMass(300.0, 5.0, 2);
+        assertEquals(145.0, result, 0.0001);
+    }
+
+    @Test
+    void testGetChargedOriginalMass() {
+        double result = AdductProcessing.getChargedOriginalMass(150.0, 5.0, 2);
+        assertEquals(310.0, result, 0.0001);
+    }
+
+    @Test
+    void testGetMassOfAdductFromMonoWeight() {
+        assertEquals(251.007, AdductProcessing.getMassOfAdductFromMonoWeight(500.0, "M+2H", IonizationMode.POSITIVE), 0.001);
+        assertEquals(167.674, AdductProcessing.getMassOfAdductFromMonoWeight(500.0, "M+3H", IonizationMode.POSITIVE), 0.001);
+        assertEquals(522.99, AdductProcessing.getMassOfAdductFromMonoWeight(500.0, "M+Na", IonizationMode.POSITIVE), 0.001);
+    }
+
+
 }

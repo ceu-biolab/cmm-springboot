@@ -220,7 +220,7 @@ public class AdductProcessing {
         return massToSearch;
     }
 
-    private static Double getDimmerOriginalMass(double experimentalMass, double adductValue, int numberAtoms) {
+    public static Double getDimmerOriginalMass(double experimentalMass, double adductValue, int numberAtoms) {
         double result = experimentalMass;
 
         result = result + adductValue;
@@ -229,7 +229,7 @@ public class AdductProcessing {
         return result;
     }
 
-    private static Double getChargedAdductMass(double monoisotopicWeight, double adductValue, int charge) {
+    public static Double getChargedAdductMass(double monoisotopicWeight, double adductValue, int charge) {
         double result = monoisotopicWeight;
 
         result = result / charge;
@@ -238,7 +238,7 @@ public class AdductProcessing {
         return result;
     }
 
-    private static Double getChargedOriginalMass(double experimentalMass, double adductValue, int charge) {
+    public static Double getChargedOriginalMass(double experimentalMass, double adductValue, int charge) {
         double result = experimentalMass;
 
         result = result + adductValue;
@@ -251,27 +251,27 @@ public class AdductProcessing {
      * Calculate the adduct Mass based on the monoisotopic weight, without
      * knowing the value of the adduct.
      *
-     * @param monoisotopic_weight Experimental mass of the compound
+     * @param monoisotopicWeight Experimental mass of the compound
      * @param adduct adduct name (M+H, 2M+H, M+2H, etc..)
      * @param ionizationMode positive, negative or neutral
      *
      * @return the mass difference within the tolerance respecting to the
      * massToSearch
      */
-    public static Double getMassOfAdductFromMonoWeight(Double monoisotopic_weight, String adduct, IonizationMode ionizationMode) {
+    public static Double getMassOfAdductFromMonoWeight(Double monoisotopicWeight, String adduct, IonizationMode ionizationMode) {
         Double adductValue = getAdductValue(adduct, ionizationMode);
         Double massToSearch;
 
         if (AdductList.CHARGE_2.contains(adduct)) {
-            massToSearch = getChargedAdductMass(monoisotopic_weight, adductValue, 2);
+            massToSearch = getChargedAdductMass(monoisotopicWeight, adductValue, 2);
         } else if (AdductList.CHARGE_3.contains(adduct)) {
-            massToSearch = getChargedAdductMass(monoisotopic_weight, adductValue, 3);
+            massToSearch = getChargedAdductMass(monoisotopicWeight, adductValue, 3);
         } else if (AdductList.DIMER_2.contains(adduct)) {
-            massToSearch = getDimmerAdductMass(monoisotopic_weight, adductValue, 2);
+            massToSearch = getDimmerAdductMass(monoisotopicWeight, adductValue, 2);
         } else if (AdductList.TRIMER_3.contains(adduct)) {
-            massToSearch = getDimmerAdductMass(monoisotopic_weight, adductValue, 3);
+            massToSearch = getDimmerAdductMass(monoisotopicWeight, adductValue, 3);
         } else {
-            massToSearch = monoisotopic_weight - adductValue;
+            massToSearch = monoisotopicWeight - adductValue;
         }
         return massToSearch;
     }
@@ -295,9 +295,13 @@ public class AdductProcessing {
      * @return
      */
     private static Double getAdductValue(String adductName, IonizationMode ionizationMode) {
-
         Map<String, String> provisionalMap = getAdductMapByIonizationMode(ionizationMode);
         String adductValue = provisionalMap.get(adductName);;
+
+        if (adductValue == null || adductValue.trim().isEmpty()) {
+            throw new IllegalArgumentException("Adduct value not found or is invalid for: " + adductName);
+        }
+
         double adductDouble = Double.parseDouble(adductValue);
         return adductDouble;
     }

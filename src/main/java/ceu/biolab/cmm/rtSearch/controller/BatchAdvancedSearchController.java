@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.rtSearch.api;
+package ceu.biolab.cmm.rtSearch.controller;
 
 
 import ceu.biolab.cmm.rtSearch.dto.BatchAdvancedSearchRequestDTO;

@@ -59,10 +59,10 @@ public class AdductList {
         mapMZPositiveAdductsTMP.put("M+3Na", "-22.989218");
         mapMZPositiveAdductsTMP.put("M+H+Na", "-11.998247");
         mapMZPositiveAdductsTMP.put("M+H+K", "-19.985217");
-        //mapMZPositiveAdductsTMP.put("M+ACN+2H", "-21.52055");
+        mapMZPositiveAdductsTMP.put("M+C2H5N", "-43.04220"); //ACN+2H = C2H3N+2H
         mapMZPositiveAdductsTMP.put("M+2Na", "-22.989218");
-        //mapMZPositiveAdductsTMP.put("M+2ACN+2H", "-42.033823");
-        //mapMZPositiveAdductsTMP.put("M+3ACN+2H", "-62.547097");
+        mapMZPositiveAdductsTMP.put("M+C4H8N2", "-84.06875"); //2ACN+2H = C4H6N2+2H
+        mapMZPositiveAdductsTMP.put("M+C6H11N3", "-125.09530"); //3ACN+2H = C6H9N3+2H
         mapMZPositiveAdductsTMP.put("M+CH3OH+H", "-33.033489");
         //mapMZPositiveAdductsTMP.put("M+ACN+H", "-42.033823");
         mapMZPositiveAdductsTMP.put("M+2Na-H", "-44.97116");
