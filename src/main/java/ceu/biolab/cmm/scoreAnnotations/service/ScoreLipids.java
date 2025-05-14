@@ -55,7 +55,7 @@ public class ScoreLipids {
                     String adduct = annotationsByAdduct.getAdduct();
                     for (Annotation annotation : annotationsByAdduct.getAnnotations()) {
                         //if (annotation.getCompound() instanceof Lipid lipid) {
-                        if (annotation.getCompound().getCompoundType() == 1) {
+                        if (annotation.getCompound().getCompoundType() == 1 || annotation.getCompound() instanceof Lipid) {
                             Lipid lipid;
                             if (!(annotation.getCompound() instanceof Lipid)) {
                                 // Workaround for now in case lipid compounds are not send as Lipid objects
