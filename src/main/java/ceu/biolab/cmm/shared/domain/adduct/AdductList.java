@@ -59,23 +59,23 @@ public class AdductList {
         mapMZPositiveAdductsTMP.put("M+3Na", "-22.989218");
         mapMZPositiveAdductsTMP.put("M+H+Na", "-11.998247");
         mapMZPositiveAdductsTMP.put("M+H+K", "-19.985217");
-        mapMZPositiveAdductsTMP.put("M+ACN+2H", "-21.52055");
+        //mapMZPositiveAdductsTMP.put("M+C2H5N", "-43.04220"); //ACN+2H = C2H3N+2H
         mapMZPositiveAdductsTMP.put("M+2Na", "-22.989218");
-        mapMZPositiveAdductsTMP.put("M+2ACN+2H", "-42.033823");
-        mapMZPositiveAdductsTMP.put("M+3ACN+2H", "-62.547097");
+        //mapMZPositiveAdductsTMP.put("M+C4H8N2", "-84.06875"); //2ACN+2H = C4H6N2+2H
+        //mapMZPositiveAdductsTMP.put("M+C6H11N3", "-125.09530"); //3ACN+2H = C6H9N3+2H
         mapMZPositiveAdductsTMP.put("M+CH3OH+H", "-33.033489");
-        mapMZPositiveAdductsTMP.put("M+ACN+H", "-42.033823");
+        //mapMZPositiveAdductsTMP.put("M+ACN+H", "-42.033823");
         mapMZPositiveAdductsTMP.put("M+2Na-H", "-44.97116");
-        mapMZPositiveAdductsTMP.put("M+IsoProp+H", "-61.06534");
-        mapMZPositiveAdductsTMP.put("M+ACN+Na", "-64.015765");
+        mapMZPositiveAdductsTMP.put("M+C3H9O", "-61.06534");
+        //mapMZPositiveAdductsTMP.put("M+ACN+Na", "-64.015765");
         mapMZPositiveAdductsTMP.put("M+2K-H", "-76.91904");
         mapMZPositiveAdductsTMP.put("M+DMSO+H", "-79.02122");
-        mapMZPositiveAdductsTMP.put("M+2ACN+H", "-83.06037");
-        mapMZPositiveAdductsTMP.put("M+IsoProp+Na+H", "-84.05511");
+        //mapMZPositiveAdductsTMP.put("M+2ACN+H", "-83.06037");
+        mapMZPositiveAdductsTMP.put("M+C3H9ONa", "-84.05511");
         mapMZPositiveAdductsTMP.put("2M+NH4", "-18.033823");
         mapMZPositiveAdductsTMP.put("2M+K", "-38.963158");
-        mapMZPositiveAdductsTMP.put("2M+ACN+H", "-42.033823");
-        mapMZPositiveAdductsTMP.put("2M+ACN+Na", "-64.015765");
+        //mapMZPositiveAdductsTMP.put("2M+ACN+H", "-42.033823");
+        //mapMZPositiveAdductsTMP.put("2M+ACN+Na", "-64.015765");
         mapMZPositiveAdductsTMP.put("3M+H", "-1.007276");
         mapMZPositiveAdductsTMP.put("3M+Na", "-22.989218");
         mapMZPositiveAdductsTMP.put("M+H-2H2O", "35.0127");
@@ -87,7 +87,7 @@ public class AdductList {
         mapMZPositiveAdductsTMP.put("M+F+H", "-20.00623");
         //mapMZPositiveAdductsTMP.put("M+2", "-2.0173");
         MAPMZPOSITIVEADDUCTS = Collections.unmodifiableMap(mapMZPositiveAdductsTMP);
-        // MAPMZPOSITIVEADDUCTS = mapMZPositiveAdductsTMP;
+        MAPMZPOSITIVEADDUCTS = mapMZPositiveAdductsTMP;
     }
 
     public static Map<String, String> MAPMZNEGATIVEADDUCTS;
@@ -230,10 +230,10 @@ public class AdductList {
         possibleParents.add("M+3ACN+2H");
         possibleParents.add("M+CH3OH+H");
         possibleParents.add("M+ACN+H");
-        possibleParents.add("M+IsoProp+H");
+        possibleParents.add("M+C3H90");
         possibleParents.add("M+DMSO+H");
         possibleParents.add("M+2ACN+H");
-        possibleParents.add("M+IsoProp+Na+H");
+        possibleParents.add("M+C3H9ONa");
         possibleParents.add("2M+ACN+H");
         possibleParents.add("M+H-2H2O");
         possibleParents.add("2M+2H+3H2O");
@@ -259,7 +259,7 @@ public class AdductList {
         possibleParents.add("M+2Na");
         possibleParents.add("M+2Na-H");
         possibleParents.add("M+ACN+Na");
-        possibleParents.add("M+IsoProp+Na+H");
+        possibleParents.add("M+C3H9ONa");
         possibleParents.add("2M+ACN+Na");
         mapMZPositiveAdductsTMP.put("M+Na", possibleParents);
 
@@ -362,9 +362,9 @@ public class AdductList {
         mapMZPositiveAdductsTMP.put("M+2Na-H", possibleParents);
 
         possibleParents = new LinkedList<>();
-        possibleParents.add("M+IsoProp+Na+H");
-        possibleParents.add("M+IsoProp+H");
-        mapMZPositiveAdductsTMP.put("M+IsoProp+H", possibleParents);
+        possibleParents.add("M+C3H9ONa");
+        possibleParents.add("M+C3H9O");
+        mapMZPositiveAdductsTMP.put("M+C3H9O", possibleParents);
 
         possibleParents = new LinkedList<>();
         possibleParents.add("2M+ACN+Na");
@@ -386,8 +386,8 @@ public class AdductList {
         mapMZPositiveAdductsTMP.put("M+2ACN+H", possibleParents);
 
         possibleParents = new LinkedList<>();
-        possibleParents.add("M+IsoProp+Na+H");
-        mapMZPositiveAdductsTMP.put("M+IsoProp+Na+H", possibleParents);
+        possibleParents.add("M+C3H9ONa");
+        mapMZPositiveAdductsTMP.put("M+C3H9O", possibleParents);
 
         possibleParents = new LinkedList<>();
         possibleParents.add("M+H-2H2O");

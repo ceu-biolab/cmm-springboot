@@ -3,7 +3,6 @@ package ceu.biolab.cmm.scoreAnnotations.service;
 import java.util.List;
 import java.util.Optional;
 
-import ceu.biolab.cmm.batchAdvancedSearch.service.BatchAdvancedSearchService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -54,7 +53,16 @@ public class ScoreLipids {
                 for (AnnotationsByAdduct annotationsByAdduct : msFeature.getAnnotationsByAdducts()) {
                     String adduct = annotationsByAdduct.getAdduct();
                     for (Annotation annotation : annotationsByAdduct.getAnnotations()) {
-                        if (annotation.getCompound() instanceof Lipid lipid) {
+                        //if (annotation.getCompound() instanceof Lipid lipid) {
+                        if (annotation.getCompound().getCompoundType() == 1 || annotation.getCompound() instanceof Lipid) {
+                            Lipid lipid;
+                            if (!(annotation.getCompound() instanceof Lipid)) {
+                                // Workaround for now in case lipid compounds are not send as Lipid objects
+                                lipid = new Lipid(annotation.getCompound());
+                            }
+                            else {
+                                lipid = (Lipid) annotation.getCompound();
+                            }
                             LipidScores scores = new LipidScores();
                             annotation.addScore(scores);
                             EvaluatedLipid evaluatedLipid = new EvaluatedLipid(lipid, featureMz, featureRtValue, adduct, scores);

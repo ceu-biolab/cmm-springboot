@@ -19,6 +19,30 @@ public class Lipid extends Compound {
     // e.g. "PR010405": "PR" is category, "PR01" main class, "PR0104" subclass, "PR010405" class level 4
     public String classificationCode;
 
+    public Lipid(Compound compound) {
+        super(compound);
+        this.lipidType = compound.getLipidType();
+        this.numberChains = compound.getNumChains();
+        this.numberCarbons = compound.getNumCarbons();
+        this.numberDoubleBonds = compound.getDoubleBonds();
+        this.classificationCode = compound.getLipidMapsClassifications().stream()
+            .findFirst()
+            .map(lmc -> {
+                // Construct the classification code from the available fields
+                // If classLevel4 is available, use that as the most specific classification
+                if (lmc.getClassLevel4() != null && !lmc.getClassLevel4().isEmpty()) {
+                    return lmc.getClassLevel4();
+                } else if (lmc.getSubClass() != null && !lmc.getSubClass().isEmpty()) {
+                    return lmc.getSubClass();
+                } else if (lmc.getMainClass() != null && !lmc.getMainClass().isEmpty()) {
+                    return lmc.getMainClass();
+                } else {
+                    return lmc.getCategory();
+                }
+            })
+            .orElse(null);
+    }
+
     public Optional<String> getCategory() {
         if (classificationCode == null || classificationCode.length() < 2) {
             return Optional.empty();
