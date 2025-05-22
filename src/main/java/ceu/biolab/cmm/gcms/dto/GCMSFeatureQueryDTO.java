@@ -13,7 +13,7 @@ import java.util.Optional;
 
 //IT CONTAINS THE INFO THAT I USE TO FIND THE INFO THAT I WANT OF THE DATABASE
 @Data //set, get,...
-@SuperBuilder //constructor
+@SuperBuilder //constructor //usar en el resto de clases relacionadas con esta!!
 public class GCMSFeatureQueryDTO {
     //private List<Peak> peaks;
     //private double RI;

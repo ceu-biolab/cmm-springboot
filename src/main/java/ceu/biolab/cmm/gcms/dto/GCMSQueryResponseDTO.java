@@ -5,22 +5,19 @@ import ceu.biolab.cmm.gcms.domain.DerivatizationMethod;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //CONTAINS WHAT I HAVE FOUND ON THE DATA BASE --> GCMSCompound?
 @Data
 public class GCMSQueryResponseDTO {
-    //private String compound_name;
-    /*TODO poner toda info compounds!!!!
-    private Integer pathwayId;
-    private String pathwayName;
-    private String pathwayMap;*/
+
     private int compoundId;
     private String compoundName;
     private double monoisotopicMass;
     private String formula;
     private String formulaType;
-    private int compoundType;
+    private String compoundType; //en ccs esta como int con un to do para cambiar a string
     private Double logP;
     private Integer pathwayId;
     private String pathwayName;
@@ -41,7 +38,10 @@ public class GCMSQueryResponseDTO {
         this.GCMS_Spectrum = GCMS_Spectrum;
     }*/
 
-    public GCMSQueryResponseDTO(int compoundId, String compoundName, double monoisotopicMass, double dbCcs, String formula, String formulaType, int compoundType, Double logP, String pathwayName, Integer pathwayId, String pathwayMap) {
+    public GCMSQueryResponseDTO(int compoundId, String compoundName, double monoisotopicMass, double dbCcs,
+                                String formula, String formulaType, String compoundType, Double logP,
+                                String pathwayName, Integer pathwayId, String pathwayMap,
+                                DerivatizationMethod dertype, ColumnType gcColumn, List<Spectrum> GCMS_Spectrum) {
         this.compoundId = compoundId;
         this.compoundName = compoundName;
         this.monoisotopicMass = monoisotopicMass;
@@ -52,6 +52,9 @@ public class GCMSQueryResponseDTO {
         this.pathwayName = pathwayName;
         this.pathwayId = pathwayId;
         this.pathwayMap = pathwayMap;
+        this.dertype = dertype;
+        this.gcColumn = gcColumn;
+        this.GCMS_Spectrum = GCMS_Spectrum != null ? GCMS_Spectrum : new ArrayList<>();
     }
 
     public GCMSQueryResponseDTO() {
@@ -60,11 +63,14 @@ public class GCMSQueryResponseDTO {
         this.monoisotopicMass = 0.0;
         this.formula = "";
         this.formulaType = "";
-        this.compoundType = -1;
+        this.compoundType = "";
         this.logP = null;  // Changed from 0.0 to null
         this.pathwayName = "";
         this.pathwayId = -1;
         this.pathwayMap = "";
+        this.dertype = DerivatizationMethod.METHYL_CHLOROFORMATES;
+        this.gcColumn = ColumnType.STANDARD_NON_POLAR;
+        this.GCMS_Spectrum = new ArrayList<>();
     }
 
 

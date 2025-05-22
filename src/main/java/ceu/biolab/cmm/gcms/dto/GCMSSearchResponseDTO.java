@@ -20,10 +20,6 @@ public class GCMSSearchResponseDTO {
         }
     }
 
-    public List<GCMSFeature> getGcmsFeatures() {
-        return gcmsFeatures;
-    }
-
     public void setGcmsFeatures(List<GCMSFeature> gcmsFeatures) {
         this.gcmsFeatures = gcmsFeatures != null ? gcmsFeatures : new ArrayList<>();
     }

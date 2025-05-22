@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.List;
 
 @Data
-@SuperBuilder // TODO SUPERBUILDER -> HECHO
+@SuperBuilder
 public class GCMSCompound extends Compound {
 
     // GET ALL THE INFORMATION FROM THE DATABASE
