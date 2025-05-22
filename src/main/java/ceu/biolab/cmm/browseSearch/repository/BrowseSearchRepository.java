@@ -3,8 +3,8 @@ package ceu.biolab.cmm.browseSearch.repository;
 
 import ceu.biolab.cmm.browseSearch.dto.BrowseQueryResponse;
 import ceu.biolab.cmm.browseSearch.dto.BrowseSearchRequest;
-import ceu.biolab.cmm.rtSearch.dto.CompoundDTO;
-import ceu.biolab.cmm.rtSearch.model.compound.CompoundMapper;
+import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
+import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
