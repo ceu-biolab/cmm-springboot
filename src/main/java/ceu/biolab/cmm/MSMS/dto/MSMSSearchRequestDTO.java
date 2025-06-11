@@ -1,10 +1,13 @@
 package ceu.biolab.cmm.MSMS.dto;
 
 import ceu.biolab.cmm.MSMS.domain.CIDEnergy;
+
 import ceu.biolab.cmm.MSMS.domain.Peak;
 import ceu.biolab.cmm.MSMS.domain.ToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.msFeature.MSFeature;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MSMSSearchRequestDTO {
@@ -28,6 +31,17 @@ public class MSMSSearchRequestDTO {
         this.adducts = adducts;
         this.spectrum = spectrum;
         this.CIDEnergy = CIDEnergy;
+    }
+
+    public MSMSSearchRequestDTO() {
+        this.precursorIonMZ = 0.0;
+        this.tolerancePrecursorIon = 0.0;
+        this.toleranceModePrecursorIon= ToleranceMode.mDA;
+        this.toleranceFragments = 0.0;
+        this.toleranceModeFragments = ToleranceMode.mDA;
+        this.ionizationMode=IonizationMode.POSITIVE;
+        this.adducts = new ArrayList<>();
+        this.spectrum = new ArrayList<>();
     }
 
     public double getPrecursorIonMZ() {

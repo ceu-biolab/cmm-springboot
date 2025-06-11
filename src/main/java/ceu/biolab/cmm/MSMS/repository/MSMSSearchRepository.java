@@ -1,12 +1,10 @@
 package ceu.biolab.cmm.MSMS.repository;
 
-import ceu.biolab.cmm.MSMS.domain.CIDEnergy;
-import ceu.biolab.cmm.MSMS.domain.MSMS;
-import ceu.biolab.cmm.MSMS.domain.Peak;
-import ceu.biolab.cmm.MSMS.domain.ToleranceMode;
+import ceu.biolab.cmm.MSMS.domain.*;
+
 import ceu.biolab.cmm.MSMS.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMS.dto.MSMSSearchResponseDTO;
-import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
+import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductList;
@@ -23,119 +21,179 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+
+
 @Repository
 public class MSMSSearchRepository {
-    private NamedParameterJdbcTemplate jdbcTemplate;
-    private ResourceLoader resourceLoader;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final ResourceLoader resourceLoader;
+
 
     @Autowired
     public MSMSSearchRepository(NamedParameterJdbcTemplate jdbcTemplate, ResourceLoader resourceLoader) {
         this.jdbcTemplate = jdbcTemplate;
         this.resourceLoader = resourceLoader;
+
     }
+
     public MSMSSearchResponseDTO findMatchingCompoundsAndSpectra(MSMSSearchRequestDTO queryData) throws IOException {
-        Double delta=0.0;
-        Double lower_bound=0.0;
-        Double upper_bound=0.0;
-
-        String resourcePath="classpath:sql/WindowSearch.sql";
-        Resource resource1=resourceLoader.getResource(resourcePath);
-        String originalSql = new String(Files.readAllBytes(Paths.get(resource1.getURI())));
-
-
-        MSMSSearchResponseDTO responseDTO= new MSMSSearchResponseDTO(new ArrayList<>(),new ArrayList<>());
-
-        Set<Compound> compoundsSet =  new HashSet<>();
-
-        Map<String, String> adductList = new HashMap<String, String>();
         if (queryData == null) {
+            throw new IllegalArgumentException("Search request cannot be null");
         }
-        if (queryData.getIonizationMode() == IonizationMode.POSITIVE) {
-            adductList = AdductList.MAPMZPOSITIVEADDUCTS;
+
+        // Build query spectrum from JSON
+        MSMSAnotation queryMsms = new MSMSAnotation();
+        queryMsms.setPrecursorMz(queryData.getPrecursorIonMZ());
+        queryMsms.setPeaks(queryData.getSpectrum());
+
+        // Prepare response containers
+        Set<Compound> compoundsSet = new HashSet<>();
+        Set<MSMSAnotation> matchedSpectra = new HashSet<>();
+        MSMSSearchResponseDTO responseDTO = new MSMSSearchResponseDTO(new ArrayList<>(), new ArrayList<>());
+
+        // Determine adduct map based on ionization mode
+        Map<String, String> adductMap;
+        switch (queryData.getIonizationMode()) {
+            case POSITIVE:
+                adductMap = AdductList.MAPMZPOSITIVEADDUCTS;
+                break;
+            case NEGATIVE:
+                adductMap = AdductList.MAPMZNEGATIVEADDUCTS;
+                break;
+            case NEUTRAL:
+                adductMap = AdductList.MAPNEUTRALADDUCTS;
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported ionization mode");
         }
-        if (queryData.getIonizationMode() == IonizationMode.NEGATIVE) {
-            adductList = AdductList.MAPMZNEGATIVEADDUCTS;
-        }
-        if (queryData.getIonizationMode() == IonizationMode.NEUTRAL) {
-            adductList = AdductList.MAPNEUTRALADDUCTS;
-        }
-        for (String queryAdduct : queryData.getAdducts()) {
-            if (adductList.containsKey(queryAdduct)) {
-                Double neutral_mass = AdductTransformer.getMonoisotopicMassFromMZ(queryData.getPrecursorIonMZ(),queryAdduct,queryData.getIonizationMode() );
-                if (queryData.getToleranceModePrecursorIon()== ToleranceMode.PPM) {
-                     delta=neutral_mass*(queryData.getTolerancePrecursorIon()/1_000_000.0);
-                }else {
-                     delta= queryData.getTolerancePrecursorIon()/1000.0;
+
+        // Load window search SQL
+        Resource windowResource = resourceLoader.getResource("classpath:sql/MSMS/WindowSearch.sql");
+        String windowSql = new String(Files.readAllBytes(Paths.get(windowResource.getURI())));
+
+        // Iterate over each adduct
+        for (String adduct : queryData.getAdducts()) {
+            if (!adductMap.containsKey(adduct)) {
+                throw new IllegalArgumentException("Adduct not found: " + adduct);
+            }
+
+            // Compute neutral mass and tolerance window
+            double neutralMass = AdductTransformer.getMonoisotopicMassFromMZ(
+                    queryData.getPrecursorIonMZ(), adduct, queryData.getIonizationMode()
+            );
+            double delta = 0.0;  // Variable para la diferencia de tolerancia
+
+            if (queryData.getToleranceModePrecursorIon() == ToleranceMode.PPM) {
+                // Tolerancia en PPM: se calcula en función del m/z
+                delta = neutralMass * (queryData.getTolerancePrecursorIon() / 1_000_000.0);
+            } else {
+                // Tolerancia en Da: se calcula de forma directa
+                delta = queryData.getTolerancePrecursorIon();
+            }
+            double lowerBound = neutralMass - delta / 2;
+            double upperBound = neutralMass + delta / 2;
+
+            // Replace bounds in SQL
+            String sql = windowSql
+                    .replace("(:lowerBound)", String.valueOf(lowerBound))
+                    .replace("(:upperBound)", String.valueOf(upperBound));
+
+            // Query compounds within mass window
+            jdbcTemplate.query(sql, rs -> {
+                while (rs.next()) {
+                    Compound compound = CompoundMapper.toCompound(
+                            CompoundMapper.fromResultSet(rs)
+                    );
+                    compoundsSet.add(compound);
+
                 }
-                lower_bound=neutral_mass-delta;
-                upper_bound=neutral_mass+delta;
-                String sqlWindow = originalSql;
-                sqlWindow = sqlWindow.replace("(:lowerBound)", lower_bound.toString());
-                sqlWindow = sqlWindow.replace("(:upperBound)", upper_bound.toString());
+                return null;
+            });
 
+            //TOdo REVIEW +
 
-                jdbcTemplate.query(sqlWindow, rs -> {
-
-                    while (rs.next()) {
-                        CompoundDTO dto = CompoundMapper.fromResultSet(rs);
-                        System.out.printf("Searching for compound that goes trhough filter: %s\n",CompoundMapper.toCompound(dto).getCompoundName());
-                        compoundsSet.add(CompoundMapper.toCompound(dto));
-                    }
-                    return compoundsSet;
-                });
+            Set<MSMSAnotation> libSpectra= new HashSet<>();
+            for (Compound compound : compoundsSet) {
+                System.out.println(compound.getCompoundName()+" mass: "+compound.getMass());
+                libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), neutralMass));
+                matchedSpectra.addAll(getMSMSWithScores(new ArrayList<>(libSpectra), queryMsms,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments()));
             }
 
         }
-        // que tiene que devolver ?? Lista de espectros pero de que tipo una clase con id y tal ??
-        Set<MSMS> featureSet = new HashSet<>();
-
-        for (Compound compound : compoundsSet) {
-            Optional<String> optMsmsId = getBestMsmsForCompound(
-                    compound.getCompoundId(),
-                    queryData.getIonizationMode(),
-                    queryData.getCIDEnergy()
-            );
-
-            if (optMsmsId.isEmpty()) continue;
-
-            String msmsId = optMsmsId.get();
-            List<Peak> peaks = getPeaksForMsms(msmsId);
-
-            MSMS feature = new MSMS();
-            feature.setCompoundId(compound.getCompoundId());
-            feature.setMsmsId(Integer.parseInt(msmsId));
-            feature.setIonizationMode(queryData.getIonizationMode());
-            feature.setVoltageEnergy(queryData.getCIDEnergy());
-            feature.setPeaks(peaks);
-
-            featureSet.add(feature);
-        }
-
-        responseDTO.setCompoundsList((List<Compound>) compoundsSet);
-        responseDTO.setMsmsList((List<MSMS>) featureSet);
+        responseDTO.setMsmsList(new ArrayList<>(matchedSpectra));
         return responseDTO;
     }
-    public Optional<String> getBestMsmsForCompound(int compoundId, IonizationMode ionMode, CIDEnergy voltage) {
-        String sql = "SELECT * FROM msms WHERE compound_id = :compoundId AND ionization_mode = :ionMode AND voltage_level = :voltage LIMIT 1";
 
-        Map<String, Object> params = Map.of(
-                "compoundId", compoundId,
-                "ionMode", ionMode.toString(),
-                "voltage", voltage
-        );
-
-        List<String> msmsIds = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("msms_id"));
-        return msmsIds.isEmpty() ? Optional.empty() : Optional.of(msmsIds.get(0));
+    public List<MSMSAnotation> getSpectraForCompounds(Compound compound,
+                                                      IonizationMode ionizationMode,
+                                                      CIDEnergy voltageEnergy,
+                                                      Double neutralMass) throws IOException {
+        Set<MSMSAnotation> msmsSet = getBestMsmsForCompound(compound, ionizationMode, voltageEnergy,neutralMass);
+        List<MSMSAnotation> spectra = new ArrayList<>();
+        for (MSMSAnotation msms : msmsSet) {
+            // Fetch precursor m/z and peaks
+            List<Peak> peaks = getPeaksForMsms(String.valueOf(msms.getMsmsId()));
+            msms.setPeaks(peaks);
+            spectra.add(msms);
+        }
+        return spectra;
     }
-    public List<Peak> getPeaksForMsms(String msmsId) {
-        String sql = "SELECT mz, intensity FROM msms_peaks WHERE msms_id = :msmsId";
 
-        Map<String, Object> params = Map.of("msmsId", msmsId);
+    public Set<MSMSAnotation> getBestMsmsForCompound(Compound compound,
+                                                     IonizationMode ionMode,
+                                                     CIDEnergy voltage,
+                                                     Double neutralMass) throws IOException {
+        Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql");
+        String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
+        sql = sql.replace("(:compound_id)", String.valueOf(compound.getCompoundId()));
 
-        return jdbcTemplate.query(sql, params, (rs, rowNum) -> {
-            Peak peak = new Peak(rs.getDouble("mz"), rs.getInt("intensity"));
+        int mode = switch (ionMode) {
+            case POSITIVE -> 1;
+            case NEGATIVE -> 2;
+            case NEUTRAL  -> 3;
+        };
+        sql = sql.replace("(:ionization_mode)", String.valueOf(mode))
+                .replace("(:voltage_level)", voltage.toString());
 
-            return peak;
+        Set<MSMSAnotation> msmsSet = new HashSet<>();
+        jdbcTemplate.query(sql, (rs, rowNum) -> {
+           if(!rs.wasNull()){
+               MSMSAnotation msms= new MSMSAnotation(compound);
+            msms.setMsmsId(rs.getInt("msms_id"));
+            msms.setPrecursorMz(neutralMass);
+             msmsSet.add(msms);}
+            return null;
         });
+        return msmsSet;
+    }
+
+    public List<Peak> getPeaksForMsms(String msmsId) throws IOException {
+        Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/PeakSearch.sql");
+        String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
+        sql = sql.replace("(:msmsId)", msmsId);
+
+        Set<Peak> peaks = new HashSet<>();
+        jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Peak pk = new Peak();
+            pk.setMz(rs.getDouble("mz"));
+            pk.setIntensity(rs.getDouble("intensity"));
+            peaks.add(pk);
+            return null;
+        });
+        return new ArrayList<>(peaks);
+    }
+
+    public List<MSMSAnotation> getMSMSWithScores(List<MSMSAnotation> libraryMsms, MSMSAnotation queryMsms, String queryTolMode, Double tolValue) throws IOException {
+        SpectrumScorer comparator = new SpectrumScorer( ToleranceMode.valueOf(queryTolMode),tolValue,2,0.5);
+        Set<MSMSAnotation> matched = new TreeSet<>();
+        for (MSMSAnotation lib : libraryMsms) {
+
+            double score = comparator.compute(SpectrumScorer.ScoreType.COSINE,lib.getPeaks(), queryMsms.getPrecursorMz(),queryMsms.getPeaks(),tolValue);
+
+            lib.setScore(score);
+                matched.add(lib);
+        }
+
+        return new ArrayList<>(matched);
     }
 }

@@ -1,0 +1,8 @@
+{
+  "precursorIonMZ": 700.5,
+  "tolerancePrecursorIon": 10,
+  "toleranceModePrecursorIon": "PPM",
+  "ionizationMode": "POSITIVE",
+  "adducts": ["[M+H]+", "[M+Na]+"],
+  "cidEnergy": 30
+}

@@ -1,9 +1,10 @@
 package ceu.biolab.cmm.MSMS.domain;
 
 public enum CIDEnergy {
-    E10(10),
-    E20(20),
-    E40(40);
+    LOW(10),
+    MED(20),
+    HIGH(40);
+    //TODO en vez de ventanas que seleccione de voltage lever el to string.
 
     private final int value;
 
@@ -20,5 +21,14 @@ public enum CIDEnergy {
             if (e.value == value) return e;
         }
         throw new IllegalArgumentException("Invalid CIDEnergy: " + value);
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        if (this == LOW) str= "low";
+        if (this == MED) str= "med";
+        if (this == HIGH) str= "high";
+        return str;
     }
 }

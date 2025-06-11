@@ -1,0 +1,38 @@
+{
+  "compoundsList": [
+    {
+      "compoundId": 12345,
+      "compoundName": "Lipid A",
+      "formula": "C41H78NO8P",
+      "otherField": "value"
+    },
+    {
+      "compoundId": 67890,
+      "compoundName": "Lipid B",
+      "formula": "C43H80NO8P",
+      "otherField": "value"
+    }
+  ],
+  "msmsList": [
+    {
+      "msmsId": 111,
+      "compoundId": 12345,
+      "ionizationMode": "POSITIVE",
+      "voltageEnergy": 30,
+      "peaks": [
+        {"mz": 700.5, "intensity": 90000},
+        {"mz": 682.5, "intensity": 70000}
+      ]
+    },
+    {
+      "msmsId": 222,
+      "compoundId": 67890,
+      "ionizationMode": "POSITIVE",
+      "voltageEnergy": 30,
+      "peaks": [
+        {"mz": 722.5, "intensity": 85000},
+        {"mz": 704.5, "intensity": 65000}
+      ]
+    }
+  ]
+}

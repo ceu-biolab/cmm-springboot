@@ -1,0 +1,1 @@
+SELECT mz, intensity FROM msms_peaks WHERE msms_id = (:msmsId);
