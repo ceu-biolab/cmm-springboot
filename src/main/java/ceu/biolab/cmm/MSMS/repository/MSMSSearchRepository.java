@@ -90,8 +90,8 @@ public class MSMSSearchRepository {
                 // Tolerancia en Da: se calcula de forma directa
                 delta = queryData.getTolerancePrecursorIon();
             }
-            double lowerBound = neutralMass - delta / 2;
-            double upperBound = neutralMass + delta / 2;
+            double lowerBound = neutralMass - delta ;
+            double upperBound = neutralMass + delta ;
 
             // Replace bounds in SQL
             String sql = windowSql
@@ -109,17 +109,14 @@ public class MSMSSearchRepository {
                 }
                 return null;
             });
-
-            //TOdo REVIEW +
-
             Set<MSMSAnotation> libSpectra= new HashSet<>();
             for (Compound compound : compoundsSet) {
-                System.out.println(compound.getCompoundName()+" mass: "+compound.getMass());
                 libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), neutralMass));
-                matchedSpectra.addAll(getMSMSWithScores(new ArrayList<>(libSpectra), queryMsms,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments()));
+                matchedSpectra.addAll(getMSMSWithScores(queryData.getScoreType(), new ArrayList<>(libSpectra), queryData,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments(),queryData.getPrecursorIonMZ()));
             }
 
         }
+        matchedSpectra=selectBestPerCompound(new ArrayList<>(matchedSpectra));
         responseDTO.setMsmsList(new ArrayList<>(matchedSpectra));
         return responseDTO;
     }
@@ -128,18 +125,18 @@ public class MSMSSearchRepository {
                                                       IonizationMode ionizationMode,
                                                       CIDEnergy voltageEnergy,
                                                       Double neutralMass) throws IOException {
-        Set<MSMSAnotation> msmsSet = getBestMsmsForCompound(compound, ionizationMode, voltageEnergy,neutralMass);
+        Set<MSMSAnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy,neutralMass);
         List<MSMSAnotation> spectra = new ArrayList<>();
         for (MSMSAnotation msms : msmsSet) {
             // Fetch precursor m/z and peaks
-            List<Peak> peaks = getPeaksForMsms(String.valueOf(msms.getMsmsId()));
-            msms.setPeaks(peaks);
+            Spectrum spectrum  = getPeaksForMsms(String.valueOf(msms.getMsmsId()));
+            msms.setPeaks(spectrum);
             spectra.add(msms);
         }
         return spectra;
     }
 
-    public Set<MSMSAnotation> getBestMsmsForCompound(Compound compound,
+    public Set<MSMSAnotation> getMsmsForCompound(Compound compound,
                                                      IonizationMode ionMode,
                                                      CIDEnergy voltage,
                                                      Double neutralMass) throws IOException {
@@ -159,7 +156,7 @@ public class MSMSSearchRepository {
         jdbcTemplate.query(sql, (rs, rowNum) -> {
            if(!rs.wasNull()){
                MSMSAnotation msms= new MSMSAnotation(compound);
-            msms.setMsmsId(rs.getInt("msms_id"));
+               msms.setMsmsId(rs.getInt("msms_id"));
             msms.setPrecursorMz(neutralMass);
              msmsSet.add(msms);}
             return null;
@@ -167,7 +164,7 @@ public class MSMSSearchRepository {
         return msmsSet;
     }
 
-    public List<Peak> getPeaksForMsms(String msmsId) throws IOException {
+    public Spectrum getPeaksForMsms(String msmsId) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/PeakSearch.sql");
         String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
         sql = sql.replace("(:msmsId)", msmsId);
@@ -180,20 +177,32 @@ public class MSMSSearchRepository {
             peaks.add(pk);
             return null;
         });
-        return new ArrayList<>(peaks);
+        return new Spectrum(new ArrayList<>(peaks));
     }
 
-    public List<MSMSAnotation> getMSMSWithScores(List<MSMSAnotation> libraryMsms, MSMSAnotation queryMsms, String queryTolMode, Double tolValue) throws IOException {
-        SpectrumScorer comparator = new SpectrumScorer( ToleranceMode.valueOf(queryTolMode),tolValue,2,0.5);
+    public List<MSMSAnotation> getMSMSWithScores(ScoreType scoreType, List<MSMSAnotation> libraryMsms, MSMSSearchRequestDTO queryMsms, String queryTolMode, Double tolValue, double precursorIonMZ) throws IOException {
+        SpectrumScorer comparator = new SpectrumScorer( ToleranceMode.valueOf(queryTolMode),tolValue,precursorIonMZ);
         Set<MSMSAnotation> matched = new TreeSet<>();
         for (MSMSAnotation lib : libraryMsms) {
-
-            double score = comparator.compute(SpectrumScorer.ScoreType.COSINE,lib.getPeaks(), queryMsms.getPrecursorMz(),queryMsms.getPeaks(),tolValue);
-
+            double score = comparator.compute(scoreType,lib.getPeaks(),queryMsms.getSpectrum());
             lib.setScore(score);
                 matched.add(lib);
         }
 
         return new ArrayList<>(matched);
     }
+    public static Set<MSMSAnotation> selectBestPerCompound(List<MSMSAnotation> allSpectra) {
+        Map<String, MSMSAnotation> best = new HashMap<>();
+        for (MSMSAnotation sp : allSpectra) {
+            best.compute(String.valueOf(sp.getCompoundId()), (id, currentBest) -> {
+                if (currentBest == null || sp.getScore() > currentBest.getScore()) {
+                    return sp;
+                } else {
+                    return currentBest;
+                }
+            });
+        }
+        return new HashSet<> (best.values());
+    }
+
 }
