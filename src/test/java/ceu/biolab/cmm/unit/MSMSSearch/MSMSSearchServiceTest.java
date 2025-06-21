@@ -1,10 +1,7 @@
 package ceu.biolab.cmm.unit.MSMSSearch;
 
-import ceu.biolab.cmm.MSMS.domain.CIDEnergy;
+import ceu.biolab.cmm.MSMS.domain.*;
 
-import ceu.biolab.cmm.MSMS.domain.MSMSAnotation;
-import ceu.biolab.cmm.MSMS.domain.Peak;
-import ceu.biolab.cmm.MSMS.domain.ToleranceMode;
 import ceu.biolab.cmm.MSMS.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMS.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.MSMS.repository.MSMSSearchRepository;
@@ -61,8 +58,9 @@ public class MSMSSearchServiceTest {
          spectrum.add(new Peak(102.401, 0.775));
         spectrum.add(new Peak(129.670, 100.000));
         spectrum.add(new Peak(146.966, 20.070));
-        request.getSpectrum().addAll(spectrum);
+        request.getSpectrum().getPeaks().addAll(spectrum);
         request.setCIDEnergy(CIDEnergy.LOW);
+        request.setScoreType(ScoreType.COSINE);
 
         MSMSSearchResponseDTO result = msmsSearchRepository.findMatchingCompoundsAndSpectra(request);
 

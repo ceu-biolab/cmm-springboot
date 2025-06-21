@@ -1,124 +1,192 @@
 package ceu.biolab.cmm.MSMS.service;
 
 import ceu.biolab.cmm.MSMS.domain.Peak;
+import ceu.biolab.cmm.MSMS.domain.ScoreType;
+import ceu.biolab.cmm.MSMS.domain.Spectrum;
 import ceu.biolab.cmm.MSMS.domain.ToleranceMode;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SpectrumScorer {
-    public enum ScoreType {COSINE, MODIFIED_COSINE}
+
 
     private final ToleranceMode tolMode;
     private final double tolValue;
-    private final double mzExp, intenExp;
+    private final double referenceMz;
 
-    public SpectrumScorer(ToleranceMode tolMode, double tolValue, double mzExp, double intenExp) {
+    public SpectrumScorer(ToleranceMode tolMode, double tolValue, double referenceMz) {
         this.tolMode = tolMode;
         this.tolValue = tolValue;
-        this.mzExp = mzExp;
-        this.intenExp = intenExp;
+        this.referenceMz = referenceMz;
     }
 
-    public double compute(ScoreType type, List<Peak> spec1, double precursor1, List<Peak> spec2, double precursor2) {
+    public double compute(ScoreType type, Spectrum spec1, Spectrum spec2)  {
         switch (type) {
             case COSINE:
-                return cosineScore(spec1, spec2).score;
-            // case MODIFIED_COSINE:
-            //   return modifiedCosine(spec1,  spec2, this.tolValue,this.tolMode==ToleranceMode.PPM);
+                return cosineScore(spec1, spec2);
+            case MODIFIED_COSINE:
+                return modifiedCosine(spec1,  spec2);
             default:
                 throw new IllegalArgumentException("Unknown score type");
         }
     }
+    // TODO repasar pq las listas no cogen toddas las intentsidades
 
-    public  static class Score {
-        private final double score;
-        private final int matches;
-        public Score(double score, int matches) {
-            this.score   = score;
-            this.matches = matches;
+    public Pair<double[], double[]> padPeaks(Spectrum specA, Spectrum specB) {
+        normalizeIntensities(specA);
+        normalizeIntensities(specB);
+
+        double[]normalizedA = specA.getPeaks().stream()
+                .mapToDouble(Peak::getIntensity)
+                .toArray();
+        double[]normalizedB = specB.getPeaks().stream()
+                .mapToDouble(Peak::getIntensity)
+                .toArray();
+        System.out.println("Normalized A: " + Arrays.toString(normalizedA));
+        System.out.println("Normalized B: " + Arrays.toString(normalizedB));
+        List<Double> mzOrder = new ArrayList<>();
+        Map<Double, Double> mapA = new LinkedHashMap<>();
+        Map<Double, Double> mapB = new HashMap<>();
+
+        // 1) Recorre specA en su orden y anota m/z + intensidad
+        for (Peak p : specA.getPeaks()) {
+            double mz = p.getMz();
+            if (!mzOrder.contains(mz)) {
+                mzOrder.add(mz);
+                mapA.put(mz, p.getIntensity());
+            } else {
+                mapA.put(mz, mapA.get(mz) + p.getIntensity());
+            }
         }
-        public double getScore()   { return score; }
-        public int    getMatches() { return matches; }
-        @Override
-        public String toString() {
-            return String.format("Score{score=%.4f, matches=%d}", score, matches);
+
+        // 2) Mapea specB pero solo guarda en mapB;  lo usaremos luego
+        for (Peak p : specB.getPeaks()) {
+            double mz = p.getMz();
+            // Si B tiene duplicados en misma m/z, sumamos intensidades
+            mapB.merge(mz, p.getIntensity(), Double::sum);
         }
+
+        // 3) Añade al final de mzOrder los m/z de B que no estaban en A
+        for (Double mz : mapB.keySet()) {
+            if (!mapA.containsKey(mz)) {
+                mzOrder.add(mz);
+            }
+        }
+
+        // 4) Construye los vectores en el orden de mzOrder
+        int n = mzOrder.size();
+        double[] vecA = new double[n];
+        double[] vecB = new double[n];
+        for (int i = 0; i < n; i++) {
+            double mz = mzOrder.get(i);
+            vecA[i] = mapA.getOrDefault(mz, 0.0);
+            vecB[i] = mapB.getOrDefault(mz, 0.0);
+        }
+
+        return Pair.of(vecA, vecB);
     }
 
+    public double obtainbinWidth() {
+        if(this.tolMode==ToleranceMode.PPM) {
+            return (tolValue / 1_000_000.0) * referenceMz;
+        } else {
+            return tolValue;
+        }
+    }
+    public double obtainMaxValue(Spectrum spec) {
+        return spec.getPeaks().stream()
+                .mapToDouble(Peak::getMz)
+                .max()
+                .orElse(1.0);
+    }
+    public double obtainMinValue(Spectrum spec) {
+        return spec.getPeaks().stream()
+                .mapToDouble(Peak::getMz)
+                .min()
+                .orElse(0.0);
+    }
+    public  double cosineScore(Spectrum specA, Spectrum specB) {
 
-        public Score cosineScore(List<Peak> spec1, List<Peak> spec2) {
-            // 1) Sort both by m/z
-            spec1.sort(Comparator.comparingDouble(Peak::getMz));
-            spec2.sort(Comparator.comparingDouble(Peak::getMz));
+        Pair<double[], double[]> padded = padPeaks(specA, specB);
+        double[] vecA = padded.getLeft();
+        double[] vecB = padded.getRight();
+        System.out.println("Vector A: " + Arrays.toString(vecA));
+        System.out.println("Vector B: " + Arrays.toString(vecB));
+        double dot = 0.0, normA = 0.0, normB = 0.0;
+        if (vecA.length != vecB.length) {
+            throw new IllegalArgumentException("Vectors must be of the same length");
+        }
+        int n = vecA.length;
+        for (int i = 0; i < n; i++) {
+            dot   += vecA[i] * vecB[i];
+            normA += vecA[i] * vecA[i];
+            normB += vecB[i] * vecB[i];
+        }
+        if (normA == 0.0 || normB == 0.0) {return 0.0;}
+        return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+    public  double modifiedCosine(Spectrum specA, Spectrum specB) {
 
-            // 2) Precompute weighted intensities and norms
-            int  n1 = spec1.size(), n2 = spec2.size();
-            double[] w1 = new double[n1], w2 = new double[n2];
-            double norm1 = 0, norm2 = 0;
-            for (int i = 0; i < n1; i++) {
-                Peak p = spec1.get(i);
-                double wi = Math.pow(p.getMz(), mzExp) * Math.pow(p.getIntensity(), intenExp);
-                w1[i] = wi;
-                norm1 += wi * wi;
-            }
-            for (int j = 0; j < n2; j++) {
-                Peak p = spec2.get(j);
-                double wi = Math.pow(p.getMz(), mzExp) * Math.pow(p.getIntensity(), intenExp);
-                w2[j] = wi;
-                norm2 += wi * wi;
-            }
-            if (norm1 == 0 || norm2 == 0) {
-                return new Score(0.0, 0);
-            }
+        normalizeIntensities(specA);
+        normalizeIntensities(specB);
 
-            // 3) Collect all candidate matches within tolerance
-            List<Match> matches = new ArrayList<>();
-            for (int i = 0; i < n1; i++) {
-                double mz1 = spec1.get(i).getMz();
-                for (int j = 0; j < n2; j++) {
-                    double mz2 = spec2.get(j).getMz();
-                    double delta = Math.abs(mz1 - mz2);
-                    double effTol = tolMode.equals(ToleranceMode.PPM)
-                            ?    ((mz1 + mz2) / 2.0) * tolValue / 1e6
-                            : tolValue;
-                    if (delta <= effTol) {
-                        double score = w1[i] * w2[j];
-                        matches.add(new Match(i, j, score));
+
+        // 2) Hacer el padding manteniendo orden de A primero, luego B-only
+        Pair<double[], double[]> padded = padPeaks(specA, specB);
+        double[] vecA = padded.getLeft();
+        double[] vecB = padded.getRight();
+
+        // 3) Reconstruir la lista de m/z en el mismo orden
+        List<Double> mzOrder = new ArrayList<>();
+        // primero los de A
+        for (Peak p : specA.getPeaks()) {
+            if (!mzOrder.contains(p.getMz())) mzOrder.add(p.getMz());
+        }
+        // luego los de B que no estaban en A
+        for (Peak p : specB.getPeaks()) {
+            if (!mzOrder.contains(p.getMz())) mzOrder.add(p.getMz());
+        }
+
+        // 4) Greedy matching sobre los vectores padded
+        boolean[] usedB = new boolean[mzOrder.size()];
+        double dot = 0, normA = 0, normB = 0;
+
+        for (int i = 0; i < mzOrder.size(); i++) {
+            double aI = vecA[i];
+            double aMz = mzOrder.get(i);
+            if (aI <= 0) continue;
+            // buscar primer j no usado cuya diferencia de m/z esté dentro de tolerancia
+            for (int j = 0; j < mzOrder.size(); j++) {
+                if (usedB[j]) continue;
+                double bMz = mzOrder.get(j);
+                if (Math.abs(aMz - bMz) <= tolValue) {
+                    double bI = vecB[j];
+                    if (bI > 0) {
+                        usedB[j] = true;
+                        dot   += aI * bI;
+                        normA += aI * aI;
+                        normB += bI * bI;
                     }
+                    break;
                 }
             }
-
-            // 4) Greedily pick the best non-overlapping matches
-            Collections.sort(matches, Comparator.comparingDouble(Match::getScore).reversed());
-            boolean[] used1 = new boolean[n1];
-            boolean[] used2 = new boolean[n2];
-            double dot = 0;
-            int    count = 0;
-            for (Match m : matches) {
-                if (!used1[m.i] && !used2[m.j]) {
-                    dot       += m.score;
-                    used1[m.i] = true;
-                    used2[m.j] = true;
-                    count++;
-                }
-            }
-
-            // 5) Normalize
-            double cosine = dot / (Math.sqrt(norm1) * Math.sqrt(norm2));
-            return new Score(cosine, count);
         }
 
-    private static class Match {
-        final int i, j;
-        final double score;
-        Match(int i, int j, double score) {
-            this.i     = i;
-            this.j     = j;
-            this.score = score;
+        if (normA == 0 || normB == 0) {
+            return 0.0;
         }
-        public double getScore() { return score; }
+        return dot / (Math.sqrt(normA) * Math.sqrt(normB));
     }
-
-
+    public void normalizeIntensities(Spectrum spec) {
+        double max = spec.getPeaks().stream()
+                .mapToDouble(Peak::getIntensity)
+                .max()
+                .orElse(1.0);
+        for (Peak p : spec.getPeaks()) {
+            p.setIntensity(p.getIntensity() / max);
+        }
+    }
 }
-

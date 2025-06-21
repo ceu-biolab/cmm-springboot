@@ -1,9 +1,7 @@
 package ceu.biolab.cmm.MSMS.dto;
 
-import ceu.biolab.cmm.MSMS.domain.CIDEnergy;
+import ceu.biolab.cmm.MSMS.domain.*;
 
-import ceu.biolab.cmm.MSMS.domain.Peak;
-import ceu.biolab.cmm.MSMS.domain.ToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.msFeature.MSFeature;
 
@@ -18,10 +16,11 @@ public class MSMSSearchRequestDTO {
     private ToleranceMode toleranceModeFragments;     // "PPM" or "mDA"
     private IonizationMode ionizationMode;             // "POSITIVE" or "NEGATIVE"
     private List<String> adducts;              // e.g., ["M+H", "M+Na"]
-    private List<Peak> spectrum;               // List of mz-intensity pairs
+    private Spectrum spectrum   ;               // List of mz-intensity pairs
     private CIDEnergy CIDEnergy;
+    private ScoreType scoreType;
 
-    public MSMSSearchRequestDTO(double precursorIonMZ, double tolerancePrecursorIon, ToleranceMode toleranceModePrecursorIon, double toleranceFragments, ToleranceMode toleranceModeFragments, IonizationMode ionizationMode, List<String> adducts, List<Peak> spectrum, CIDEnergy CIDEnergy) {
+    public MSMSSearchRequestDTO(double precursorIonMZ, double tolerancePrecursorIon, ToleranceMode toleranceModePrecursorIon, double toleranceFragments, ToleranceMode toleranceModeFragments, IonizationMode ionizationMode, List<String> adducts, Spectrum peaks, CIDEnergy CIDEnergy, ScoreType scoreType) {
         this.precursorIonMZ = precursorIonMZ;
         this.tolerancePrecursorIon = tolerancePrecursorIon;
         this.toleranceModePrecursorIon = toleranceModePrecursorIon;
@@ -29,8 +28,9 @@ public class MSMSSearchRequestDTO {
         this.toleranceModeFragments = toleranceModeFragments;
         this.ionizationMode = ionizationMode;
         this.adducts = adducts;
-        this.spectrum = spectrum;
+        this.spectrum   = peaks;
         this.CIDEnergy = CIDEnergy;
+        this.scoreType = scoreType;
     }
 
     public MSMSSearchRequestDTO() {
@@ -41,7 +41,7 @@ public class MSMSSearchRequestDTO {
         this.toleranceModeFragments = ToleranceMode.mDA;
         this.ionizationMode=IonizationMode.POSITIVE;
         this.adducts = new ArrayList<>();
-        this.spectrum = new ArrayList<>();
+        this.spectrum = new Spectrum();
     }
 
     public double getPrecursorIonMZ() {
@@ -100,11 +100,11 @@ public class MSMSSearchRequestDTO {
         this.adducts = adducts;
     }
 
-    public List<Peak> getSpectrum() {
+    public Spectrum getSpectrum() {
         return spectrum;
     }
 
-    public void setSpectrum(List<Peak> spectrum) {
+    public void setSpectrum(Spectrum spectrum) {
         this.spectrum = spectrum;
     }
 
@@ -114,5 +114,13 @@ public class MSMSSearchRequestDTO {
 
     public void setCIDEnergy(CIDEnergy CIDEnergy) {
         this.CIDEnergy = CIDEnergy;
+    }
+
+    public ScoreType getScoreType() {
+        return scoreType;
+    }
+
+    public void setScoreType(ScoreType scoreType) {
+        this.scoreType = scoreType;
     }
 }
