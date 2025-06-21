@@ -8,11 +8,11 @@ import java.util.List;
 public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation> {
 
     int msmsId;
-    List<Peak> peaks;
+    Spectrum peaks;
     Double score;
     Double precursorMz;
 
-    public MSMSAnotation(int msmsId, List<Peak> peaks, Double score, Double mass) {
+    public MSMSAnotation(int msmsId, Spectrum peaks, Double score, Double mass) {
         super(new Compound());
         this.msmsId = msmsId;
         this.peaks = peaks;
@@ -22,14 +22,14 @@ public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation>
     public MSMSAnotation(Compound compound) {
         super(compound);
         this.msmsId = 0;
-        this.peaks = new ArrayList<>();
+        this.peaks = new Spectrum();
         this.score = 0.0;
         this.precursorMz = 0.0;
     }
     public MSMSAnotation() {
         super(new Compound());
         this.msmsId  = 0;
-        this.peaks = new ArrayList<>();
+        this.peaks = new Spectrum();
         this.score = 0.0;
         this.precursorMz = 0.0;
     }
@@ -43,11 +43,11 @@ public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation>
     }
 
 
-    public List<Peak> getPeaks() {
+    public Spectrum getPeaks() {
         return peaks;
     }
 
-    public void setPeaks(List<Peak> peaks) {
+    public void setPeaks(Spectrum peaks) {
         this.peaks = peaks;
     }
 
