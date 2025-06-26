@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.gcms.domain;
+package ceu.biolab.cmm.gcmsSearch.domain;
 
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
@@ -20,7 +20,15 @@ public class GCMSCompound extends Compound {
     private double dbRT;
     private DerivatizationMethod derivatizationMethod;
     private ColumnType gcColumn;
+
+    //WITH MY CONFIGURATION A COMPOUND WILL ONLY HAVE ONE SPECTRUM PER DERIVATIZATION METHOD TYPE
     private List<Spectrum> GCMSSpectrum;
+
+    //private int gcmsSpectrumId; //Lo necesito??? -> si -> lo puse en Spectrum
+
+    /*private double mz;
+    private double intensity;*/
+
 
     /*public GCMSCompound(Compound compound, double RI, double RT, String dertype,
                         String gcColumn, List<Spectrum> GCMS_Spectrum) {
