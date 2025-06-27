@@ -111,8 +111,9 @@ public class MSMSSearchRepository {
             });
             Set<MSMSAnotation> libSpectra= new HashSet<>();
             for (Compound compound : compoundsSet) {
+                System.out.println("Searching spectra for compound: " + compound.getCompoundName() + " (ID: " + compound.getCompoundId() + ")");
                 libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), neutralMass));
-                matchedSpectra.addAll(getMSMSWithScores(queryData.getScoreType(), new ArrayList<>(libSpectra), queryData,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments(),queryData.getPrecursorIonMZ()));
+                matchedSpectra.addAll(getMSMSWithScores(queryData.getScoreType(), new ArrayList<>(libSpectra), queryData,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments()));
             }
 
         }
@@ -129,6 +130,7 @@ public class MSMSSearchRepository {
         List<MSMSAnotation> spectra = new ArrayList<>();
         for (MSMSAnotation msms : msmsSet) {
             // Fetch precursor m/z and peaks
+
             Spectrum spectrum  = getPeaksForMsms(String.valueOf(msms.getMsmsId()));
             msms.setPeaks(spectrum);
             spectra.add(msms);
@@ -174,17 +176,19 @@ public class MSMSSearchRepository {
             Peak pk = new Peak();
             pk.setMz(rs.getDouble("mz"));
             pk.setIntensity(rs.getDouble("intensity"));
+            System.out.println("Peak found: " + pk);
             peaks.add(pk);
             return null;
         });
         return new Spectrum(new ArrayList<>(peaks));
     }
 
-    public List<MSMSAnotation> getMSMSWithScores(ScoreType scoreType, List<MSMSAnotation> libraryMsms, MSMSSearchRequestDTO queryMsms, String queryTolMode, Double tolValue, double precursorIonMZ) throws IOException {
-        SpectrumScorer comparator = new SpectrumScorer( ToleranceMode.valueOf(queryTolMode),tolValue,precursorIonMZ);
+    public List<MSMSAnotation> getMSMSWithScores(ScoreType scoreType, List<MSMSAnotation> libraryMsms, MSMSSearchRequestDTO queryMsms, String queryTolMode, Double tolValue) throws IOException {
+        SpectrumScorer comparator = new SpectrumScorer( ToleranceMode.valueOf(queryTolMode),tolValue);
         Set<MSMSAnotation> matched = new TreeSet<>();
         for (MSMSAnotation lib : libraryMsms) {
             double score = comparator.compute(scoreType,lib.getPeaks(),queryMsms.getSpectrum());
+            System.out.println("Score for compound " + lib.getCompoundId() + ": " + score);
             lib.setScore(score);
                 matched.add(lib);
         }

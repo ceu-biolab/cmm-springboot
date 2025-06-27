@@ -28,7 +28,7 @@ public class TestCosine {
                 new Peak(205.0, 2.0)
         )));
 
-       SpectrumScorer instancia = new SpectrumScorer(ToleranceMode.mDA, 0.1,100); // donde tengas tu cosineScore()
+       SpectrumScorer instancia = new SpectrumScorer(ToleranceMode.mDA, 0.1); // donde tengas tu cosineScore()
 
         // Primer test: coseno perfecto
         double score1 = instancia.cosineScore(specA, specB1);

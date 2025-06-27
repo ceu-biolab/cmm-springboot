@@ -123,7 +123,7 @@ public BrowseQueryResponse findMatchingCompounds(BrowseSearchRequest queryData) 
 
                 while (rs.next()) {
                     CompoundDTO dto = CompoundMapper.fromResultSet(rs);
-                    System.out.printf("Searching for compound name and formula: %s\n",CompoundMapper.toCompound(dto).getCompoundName());
+                    System.out.printf("%s\n",CompoundMapper.toCompound(dto).getCompoundName()+" formula: "+CompoundMapper.toCompound(dto).getFormula());
                     compoundsSet.add(CompoundMapper.toCompound(dto));
                 }
                 return compoundsSet;

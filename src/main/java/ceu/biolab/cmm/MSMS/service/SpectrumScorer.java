@@ -10,17 +10,19 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.max;
+
 public class SpectrumScorer {
 
 
-    private final ToleranceMode tolMode;
-    private final double tolValue;
-    private final double referenceMz;
+    private  ToleranceMode tolMode;
+    private double tolValue;
 
-    public SpectrumScorer(ToleranceMode tolMode, double tolValue, double referenceMz) {
+
+    public SpectrumScorer(ToleranceMode tolMode, double tolValue) {
         this.tolMode = tolMode;
         this.tolValue = tolValue;
-        this.referenceMz = referenceMz;
+
     }
 
     public double compute(ScoreType type, Spectrum spec1, Spectrum spec2)  {
@@ -33,20 +35,11 @@ public class SpectrumScorer {
                 throw new IllegalArgumentException("Unknown score type");
         }
     }
-    // TODO repasar pq las listas no cogen toddas las intentsidades
 
     public Pair<double[], double[]> padPeaks(Spectrum specA, Spectrum specB) {
         normalizeIntensities(specA);
         normalizeIntensities(specB);
 
-        double[]normalizedA = specA.getPeaks().stream()
-                .mapToDouble(Peak::getIntensity)
-                .toArray();
-        double[]normalizedB = specB.getPeaks().stream()
-                .mapToDouble(Peak::getIntensity)
-                .toArray();
-        System.out.println("Normalized A: " + Arrays.toString(normalizedA));
-        System.out.println("Normalized B: " + Arrays.toString(normalizedB));
         List<Double> mzOrder = new ArrayList<>();
         Map<Double, Double> mapA = new LinkedHashMap<>();
         Map<Double, Double> mapB = new HashMap<>();
@@ -58,7 +51,7 @@ public class SpectrumScorer {
                 mzOrder.add(mz);
                 mapA.put(mz, p.getIntensity());
             } else {
-                mapA.put(mz, mapA.get(mz) + p.getIntensity());
+                mapA.put(mz, max(mapA.get(mz), p.getIntensity()));
             }
         }
 
@@ -68,53 +61,64 @@ public class SpectrumScorer {
             // Si B tiene duplicados en misma m/z, sumamos intensidades
             mapB.merge(mz, p.getIntensity(), Double::sum);
         }
-
+// todo revisar si esto es correcto, porque no se está teniendo en cuenta la tolerancia
         // 3) Añade al final de mzOrder los m/z de B que no estaban en A
-        for (Double mz : mapB.keySet()) {
-            if (!mapA.containsKey(mz)) {
-                mzOrder.add(mz);
+        for (Double mzB : mapB.keySet()) {
+            boolean matched = false;
+            for (Double mzA : mzOrder) {
+                double delta = Math.abs(mzA - mzB);
+                double tolDa = (tolMode == ToleranceMode.PPM)
+                        ? mzA * tolValue / 1_000_000.0
+                        : tolValue;
+                if (delta <= tolDa) {
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched) {
+                mzOrder.add(mzB);
             }
         }
 
-        // 4) Construye los vectores en el orden de mzOrder
         int n = mzOrder.size();
         double[] vecA = new double[n];
         double[] vecB = new double[n];
+
         for (int i = 0; i < n; i++) {
-            double mz = mzOrder.get(i);
-            vecA[i] = mapA.getOrDefault(mz, 0.0);
-            vecB[i] = mapB.getOrDefault(mz, 0.0);
-        }
+            double mzRef = mzOrder.get(i);
+            // calculamos la tolerancia en Da para este bin
+            double tolDa = (tolMode == ToleranceMode.PPM)
+                    ? mzRef * tolValue / 1_000_000.0
+                    : tolValue;
 
+            // sumamos todas las intensidades de A que entren en esa ventana
+            double sumA = 0.0;
+            for (Map.Entry<Double, Double> e : mapA.entrySet()) {
+                if (Math.abs(e.getKey() - mzRef) <= tolDa) {
+                    sumA += e.getValue();
+                }
+            }
+            vecA[i] = sumA;
+
+            // idéntico para B
+            double sumB = 0.0;
+            for (Map.Entry<Double, Double> e : mapB.entrySet()) {
+                if (Math.abs(e.getKey() - mzRef) <= tolDa) {
+                    sumB += e.getValue();
+                }
+            }
+            vecB[i] = sumB;
+        }
+        System.out.println("Mz Order: " + Arrays.toString(mzOrder.toArray()));
+        System.out.println("Vector A: " + Arrays.toString(vecA));
+        System.out.println("Vector B: " + Arrays.toString(vecB));
         return Pair.of(vecA, vecB);
-    }
-
-    public double obtainbinWidth() {
-        if(this.tolMode==ToleranceMode.PPM) {
-            return (tolValue / 1_000_000.0) * referenceMz;
-        } else {
-            return tolValue;
-        }
-    }
-    public double obtainMaxValue(Spectrum spec) {
-        return spec.getPeaks().stream()
-                .mapToDouble(Peak::getMz)
-                .max()
-                .orElse(1.0);
-    }
-    public double obtainMinValue(Spectrum spec) {
-        return spec.getPeaks().stream()
-                .mapToDouble(Peak::getMz)
-                .min()
-                .orElse(0.0);
     }
     public  double cosineScore(Spectrum specA, Spectrum specB) {
 
         Pair<double[], double[]> padded = padPeaks(specA, specB);
         double[] vecA = padded.getLeft();
         double[] vecB = padded.getRight();
-        System.out.println("Vector A: " + Arrays.toString(vecA));
-        System.out.println("Vector B: " + Arrays.toString(vecB));
         double dot = 0.0, normA = 0.0, normB = 0.0;
         if (vecA.length != vecB.length) {
             throw new IllegalArgumentException("Vectors must be of the same length");
@@ -139,7 +143,7 @@ public class SpectrumScorer {
         double[] vecA = padded.getLeft();
         double[] vecB = padded.getRight();
 
-        // 3) Reconstruir la lista de m/z en el mismo orden
+        //3) Reconstruir la lista de m/z en el mismo orden
         List<Double> mzOrder = new ArrayList<>();
         // primero los de A
         for (Peak p : specA.getPeaks()) {
@@ -183,10 +187,24 @@ public class SpectrumScorer {
     public void normalizeIntensities(Spectrum spec) {
         double max = spec.getPeaks().stream()
                 .mapToDouble(Peak::getIntensity)
-                .max()
-                .orElse(1.0);
+                .max().orElseThrow();
         for (Peak p : spec.getPeaks()) {
             p.setIntensity(p.getIntensity() / max);
         }
+    }
+
+    public ToleranceMode getTolMode() {
+        return tolMode;
+    }
+
+    public double getTolValue() {
+        return tolValue;
+    }
+
+    public void setTolMode(ToleranceMode tolMode) {
+        this.tolMode = tolMode;
+    }
+    public void setTolValue(double tolValue) {
+        this.tolValue = tolValue;
     }
 }

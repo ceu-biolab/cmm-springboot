@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Service
 public class BrowseSearchService {
@@ -40,7 +41,7 @@ public class BrowseSearchService {
 
         // Ejecución principal
         try {
-            System.out.println("Searching compound: " + request.getCompound_name());
+            System.out.println("Searching for: " + request.getCompound_name()+" with formula: " + request.getFormula()+" in databases: " + Arrays.toString(request.getDatabases().toArray()) +" and metabolite type: " + request.getMetaboliteType().name()+" with exact name: " + request.isExact_name());
             return browseSearchRepository.findMatchingCompounds(request);
         } catch (IOException e) {
             e.printStackTrace();
