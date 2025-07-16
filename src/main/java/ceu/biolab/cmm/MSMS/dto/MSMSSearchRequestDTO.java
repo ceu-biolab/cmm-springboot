@@ -3,6 +3,7 @@ package ceu.biolab.cmm.MSMS.dto;
 import ceu.biolab.cmm.MSMS.domain.*;
 
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.msFeature.MSFeature;
 
 import java.util.ArrayList;
@@ -11,16 +12,18 @@ import java.util.List;
 public class MSMSSearchRequestDTO {
     private double precursorIonMZ;
     private double tolerancePrecursorIon;
-    private ToleranceMode toleranceModePrecursorIon; // "PPM" or "mDA"
+    private MzToleranceMode toleranceModePrecursorIon; // "PPM" or "mDA"
     private double toleranceFragments;
-    private ToleranceMode toleranceModeFragments;     // "PPM" or "mDA"
+    private MzToleranceMode toleranceModeFragments;     // "PPM" or "mDA"
     private IonizationMode ionizationMode;             // "POSITIVE" or "NEGATIVE"
     private List<String> adducts;              // e.g., ["M+H", "M+Na"]
     private Spectrum spectrum   ;               // List of mz-intensity pairs
     private CIDEnergy CIDEnergy;
     private ScoreType scoreType;
 
-    public MSMSSearchRequestDTO(double precursorIonMZ, double tolerancePrecursorIon, ToleranceMode toleranceModePrecursorIon, double toleranceFragments, ToleranceMode toleranceModeFragments, IonizationMode ionizationMode, List<String> adducts, Spectrum peaks, CIDEnergy CIDEnergy, ScoreType scoreType) {
+    public MSMSSearchRequestDTO(double precursorIonMZ, double tolerancePrecursorIon, MzToleranceMode toleranceModePrecursorIon,
+                                double toleranceFragments, MzToleranceMode toleranceModeFragments, IonizationMode ionizationMode,
+                                List<String> adducts, Spectrum peaks, CIDEnergy CIDEnergy, ScoreType scoreType) {
         this.precursorIonMZ = precursorIonMZ;
         this.tolerancePrecursorIon = tolerancePrecursorIon;
         this.toleranceModePrecursorIon = toleranceModePrecursorIon;
@@ -36,9 +39,9 @@ public class MSMSSearchRequestDTO {
     public MSMSSearchRequestDTO() {
         this.precursorIonMZ = 0.0;
         this.tolerancePrecursorIon = 0.0;
-        this.toleranceModePrecursorIon= ToleranceMode.mDA;
+        this.toleranceModePrecursorIon= MzToleranceMode.MDA;
         this.toleranceFragments = 0.0;
-        this.toleranceModeFragments = ToleranceMode.mDA;
+        this.toleranceModeFragments = MzToleranceMode.MDA;
         this.ionizationMode=IonizationMode.POSITIVE;
         this.adducts = new ArrayList<>();
         this.spectrum = new Spectrum();
@@ -60,11 +63,11 @@ public class MSMSSearchRequestDTO {
         this.tolerancePrecursorIon = tolerancePrecursorIon;
     }
 
-    public ToleranceMode getToleranceModePrecursorIon() {
+    public MzToleranceMode getToleranceModePrecursorIon() {
         return toleranceModePrecursorIon;
     }
 
-    public void setToleranceModePrecursorIon(ToleranceMode toleranceModePrecursorIon) {
+    public void setToleranceModePrecursorIon(MzToleranceMode toleranceModePrecursorIon) {
         this.toleranceModePrecursorIon = toleranceModePrecursorIon;
     }
 
@@ -76,11 +79,11 @@ public class MSMSSearchRequestDTO {
         this.toleranceFragments = toleranceFragments;
     }
 
-    public ToleranceMode getToleranceModeFragments() {
+    public MzToleranceMode getToleranceModeFragments() {
         return toleranceModeFragments;
     }
 
-    public void setToleranceModeFragments(ToleranceMode toleranceModeFragments) {
+    public void setToleranceModeFragments(MzToleranceMode toleranceModeFragments) {
         this.toleranceModeFragments = toleranceModeFragments;
     }
 

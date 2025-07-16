@@ -4,12 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import ceu.biolab.cmm.MSMS.domain.Peak;
 import ceu.biolab.cmm.MSMS.domain.Spectrum;
-import ceu.biolab.cmm.MSMS.domain.ToleranceMode;
 import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,16 +20,16 @@ public class SpectrumScorerTest {
     @BeforeEach
     void setUp() {
         // We pick Da mode for simplicity and tolValue=0.1 (won't matter for these tests)
-        scorer = new SpectrumScorer(ToleranceMode.mDA, 0.5);
+        scorer = new SpectrumScorer(MzToleranceMode.MDA, 0.5);
     }
 
     @Test
     void testNormalizeSpectrum() {
         // 1) Build a spectrum with intensities [2,4,6]
         Spectrum raw = new Spectrum(List.of(
-                new Peak(100.0, 2.0),
-                new Peak(200.0, 4.0),
-                new Peak(300.0, 6.0)
+                new MSPeak(100.0, 2.0),
+                new MSPeak(200.0, 4.0),
+                new MSPeak(300.0, 6.0)
         ));
         // 2) Normalize
         scorer.normalizeIntensities(raw);
@@ -38,7 +37,7 @@ public class SpectrumScorerTest {
         // 3) Check max = 1.0
         double max = norm.getPeaks()
                 .stream()
-                .mapToDouble(Peak::getIntensity)
+                .mapToDouble(MSPeak::getIntensity)
                 .max()
                 .orElseThrow();
         assertEquals(1.0, max, 1e-9);
@@ -55,12 +54,12 @@ public class SpectrumScorerTest {
     void testCosineScoreOnSimpleCase() {
         // A = [1,2], B = [1,0] → expected cosine = (1*1+2*0)/(√5 * 1)=1/√5≈0.4472
         Spectrum specA = new Spectrum(List.of(
-                new Peak(100.0, 1.0),
-                new Peak(200.0, 2.0)
+                new MSPeak(100.0, 1.0),
+                new MSPeak(200.0, 2.0)
         ));
         Spectrum specB = new Spectrum(List.of(
-                new Peak(100.0, 1.0)
-                // no 200 m/z peak → padding to 0
+                new MSPeak(100.0, 1.0)
+                // no 200 m/z MSPeak → padding to 0
         ));
 
         double score = scorer.cosineScore(specA, specB);
@@ -72,48 +71,48 @@ public class SpectrumScorerTest {
     void testPaddingNormalizedSpectra() {
         // 1) Build raw spectra
         Spectrum spec1 = new Spectrum(List.of(
-                new Peak(74.0964258, 0.6203296461),
-                new Peak(84.08077574, 5.723794737),
-                new Peak(88.11207587, 15.92527652),
-                new Peak(182.0576709, 1.229660568),
-                new Peak(184.073321, 1.357979413),
-                new Peak(225.2576775, 3.670435487),
-                new Peak(267.2682422, 7.879446941),
-                new Peak(283.2995423, 2.132216341),
-                new Peak(285.2788068, 3.005365091),
-                new Peak(462.3342867, 1.010024938),
-                new Peak(464.3499368, 4.88356222),
-                new Peak(563.5397726, 1.035560548),
-                new Peak(565.5554226, 3.403229444),
-                new Peak(661.5166678, 1.713527115),
-                new Peak(730.6109025, 1.379876098),
-                new Peak(748.6214672, 8.370506766)
+                new MSPeak(74.0964258, 0.6203296461),
+                new MSPeak(84.08077574, 5.723794737),
+                new MSPeak(88.11207587, 15.92527652),
+                new MSPeak(182.0576709, 1.229660568),
+                new MSPeak(184.073321, 1.357979413),
+                new MSPeak(225.2576775, 3.670435487),
+                new MSPeak(267.2682422, 7.879446941),
+                new MSPeak(283.2995423, 2.132216341),
+                new MSPeak(285.2788068, 3.005365091),
+                new MSPeak(462.3342867, 1.010024938),
+                new MSPeak(464.3499368, 4.88356222),
+                new MSPeak(563.5397726, 1.035560548),
+                new MSPeak(565.5554226, 3.403229444),
+                new MSPeak(661.5166678, 1.713527115),
+                new MSPeak(730.6109025, 1.379876098),
+                new MSPeak(748.6214672, 8.370506766)
         ));
 
         Spectrum spec2 = new Spectrum(List.of(
-                new Peak(88.11207587, 15.92527652),
-                new Peak(182.0576709, 1.229660568),
-                new Peak(184.073321, 1.357979413),
-                new Peak(249.2576775, 1.069886032),
-                new Peak(267.2682422, 7.879446941),
-                new Peak(283.2995423, 2.132216341),
-                new Peak(285.2788068, 3.005365091),
-                new Peak(462.3342867, 1.010024938),
-                new Peak(464.3499368, 4.88356222),
-                new Peak(482.3605015, 2.341503307),
-                new Peak(563.5397726, 1.035560548),
-                new Peak(565.5554226, 3.403229444),
-                new Peak(661.5166678, 1.713527115),
-                new Peak(748.6214672, 8.370506766)
+                new MSPeak(88.11207587, 15.92527652),
+                new MSPeak(182.0576709, 1.229660568),
+                new MSPeak(184.073321, 1.357979413),
+                new MSPeak(249.2576775, 1.069886032),
+                new MSPeak(267.2682422, 7.879446941),
+                new MSPeak(283.2995423, 2.132216341),
+                new MSPeak(285.2788068, 3.005365091),
+                new MSPeak(462.3342867, 1.010024938),
+                new MSPeak(464.3499368, 4.88356222),
+                new MSPeak(482.3605015, 2.341503307),
+                new MSPeak(563.5397726, 1.035560548),
+                new MSPeak(565.5554226, 3.403229444),
+                new MSPeak(661.5166678, 1.713527115),
+                new MSPeak(748.6214672, 8.370506766)
         ));
 
         // 2) Normalize in place
-        SpectrumScorer scorer = new SpectrumScorer(ToleranceMode.mDA, 0.5);
+        SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 0.5);
         scorer.normalizeIntensities(spec1);
         scorer.normalizeIntensities(spec2);
 
         // 3) Pad spectra
-        Pair<double[], double[]> padded = scorer.padPeaks(spec1, spec2);
+        Pair<double[], double[]> padded = scorer.padMSPeaks(spec1, spec2);
 
         double[] vecA = padded.getLeft();
         for (int i = 0; i < vecA.length; i++) {
@@ -154,31 +153,31 @@ public class SpectrumScorerTest {
         // 1) Build raw spectra
         Spectrum spec1 = new Spectrum(List.of(
                 // Lista A
-                new Peak(100.0, 3.50),
-                new Peak(150.0, 5.10),
-                new Peak(200.0, 2.20),
-                new Peak(250.0, 6.80),
-                new Peak(300.0, 1.90),
-                new Peak(350.0, 4.30),
-                new Peak(400.0, 7.00),
-                new Peak(450.0, 3.30),
-                new Peak(500.0, 5.50),
-                new Peak(550.0, 2.70)
+                new MSPeak(100.0, 3.50),
+                new MSPeak(150.0, 5.10),
+                new MSPeak(200.0, 2.20),
+                new MSPeak(250.0, 6.80),
+                new MSPeak(300.0, 1.90),
+                new MSPeak(350.0, 4.30),
+                new MSPeak(400.0, 7.00),
+                new MSPeak(450.0, 3.30),
+                new MSPeak(500.0, 5.50),
+                new MSPeak(550.0, 2.70)
 
         ));
 
         Spectrum spec2 = new Spectrum(List.of(
                 // Lista B
-                new Peak(100.5, 3.65),
-                new Peak(149.8, 4.98),
-                new Peak(199.7, 2.30),
-                new Peak(250.2, 6.92),
-                new Peak(300.4, 1.75),
-                new Peak(349.6, 4.15),
-                new Peak(400.3, 7.10),
-                new Peak(450.1, 3.45),
-                new Peak(499.9, 5.40),
-                new Peak(550.5, 2.85)
+                new MSPeak(100.5, 3.65),
+                new MSPeak(149.8, 4.98),
+                new MSPeak(199.7, 2.30),
+                new MSPeak(250.2, 6.92),
+                new MSPeak(300.4, 1.75),
+                new MSPeak(349.6, 4.15),
+                new MSPeak(400.3, 7.10),
+                new MSPeak(450.1, 3.45),
+                new MSPeak(499.9, 5.40),
+                new MSPeak(550.5, 2.85)
 
         ));
         double score = scorer.cosineScore(spec1, spec2);
@@ -189,40 +188,40 @@ public class SpectrumScorerTest {
     void testModiCosineScore() {
         // 1) Build raw spectra
         Spectrum spec1 = new Spectrum(List.of(
-                new Peak(74.0964258, 0.6203296461),
-                new Peak(84.08077574, 5.723794737),
-                new Peak(88.11207587, 15.92527652),
-                new Peak(182.0576709, 1.229660568),
-                new Peak(184.073321, 1.357979413),
-                new Peak(225.2576775, 3.670435487),
-                new Peak(267.2682422, 7.879446941),
-                new Peak(283.2995423, 2.132216341),
-                new Peak(285.2788068, 3.005365091),
-                new Peak(462.3342867, 1.010024938),
-                new Peak(464.3499368, 4.88356222),
-                new Peak(563.5397726, 1.035560548),
-                new Peak(565.5554226, 3.403229444),
-                new Peak(661.5166678, 1.713527115),
-                new Peak(730.6109025, 1.379876098),
-                new Peak(748.6214672, 8.370506766)
+                new MSPeak(74.0964258, 0.6203296461),
+                new MSPeak(84.08077574, 5.723794737),
+                new MSPeak(88.11207587, 15.92527652),
+                new MSPeak(182.0576709, 1.229660568),
+                new MSPeak(184.073321, 1.357979413),
+                new MSPeak(225.2576775, 3.670435487),
+                new MSPeak(267.2682422, 7.879446941),
+                new MSPeak(283.2995423, 2.132216341),
+                new MSPeak(285.2788068, 3.005365091),
+                new MSPeak(462.3342867, 1.010024938),
+                new MSPeak(464.3499368, 4.88356222),
+                new MSPeak(563.5397726, 1.035560548),
+                new MSPeak(565.5554226, 3.403229444),
+                new MSPeak(661.5166678, 1.713527115),
+                new MSPeak(730.6109025, 1.379876098),
+                new MSPeak(748.6214672, 8.370506766)
 
         ));
 
         Spectrum spec2 = new Spectrum(List.of(
-                new Peak(88.11207587, 15.92527652),
-                new Peak(182.0576709, 1.229660568),
-                new Peak(184.073321, 1.357979413),
-                new Peak(249.2576775, 1.069886032),
-                new Peak(267.2682422, 7.879446941),
-                new Peak(283.2995423, 2.132216341),
-                new Peak(285.2788068, 3.005365091),
-                new Peak(462.3342867, 1.010024938),
-                new Peak(464.3499368, 4.88356222),
-                new Peak(482.3605015, 2.341503307),
-                new Peak(563.5397726, 1.035560548),
-                new Peak(565.5554226, 3.403229444),
-                new Peak(661.5166678, 1.713527115),
-                new Peak(748.6214672, 8.370506766)
+                new MSPeak(88.11207587, 15.92527652),
+                new MSPeak(182.0576709, 1.229660568),
+                new MSPeak(184.073321, 1.357979413),
+                new MSPeak(249.2576775, 1.069886032),
+                new MSPeak(267.2682422, 7.879446941),
+                new MSPeak(283.2995423, 2.132216341),
+                new MSPeak(285.2788068, 3.005365091),
+                new MSPeak(462.3342867, 1.010024938),
+                new MSPeak(464.3499368, 4.88356222),
+                new MSPeak(482.3605015, 2.341503307),
+                new MSPeak(563.5397726, 1.035560548),
+                new MSPeak(565.5554226, 3.403229444),
+                new MSPeak(661.5166678, 1.713527115),
+                new MSPeak(748.6214672, 8.370506766)
         ));
         double score = scorer.modifiedCosine(spec1, spec2);
         assertEquals(0.9424, score, 1e-4, "Cosine score between spec1 and spec2 should be approximately 0.9424");
@@ -232,45 +231,45 @@ public class SpectrumScorerTest {
     void testModifiedCosine() {
         // 1) Build raw spectra
         Spectrum spec1 = new Spectrum(List.of(
-                new Peak(74.0964258, 0.6203296461),
-                new Peak(84.08077574, 5.723794737),
-                new Peak(88.11207587, 15.92527652),
-                new Peak(182.0576709, 1.229660568),
-                new Peak(184.073321, 1.357979413),
-                new Peak(225.2576775, 3.670435487),
-                new Peak(267.2682422, 7.879446941),
-                new Peak(283.2995423, 2.132216341),
-                new Peak(285.2788068, 3.005365091),
-                new Peak(462.3342867, 1.010024938)
+                new MSPeak(74.0964258, 0.6203296461),
+                new MSPeak(84.08077574, 5.723794737),
+                new MSPeak(88.11207587, 15.92527652),
+                new MSPeak(182.0576709, 1.229660568),
+                new MSPeak(184.073321, 1.357979413),
+                new MSPeak(225.2576775, 3.670435487),
+                new MSPeak(267.2682422, 7.879446941),
+                new MSPeak(283.2995423, 2.132216341),
+                new MSPeak(285.2788068, 3.005365091),
+                new MSPeak(462.3342867, 1.010024938)
 
         ));
 
         Spectrum spec2 = new Spectrum(List.of(
-                new Peak(88.11207587, 15.92527652),
-                new Peak(182.0576709, 1.229660568),
-                new Peak(184.073321, 1.357979413),
-                new Peak(249.2576775, 1.069886032),
-                new Peak(267.2682422, 7.879446941),
-                new Peak(283.2995423, 2.132216341),
-                new Peak(285.2788068, 3.005365091),
-                new Peak(462.3342867, 1.010024938),
-                new Peak(464.3499368, 4.88356222),
-                new Peak(482.3605015, 2.341503307)
+                new MSPeak(88.11207587, 15.92527652),
+                new MSPeak(182.0576709, 1.229660568),
+                new MSPeak(184.073321, 1.357979413),
+                new MSPeak(249.2576775, 1.069886032),
+                new MSPeak(267.2682422, 7.879446941),
+                new MSPeak(283.2995423, 2.132216341),
+                new MSPeak(285.2788068, 3.005365091),
+                new MSPeak(462.3342867, 1.010024938),
+                new MSPeak(464.3499368, 4.88356222),
+                new MSPeak(482.3605015, 2.341503307)
         ));
 
         double ppmOffset = 12.0;
-        List<Peak> extra = new ArrayList<>();
+        List<MSPeak> extra = new ArrayList<>();
         // Tomamos los dos primeros picos de spec1 (o los que quieras)
-        for (Peak p : spec1.getPeaks().subList(0, 2)) {
+        for (MSPeak p : spec1.getPeaks().subList(0, 2)) {
             double delta = p.getMz() * ppmOffset / 1e6;
-            extra.add(new Peak(p.getMz() + delta, p.getIntensity()));
-            extra.add(new Peak(p.getMz() - delta, p.getIntensity()));
+            extra.add(new MSPeak(p.getMz() + delta, p.getIntensity()));
+            extra.add(new MSPeak(p.getMz() - delta, p.getIntensity()));
         }
-        List<Peak> spec2WithExtras = new ArrayList<>(spec2.getPeaks());
+        List<MSPeak> spec2WithExtras = new ArrayList<>(spec2.getPeaks());
         spec2WithExtras.addAll(extra);
         Spectrum spec2Extended = new Spectrum(spec2WithExtras);
 
-        SpectrumScorer scorer = new SpectrumScorer(ToleranceMode.PPM, 0.0);
+        SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.PPM, 0.0);
 
         // 4) Prueba para distintas tolerancias
         double[] tolerances = {10.0, 12.0, 15.0};
@@ -278,7 +277,7 @@ public class SpectrumScorerTest {
         for (double tol : tolerances) {
             scorer.setTolValue(tol);          // ajusta la tolerancia en ppm
             System.out.println("Testing modified cosine with tolerance: " + tol);
-            Pair<double[], double[]> padded = scorer.padPeaks(spec1, spec2Extended);
+            Pair<double[], double[]> padded = scorer.padMSPeaks(spec1, spec2Extended);
             double[] vecA = padded.getLeft();
             double[] vecB = padded.getRight();
             double score = scorer.modifiedCosine(spec1, spec2);
@@ -288,27 +287,27 @@ public class SpectrumScorerTest {
     void testCosine() {
         // 1) Build raw spectra
         Spectrum spec1 = new Spectrum(List.of(
-                new Peak(84.08077574, 5.723794737),
-                new Peak(88.11207587, 15.92527652),
-                new Peak(182.0576709, 1.229660568),
-                new Peak(184.073321, 1.357979413),
-                new Peak(225.2576775, 3.670435487),
-                new Peak(267.2682422, 7.879446941),
-                new Peak(283.2995423, 2.132216341),
-                new Peak(285.2788068, 3.005365091),
-                new Peak(462.3342867, 1.010024938)
+                new MSPeak(84.08077574, 5.723794737),
+                new MSPeak(88.11207587, 15.92527652),
+                new MSPeak(182.0576709, 1.229660568),
+                new MSPeak(184.073321, 1.357979413),
+                new MSPeak(225.2576775, 3.670435487),
+                new MSPeak(267.2682422, 7.879446941),
+                new MSPeak(283.2995423, 2.132216341),
+                new MSPeak(285.2788068, 3.005365091),
+                new MSPeak(462.3342867, 1.010024938)
 
         ));
 
         Spectrum spec2 = new Spectrum(List.of(
-                new Peak(88.11207587, 15.92527652),
-                new Peak(182.0576709, 1.229660568),
-                new Peak(184.073321, 1.357979413),
-                new Peak(267.2682422, 7.879446941),
-                new Peak(283.2995423, 2.132216341),
-                new Peak(285.2788068, 3.005365091),
-                new Peak(462.3342867, 1.010024938),
-                new Peak(482.3605015, 2.341503307)
+                new MSPeak(88.11207587, 15.92527652),
+                new MSPeak(182.0576709, 1.229660568),
+                new MSPeak(184.073321, 1.357979413),
+                new MSPeak(267.2682422, 7.879446941),
+                new MSPeak(283.2995423, 2.132216341),
+                new MSPeak(285.2788068, 3.005365091),
+                new MSPeak(462.3342867, 1.010024938),
+                new MSPeak(482.3605015, 2.341503307)
         ));
         double score = scorer.cosineScore(spec1, spec2);
         System.out.println("Cosine score: " + score);

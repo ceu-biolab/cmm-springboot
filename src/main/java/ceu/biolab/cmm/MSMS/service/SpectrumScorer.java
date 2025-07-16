@@ -1,25 +1,21 @@
 package ceu.biolab.cmm.MSMS.service;
 
-import ceu.biolab.cmm.MSMS.domain.Peak;
 import ceu.biolab.cmm.MSMS.domain.ScoreType;
 import ceu.biolab.cmm.MSMS.domain.Spectrum;
-import ceu.biolab.cmm.MSMS.domain.ToleranceMode;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.max;
 
 public class SpectrumScorer {
-
-
-    private  ToleranceMode tolMode;
+    private MzToleranceMode tolMode;
     private double tolValue;
 
 
-    public SpectrumScorer(ToleranceMode tolMode, double tolValue) {
+    public SpectrumScorer(MzToleranceMode tolMode, double tolValue) {
         this.tolMode = tolMode;
         this.tolValue = tolValue;
 
@@ -36,7 +32,7 @@ public class SpectrumScorer {
         }
     }
 
-    public Pair<double[], double[]> padPeaks(Spectrum specA, Spectrum specB) {
+    public Pair<double[], double[]> padMSPeaks(Spectrum specA, Spectrum specB) {
         normalizeIntensities(specA);
         normalizeIntensities(specB);
 
@@ -45,7 +41,7 @@ public class SpectrumScorer {
         Map<Double, Double> mapB = new HashMap<>();
 
         // 1) Recorre specA en su orden y anota m/z + intensidad
-        for (Peak p : specA.getPeaks()) {
+        for (MSPeak p : specA.getPeaks()) {
             double mz = p.getMz();
             if (!mzOrder.contains(mz)) {
                 mzOrder.add(mz);
@@ -56,7 +52,7 @@ public class SpectrumScorer {
         }
 
         // 2) Mapea specB pero solo guarda en mapB;  lo usaremos luego
-        for (Peak p : specB.getPeaks()) {
+        for (MSPeak p : specB.getPeaks()) {
             double mz = p.getMz();
             // Si B tiene duplicados en misma m/z, sumamos intensidades
             mapB.merge(mz, p.getIntensity(), Double::sum);
@@ -67,7 +63,7 @@ public class SpectrumScorer {
             boolean matched = false;
             for (Double mzA : mzOrder) {
                 double delta = Math.abs(mzA - mzB);
-                double tolDa = (tolMode == ToleranceMode.PPM)
+                double tolDa = (tolMode == MzToleranceMode.PPM)
                         ? mzA * tolValue / 1_000_000.0
                         : tolValue;
                 if (delta <= tolDa) {
@@ -87,7 +83,7 @@ public class SpectrumScorer {
         for (int i = 0; i < n; i++) {
             double mzRef = mzOrder.get(i);
             // calculamos la tolerancia en Da para este bin
-            double tolDa = (tolMode == ToleranceMode.PPM)
+            double tolDa = (tolMode == MzToleranceMode.PPM)
                     ? mzRef * tolValue / 1_000_000.0
                     : tolValue;
 
@@ -116,7 +112,7 @@ public class SpectrumScorer {
     }
     public  double cosineScore(Spectrum specA, Spectrum specB) {
 
-        Pair<double[], double[]> padded = padPeaks(specA, specB);
+        Pair<double[], double[]> padded = padMSPeaks(specA, specB);
         double[] vecA = padded.getLeft();
         double[] vecB = padded.getRight();
         double dot = 0.0, normA = 0.0, normB = 0.0;
@@ -139,18 +135,18 @@ public class SpectrumScorer {
 
 
         // 2) Hacer el padding manteniendo orden de A primero, luego B-only
-        Pair<double[], double[]> padded = padPeaks(specA, specB);
+        Pair<double[], double[]> padded = padMSPeaks(specA, specB);
         double[] vecA = padded.getLeft();
         double[] vecB = padded.getRight();
 
         //3) Reconstruir la lista de m/z en el mismo orden
         List<Double> mzOrder = new ArrayList<>();
         // primero los de A
-        for (Peak p : specA.getPeaks()) {
+        for (MSPeak p : specA.getPeaks()) {
             if (!mzOrder.contains(p.getMz())) mzOrder.add(p.getMz());
         }
         // luego los de B que no estaban en A
-        for (Peak p : specB.getPeaks()) {
+        for (MSPeak p : specB.getPeaks()) {
             if (!mzOrder.contains(p.getMz())) mzOrder.add(p.getMz());
         }
 
@@ -186,14 +182,14 @@ public class SpectrumScorer {
     }
     public void normalizeIntensities(Spectrum spec) {
         double max = spec.getPeaks().stream()
-                .mapToDouble(Peak::getIntensity)
+                .mapToDouble(MSPeak::getIntensity)
                 .max().orElseThrow();
-        for (Peak p : spec.getPeaks()) {
+        for (MSPeak p : spec.getPeaks()) {
             p.setIntensity(p.getIntensity() / max);
         }
     }
 
-    public ToleranceMode getTolMode() {
+    public MzToleranceMode getTolMode() {
         return tolMode;
     }
 
@@ -201,7 +197,7 @@ public class SpectrumScorer {
         return tolValue;
     }
 
-    public void setTolMode(ToleranceMode tolMode) {
+    public void setTolMode(MzToleranceMode tolMode) {
         this.tolMode = tolMode;
     }
     public void setTolValue(double tolValue) {

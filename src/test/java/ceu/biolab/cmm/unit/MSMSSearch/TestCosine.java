@@ -1,8 +1,6 @@
 package ceu.biolab.cmm.unit.MSMSSearch;
 
-import ceu.biolab.cmm.MSMS.domain.Peak;
 import ceu.biolab.cmm.MSMS.domain.Spectrum;
-import ceu.biolab.cmm.MSMS.domain.ToleranceMode;
 import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
 
 import java.util.ArrayList;

@@ -7,8 +7,10 @@ import ceu.biolab.cmm.MSMS.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -83,7 +85,7 @@ public class MSMSSearchRepository {
             );
             double delta = 0.0;  // Variable para la diferencia de tolerancia
 
-            if (queryData.getToleranceModePrecursorIon() == ToleranceMode.PPM) {
+            if (queryData.getToleranceModePrecursorIon() == MzToleranceMode.PPM) {
                 // Tolerancia en PPM: se calcula en función del m/z
                 delta = neutralMass * (queryData.getTolerancePrecursorIon() / 1_000_000.0);
             } else {
@@ -171,11 +173,11 @@ public class MSMSSearchRepository {
         String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
         sql = sql.replace("(:msmsId)", msmsId);
 
-        Set<Peak> peaks = new HashSet<>();
+        Set<MSPeak> peaks = new HashSet<>();
         jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Peak pk = new Peak();
-            pk.setMz(rs.getDouble("mz"));
-            pk.setIntensity(rs.getDouble("intensity"));
+            double mz = rs.getDouble("mz");
+            double intensity = rs.getDouble("intensity");
+            MSPeak pk = new MSPeak(mz, intensity);
             System.out.println("Peak found: " + pk);
             peaks.add(pk);
             return null;
@@ -184,7 +186,7 @@ public class MSMSSearchRepository {
     }
 
     public List<MSMSAnotation> getMSMSWithScores(ScoreType scoreType, List<MSMSAnotation> libraryMsms, MSMSSearchRequestDTO queryMsms, String queryTolMode, Double tolValue) throws IOException {
-        SpectrumScorer comparator = new SpectrumScorer( ToleranceMode.valueOf(queryTolMode),tolValue);
+        SpectrumScorer comparator = new SpectrumScorer(MzToleranceMode.valueOf(queryTolMode),tolValue);
         Set<MSMSAnotation> matched = new TreeSet<>();
         for (MSMSAnotation lib : libraryMsms) {
             double score = comparator.compute(scoreType,lib.getPeaks(),queryMsms.getSpectrum());

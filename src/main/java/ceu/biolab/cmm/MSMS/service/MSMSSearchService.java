@@ -10,7 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class MSMSSearchService {
-
     private final MSMSSearchRepository msmsSearchRepository;
 
     @Autowired
