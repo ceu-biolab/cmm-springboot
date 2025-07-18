@@ -2,71 +2,51 @@ package ceu.biolab.cmm.browseSearch.dto;
 
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import lombok.Data;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
+@Data
 public class BrowseSearchRequest {
-    private String compound_name;
+    private String compoundName;
     private String formula;
-    private List<Database> databases;
+    private Set<Database> databases;
     private MetaboliteType metaboliteType;
-    private boolean exact_name;
+    private boolean exactName;
 
-    public BrowseSearchRequest(String searchTerm, String searchFormula, List<Database> databases, MetaboliteType metaboliteType, boolean exact_name) {
-        if(searchTerm == null || searchTerm.isEmpty()) this.compound_name = "";
-        else this.compound_name = searchTerm;
-        if(searchFormula != null && !searchFormula.isEmpty()) this.formula = "";
-        else this.formula = searchFormula;
+    public BrowseSearchRequest(String searchTerm, String searchFormula, Set<Database> databases, MetaboliteType metaboliteType, boolean exactName) {
+        if(searchTerm == null || searchTerm.isEmpty()) {
+            this.compoundName = "";
+        } else this.compoundName = searchTerm;
+        if(searchFormula != null || !searchFormula.isEmpty()) {
+            this.formula = "";
+        } else this.formula = searchFormula;
         this.databases = databases;
         this.metaboliteType = metaboliteType;
-        this.exact_name = exact_name;
+        this.exactName = exactName;
     }
 
     public BrowseSearchRequest() {
-    this.compound_name = "";
-    this.formula = "";
-    this.databases = new ArrayList<>();
-    this.metaboliteType = MetaboliteType.ALL;
-    this.exact_name = false;
-        }
-
-    public String getCompound_name() {return compound_name;}
-    public void setCompound_name(String compound_name) {if(compound_name == null || compound_name.isEmpty()) this.compound_name = "";
-    else this.compound_name = compound_name;}
-
-    public String getFormula() {return formula;}
-    public void setFormula(String formula) {if(formula == null || formula.isEmpty()) this.formula = "";
-    else this.formula = formula;}
-
-    public List<Database> getDatabases() {return databases;}
-
-    public void setDatabases(List<Database> databases) {this.databases = databases;}
-
-    public MetaboliteType getMetaboliteType() {return metaboliteType;}
-    public void setMetaboliteType(MetaboliteType metaboliteType) {this.metaboliteType = metaboliteType;}
-
-    public boolean isExact_name() {
-        return exact_name;
+        this.compoundName = "";
+        this.formula = "";
+        this.databases = new HashSet<>();
+        this.metaboliteType = MetaboliteType.ALL;
+        this.exactName = false;
     }
 
-    public void setExact_name(boolean exact_name) {
-        this.exact_name = exact_name;
+    public void setCompoundName(String compound_name) {
+        if(compound_name == null || compound_name.isEmpty()) {
+            this.compoundName = "";
+        } else this.compoundName = compound_name;
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
+    public void setFormula(String formula) {
+        if(formula == null || formula.isEmpty()) {
+            this.formula = "";
+        } else this.formula = formula;
     }
 
-    @Override
-    public String toString() {
-        return "BrowseSearchRequest{" +
-                "searchTerm='" + compound_name + '\'' +
-                ", searchFormula='" + formula + '\'' +
-                ", databases=" + databases +
-                ", metaboliteType=" + metaboliteType +
-                '}';
+    public boolean isExactName() {
+        return exactName;
     }
 }

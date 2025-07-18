@@ -27,7 +27,6 @@ import java.util.Set;
 
 @Repository
     public class BrowseSearchRepository {
-
         private NamedParameterJdbcTemplate jdbcTemplate;
         private ResourceLoader resourceLoader;
 
@@ -37,94 +36,58 @@ import java.util.Set;
             this.resourceLoader = resourceLoader;
         }
 
-public BrowseQueryResponse findMatchingCompounds(BrowseSearchRequest queryData) throws IOException {
-
+        public BrowseQueryResponse findMatchingCompounds(BrowseSearchRequest queryData) throws IOException {
                 String sql = loadSqlQuery("classpath:sql/browse_compound_search_query.sql");
-
                 List<Compound> compounds = buildParams(queryData, sql);
                 return new BrowseQueryResponse(compounds);
-
         }
+
         private String loadSqlQuery(String resourcePath) throws IOException {
             Resource resource = resourceLoader.getResource(resourcePath);
             return new String(Files.readAllBytes(Paths.get(resource.getURI())));
         }
+
         private List<Compound> buildParams(BrowseSearchRequest queryData, String sql) {
             MapSqlParameterSource params = new MapSqlParameterSource();
-            List<String> databaseConditions = new ArrayList<>();
-
-            if (queryData.getDatabases().contains(Database.HMDB)) {
-                databaseConditions.add("c.hmdb_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.LIPIDMAPS)) {
-                databaseConditions.add("c.lm_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.KEGG)) {
-                databaseConditions.add("c.kegg_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.INHOUSE)) {
-                databaseConditions.add("c.in_house_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.ASPERGILLUS)) {
-                databaseConditions.add("c.aspergillus_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.FAHFA)) {
-                databaseConditions.add("c.fahfa_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.CHEBI)) {
-                databaseConditions.add("c.chebi_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.PUBCHEM)) {
-                databaseConditions.add("c.pc_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.NPATLAS)) {
-                databaseConditions.add("c.npatlas_id IS NOT NULL");
-            }
-            if (queryData.getDatabases().contains(Database.ALL)) {
-                databaseConditions.add("c.npatlas_id IS NOT NULL");
-                databaseConditions.add("c.lm_id IS NOT NULL");
-                databaseConditions.add("c.kegg_id IS NOT NULL");
-                databaseConditions.add("c.in_house_id IS NOT NULL");
-                databaseConditions.add("c.fahfa_id IS NOT NULL");
-                databaseConditions.add("c.pc_id IS NOT NULL");
-                databaseConditions.add("c.aspergillus_id IS NOT NULL");
-                databaseConditions.add("c.chebi_id IS NOT NULL");
-            }
+            List<String> databaseConditions = Database.databaseConditions(queryData.getDatabases());
             String filterCondition =  "";
 
             if (!databaseConditions.isEmpty()) {
                 filterCondition += " AND (" + String.join(" OR ", databaseConditions) + ")";
             }
 
-            int metaboliteType = 0;
-
-            if(queryData.getMetaboliteType().equals(MetaboliteType.ONLYLIPIDS)){ metaboliteType=1;};
-            filterCondition= filterCondition +" AND c.compound_type = " + metaboliteType;
+            int compoundType = 0;
+            if(queryData.getMetaboliteType().equals(MetaboliteType.ONLYLIPIDS)) {
+                compoundType=1;
+            }
+            filterCondition = filterCondition + " AND c.compound_type = " + compoundType;
             sql = sql.replace("(:databaseFilterCondition)", filterCondition);
 
+            String nameFilterBlock = "";
+            String compoundName = queryData.getCompoundName();
+            if (compoundName != null && compoundName.trim().length() >= 3) {
+                String operator = queryData.isExactName() ? "LIKE" : "ILIKE";
+                String value = queryData.isExactName() ? compoundName : "%" + compoundName + "%";
+                nameFilterBlock = "(c.compound_name IS NULL OR c.compound_name " + operator + " '" + value + "')";
+            }else{
+                sql = sql.replace("(:compoundNameFilter)", nameFilterBlock.isBlank() ? "1=1" : nameFilterBlock);
+            }
 
-            if (queryData.isExact_name()){
-                sql=sql.replace("(:exact_name)", "LIKE");
-                sql=sql.replace("(:compound_name)",queryData.getCompound_name());
-            }else {sql=sql.replace("(:exact_name)", "ILIKE");
-                sql=sql.replace("(:compound_name)","%"+queryData.getCompound_name()+"%");}
-
-            if(queryData.getCompound_name().isEmpty()){
-                sql=sql.replace("(:condition)", "");
-            }else    sql=sql.replace("(:condition)", "c.formula IS NULL OR");
-
-
-            sql=sql.replace("(:formula)", queryData.getFormula());
+            String formula = queryData.getFormula();
+            if (formula == null || formula.isBlank()) {
+                sql = sql.replace("(:formula)", "%");
+            } else {
+                sql = sql.replace("(:formula)", formula);
+            }
 
             Set<Compound> compoundsSet = new HashSet<>();
 
-
             jdbcTemplate.query(sql, params, rs -> {
-
                 while (rs.next()) {
                     CompoundDTO dto = CompoundMapper.fromResultSet(rs);
+                    Compound compound = CompoundMapper.toCompound(dto);
+                    compoundsSet.add(compound);
                     System.out.printf("%s\n",CompoundMapper.toCompound(dto).getCompoundName()+" formula: "+CompoundMapper.toCompound(dto).getFormula());
-                    compoundsSet.add(CompoundMapper.toCompound(dto));
                 }
                 return compoundsSet;
             });

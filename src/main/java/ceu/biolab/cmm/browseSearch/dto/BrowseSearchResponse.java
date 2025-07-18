@@ -1,10 +1,12 @@
 package ceu.biolab.cmm.browseSearch.dto;
 
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class BrowseSearchResponse {
     private List<Compound> compoundList;
 
@@ -15,18 +17,10 @@ public class BrowseSearchResponse {
         this.compoundList = new ArrayList<>();
     }
 
-    public List<Compound> getCompoundList() {return compoundList;}
-
-    public void setCompoundList(List<Compound> compoundList) {
-        this.compoundList = compoundList;}
-
     public void addCompound(Compound compound) {
-        if(compound!=null) this.compoundList.add(compound);}
-
-    @Override
-    public String toString() {
-        return "BrowseSearchResponse{" +
-                "compoundList=" + compoundList +
-                '}';
+        if(compound!=null) {
+            this.compoundList.add(compound);
+        }
     }
+
 }

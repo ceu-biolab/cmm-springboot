@@ -13,7 +13,6 @@ import java.util.Arrays;
 
 @Service
 public class BrowseSearchService {
-
     @Autowired
     private BrowseSearchRepository browseSearchRepository;
 
@@ -21,12 +20,12 @@ public class BrowseSearchService {
         this.browseSearchRepository = browseSearchRepository;
     }
 
-    public BrowseQueryResponse search(BrowseSearchRequest request) {
+    public BrowseQueryResponse search (BrowseSearchRequest request) {
+        String compoundName = request.getCompoundName();
+        String formula = request.getFormula();
 
-        // Validación: al menos compound_name o formula debe estar presente
-        if ((request.getCompound_name() == null || request.getCompound_name().isBlank()) &&
-                (request.getFormula() == null || request.getFormula().isBlank())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide at least a compound name or a formula.");
+        if (!hasValidName(request) && !hasValidFormula(request)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide a compound name (min 3 characters) or a formula.");
         }
 
         // Validación: bases de datos no pueden estar vacías
@@ -41,13 +40,27 @@ public class BrowseSearchService {
 
         // Ejecución principal
         try {
-            System.out.println("Searching for: " + request.getCompound_name()+" with formula: " + request.getFormula()+" in databases: " + Arrays.toString(request.getDatabases().toArray()) +" and metabolite type: " + request.getMetaboliteType().name()+" with exact name: " + request.isExact_name());
+            System.out.println("Searching for: " + request.getCompoundName() +
+                    " with formula: " + request.getFormula() +
+                    " in databases: " + Arrays.toString(request.getDatabases().toArray()) +
+                    " and metabolite type: " + request.getMetaboliteType().name() +
+                    " with exact name: " + request.isExactName());
             return browseSearchRepository.findMatchingCompounds(request);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error during compound search.");
             return new BrowseQueryResponse(); // vacío si hay error
         }
+    }
+
+    private boolean hasValidName(BrowseSearchRequest request) {
+        String name = request.getCompoundName();
+        return name != null && name.trim().length() >= 3;
+    }
+
+    private boolean hasValidFormula(BrowseSearchRequest request) {
+        String formula = request.getFormula();
+        return formula != null && !formula.isBlank();
     }
 
 }

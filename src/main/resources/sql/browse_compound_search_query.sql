@@ -1,8 +1,5 @@
 SELECT * FROM compounds_view AS c
-WHERE
-    (c.compound_name IS NULL OR c.compound_name (:exact_name) '(:compound_name)')
-AND ( (:condition) c.formula LIKE '(:formula)')
+WHERE 1=1
+  AND (:compoundNameFilter)
+  AND c.formula LIKE '(:formula)'
   (:databaseFilterCondition);
-
-
-
