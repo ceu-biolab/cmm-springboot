@@ -57,9 +57,11 @@ import java.util.Set;
             }
 
             int compoundType = 0;
+
             if(queryData.getMetaboliteType().equals(MetaboliteType.ONLYLIPIDS)) {
                 compoundType=1;
             }
+
             filterCondition = filterCondition + " AND c.compound_type = " + compoundType;
             sql = sql.replace("(:databaseFilterCondition)", filterCondition);
 
@@ -69,8 +71,9 @@ import java.util.Set;
                 String operator = queryData.isExactName() ? "LIKE" : "ILIKE";
                 String value = queryData.isExactName() ? compoundName : "%" + compoundName + "%";
                 nameFilterBlock = "(c.compound_name IS NULL OR c.compound_name " + operator + " '" + value + "')";
+                sql = sql.replace("(:compoundNameFilter)", nameFilterBlock);
             }else{
-                sql = sql.replace("(:compoundNameFilter)", nameFilterBlock.isBlank() ? "1=1" : nameFilterBlock);
+                sql = sql.replace("AND (:compoundNameFilter)", "");
             }
 
             String formula = queryData.getFormula();

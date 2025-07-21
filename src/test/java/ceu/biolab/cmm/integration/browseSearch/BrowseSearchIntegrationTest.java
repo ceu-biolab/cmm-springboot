@@ -30,7 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             Resource resource = new ClassPathResource(path);
             return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
         }
-// this is an example that should work
+
+        // this is an example that should work
         @Test
         void testBrowseSearchWithCompleteExample() throws Exception {
             String requestJson = loadJson("json/browseSearch/request1.json");
@@ -51,7 +52,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                             .content(requestJson))
                     .andExpect(status().isOk())
                     .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
-        } @Test
+        }
+
+        @Test
         void testBrowseSearchWithNullFromula() throws Exception {
             String requestJson = loadJson("json/browseSearch/request3.json");
             String expectedResponse = loadJson("json/browseSearch/response3.json");
@@ -61,6 +64,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                     .andExpect(status().isOk())
                     .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));//TODO Pq no me coge el mismo numero de valores esperados
         }
+
         @Test
         void testBrowseSearchWithNullDtabase() throws Exception {
             String requestJson = loadJson("json/browseSearch/request4.json");
@@ -71,7 +75,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                     .andDo(print())
                     .andExpect(status().isBadRequest());//
 
-            }
+        }
 
         @Test
         void testBrowseSearchWithNullMetabolite() throws Exception {

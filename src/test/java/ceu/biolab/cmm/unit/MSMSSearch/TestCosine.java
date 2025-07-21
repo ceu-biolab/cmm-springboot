@@ -2,6 +2,8 @@ package ceu.biolab.cmm.unit.MSMSSearch;
 
 import ceu.biolab.cmm.MSMS.domain.Spectrum;
 import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,22 +13,22 @@ public class TestCosine {
     public static void main(String[] args) {
         // 1) Espectro A: picos en 100 (int=1) y 200 (int=2)
         Spectrum specA = new Spectrum(new ArrayList<>(List.of(
-                new Peak(100.0, 1.0),
-                new Peak(200.0, 2.0)
+                new MSPeak(100.0, 1.0),
+                new MSPeak(200.0, 2.0)
         )
         ));
         // 2) Espectro B idéntico (debería dar cosine = 1.0)
         Spectrum specB1 = new Spectrum(new ArrayList<>(List.of(
-                new Peak(100.0, 1.0),
-                new Peak(200.0, 2.0)
+                new MSPeak(100.0, 1.0),
+                new MSPeak(200.0, 2.0)
         )));
         // 3) Espectro B con un pico “fuera de tolerancia” (200→205)
         Spectrum specB2 = new Spectrum(new ArrayList<>(List.of(
-                new Peak(100.0, 1.0),
-                new Peak(205.0, 2.0)
+                new MSPeak(100.0, 1.0),
+                new MSPeak(205.0, 2.0)
         )));
 
-       SpectrumScorer instancia = new SpectrumScorer(ToleranceMode.mDA, 0.1); // donde tengas tu cosineScore()
+       SpectrumScorer instancia = new SpectrumScorer(MzToleranceMode.MDA, 0.1); // donde tengas tu cosineScore()
 
         // Primer test: coseno perfecto
         double score1 = instancia.cosineScore(specA, specB1);

@@ -23,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @SpringBootTest
@@ -51,9 +53,9 @@ public class BrowseSearchServiceTest {
 
         BrowseSearchRequest query = new BrowseSearchRequest ();
         query.setFormula("C6H12O6");
-        List<Database> list=new ArrayList<>();
-        list.add(Database.ALL);
-        query.setDatabases(list);
+        Set<Database> databaseList=new HashSet<>();
+        databaseList.add(Database.ALL);
+        query.setDatabases(databaseList);
         query.setMetaboliteType(MetaboliteType.ALL);
         query.setExactName(false);
        BrowseQueryResponse results = browseSearchService.search(query);
@@ -75,9 +77,9 @@ public class BrowseSearchServiceTest {
         BrowseSearchRequest query = new BrowseSearchRequest ();
         query.setFormula("C6H12O6 ");
         query.setCompoundName("glucose");
-        List<Database> databaseList = new ArrayList<>();
+        Set<Database> databaseList=new HashSet<>();
         databaseList.add(Database.ALL);
-        query.setDatabases(databaseList );
+        query.setDatabases(databaseList);
         query.setMetaboliteType(MetaboliteType.ALL);
         query.setExactName(true);
 
@@ -91,8 +93,9 @@ public class BrowseSearchServiceTest {
         BrowseSearchRequest query = new BrowseSearchRequest ();
         query.setFormula("C6H12O6 ");
         query.setCompoundName("glucose");
-        List<Database> databaseList = new ArrayList<>();
-        query.setDatabases(databaseList );
+        Set<Database> databaseList=new HashSet<>();
+        databaseList.add(Database.ALL);
+        query.setDatabases(databaseList);
         query.setMetaboliteType(MetaboliteType.ALL);
         query.setExactName(true);
 
@@ -107,7 +110,7 @@ public class BrowseSearchServiceTest {
         BrowseSearchRequest query = new BrowseSearchRequest ();
         query.setFormula("C6H12O6 ");
         query.setCompoundName("glucose");
-        List<Database> databaseList = new ArrayList<>();
+        Set<Database> databaseList=new HashSet<>();
         databaseList.add(Database.ALL);
         query.setDatabases(databaseList );
         query.setMetaboliteType(null);

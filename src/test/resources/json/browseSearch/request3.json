@@ -1,7 +1,7 @@
 {
-  "compound_name": "glucose",
+  "compoundName": "glucose",
   "formula": null,
   "databases": ["ALL"],
   "metaboliteType": "ALL",
-  "exact_name": false
+  "exactName": false
 }
