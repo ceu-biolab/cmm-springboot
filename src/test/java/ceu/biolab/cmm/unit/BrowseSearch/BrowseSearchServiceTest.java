@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 
@@ -65,11 +66,22 @@ public class BrowseSearchServiceTest {
     @Test
     public void testSearchWithoutFormula() {
         BrowseSearchRequest query = new BrowseSearchRequest ();
-        query.setCompoundName(null);
-        BrowseQueryResponse results = browseSearchService.search(query);
+        query.setCompoundName(null);  // Ni nombre válido ni fórmula
 
-        assertTrue(results.getCompoundlist().isEmpty(), "should not break when name is null" +
-                "");
+        assertThrows(ResponseStatusException.class, () -> {
+            browseSearchService.search(query);
+        }, "Should throw when both compound name and formula are missing");
+    }
+
+
+    @Test
+    public void testSearchWithoutFormulaShouldThrow() {
+        BrowseSearchRequest query = new BrowseSearchRequest();
+        query.setCompoundName(null);  // Ni formula ni nombre válido
+
+        assertThrows(ResponseStatusException.class, () -> {
+            browseSearchService.search(query);
+        }, "Should throw when both compound name and formula are missing");
     }
     @Test
     public void testSearchWithCorrect() throws IOException {

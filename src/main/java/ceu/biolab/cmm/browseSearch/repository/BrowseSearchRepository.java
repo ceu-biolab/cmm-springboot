@@ -70,7 +70,7 @@ import java.util.Set;
             if (compoundName != null && compoundName.trim().length() >= 3) {
                 String operator = queryData.isExactName() ? "LIKE" : "ILIKE";
                 String value = queryData.isExactName() ? compoundName : "%" + compoundName + "%";
-                nameFilterBlock = "(c.compound_name IS NULL OR c.compound_name " + operator + " '" + value + "')";
+                nameFilterBlock = "(c.compound_name " + operator + " '" + value + "')";
                 sql = sql.replace("(:compoundNameFilter)", nameFilterBlock);
             }else{
                 sql = sql.replace("AND (:compoundNameFilter)", "");

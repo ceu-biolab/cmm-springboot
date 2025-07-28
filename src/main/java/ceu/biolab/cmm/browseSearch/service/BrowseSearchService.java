@@ -3,6 +3,7 @@ package ceu.biolab.cmm.browseSearch.service;
 import ceu.biolab.cmm.browseSearch.dto.BrowseQueryResponse;
 import ceu.biolab.cmm.browseSearch.dto.BrowseSearchRequest;
 import ceu.biolab.cmm.browseSearch.repository.BrowseSearchRepository;
+import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,8 @@ public class BrowseSearchService {
 
         // Validación: metaboliteType obligatorio
         if (request.getMetaboliteType() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide a metabolite type.");
+            //throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide a metabolite type.");
+            request.setMetaboliteType(MetaboliteType.ALL);
         }
 
         // Ejecución principal

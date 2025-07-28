@@ -1,10 +1,12 @@
 package ceu.biolab.cmm.MSMS.domain;
 
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Spectrum {
     private List<MSPeak> peaks;
 
@@ -13,14 +15,6 @@ public class Spectrum {
     }
 
     public Spectrum(List<MSPeak> peaks) {
-        this.peaks = peaks;
-    }
-
-    public List<MSPeak> getPeaks() {
-        return peaks;
-    }
-
-    public void setPeaks(List<MSPeak> peaks) {
         this.peaks = peaks;
     }
 }

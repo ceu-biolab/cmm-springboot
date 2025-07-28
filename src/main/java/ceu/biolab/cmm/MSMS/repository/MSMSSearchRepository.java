@@ -11,6 +11,7 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -22,8 +23,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
-
 
 @Repository
 public class MSMSSearchRepository {
@@ -54,20 +53,7 @@ public class MSMSSearchRepository {
         MSMSSearchResponseDTO responseDTO = new MSMSSearchResponseDTO(new ArrayList<>(), new ArrayList<>());
 
         // Determine adduct map based on ionization mode
-        Map<String, String> adductMap;
-        switch (queryData.getIonizationMode()) {
-            case POSITIVE:
-                adductMap = AdductList.MAPMZPOSITIVEADDUCTS;
-                break;
-            case NEGATIVE:
-                adductMap = AdductList.MAPMZNEGATIVEADDUCTS;
-                break;
-            case NEUTRAL:
-                adductMap = AdductList.MAPNEUTRALADDUCTS;
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported ionization mode");
-        }
+        Map<String, String> adductMap = AdductProcessing.getAdductMapByIonizationMode(queryData.getIonizationMode());
 
         // Load window search SQL
         Resource windowResource = resourceLoader.getResource("classpath:sql/MSMS/WindowSearch.sql");
@@ -194,9 +180,9 @@ public class MSMSSearchRepository {
             lib.setScore(score);
                 matched.add(lib);
         }
-
         return new ArrayList<>(matched);
     }
+
     public static Set<MSMSAnotation> selectBestPerCompound(List<MSMSAnotation> allSpectra) {
         Map<String, MSMSAnotation> best = new HashMap<>();
         for (MSMSAnotation sp : allSpectra) {

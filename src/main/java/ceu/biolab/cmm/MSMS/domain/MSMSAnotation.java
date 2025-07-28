@@ -1,16 +1,19 @@
 package ceu.biolab.cmm.MSMS.domain;
 
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 //TODO creado esta clase pq no se muy bien a dnd tienen que ir los espectros encontrados y no he encontrado ninguna clase con esos parametros
+
+@Data
 public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation> {
 
-    int msmsId;
-    Spectrum peaks;
-    Double score;
-    Double precursorMz;
+    private int msmsId;
+    private Spectrum peaks;
+    private Double score;
+    private Double precursorMz;
 
     public MSMSAnotation(int msmsId, Spectrum peaks, Double score, Double mass) {
         super(new Compound());
@@ -34,37 +37,6 @@ public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation>
         this.precursorMz = 0.0;
     }
 
-    public int getMsmsId() {
-        return msmsId;
-    }
-
-    public void setMsmsId(int msmsId) {
-        this.msmsId = msmsId;
-    }
-
-
-    public Spectrum getPeaks() {
-        return peaks;
-    }
-
-    public void setPeaks(Spectrum peaks) {
-        this.peaks = peaks;
-    }
-
-    public Double getScore() {
-        return score;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
-    }
-
-    public Double getPrecursorMz() {
-        return precursorMz;
-    }
-    public void setPrecursorMz(double precursorMz) {
-        this.precursorMz = precursorMz;
-    }
     public MSMSAnotation getMSMS(){
         return new MSMSAnotation(this);
     }
@@ -75,30 +47,5 @@ public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation>
         // O podrías ordenar por score:
         // return Double.compare(o.score, this.score); // descendente
     }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MSMSAnotation)) return false;
-        MSMSAnotation other = (MSMSAnotation) o;
-        return( this.msmsId == other.msmsId&& this.getCompoundId()==other.getCompoundId() );
-    }
-
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(msmsId);
-    }
-    @Override
-    public String toString() {
-        if (this.getMsmsId() != 0) {
-            return "MSMS{" +
-                    ", msmsId=" + msmsId +
-                    ", peaks=" + peaks +
-                    ", score=" + score +
-                    '}';
-        }
-        else return "empty MSMS";
-    }
-
-
 
 }

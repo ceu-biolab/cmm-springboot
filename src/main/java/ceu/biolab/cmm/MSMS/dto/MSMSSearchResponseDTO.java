@@ -2,25 +2,23 @@ package ceu.biolab.cmm.MSMS.dto;
 
 import ceu.biolab.cmm.MSMS.domain.MSMSAnotation;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MSMSSearchResponseDTO { ;
-    List<MSMSAnotation> msmsList;
+@Data
+public class MSMSSearchResponseDTO {
+    private List<Compound> compoundList;
+    private List<MSMSAnotation> msmsList;
 
-    public MSMSSearchResponseDTO(List<Compound> compoundsList,List<MSMSAnotation> msmsList) {
-
+    public MSMSSearchResponseDTO(List<Compound> compoundsList, List<MSMSAnotation> msmsList) {
+        this.compoundList = compoundsList;
         this.msmsList=msmsList;
     }
 
     public MSMSSearchResponseDTO() {
-    }
-
-    public void setMsmsList(List<MSMSAnotation> msmsList) {
-        this.msmsList = msmsList;
-    }
-
-    public List<MSMSAnotation> getMsmsList() {
-        return msmsList;
+        this.compoundList = new ArrayList<>();
+        this.msmsList = new ArrayList<>();
     }
 }

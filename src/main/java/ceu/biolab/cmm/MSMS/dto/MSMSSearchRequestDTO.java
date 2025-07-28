@@ -5,10 +5,12 @@ import ceu.biolab.cmm.MSMS.domain.*;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.msFeature.MSFeature;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class MSMSSearchRequestDTO {
     private double precursorIonMZ;
     private double tolerancePrecursorIon;
@@ -47,83 +49,4 @@ public class MSMSSearchRequestDTO {
         this.spectrum = new Spectrum();
     }
 
-    public double getPrecursorIonMZ() {
-        return precursorIonMZ;
-    }
-
-    public void setPrecursorIonMZ(double precursorIonMZ) {
-        this.precursorIonMZ = precursorIonMZ;
-    }
-
-    public double getTolerancePrecursorIon() {
-        return tolerancePrecursorIon;
-    }
-
-    public void setTolerancePrecursorIon(double tolerancePrecursorIon) {
-        this.tolerancePrecursorIon = tolerancePrecursorIon;
-    }
-
-    public MzToleranceMode getToleranceModePrecursorIon() {
-        return toleranceModePrecursorIon;
-    }
-
-    public void setToleranceModePrecursorIon(MzToleranceMode toleranceModePrecursorIon) {
-        this.toleranceModePrecursorIon = toleranceModePrecursorIon;
-    }
-
-    public double getToleranceFragments() {
-        return toleranceFragments;
-    }
-
-    public void setToleranceFragments(double toleranceFragments) {
-        this.toleranceFragments = toleranceFragments;
-    }
-
-    public MzToleranceMode getToleranceModeFragments() {
-        return toleranceModeFragments;
-    }
-
-    public void setToleranceModeFragments(MzToleranceMode toleranceModeFragments) {
-        this.toleranceModeFragments = toleranceModeFragments;
-    }
-
-    public IonizationMode getIonizationMode() {
-        return ionizationMode;
-    }
-
-    public void setIonizationMode(IonizationMode ionizationMode) {
-        this.ionizationMode = ionizationMode;
-    }
-
-    public List<String> getAdducts() {
-        return adducts;
-    }
-
-    public void setAdducts(List<String> adducts) {
-        this.adducts = adducts;
-    }
-
-    public Spectrum getSpectrum() {
-        return spectrum;
-    }
-
-    public void setSpectrum(Spectrum spectrum) {
-        this.spectrum = spectrum;
-    }
-
-    public CIDEnergy getCIDEnergy() {
-        return CIDEnergy;
-    }
-
-    public void setCIDEnergy(CIDEnergy CIDEnergy) {
-        this.CIDEnergy = CIDEnergy;
-    }
-
-    public ScoreType getScoreType() {
-        return scoreType;
-    }
-
-    public void setScoreType(ScoreType scoreType) {
-        this.scoreType = scoreType;
-    }
 }
