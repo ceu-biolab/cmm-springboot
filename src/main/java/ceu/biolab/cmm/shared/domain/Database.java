@@ -17,7 +17,6 @@ public enum Database {
     NPATLAS("npatlas")
     ;
 
-
     private final String name;
 
     Database(String name) {
