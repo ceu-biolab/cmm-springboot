@@ -1,6 +1,5 @@
 package ceu.biolab.cmm.gcmsSearch.domain;
 
-import ceu.biolab.cmm.shared.domain.msFeature.Peak;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -13,10 +12,12 @@ import java.util.Optional;
 public class GCMSFeature {
 
     //private List<Peak> gcmsSpectrum; // CHANGE FOR SPECTRUM-> done
-    /*TODO ?????
-    private List<Spectrum> gcmsSpectrum;
-    private double RI;
-    private Optional<Double> RT;*/
+
+    //private List<Spectrum> gcmsSpectrumExperimental; //TODO 1 o son varios?
+    private Spectrum gcmsSpectrumExperimental;
+
+    private double RIExperimental;
+    //private Optional<Double> RT;
 
     private List<GCMSAnnotation> gcmsAnnotations;
 
@@ -28,7 +29,7 @@ public class GCMSFeature {
         this.gcmsAnnotations = gcmsAnnotations != null ? gcmsAnnotations : new ArrayList<>();
     }*/
 
-    /*//todo -> gcmsAnotation
+    /*
     public int cosinefunction(List<GCMSAnnotation> gcmsAnnotations){
         int score=0;
         return score;

@@ -4,12 +4,18 @@ import lombok.Data;
 
 import java.util.Optional;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Data
+@SuperBuilder
 public class Peak {
     private double mzValue;
     private double intensity;
 
+    public Peak(){
+        this.mzValue = -1;
+        this.intensity = -1;
+    }
 
     public Peak(double mzValue, double intensity) {
         this.mzValue = mzValue;

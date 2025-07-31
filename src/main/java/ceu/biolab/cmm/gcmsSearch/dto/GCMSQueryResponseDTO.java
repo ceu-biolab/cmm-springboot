@@ -2,6 +2,7 @@ package ceu.biolab.cmm.gcmsSearch.dto;
 
 import ceu.biolab.cmm.gcmsSearch.domain.ColumnType;
 import ceu.biolab.cmm.gcmsSearch.domain.DerivatizationMethod;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -14,17 +15,20 @@ import java.util.List;
 @SuperBuilder
 public class GCMSQueryResponseDTO {
 
+    //TODO añadir resto info -> hecho
     private int compoundId;
     private String compoundName;
     private double monoisotopicMass;
     private String formula;
+    FormulaType formulaType;
+    Double logP;
 
     private DerivatizationMethod dertype;
     private ColumnType gcColumn;
     private List<Spectrum> GCMSSpectrum = null;
 
     private double RI;
-    private double RT;
+    //private double RT;
 
     //GCMSCompound gcmsCompound;
 
@@ -42,7 +46,7 @@ public class GCMSQueryResponseDTO {
         this.gcColumn = gcColumn;
         this.GCMSSpectrum = GCMSSpectrum != null ? GCMSSpectrum : new ArrayList<>();
         this.RI = RI;
-        this.RT = RT;
+        //this.RT = RT;
     }
 
     public GCMSQueryResponseDTO() {
@@ -54,7 +58,7 @@ public class GCMSQueryResponseDTO {
         this.gcColumn = ColumnType.STANDARD_NON_POLAR;
         this.GCMSSpectrum = new ArrayList<>();
         this.RI = -1;
-        this.RT = -1;
+        //this.RT = -1;
     }
 
 

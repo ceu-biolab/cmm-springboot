@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CompoundGCMSController {
 
     @Autowired
-    private GCMSSearchService compoundGCMSService; //TODO crearla y poner contenido
+    private GCMSSearchService compoundGCMSService;
 
     @PostMapping("/gcms")
     public GCMSSearchResponseDTO getCompoundsByRITolerance(@RequestBody GCMSSearchRequestDTO request) {

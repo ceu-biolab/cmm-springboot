@@ -16,8 +16,10 @@ public class GCMSCompound extends Compound {
     // ENUM COLUMN_TYPE
     // PARA ESE DERIVADO TIENE UN RI de BBDDy
 
+    //TODO añadir el resto ->not here -> is at Compound
+
     private double dbRI;
-    private double dbRT;
+    //private double dbRT;
     private DerivatizationMethod derivatizationMethod;
     private ColumnType gcColumn;
 

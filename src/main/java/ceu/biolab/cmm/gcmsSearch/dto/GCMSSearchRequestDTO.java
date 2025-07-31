@@ -13,8 +13,8 @@ import java.util.List;
 //THIS IS WHAT THE USER IS USING TO FIND THE COMPOUNDS
 public class GCMSSearchRequestDTO {
 
-    //necesito aaqui el spectro? -> no
-    //private List<Spectrum> gcmsSpectrum; //Group of Spectra
+    //private List<Spectrum> gcmsSpectrumExperimental; //Group of Spectra
+    private Spectrum gcmsSpectrumExperimental;
 
     private double retentionIndex;
     private double retentionIndexTolerance;
@@ -23,9 +23,10 @@ public class GCMSSearchRequestDTO {
     private ColumnType columnType;
 
 
-    public GCMSSearchRequestDTO(List<Spectrum> gcmsSpectrum, double retentionIndex, double retentionIndexTolerance,
+    public GCMSSearchRequestDTO(/*List<Spectrum> gcmsSpectrum*/
+                                Spectrum gcmsSpectrum, double retentionIndex, double retentionIndexTolerance,
                                 DerivatizationMethod derivatizationMethod, ColumnType columnType) {
-        //this.gcmsSpectrum = gcmsSpectrum != null ? gcmsSpectrum : new ArrayList<>();
+        this.gcmsSpectrumExperimental = gcmsSpectrum != null ? gcmsSpectrum : new Spectrum();
         this.retentionIndex = retentionIndex;
         this.retentionIndexTolerance = retentionIndexTolerance;
         this.derivatizationMethod = derivatizationMethod != null ? derivatizationMethod : derivatizationMethod.METHYL_CHLOROFORMATE;
@@ -34,14 +35,14 @@ public class GCMSSearchRequestDTO {
 
 
     public void setGcmsSpectrum(List<Spectrum> gcmsSpectrum) {
-        //this.gcmsSpectrum = gcmsSpectrum != null ? gcmsSpectrum : new ArrayList<>();
+        //this.gcmsSpectrumExperimental = gcmsSpectrum != null ? gcmsSpectrum : new ArrayList<>();
     }
 
     //MUST BE >0
     public void setRetentionIndexTolerance(double retentionIndexTolerance) {
         //this.retentionIndexTolerance = retentionIndexTolerance;
         if (retentionIndexTolerance < 0) {
-            throw new IllegalArgumentException("retentionIndexTolerance must be non-negative");
+            throw new IllegalArgumentException("retentionIndexTolerance must be positive");
         }
         this.retentionIndexTolerance = retentionIndexTolerance;
     }

@@ -1,6 +1,7 @@
 package ceu.biolab.cmm.gcmsSearch.domain;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
+import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -10,13 +11,15 @@ import java.util.Optional;
 @Data
 @SuperBuilder
 public class GCMSAnnotation /*extends Annotation*/ {
+    //TODO MAPA COMPOUND SCORE
     private GCMSCompound gcmsCompound;
     //private GCMSCompoundAll gcmsCompoundAll;
     private double gcmsCosineScore; // calculation of the msmsCosineScore based on the input data vs database data
+
     private double experimentalRI; // is the one that the user use
     private double deltaRI; //experimental - dbRI
-    private Optional<Double> experimentalRT;
-    private Optional<Double> deltaRT;
+    //private Optional<Double> experimentalRT;
+    //private Optional<Double> deltaRT;
 
     /*public GCMSAnnotation(Compound compound, GCMSCompound gcmsCompound,
                           double msmsCosineScore, double deltaRI, Optional<Double> deltaRT) {
@@ -43,8 +46,13 @@ public class GCMSAnnotation /*extends Annotation*/ {
         this.deltaRT = Optional.of(deltaRT);
     }*/
 
-    public void cosineScoreFunction(){
+    //TODO not the correct function
+    public void cosineScoreFunction(Spectrum gcmsSpectrumExperimental){
         int score=0;
+        int sizeListgcmsCompundSpectrum = this.gcmsCompound.getGCMSSpectrum().size();
+        for (int i=0; i<sizeListgcmsCompundSpectrum; i++){
+            Spectrum gcmsSpectrumCompound = this.gcmsCompound.getGCMSSpectrum().get(i);
+        }
         //return score;
         this.gcmsCosineScore = score;
     }
