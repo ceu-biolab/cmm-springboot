@@ -8,12 +8,13 @@ import java.util.List;
 
 @Data
 public class Spectrum {
+    private Double precursorMz;
     private List<MSPeak> peaks;
     public Spectrum() {
         this.peaks = new ArrayList<>();
     }
-    public Spectrum(List<MSPeak> peaks) {
+    public Spectrum(Double precursorMz, List<MSPeak> peaks) {
+        this.precursorMz = precursorMz;
         this.peaks = peaks;
     }
-
 }

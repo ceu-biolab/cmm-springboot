@@ -6,16 +6,14 @@ import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-//TODO creado esta clase pq no se muy bien a dnd tienen que ir los espectros encontrados y no he encontrado ninguna clase con esos parametros
-
 @Data
 public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation> {
+    private int msmsID;
     private CMMCompound compound;
     private Adduct adduct;
     private Double deltaPPMPrecursorIon;
     private Double MSMSCosineScore;
+    private Spectrum spectrum;
 
 
     @Override

@@ -43,13 +43,13 @@ public class MSMSSearchRepository {
 
         // Build query spectrum from JSON
         MSMSAnotation queryMsms = new MSMSAnotation();
-        queryMsms.setPrecursorMz(queryData.getPrecursorIonMZ());
-        queryMsms.setPeaks(queryData.getFragmentsMZsIntensities());
+        Spectrum querySpectrum = new Spectrum(queryData.getPrecursorIonMZ(), queryData.getFragmentsMZsIntensities().getPeaks());
+        queryMsms.setSpectrum(querySpectrum);
 
         // Prepare response containers
         Set<Compound> compoundsSet = new HashSet<>();
         Set<MSMSAnotation> matchedSpectra = new HashSet<>();
-        MSMSSearchResponseDTO responseDTO = new MSMSSearchResponseDTO(new ArrayList<>(), new ArrayList<>());
+        MSMSSearchResponseDTO responseDTO = new MSMSSearchResponseDTO(new ArrayList<>());
 
         // Determine adduct map based on ionization mode
         Map<String, String> adductMap = AdductProcessing.getAdductMapByIonizationMode(queryData.getIonizationMode());
@@ -92,34 +92,32 @@ public class MSMSSearchRepository {
                             CompoundMapper.fromResultSet(rs)
                     );
                     compoundsSet.add(compound);
-
                 }
                 return null;
             });
+
             Set<MSMSAnotation> libSpectra= new HashSet<>();
             for (Compound compound : compoundsSet) {
                 System.out.println("Searching spectra for compound: " + compound.getCompoundName() + " (ID: " + compound.getCompoundId() + ")");
                 libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), neutralMass));
-                matchedSpectra.addAll(getMSMSWithScores(queryData.getScoreType(), new ArrayList<>(libSpectra), queryData,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments()));
             }
-
+            matchedSpectra.addAll(getMSMSWithScores(queryData.getScoreType(), new ArrayList<>(libSpectra), queryData,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments()));
         }
+
         matchedSpectra=selectBestPerCompound(new ArrayList<>(matchedSpectra));
         responseDTO.setMsmsList(new ArrayList<>(matchedSpectra));
+
         return responseDTO;
     }
 
-    public List<MSMSAnotation> getSpectraForCompounds(Compound compound,
-                                                      IonizationMode ionizationMode,
-                                                      CIDEnergy voltageEnergy,
-                                                      Double neutralMass) throws IOException {
+    public List<MSMSAnotation> getSpectraForCompounds(Compound compound, IonizationMode ionizationMode,
+                                                      CIDEnergy voltageEnergy, Double neutralMass) throws IOException {
         Set<MSMSAnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy,neutralMass);
         List<MSMSAnotation> spectra = new ArrayList<>();
         for (MSMSAnotation msms : msmsSet) {
             // Fetch precursor m/z and peaks
-
-            Spectrum spectrum  = getPeaksForMsms(String.valueOf(msms.getMsmsId()));
-            msms.setPeaks(spectrum);
+            Spectrum spectrum  = getPeaksForMsms(String.valueOf(msms.getMsmsID()));
+            msms.setSpectrum(spectrum);
             spectra.add(msms);
         }
         return spectra;
@@ -144,11 +142,10 @@ public class MSMSSearchRepository {
         Set<MSMSAnotation> msmsSet = new HashSet<>();
         jdbcTemplate.query(sql, (rs, rowNum) -> {
            if(!rs.wasNull()){
-               MSMSAnotation msms= new MSMSAnotation(compound);
-               msms.setMsmsId(rs.getInt("msms_id"));
-            msms.setPrecursorMz(neutralMass);
-             msmsSet.add(msms);}
-            return null;
+                MSMSAnotation msms= new MSMSAnotation(compound);
+                msms.setPrecursorMz(neutralMass);
+                msmsSet.add(msms);}
+                return null;
         });
         return msmsSet;
     }
