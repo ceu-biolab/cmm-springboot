@@ -8,7 +8,6 @@ import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
@@ -45,7 +44,7 @@ public class MSMSSearchRepository {
         // Build query spectrum from JSON
         MSMSAnotation queryMsms = new MSMSAnotation();
         queryMsms.setPrecursorMz(queryData.getPrecursorIonMZ());
-        queryMsms.setPeaks(queryData.getSpectrum());
+        queryMsms.setPeaks(queryData.getFragmentsMZsIntensities());
 
         // Prepare response containers
         Set<Compound> compoundsSet = new HashSet<>();
@@ -175,7 +174,7 @@ public class MSMSSearchRepository {
         SpectrumScorer comparator = new SpectrumScorer(MzToleranceMode.valueOf(queryTolMode),tolValue);
         Set<MSMSAnotation> matched = new TreeSet<>();
         for (MSMSAnotation lib : libraryMsms) {
-            double score = comparator.compute(scoreType,lib.getPeaks(),queryMsms.getSpectrum());
+            double score = comparator.compute(scoreType,lib.getPeaks(),queryMsms.getFragmentsMZsIntensities());
             System.out.println("Score for compound " + lib.getCompoundId() + ": " + score);
             lib.setScore(score);
                 matched.add(lib);

@@ -4,7 +4,6 @@ import ceu.biolab.cmm.MSMS.domain.*;
 
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.msFeature.MSFeature;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.List;
 
 @Data
 public class MSMSSearchRequestDTO {
+    private CIDEnergy CIDEnergy;
     private double precursorIonMZ;
     private double tolerancePrecursorIon;
     private MzToleranceMode toleranceModePrecursorIon; // "PPM" or "mDA"
@@ -19,13 +19,13 @@ public class MSMSSearchRequestDTO {
     private MzToleranceMode toleranceModeFragments;     // "PPM" or "mDA"
     private IonizationMode ionizationMode;             // "POSITIVE" or "NEGATIVE"
     private List<String> adducts;              // e.g., ["M+H", "M+Na"]
-    private Spectrum spectrum   ;               // List of mz-intensity pairs
-    private CIDEnergy CIDEnergy;
+    private Spectrum fragmentsMZsIntensities;   // List of mz-intensity pairs
     private ScoreType scoreType;
 
-    public MSMSSearchRequestDTO(double precursorIonMZ, double tolerancePrecursorIon, MzToleranceMode toleranceModePrecursorIon,
+    public MSMSSearchRequestDTO(CIDEnergy CIDEnergy, double precursorIonMZ, double tolerancePrecursorIon, MzToleranceMode toleranceModePrecursorIon,
                                 double toleranceFragments, MzToleranceMode toleranceModeFragments, IonizationMode ionizationMode,
-                                List<String> adducts, Spectrum peaks, CIDEnergy CIDEnergy, ScoreType scoreType) {
+                                List<String> adducts, Spectrum fragmentsMZsIntensities, ScoreType scoreType) {
+        this.CIDEnergy = CIDEnergy;
         this.precursorIonMZ = precursorIonMZ;
         this.tolerancePrecursorIon = tolerancePrecursorIon;
         this.toleranceModePrecursorIon = toleranceModePrecursorIon;
@@ -33,12 +33,12 @@ public class MSMSSearchRequestDTO {
         this.toleranceModeFragments = toleranceModeFragments;
         this.ionizationMode = ionizationMode;
         this.adducts = adducts;
-        this.spectrum   = peaks;
-        this.CIDEnergy = CIDEnergy;
+        this.fragmentsMZsIntensities = fragmentsMZsIntensities;
         this.scoreType = scoreType;
     }
 
     public MSMSSearchRequestDTO() {
+        this.CIDEnergy = ceu.biolab.cmm.MSMS.domain.CIDEnergy.MED;
         this.precursorIonMZ = 0.0;
         this.tolerancePrecursorIon = 0.0;
         this.toleranceModePrecursorIon= MzToleranceMode.MDA;
@@ -46,7 +46,8 @@ public class MSMSSearchRequestDTO {
         this.toleranceModeFragments = MzToleranceMode.MDA;
         this.ionizationMode=IonizationMode.POSITIVE;
         this.adducts = new ArrayList<>();
-        this.spectrum = new Spectrum();
+        this.fragmentsMZsIntensities = new Spectrum();
+        this.scoreType = ScoreType.COSINE;
     }
 
 }

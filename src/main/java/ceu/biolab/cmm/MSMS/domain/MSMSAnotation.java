@@ -1,5 +1,8 @@
 package ceu.biolab.cmm.MSMS.domain;
 
+import ceu.biolab.Adduct;
+import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
+import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.Data;
 
@@ -9,43 +12,26 @@ import java.util.List;
 
 @Data
 public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation> {
+    private CMMCompound compound;
+    private Adduct adduct;
+    private Double deltaPPMPrecursorIon;
+    private Double MSMSCosineScore;
 
-    private int msmsId;
-    private Spectrum peaks;
-    private Double score;
-    private Double precursorMz;
 
-    public MSMSAnotation(int msmsId, Spectrum peaks, Double score, Double mass) {
-        super(new Compound());
-        this.msmsId = msmsId;
-        this.peaks = peaks;
-        this.score = score;
-        this.precursorMz = mass;
-    }
-    public MSMSAnotation(Compound compound) {
-        super(compound);
-        this.msmsId = 0;
-        this.peaks = new Spectrum();
-        this.score = 0.0;
-        this.precursorMz = 0.0;
-    }
-    public MSMSAnotation() {
-        super(new Compound());
-        this.msmsId  = 0;
-        this.peaks = new Spectrum();
-        this.score = 0.0;
-        this.precursorMz = 0.0;
-    }
+    @Override
+    public int compareTo(MSMSAnotation other) {
+        int scoreComparison = Double.compare(
+                other.getMSMSCosineScore() != null ? other.getMSMSCosineScore() : 0.0,
+                this.MSMSCosineScore != null ? this.MSMSCosineScore : 0.0
+        );
 
-    public MSMSAnotation getMSMS(){
-        return new MSMSAnotation(this);
-    }
+        if (scoreComparison != 0) {
+            return scoreComparison;
+        }
 
-    public int compareTo(MSMSAnotation o) {
-        // Por ejemplo: ordena por msmsId
-        return Integer.compare(this.msmsId, o.msmsId);
-        // O podrías ordenar por score:
-        // return Double.compare(o.score, this.score); // descendente
+        return Double.compare(
+                this.deltaPPMPrecursorIon != null ? this.deltaPPMPrecursorIon : Double.MAX_VALUE,
+                other.getDeltaPPMPrecursorIon() != null ? other.getDeltaPPMPrecursorIon() : Double.MAX_VALUE
+        );
     }
-
 }

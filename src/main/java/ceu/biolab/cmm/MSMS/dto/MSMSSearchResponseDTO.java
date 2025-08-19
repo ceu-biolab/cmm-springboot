@@ -9,16 +9,13 @@ import java.util.List;
 
 @Data
 public class MSMSSearchResponseDTO {
-    private List<Compound> compoundList;
     private List<MSMSAnotation> msmsList;
 
-    public MSMSSearchResponseDTO(List<Compound> compoundsList, List<MSMSAnotation> msmsList) {
-        this.compoundList = compoundsList;
+    public MSMSSearchResponseDTO(List<MSMSAnotation> msmsList) {
         this.msmsList=msmsList;
     }
 
     public MSMSSearchResponseDTO() {
-        this.compoundList = new ArrayList<>();
         this.msmsList = new ArrayList<>();
     }
 }

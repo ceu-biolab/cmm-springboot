@@ -1,8 +1,11 @@
 {
+  "cidEnergy": 30,
   "precursorIonMZ": 700.5,
   "tolerancePrecursorIon": 10,
   "toleranceModePrecursorIon": "PPM",
+  //fragments mzs + intensity: 46.77, 56; 70.57, 100, etc...) donde el JSON será un objeto fragment con dos atributos: mz e intensidad
+  "toleranceFragments": 10,
+  "toleranceModeFragments": "PPM",
   "ionizationMode": "POSITIVE",
-  "adducts": "[M+H]+",
-  "cidEnergy": 30
+  "adducts": "[M+H]+"
 }
