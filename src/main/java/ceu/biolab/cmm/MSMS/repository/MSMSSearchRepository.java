@@ -8,6 +8,7 @@ import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
@@ -47,7 +48,7 @@ public class MSMSSearchRepository {
         queryMsms.setSpectrum(querySpectrum);
 
         // Prepare response containers
-        Set<Compound> compoundsSet = new HashSet<>();
+        Set<CMMCompound> compoundsSet = new HashSet<>();
         Set<MSMSAnotation> matchedSpectra = new HashSet<>();
         MSMSSearchResponseDTO responseDTO = new MSMSSearchResponseDTO(new ArrayList<>());
 
@@ -97,7 +98,7 @@ public class MSMSSearchRepository {
             });
 
             Set<MSMSAnotation> libSpectra= new HashSet<>();
-            for (Compound compound : compoundsSet) {
+            for (CMMCompound compound : compoundsSet) {
                 System.out.println("Searching spectra for compound: " + compound.getCompoundName() + " (ID: " + compound.getCompoundId() + ")");
                 libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), neutralMass));
             }
@@ -110,7 +111,7 @@ public class MSMSSearchRepository {
         return responseDTO;
     }
 
-    public List<MSMSAnotation> getSpectraForCompounds(Compound compound, IonizationMode ionizationMode,
+    public List<MSMSAnotation> getSpectraForCompounds(CMMCompound compound, IonizationMode ionizationMode,
                                                       CIDEnergy voltageEnergy, Double neutralMass) throws IOException {
         Set<MSMSAnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy,neutralMass);
         List<MSMSAnotation> spectra = new ArrayList<>();
@@ -123,10 +124,8 @@ public class MSMSSearchRepository {
         return spectra;
     }
 
-    public Set<MSMSAnotation> getMsmsForCompound(Compound compound,
-                                                     IonizationMode ionMode,
-                                                     CIDEnergy voltage,
-                                                     Double neutralMass) throws IOException {
+    public Set<MSMSAnotation> getMsmsForCompound(CMMCompound compound, IonizationMode ionMode,
+                                                 CIDEnergy voltage, Double neutralMass) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql");
         String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
         sql = sql.replace("(:compound_id)", String.valueOf(compound.getCompoundId()));
@@ -171,9 +170,9 @@ public class MSMSSearchRepository {
         SpectrumScorer comparator = new SpectrumScorer(MzToleranceMode.valueOf(queryTolMode),tolValue);
         Set<MSMSAnotation> matched = new TreeSet<>();
         for (MSMSAnotation lib : libraryMsms) {
-            double score = comparator.compute(scoreType,lib.getPeaks(),queryMsms.getFragmentsMZsIntensities());
+            double score = comparator.compute(scoreType,lib.getSpectrum(),queryMsms.getFragmentsMZsIntensities());
             System.out.println("Score for compound " + lib.getCompoundId() + ": " + score);
-            lib.setScore(score);
+            lib.setMSMSCosineScore(score);
                 matched.add(lib);
         }
         return new ArrayList<>(matched);
@@ -183,7 +182,7 @@ public class MSMSSearchRepository {
         Map<String, MSMSAnotation> best = new HashMap<>();
         for (MSMSAnotation sp : allSpectra) {
             best.compute(String.valueOf(sp.getCompoundId()), (id, currentBest) -> {
-                if (currentBest == null || sp.getScore() > currentBest.getScore()) {
+                if (currentBest == null || sp.getMSMSCosineScore() > currentBest.getMSMSCosineScore()) {
                     return sp;
                 } else {
                     return currentBest;
