@@ -29,7 +29,6 @@ public class MSMSSearchRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final ResourceLoader resourceLoader;
 
-
     @Autowired
     public MSMSSearchRepository(NamedParameterJdbcTemplate jdbcTemplate, ResourceLoader resourceLoader) {
         this.jdbcTemplate = jdbcTemplate;
@@ -48,7 +47,7 @@ public class MSMSSearchRepository {
         queryMsms.setSpectrum(querySpectrum);
 
         // Prepare response containers
-        Set<CMMCompound> compoundsSet = new HashSet<>();
+        Set<Compound> compoundsSet = new HashSet<>();
         Set<MSMSAnotation> matchedSpectra = new HashSet<>();
         MSMSSearchResponseDTO responseDTO = new MSMSSearchResponseDTO(new ArrayList<>());
 
@@ -69,7 +68,7 @@ public class MSMSSearchRepository {
             double neutralMass = AdductTransformer.getMonoisotopicMassFromMZ(
                     queryData.getPrecursorIonMZ(), adduct, queryData.getIonizationMode()
             );
-            double delta = 0.0;  // Variable para la diferencia de tolerancia
+            double delta;  // Variable para la diferencia de tolerancia
 
             if (queryData.getToleranceModePrecursorIon() == MzToleranceMode.PPM) {
                 // Tolerancia en PPM: se calcula en función del m/z
@@ -98,9 +97,9 @@ public class MSMSSearchRepository {
             });
 
             Set<MSMSAnotation> libSpectra= new HashSet<>();
-            for (CMMCompound compound : compoundsSet) {
+            for (Compound compound : compoundsSet) {
                 System.out.println("Searching spectra for compound: " + compound.getCompoundName() + " (ID: " + compound.getCompoundId() + ")");
-                libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), neutralMass));
+                libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), neutralMass, querySpectrum.getPrecursorMz()));
             }
             matchedSpectra.addAll(getMSMSWithScores(queryData.getScoreType(), new ArrayList<>(libSpectra), queryData,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments()));
         }
@@ -111,21 +110,21 @@ public class MSMSSearchRepository {
         return responseDTO;
     }
 
-    public List<MSMSAnotation> getSpectraForCompounds(CMMCompound compound, IonizationMode ionizationMode,
-                                                      CIDEnergy voltageEnergy, Double neutralMass) throws IOException {
-        Set<MSMSAnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy,neutralMass);
+    public List<MSMSAnotation> getSpectraForCompounds(Compound compound, IonizationMode ionizationMode,
+                                                      CIDEnergy voltageEnergy, Double neutralMass, Double queryMz) throws IOException {
+        Set<MSMSAnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy,neutralMass, queryMz);
         List<MSMSAnotation> spectra = new ArrayList<>();
         for (MSMSAnotation msms : msmsSet) {
             // Fetch precursor m/z and peaks
-            Spectrum spectrum  = getPeaksForMsms(String.valueOf(msms.getMsmsID()));
+            Spectrum spectrum = getPeaksForMsms(msms.getMsmsID(), msms.getSpectrum().getPrecursorMz());
             msms.setSpectrum(spectrum);
             spectra.add(msms);
         }
         return spectra;
     }
 
-    public Set<MSMSAnotation> getMsmsForCompound(CMMCompound compound, IonizationMode ionMode,
-                                                 CIDEnergy voltage, Double neutralMass) throws IOException {
+    public Set<MSMSAnotation> getMsmsForCompound(Compound compound, IonizationMode ionMode,
+                                                 CIDEnergy voltage, Double neutralMass, Double queryMz) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql");
         String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
         sql = sql.replace("(:compound_id)", String.valueOf(compound.getCompoundId()));
@@ -141,20 +140,29 @@ public class MSMSSearchRepository {
         Set<MSMSAnotation> msmsSet = new HashSet<>();
         jdbcTemplate.query(sql, (rs, rowNum) -> {
            if(!rs.wasNull()){
-                MSMSAnotation msms= new MSMSAnotation(compound);
-                msms.setPrecursorMz(neutralMass);
-                msmsSet.add(msms);}
-                return null;
+               MSMSAnotation msms = new MSMSAnotation();
+               msms.setCompound(compound);
+               msms.setMsmsID(rs.getInt("msms_id"));
+
+               Spectrum spectrum = new Spectrum(neutralMass, new ArrayList<>());
+               msms.setSpectrum(spectrum);
+
+               double deltaPPM = ((queryMz - neutralMass) / neutralMass) * 1_000_000.0;
+               msms.setDeltaPPMPrecursorIon(deltaPPM);
+
+               msmsSet.add(msms);
+           }
+            return null;
         });
         return msmsSet;
     }
 
-    public Spectrum getPeaksForMsms(String msmsId) throws IOException {
+    public Spectrum getPeaksForMsms(int msmsId, Double precursorMz) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/PeakSearch.sql");
         String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
-        sql = sql.replace("(:msmsId)", msmsId);
+        sql = sql.replace("(:msmsId)", String.valueOf(msmsId));
 
-        Set<MSPeak> peaks = new HashSet<>();
+        List<MSPeak> peaks = new ArrayList<>();
         jdbcTemplate.query(sql, (rs, rowNum) -> {
             double mz = rs.getDouble("mz");
             double intensity = rs.getDouble("intensity");
@@ -163,7 +171,8 @@ public class MSMSSearchRepository {
             peaks.add(pk);
             return null;
         });
-        return new Spectrum(new ArrayList<>(peaks));
+
+        return new Spectrum(precursorMz, peaks);
     }
 
     public List<MSMSAnotation> getMSMSWithScores(ScoreType scoreType, List<MSMSAnotation> libraryMsms, MSMSSearchRequestDTO queryMsms, String queryTolMode, Double tolValue) throws IOException {

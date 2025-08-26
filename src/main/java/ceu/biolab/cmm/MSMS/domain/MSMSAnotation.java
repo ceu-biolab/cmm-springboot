@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class MSMSAnotation extends Compound implements Comparable<MSMSAnotation> {
     private int msmsID;
-    private CMMCompound compound;
+    private Compound compound;
     private Adduct adduct;
     private Double deltaPPMPrecursorIon;
     private Double MSMSCosineScore;
