@@ -43,7 +43,7 @@ public class GCMSSearchRepository {
      * @throws IOException
      */
     private List<GCMSCompound> getCompoundInformation(GCMSFeatureQueryDTO queryData) throws IOException {
-        //TODO chaneg the file
+        //TODO chaneg the file -> hecho?
         Resource resource1 = resourceLoader.getResource("classpath:sql/gcms_compound_information.sql");
         String sql1 = new String(Files.readAllBytes(Paths.get(resource1.getURI())));
 
@@ -76,6 +76,12 @@ public class GCMSSearchRepository {
                     .formula(rs.getString("formula"))
                     .formulaType(FormulaType.valueOf(rs.getString("formula_type")))
                     .logP(rs.getDouble("logP"))
+                    .casId(rs.getString("cas_id"))
+                    .chargeType(rs.getInt("charge_type"))
+                    .chargeNumber(rs.getInt("charge_number"))
+                    .compoundType(rs.getInt("compound_type"))
+                    .compoundStatus(rs.getInt("compound_status"))
+                    .formulaTypeInt(rs.getInt("formula_type_int"))
                     .inchi(rs.getString("inchi"))
                     .inchiKey(rs.getString("inchi_key"))
                     .smiles(rs.getString("smiles"))
@@ -85,6 +91,14 @@ public class GCMSSearchRepository {
                     .gcColumn(queryData.getColumnType())
                     .GCMSSpectrum(new ArrayList<>())
                     .build();
+
+            //Bien
+            System.out.println("MAPEO COMPOUND/GCMS: \n"+
+                    " name: "+compound.getCompoundName()+
+                    "; cass: "+compound.getCasId()+
+                    "; inchi: "+compound.getInchi()+
+                    "; inchikey: "+compound.getInchiKey()+
+                    "; smiles: "+compound.getSmiles());
 
             //CREATION OF THE Spectrum (IT WILL ONLY CONTAIN THE Id) -> SpectrumId
             Spectrum spectrum = Spectrum.builder()
@@ -362,6 +376,17 @@ public class GCMSSearchRepository {
             String compoundFormula = gcmsCompoundList.get(i).getFormula();
             FormulaType formulaType = gcmsCompoundList.get(i).getFormulaType();
             Double logP = gcmsCompoundList.get(i).getLogP();
+            String casId = gcmsCompoundList.get(i).getCasId();
+
+            int chargeType = gcmsCompoundList.get(i).getChargeType();
+            int chargeNumber = gcmsCompoundList.get(i).getChargeNumber();
+            int compoundType = gcmsCompoundList.get(i).getCompoundType();
+            int compoundStatus = gcmsCompoundList.get(i).getCompoundStatus();
+            int formulaTypeInt = gcmsCompoundList.get(i).getFormulaTypeInt();
+
+            String inchi = gcmsCompoundList.get(i).getInchi();
+            String inchiKey = gcmsCompoundList.get(i).getInchiKey();
+            String smiles = gcmsCompoundList.get(i).getSmiles();
 
             DerivatizationMethod derivatizationMethod = gcmsCompoundList.get(i).getDerivatizationMethod();
             ColumnType gcColumn = gcmsCompoundList.get(i).getGcColumn();
@@ -393,7 +418,10 @@ public class GCMSSearchRepository {
             }
             queryResponseDTO = GCMSQueryResponseDTO.builder()
                     .compoundId(compoundId).compoundName(compoundName).monoisotopicMass(compoundMonoisotopicMass)
-                    .formula(compoundFormula).formulaType(formulaType).logP(logP)
+                    .formula(compoundFormula).formulaType(formulaType).logP(logP).casId(casId)
+                    .charge_type(chargeType).charge_number(chargeNumber).compound_type(compoundType)
+                    .compound_status(compoundStatus).formula_type_int(formulaTypeInt)
+                    .inchi(inchi).inchiKey(inchiKey).smiles(smiles)
                     .dertype(derivatizationMethod).gcColumn(gcColumn)
                     .RI(RI)/*.RT(RT)*/.GCMSSpectrum(spectrumListCopy)
                     .build();
@@ -412,6 +440,13 @@ public class GCMSSearchRepository {
         List<GCMSQueryResponseDTO> infoAllRelevantCompounds = new ArrayList<>();
 
         List<GCMSCompound> gcmsCompoundList = getCompoundInformation(queryData);
+        GCMSCompound gcmsc = gcmsCompoundList.get(0);
+
+        System.out.println("FIND MATCH COMPOUNDS RESUL LIST MAPEO: \n"+
+                " name: "+gcmsc.getCompoundName()+
+                "; inchi: "+gcmsc.getInchi()+
+                "; inchikey: "+gcmsc.getInchiKey()+
+                "; smiles: "+gcmsc.getSmiles());
 
         //List<Integer> completeListSpectrumIds =  listAllSpectrumIdsCompounds(gcmsCompoundList); //inside spectruminfo
 
@@ -420,11 +455,24 @@ public class GCMSSearchRepository {
 
         //GCMSCompound WITH EACH Spectrum
         getSpectrumInformation(gcmsCompoundList);
+        System.out.println("FIND MATCH COMPOUNDS RESUL LIST MAPEO despues SPECTRUM UNION: \n"+
+                " name: "+gcmsc.getCompoundName()+
+                "; inchi: "+gcmsc.getInchi()+
+                "; inchikey: "+gcmsc.getInchiKey()+
+                "; smiles: "+gcmsc.getSmiles()+
+                "; spect: "+gcmsc.getGCMSSpectrum().get(0));
 
         //JOIN EACH GCMSCompound WITH THE CORRECT Spectrum
         //joinCompoundSpectrum(gcmsCompoundList, spectrumWithPeakList);
 
         infoAllRelevantCompounds = creationGCMSQueryResponseDTOFromgcmsCompoundList(gcmsCompoundList);
+        System.out.println("FIND MATCH COMPOUNDS RESUL LIST MAPEO INFOALL (queryResponseDTO): \n"+
+                " name: "+gcmsc.getCompoundName()+
+                "; inchi: "+gcmsc.getInchi()+
+                "; inchikey: "+gcmsc.getInchiKey()+
+                "; smiles: "+gcmsc.getSmiles()+
+                "; casId: "+gcmsc.getCasId()+
+                "; spect: "+gcmsc.getGCMSSpectrum().get(0));
 
         return infoAllRelevantCompounds;
     }

@@ -20,8 +20,18 @@ public class GCMSQueryResponseDTO {
     private String compoundName;
     private double monoisotopicMass;
     private String formula;
-    FormulaType formulaType;
-    Double logP;
+    private FormulaType formulaType;
+    private Double logP;
+    private String casId;
+    private int charge_type;
+    private int charge_number;
+    private int compound_type;
+    private int compound_status;
+    private int formula_type_int;
+
+    private String inchi;
+    private String inchiKey;
+    private String smiles;
 
     private DerivatizationMethod dertype;
     private ColumnType gcColumn;
@@ -54,6 +64,20 @@ public class GCMSQueryResponseDTO {
         this.compoundName = "";
         this.monoisotopicMass = 0.0;
         this.formula = "";
+        this.formulaType = FormulaType.CHNOPS;
+
+        this.logP = 0.0;
+        this.casId = "";
+        this.charge_type = -1;
+        this.charge_number = -1;
+        this.compound_type = -1;
+        this.compound_status = -1;
+        this.formula_type_int = -1;
+
+        this.inchi = "";
+        this.inchiKey = "";
+        this.smiles = "";
+
         this.dertype = DerivatizationMethod.METHYL_CHLOROFORMATE;
         this.gcColumn = ColumnType.STANDARD_NON_POLAR;
         this.GCMSSpectrum = new ArrayList<>();

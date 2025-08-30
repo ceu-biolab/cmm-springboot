@@ -36,6 +36,9 @@ public class GCMSSearchService {
         double RITolerance = request.getRetentionIndexTolerance();
         double RIToleranceFinal;
 
+        System.out.println("DATOS REQUEST: "+ gcmsSpectrumExperimental + "; ct: "+
+                columnType + "; dt: "+ derivatizationMethod + "; ri: "+ RI + "; ritol: "+ RITolerance);
+
         if (RITolerance >= 0 && RITolerance <= 100){//
             RIToleranceFinal = RITolerance*0.01;
         } else {
@@ -91,12 +94,26 @@ public class GCMSSearchService {
                         .formula(queryResult.getFormula())
                         .formulaType(queryResult.getFormulaType())
                         .logP(queryResult.getLogP())
+                        .casId(queryResult.getCasId())
+                        .chargeType(queryResult.getCharge_type())
+                        .chargeNumber(queryResult.getCharge_number())
+                        .compoundType(queryResult.getCompound_type())
+                        .compoundStatus(queryResult.getCompound_status())
+                        .formulaTypeInt(queryResult.getFormula_type_int())
+                        .inchi(queryResult.getInchi())
+                        .inchiKey(queryResult.getInchiKey())
+                        .smiles(queryResult.getSmiles())
                         .dbRI(queryResult.getRI())
                         //.dbRT(queryResult.getRT())
                         .derivatizationMethod(queryResult.getDertype())
                         .gcColumn(queryResult.getGcColumn())
                         .GCMSSpectrum(queryResult.getGCMSSpectrum())
                         .build();
+
+                System.out.println("GCMSCompound SERVICE BUILD: \n"+
+                        " inchi: "+gcmsCompound.getInchi()+
+                        "; inchikey: "+gcmsCompound.getInchiKey()+
+                        "; smiles: "+gcmsCompound.getSmiles());
 
                 double dbRI = queryResult.getRI();
                 //RI by user (experimental) - RI database -> absolute value so that it is positive
@@ -115,7 +132,11 @@ public class GCMSSearchService {
                 //AnnotationsByAdduct annotationsByAdduct = new AnnotationsByAdduct(adduct, annotations); //gcmsannotation//no necesito
                  //*
             }
-            GCMSFeature gcmsFeature = GCMSFeature.builder().gcmsAnnotations(gcmsAnnotationList).build();
+            GCMSFeature gcmsFeature = GCMSFeature.builder()
+                    .gcmsAnnotations(gcmsAnnotationList)
+                    .gcmsSpectrumExperimental(gcmsSpectrumExperimental)
+                    .RIExperimental(RI)
+                    .build();
 
             response.addGcmsFeatures(gcmsFeature);
 

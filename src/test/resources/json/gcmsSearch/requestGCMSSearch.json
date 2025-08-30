@@ -1,0 +1,20 @@
+{
+	"gcmsSpectrumExperimental":{
+		"spectrum":[
+			{"mzValue": 115.0376,"intensity": 100},
+			{"mzValue": 55.0177,"intensity": 40.31255},
+			{"mzValue": 59.0128,"intensity": 18.103279999999998},
+			{"mzValue": 87.0427,"intensity": 15.904760000000001},
+			{"mzValue": 71.0855,"intensity": 6.213241000000001},
+			{"mzValue": 57.0698,"intensity": 5.426879}
+		]
+	},
+	"retentionIndex": 1500, 
+	"retentionIndexTolerance": 10, 
+	"derivatizationMethod": "METHYL_CHLOROFORMATE", 
+	"columnType": "STANDARD_NON_POLAR" 
+}
+
+
+
+
