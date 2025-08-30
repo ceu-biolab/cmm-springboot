@@ -10,8 +10,7 @@ import java.util.Optional;
 
 @Data
 @SuperBuilder
-public class GCMSAnnotation /*extends Annotation*/ {
-    //TODO MAPA COMPOUND SCORE
+public class GCMSAnnotation {
     private GCMSCompound gcmsCompound;
     //private GCMSCompoundAll gcmsCompoundAll;
     private double gcmsCosineScore; // calculation of the msmsCosineScore based on the input data vs database data
@@ -46,7 +45,7 @@ public class GCMSAnnotation /*extends Annotation*/ {
         this.deltaRT = Optional.of(deltaRT);
     }*/
 
-    //TODO not the correct function
+    //TODO not the correct method
     public void cosineScoreFunction(Spectrum gcmsSpectrumExperimental){
         int score=0;
         int sizeListgcmsCompundSpectrum = this.gcmsCompound.getGCMSSpectrum().size();

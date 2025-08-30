@@ -43,7 +43,6 @@ public class GCMSSearchRepository {
      * @throws IOException
      */
     private List<GCMSCompound> getCompoundInformation(GCMSFeatureQueryDTO queryData) throws IOException {
-        //TODO chaneg the file -> hecho?
         Resource resource1 = resourceLoader.getResource("classpath:sql/gcms_compound_information.sql");
         String sql1 = new String(Files.readAllBytes(Paths.get(resource1.getURI())));
 
@@ -68,7 +67,6 @@ public class GCMSSearchRepository {
             // FOR EVERY COMPOUND) I OBTAIN THE derivatizationMethod & gcColumn
 
             //CREATION OF THE GCMSCompound
-            //TODO AÑADIR RESTO INFO COMPOUND -> hecho
             GCMSCompound compound = GCMSCompound.builder()
                     .compoundId(rs.getInt("compound_id"))
                     .compoundName(rs.getString("compound_name"))
@@ -92,7 +90,6 @@ public class GCMSSearchRepository {
                     .GCMSSpectrum(new ArrayList<>())
                     .build();
 
-            //Bien
             System.out.println("MAPEO COMPOUND/GCMS: \n"+
                     " name: "+compound.getCompoundName()+
                     "; cass: "+compound.getCasId()+
@@ -185,7 +182,6 @@ public class GCMSSearchRepository {
      * @throws IOException
      */
     private Spectrum spectrumWithPeaksFromDB(int spectrumId) throws IOException {
-        //TODO change query file
         Resource resource2 = resourceLoader.getResource("classpath:sql/gcms_spectrum_information.sql");
         String sql2 = new String(Files.readAllBytes(Paths.get(resource2.getURI())));
 
@@ -477,86 +473,4 @@ public class GCMSSearchRepository {
         return infoAllRelevantCompounds;
     }
 
-    /*public List<GCMSQueryResponseDTO> findMatchingCompounds(GCMSFeatureQueryDTO queryData) throws IOException {
-        //TO OBTAIN THE PAIRS OF IDS
-        Resource resource1 = resourceLoader.getResource("classpath:sql/gcms_query_ids.sql");
-        String sql1 = new String(Files.readAllBytes(Paths.get(resource1.getURI())));
-
-        MapSqlParameterSource params1 = new MapSqlParameterSource();
-        params1.addValue("RILower", queryData.getMinRI());
-        params1.addValue("RIUpper", queryData.getMaxRI());
-        //SINCE BOTH PARAMS ARE ENUMS I WILL USE .name() TO CONVERT IT TO STRING
-        params1.addValue("ColumnType", queryData.getColumnType().name());
-        params1.addValue("DerivatizationType", queryData.getDerivatizationMethod().name());
-
-        /*
-        WITH THE QUERY AND THE GIVEN PARAMETERS, WE OBTAIN THE DATA WE ARE LOOKING FOR (IDs)
-        THEN THE VALUES ARE MAPPED TO THE CLASS THAT CONTAINS THE PAIRS (compoundId & DerivatizationMethodId)
-        THE RESULTING OBJECTS ARE SAVED ON A LIST
-         *
-        List<CompoundDerivatizationPairIds> pairIdsList = jdbcTemplate.query(sql1, params1, new BeanPropertyRowMapper<>(CompoundDerivatizationPairIds.class));
-
-        //TO OBTAIN ALL THE INFORMATION
-        Resource resource2 = resourceLoader.getResource("classpath:sql/gcms_query_InformationAll.sql");
-        String sql2 = new String(Files.readAllBytes(Paths.get(resource2.getURI())));
-
-        MapSqlParameterSource params2;// = new MapSqlParameterSource();
-
-        int i;
-        int j;
-        int idcompound;
-        List<GCMSQueryResponseDTO> infoAllRelevantCompounds = new ArrayList<>();
-        Map<Integer, GCMSQueryResponseDTO> infoOneCompoundGrouped = new LinkedHashMap<>();
-
-        //ITERATE OVER THE LIST WITH THE IDS
-        for(i=0; i<pairIdsList.size(); i++){
-            params2 = new MapSqlParameterSource(); //IT WILL RESET EVERY ITERATION
-            params2.addValue("CompoundId", pairIdsList.get(i).getCompoundId());
-            params2.addValue("DerivatizationMethodId", pairIdsList.get(i).getDerivatizationMethodId());
-
-            //A LIST WITH THE VALUES OF THE SAME COMPOUND -> SAME INFORMATION EXCEPT MZ&INTENSITY (SPECTRUM)
-            List<GCMSCompound> infoOneCompound = jdbcTemplate.query(sql2, params2, new BeanPropertyRowMapper<>(GCMSCompound.class));
-
-            // List<Spectrum> GetSpectrumFromCompoundIDAndDerivatizationID
-            // gcmsCompound.addSpectrum(spectrum correspondiente de la query).
-
-            //ITERATES OVER THE LIST WITH THE SAME COMPOUND DIFFERENT PEAKS
-            for(j=0; j<infoOneCompound.size(); j++){
-                idcompound = infoOneCompound.get(j).getCompoundId();
-
-                GCMSQueryResponseDTO qrdto = infoOneCompoundGrouped.get(idcompound);
-
-                //IF THE COMPOUND IS NOT AGRUPATED
-                if(qrdto == null){
-                    qrdto = new GCMSQueryResponseDTO(); //Inicialice all the values
-                    qrdto.setCompoundId(idcompound);
-
-                    qrdto.setCompoundName(infoOneCompound.get(j).getCompoundName());
-                    qrdto.setMonoisotopicMass(infoOneCompound.get(j).getMass());
-                    qrdto.setFormula(infoOneCompound.get(j).getFormula());
-                    //TODO Los necesito???
-                    //qrdto.setFormulaType(infoOneCompound.get(j).getFormulaType());
-                    //qrdto.setCompoundType(infoOneCompound.get(j).getCompoundType());
-                    //qrdto.setLogP(infoOneCompound.get(j).getLogP());
-
-                    qrdto.setDertype(infoOneCompound.get(j).getDerivatizationMethod());
-                    qrdto.setGcColumn(infoOneCompound.get(j).getGcColumn());
-
-                    Spectrum spectrum = new Spectrum();
-                    qrdto.getGCMSSpectrum().add(spectrum);
-                    infoOneCompoundGrouped.put(idcompound,qrdto);
-                }
-
-                double mz = infoOneCompound.get(j).getMz();
-                double intensity = infoOneCompound.get(j).getIntensity();
-                Peak peak = new Peak(mz, intensity);
-
-                qrdto.getGCMSSpectrum().get(0).getSpectrum().add(peak); //SINCE I ONLY HAVE 1 SPECTRUM/COMPOUND/DERIVATIZATION
-
-            }
-        }
-        infoAllRelevantCompounds = new ArrayList<>(infoOneCompoundGrouped.values());
-
-        return infoAllRelevantCompounds;
-    }*/
 }

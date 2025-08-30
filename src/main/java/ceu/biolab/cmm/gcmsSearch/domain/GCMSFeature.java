@@ -11,9 +11,6 @@ import java.util.Optional;
 @SuperBuilder
 public class GCMSFeature {
 
-    //private List<Peak> gcmsSpectrum; // CHANGE FOR SPECTRUM-> done
-
-    //private List<Spectrum> gcmsSpectrumExperimental; //TODO 1 o son varios?
     private Spectrum gcmsSpectrumExperimental;
 
     private double RIExperimental;

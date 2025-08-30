@@ -21,10 +21,6 @@ public class CompoundGCMSController {
 
     @PostMapping("/gcms")
     public GCMSSearchResponseDTO getCompoundsByRITolerance(@RequestBody GCMSSearchRequestDTO request) {
-        /*if (request.getGcmsSpectrum() == null || request.getGcmsSpectrum().isEmpty()) {
-            return new GCMSSearchResponseDTO();
-        }*/
-        //if(request.getRetentionIndexTolerance())
 
         System.out.println("Datos recibidos controller: \n"+
                 " s: "+request.getGcmsSpectrumExperimental() +

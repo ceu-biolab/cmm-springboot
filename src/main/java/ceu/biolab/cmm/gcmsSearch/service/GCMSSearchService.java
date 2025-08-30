@@ -62,8 +62,6 @@ public class GCMSSearchService {
             }
         }*/
 
-        /*IMFeature feature = new IMFeature(mz, ccs);
-        AnnotatedFeature imAnnotatedFeature = new AnnotatedFeature(feature);*/
         //GCMSFeature gcmsFeature = new GCMSFeature(feature);
 
         double RIDifference = RI * RIToleranceFinal;
@@ -71,22 +69,17 @@ public class GCMSSearchService {
         double RIUpper = RI + RIDifference;
 
         //GCMSFeatureQueryDTO queryData = new GCMSFeatureQueryDTO(RILower, RIUpper, derivatizationMethod, columnType);
-        //USE OF SUPERBUILDER
         GCMSFeatureQueryDTO queryData = GCMSFeatureQueryDTO.builder().minRI(RILower).maxRI(RIUpper)
                 .derivatizationMethod(derivatizationMethod).columnType(columnType).build();
 
         try {
-            //TODO CAMBIAR EN FUNCION DE LAS NUEAS QUERYS - hecho
             //THE COMPOUNDS ARE ALREADY MERGED
             List<GCMSQueryResponseDTO> queryResults = gcmsSearchRepository.findMatchingCompounds(queryData);
 
             List<GCMSAnnotation> gcmsAnnotationList = new ArrayList<>();
 
-
-            //TODO -> pasar queryresult a gcmsannotation y de ahi pasarlo a gcmsfeature
             //ITERATES OVER THE RESULTS OF THE QUERY
             for (GCMSQueryResponseDTO queryResult : queryResults) {
-                //TODO AÑADIR TODA INFO COMPOUNDS -> hecho
                 GCMSCompound gcmsCompound = GCMSCompound.builder()
                         .compoundId(queryResult.getCompoundId())
                         .compoundName(queryResult.getCompoundName())
@@ -126,11 +119,6 @@ public class GCMSSearchService {
 
                 gcmsAnnotationList.add(gcmsAnnotation);
 
-                //*imCompound.addPathway(pathway); //imcompound es gcmscompoundAll //Cambiarlo a gcmscompound
-                //Annotation annotation = new Annotation(imCompound); //no necesito esta
-                //annotations.add(annotation); //no la necesito //lista de gcmsannotaciones
-                //AnnotationsByAdduct annotationsByAdduct = new AnnotationsByAdduct(adduct, annotations); //gcmsannotation//no necesito
-                 //*
             }
             GCMSFeature gcmsFeature = GCMSFeature.builder()
                     .gcmsAnnotations(gcmsAnnotationList)
@@ -139,9 +127,6 @@ public class GCMSSearchService {
                     .build();
 
             response.addGcmsFeatures(gcmsFeature);
-
-            //imAnnotatedFeature.addAnnotationByAdduct(annotationsByAdduct); //GCMSFeature
-            //response.addImFeature(imAnnotatedFeature);
 
         } catch (IOException e) {
             e.printStackTrace();

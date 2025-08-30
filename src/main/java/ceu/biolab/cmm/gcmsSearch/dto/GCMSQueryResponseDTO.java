@@ -15,7 +15,6 @@ import java.util.List;
 @SuperBuilder
 public class GCMSQueryResponseDTO {
 
-    //TODO añadir resto info -> hecho
     private int compoundId;
     private String compoundName;
     private double monoisotopicMass;
@@ -40,7 +39,6 @@ public class GCMSQueryResponseDTO {
     private double RI;
     //private double RT;
 
-    //GCMSCompound gcmsCompound;
 
 
     public GCMSQueryResponseDTO(int compoundId, String compoundName, double monoisotopicMass,
