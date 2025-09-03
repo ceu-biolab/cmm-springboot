@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.MSMS.dto;
 
-import ceu.biolab.cmm.MSMS.domain.MSMSAnotation;
+import ceu.biolab.cmm.MSMS.domain.MSMSAnnotation;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MSMSSearchResponseDTO {
-    private List<MSMSAnotation> msmsList;
+    private List<MSMSAnnotation> msmsList;
 
 }

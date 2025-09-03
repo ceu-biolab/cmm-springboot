@@ -42,13 +42,12 @@ public class MSMSSearchRepository {
         }
 
         // Build query spectrum from JSON
-        MSMSAnotation queryMsms = new MSMSAnotation();
+        MSMSAnnotation queryMsms = new MSMSAnnotation();
         Spectrum querySpectrum = new Spectrum(queryData.getPrecursorIonMZ(), queryData.getFragmentsMZsIntensities().getPeaks());
         queryMsms.setSpectrum(querySpectrum);
 
         // Prepare response containers
-        Set<Compound> compoundsSet = new HashSet<>();
-        Set<MSMSAnotation> matchedSpectra = new HashSet<>();
+        Set<MSMSAnnotation> matchedSpectra = new HashSet<>();
         MSMSSearchResponseDTO responseDTO = new MSMSSearchResponseDTO(new ArrayList<>());
 
         // Determine adduct map based on ionization mode
@@ -60,6 +59,7 @@ public class MSMSSearchRepository {
 
         // Iterate over each adduct
         for (String adduct : queryData.getAdducts()) {
+            Set<Compound> compoundsSet = new HashSet<>();
             if (!adductMap.containsKey(adduct)) {
                 throw new IllegalArgumentException("Adduct not found: " + adduct);
             }
@@ -96,10 +96,10 @@ public class MSMSSearchRepository {
                 return null;
             });
 
-            Set<MSMSAnotation> libSpectra= new HashSet<>();
+            Set<MSMSAnnotation> libSpectra= new HashSet<>();
             for (Compound compound : compoundsSet) {
                 System.out.println("Searching spectra for compound: " + compound.getCompoundName() + " (ID: " + compound.getCompoundId() + ")");
-                libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), neutralMass, querySpectrum.getPrecursorMz()));
+                libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), adduct, querySpectrum.getPrecursorMz()));
             }
             matchedSpectra.addAll(getMSMSWithScores(queryData.getScoreType(), new ArrayList<>(libSpectra), queryData,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments()));
         }
@@ -110,21 +110,21 @@ public class MSMSSearchRepository {
         return responseDTO;
     }
 
-    public List<MSMSAnotation> getSpectraForCompounds(Compound compound, IonizationMode ionizationMode,
-                                                      CIDEnergy voltageEnergy, Double neutralMass, Double queryMz) throws IOException {
-        Set<MSMSAnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy,neutralMass, queryMz);
-        List<MSMSAnotation> spectra = new ArrayList<>();
-        for (MSMSAnotation msms : msmsSet) {
+    public List<MSMSAnnotation> getSpectraForCompounds(Compound compound, IonizationMode ionizationMode,
+                                                      CIDEnergy voltageEnergy, String adduct, Double queryMz) throws IOException {
+        Set<MSMSAnnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy, adduct, queryMz);
+        List<MSMSAnnotation> spectra = new ArrayList<>();
+        for (MSMSAnnotation msms : msmsSet) {
             // Fetch precursor m/z and peaks
-            Spectrum spectrum = getPeaksForMsms(msms.getMsmsID(), msms.getSpectrum().getPrecursorMz());
+            Spectrum spectrum = getPeaksForMsms(msms.getMsmsId(), msms.getSpectrum().getPrecursorMz());
             msms.setSpectrum(spectrum);
             spectra.add(msms);
         }
         return spectra;
     }
 
-    public Set<MSMSAnotation> getMsmsForCompound(Compound compound, IonizationMode ionMode,
-                                                 CIDEnergy voltage, Double neutralMass, Double queryMz) throws IOException {
+    public Set<MSMSAnnotation> getMsmsForCompound(Compound compound, IonizationMode ionMode,
+                                                 CIDEnergy voltage, String adduct, Double queryMz) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql");
         String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
         sql = sql.replace("(:compound_id)", String.valueOf(compound.getCompoundId()));
@@ -137,18 +137,25 @@ public class MSMSSearchRepository {
         sql = sql.replace("(:ionization_mode)", String.valueOf(mode))
                 .replace("(:voltage_level)", voltage.toString());
 
-        Set<MSMSAnotation> msmsSet = new HashSet<>();
+        Set<MSMSAnnotation> msmsSet = new HashSet<>();
         jdbcTemplate.query(sql, (rs, rowNum) -> {
            if(!rs.wasNull()){
-               MSMSAnotation msms = new MSMSAnotation();
+               MSMSAnnotation msms = new MSMSAnnotation();
                msms.setCompound(compound);
-               msms.setMsmsID(rs.getInt("msms_id"));
+               msms.setMsmsId(rs.getInt("msms_id"));
 
-               Spectrum spectrum = new Spectrum(neutralMass, new ArrayList<>());
+               // Compute theoretical precursor m/z for this compound with the requested adduct
+               String formattedAdduct = AdductProcessing.formatAdductString(adduct, ionMode);
+               Double libPrecursorMz = AdductTransformer.getMassOfAdductFromMonoMass(compound.getMass(), formattedAdduct, ionMode);
+               Spectrum spectrum = new Spectrum(libPrecursorMz, new ArrayList<>());
                msms.setSpectrum(spectrum);
 
-               double deltaPPM = ((queryMz - neutralMass) / neutralMass) * 1_000_000.0;
-               msms.setDeltaPPMPrecursorIon(deltaPPM);
+               // Signed ppm difference between query precursor and library precursor
+               double deltaPPM = ((queryMz - libPrecursorMz) / libPrecursorMz) * 1_000_000.0;
+               msms.setDeltaPpmPrecursorIon(deltaPPM);
+
+               // Set adduct used
+               msms.setAdduct(adduct);
 
                msmsSet.add(msms);
            }
@@ -175,23 +182,25 @@ public class MSMSSearchRepository {
         return new Spectrum(precursorMz, peaks);
     }
 
-    public List<MSMSAnotation> getMSMSWithScores(ScoreType scoreType, List<MSMSAnotation> libraryMsms, MSMSSearchRequestDTO queryMsms, String queryTolMode, Double tolValue) throws IOException {
+    public List<MSMSAnnotation> getMSMSWithScores(ScoreType scoreType, List<MSMSAnnotation> libraryMsms, MSMSSearchRequestDTO queryMsms, String queryTolMode, Double tolValue) throws IOException {
         SpectrumScorer comparator = new SpectrumScorer(MzToleranceMode.valueOf(queryTolMode),tolValue);
-        Set<MSMSAnotation> matched = new TreeSet<>();
-        for (MSMSAnotation lib : libraryMsms) {
+        Set<MSMSAnnotation> matched = new HashSet<>();
+        for (MSMSAnnotation lib : libraryMsms) {
             double score = comparator.compute(scoreType,lib.getSpectrum(),queryMsms.getFragmentsMZsIntensities());
-            System.out.println("Score for compound " + lib.getCompoundId() + ": " + score);
-            lib.setMSMSCosineScore(score);
+            System.out.println("Score for compound " + lib.getCompound().getCompoundId() + ": " + score);
+            if (score >= 0.5) {
+                lib.setMsmsCosineScore(score);
                 matched.add(lib);
+            }
         }
         return new ArrayList<>(matched);
     }
 
-    public static Set<MSMSAnotation> selectBestPerCompound(List<MSMSAnotation> allSpectra) {
-        Map<String, MSMSAnotation> best = new HashMap<>();
-        for (MSMSAnotation sp : allSpectra) {
-            best.compute(String.valueOf(sp.getCompoundId()), (id, currentBest) -> {
-                if (currentBest == null || sp.getMSMSCosineScore() > currentBest.getMSMSCosineScore()) {
+    public static Set<MSMSAnnotation> selectBestPerCompound(List<MSMSAnnotation> allSpectra) {
+        Map<String, MSMSAnnotation> best = new HashMap<>();
+        for (MSMSAnnotation sp : allSpectra) {
+            best.compute(String.valueOf(sp.getCompound().getCompoundId()), (id, currentBest) -> {
+                if (currentBest == null || sp.getMsmsCosineScore() > currentBest.getMsmsCosineScore()) {
                     return sp;
                 } else {
                     return currentBest;

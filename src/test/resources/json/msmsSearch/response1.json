@@ -1,38 +1,223 @@
 {
-  "compoundsList": [
-    {
-      "compoundId": 12345,
-      "compoundName": "Lipid A",
-      "formula": "C41H78NO8P",
-      "otherField": "value"
-    },
-    {
-      "compoundId": 67890,
-      "compoundName": "Lipid B",
-      "formula": "C43H80NO8P",
-      "otherField": "value"
-    }
-  ],
-  "msmsList": [
-    {
-      "msmsId": 111,
-      "compoundId": 12345,
-      "ionizationMode": "POSITIVE",
-      "voltageEnergy": 30,
-      "peaks": [
-        {"mz": 700.5, "intensity": 90000},
-        {"mz": 682.5, "intensity": 70000}
-      ]
-    },
-    {
-      "msmsId": 222,
-      "compoundId": 67890,
-      "ionizationMode": "POSITIVE",
-      "voltageEnergy": 30,
-      "peaks": [
-        {"mz": 722.5, "intensity": 85000},
-        {"mz": 704.5, "intensity": 65000}
-      ]
-    }
-  ]
+    "msmsList": [
+        {
+            "msmsId": 520,
+            "compound": {
+                "compoundId": 1095,
+                "casId": "68-26-8",
+                "compoundName": "Retinol",
+                "formula": "C20H30O",
+                "mass": 286.229665582,
+                "chargeType": 0,
+                "chargeNumber": 0,
+                "formulaType": "CHNOPS",
+                "compoundType": 1,
+                "compoundStatus": 2,
+                "formulaTypeInt": 0,
+                "logP": 0.0,
+                "rtPred": 0.1321357114325395,
+                "inchi": "InChI=1S/C20H30O/c1-16(8-6-9-17(2)13-15-21)11-12-19-18(3)10-7-14-20(19,4)5/h6,8-9,11-13,21H,7,10,14-15H2,1-5H3/b9-6+,12-11+,16-8+,17-13+",
+                "inchiKey": "FPIPGXGPPPQFEQ-OVSJKPMPSA-N",
+                "smiles": "C\\C(=C/CO)\\C=C\\C=C(/C)\\C=C\\C1=C(C)CCCC1(C)C",
+                "lipidType": null,
+                "numChains": 0,
+                "numCarbons": 0,
+                "doubleBonds": 0,
+                "biologicalActivity": null,
+                "meshNomenclature": null,
+                "iupacClassification": null,
+                "mol2": null,
+                "keggID": "C17276",
+                "lmID": "LMPR01090001",
+                "hmdbID": "HMDB0000305",
+                "agilentID": "215",
+                "pcID": 9904001,
+                "chebiID": 17336,
+                "inHouseID": null,
+                "aspergillusID": 0,
+                "knapsackID": null,
+                "npatlasID": 0,
+                "fahfaID": 0,
+                "ohPositionID": 0,
+                "aspergillusWebName": null,
+                "lipidMapsClassifications": [
+                    {
+                        "category": "PR",
+                        "mainClass": "PR01",
+                        "subClass": "PR0109",
+                        "classLevel4": ""
+                    }
+                ],
+                "pathways": []
+            },
+            "adduct": "M+H",
+            "deltaPpmPrecursorIon": -3.279643144683768,
+            "msmsCosineScore": 0.9999999999999998,
+            "spectrum": {
+                "precursorMz": 287.23694203466783,
+                "peaks": [
+                    {
+                        "mz": 55.301,
+                        "intensity": 0.12753
+                    },
+                    {
+                        "mz": 67.237,
+                        "intensity": 0.14611000000000002
+                    },
+                    {
+                        "mz": 69.204,
+                        "intensity": 0.39189
+                    },
+                    {
+                        "mz": 79.134,
+                        "intensity": 0.14526999999999998
+                    },
+                    {
+                        "mz": 81.102,
+                        "intensity": 0.26350999999999997
+                    },
+                    {
+                        "mz": 83.17,
+                        "intensity": 0.13007
+                    },
+                    {
+                        "mz": 91.118,
+                        "intensity": 0.12330999999999999
+                    },
+                    {
+                        "mz": 93.14,
+                        "intensity": 0.30405
+                    },
+                    {
+                        "mz": 95.091,
+                        "intensity": 0.5
+                    },
+                    {
+                        "mz": 96.871,
+                        "intensity": 0.15034
+                    },
+                    {
+                        "mz": 105.084,
+                        "intensity": 0.27365
+                    },
+                    {
+                        "mz": 107.052,
+                        "intensity": 0.25
+                    },
+                    {
+                        "mz": 109.035,
+                        "intensity": 0.31757
+                    },
+                    {
+                        "mz": 111.057,
+                        "intensity": 0.18074
+                    },
+                    {
+                        "mz": 119.012,
+                        "intensity": 0.20777
+                    },
+                    {
+                        "mz": 121.035,
+                        "intensity": 1.0
+                    },
+                    {
+                        "mz": 121.722,
+                        "intensity": 0.11318
+                    },
+                    {
+                        "mz": 122.549,
+                        "intensity": 0.15456
+                    },
+                    {
+                        "mz": 124.954,
+                        "intensity": 0.15203
+                    },
+                    {
+                        "mz": 130.958,
+                        "intensity": 0.10980000000000001
+                    },
+                    {
+                        "mz": 132.972,
+                        "intensity": 0.31419
+                    },
+                    {
+                        "mz": 134.987,
+                        "intensity": 0.21199
+                    },
+                    {
+                        "mz": 137.048,
+                        "intensity": 0.26689
+                    },
+                    {
+                        "mz": 143.036,
+                        "intensity": 0.09544000000000001
+                    },
+                    {
+                        "mz": 145.113,
+                        "intensity": 0.14949
+                    },
+                    {
+                        "mz": 146.854,
+                        "intensity": 0.15034
+                    },
+                    {
+                        "mz": 148.939,
+                        "intensity": 0.1174
+                    },
+                    {
+                        "mz": 150.992,
+                        "intensity": 0.27027
+                    },
+                    {
+                        "mz": 157.2,
+                        "intensity": 0.13851000000000002
+                    },
+                    {
+                        "mz": 159.066,
+                        "intensity": 0.16638999999999998
+                    },
+                    {
+                        "mz": 161.08,
+                        "intensity": 0.16638999999999998
+                    },
+                    {
+                        "mz": 163.149,
+                        "intensity": 0.12078
+                    },
+                    {
+                        "mz": 165.094,
+                        "intensity": 0.08108
+                    },
+                    {
+                        "mz": 171.028,
+                        "intensity": 0.12330999999999999
+                    },
+                    {
+                        "mz": 173.152,
+                        "intensity": 0.10557
+                    },
+                    {
+                        "mz": 174.916,
+                        "intensity": 0.12584
+                    },
+                    {
+                        "mz": 185.099,
+                        "intensity": 0.125
+                    },
+                    {
+                        "mz": 199.295,
+                        "intensity": 0.08023999999999999
+                    },
+                    {
+                        "mz": 216.966,
+                        "intensity": 0.12078
+                    },
+                    {
+                        "mz": 244.947,
+                        "intensity": 0.13936
+                    }
+                ]
+            }
+        }
+    ]
 }
