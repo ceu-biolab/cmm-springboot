@@ -1,7 +1,7 @@
-package ceu.biolab.cmm.MSMS.service;
+package ceu.biolab.cmm.MSMSSearch.service;
 
-import ceu.biolab.cmm.MSMS.domain.ScoreType;
-import ceu.biolab.cmm.MSMS.domain.Spectrum;
+import ceu.biolab.cmm.MSMSSearch.domain.ScoreType;
+import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import lombok.Data;

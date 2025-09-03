@@ -1,13 +1,14 @@
-package ceu.biolab.cmm.MSMS.controller;
+package ceu.biolab.cmm.MSMSSearch.controller;
 
-import ceu.biolab.cmm.MSMS.dto.MSMSSearchRequestDTO;
-import ceu.biolab.cmm.MSMS.dto.MSMSSearchResponseDTO;
-import ceu.biolab.cmm.MSMS.service.MSMSSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
+import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
+import ceu.biolab.cmm.MSMSSearch.service.MSMSSearchService;
 
 @RestController
 @RequestMapping("/api")

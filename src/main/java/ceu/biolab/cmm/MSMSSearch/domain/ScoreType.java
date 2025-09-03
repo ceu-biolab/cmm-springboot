@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.MSMS.domain;
+package ceu.biolab.cmm.MSMSSearch.domain;
 
 public enum ScoreType {
     COSINE, MODIFIED_COSINE

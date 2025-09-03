@@ -1,10 +1,9 @@
-package ceu.biolab.cmm.MSMS.repository;
+package ceu.biolab.cmm.MSMSSearch.repository;
 
-import ceu.biolab.cmm.MSMS.domain.*;
-
-import ceu.biolab.cmm.MSMS.dto.MSMSSearchRequestDTO;
-import ceu.biolab.cmm.MSMS.dto.MSMSSearchResponseDTO;
-import ceu.biolab.cmm.MSMS.service.SpectrumScorer;
+import ceu.biolab.cmm.MSMSSearch.domain.*;
+import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
+import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
+import ceu.biolab.cmm.MSMSSearch.service.SpectrumScorer;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;

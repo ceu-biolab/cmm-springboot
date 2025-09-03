@@ -1,12 +1,13 @@
-package ceu.biolab.cmm.MSMS.service;
+package ceu.biolab.cmm.MSMSSearch.service;
 
-import ceu.biolab.cmm.MSMS.dto.MSMSSearchRequestDTO;
-import ceu.biolab.cmm.MSMS.dto.MSMSSearchResponseDTO;
-import ceu.biolab.cmm.MSMS.repository.MSMSSearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
+import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
+import ceu.biolab.cmm.MSMSSearch.repository.MSMSSearchRepository;
 
 @Service
 public class MSMSSearchService {

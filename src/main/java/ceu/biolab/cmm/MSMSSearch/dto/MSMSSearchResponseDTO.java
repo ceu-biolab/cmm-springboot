@@ -1,6 +1,6 @@
-package ceu.biolab.cmm.MSMS.dto;
+package ceu.biolab.cmm.MSMSSearch.dto;
 
-import ceu.biolab.cmm.MSMS.domain.MSMSAnnotation;
+import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import lombok.AllArgsConstructor;
 import lombok.Data;

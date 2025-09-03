@@ -1,7 +1,6 @@
-package ceu.biolab.cmm.MSMS.dto;
+package ceu.biolab.cmm.MSMSSearch.dto;
 
-import ceu.biolab.cmm.MSMS.domain.*;
-
+import ceu.biolab.cmm.MSMSSearch.domain.*;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import lombok.Data;
@@ -38,7 +37,7 @@ public class MSMSSearchRequestDTO {
     }
 
     public MSMSSearchRequestDTO() {
-        this.CIDEnergy = ceu.biolab.cmm.MSMS.domain.CIDEnergy.MED;
+        this.CIDEnergy = ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy.MED;
         this.precursorIonMZ = 0.0;
         this.tolerancePrecursorIon = 0.0;
         this.toleranceModePrecursorIon= MzToleranceMode.MDA;

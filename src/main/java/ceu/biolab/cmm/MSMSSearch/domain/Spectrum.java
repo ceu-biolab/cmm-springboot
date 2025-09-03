@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.MSMS.domain;
+package ceu.biolab.cmm.MSMSSearch.domain;
 
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import lombok.Data;
