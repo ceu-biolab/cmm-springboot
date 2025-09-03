@@ -66,7 +66,7 @@ public class SpectrumScorer {
                 double delta = Math.abs(mzA - mzB);
                 double tolDa = (tolMode == MzToleranceMode.PPM)
                         ? mzA * tolValue / 1_000_000.0
-                        : tolValue;
+                        : tolValue / 1000.0; // MDA to Da
                 if (delta <= tolDa) {
                     matched = true;
                     break;
@@ -86,7 +86,7 @@ public class SpectrumScorer {
             // calculamos la tolerancia en Da para este bin
             double tolDa = (tolMode == MzToleranceMode.PPM)
                     ? mzRef * tolValue / 1_000_000.0
-                    : tolValue;
+                    : tolValue / 1000.0; // MDA to Da
 
             // sumamos todas las intensidades que entren en esa ventana
             vecA[i] = sumIntensitiesWithinTol(specA, mzRef, tolDa);
@@ -130,7 +130,10 @@ public class SpectrumScorer {
                 if (usedB[j]) continue;
 
                 double bMz = mzOrder.get(j);
-                if (Math.abs(aMz - bMz) <= tolValue) {
+                double tolDa = (tolMode == MzToleranceMode.PPM)
+                        ? aMz * tolValue / 1_000_000.0
+                        : tolValue / 1000.0; // MDA to Da
+                if (Math.abs(aMz - bMz) <= tolDa) {
                     double bI = vecB[j];
                     if (bI > 0) {
                         usedB[j] = true;
