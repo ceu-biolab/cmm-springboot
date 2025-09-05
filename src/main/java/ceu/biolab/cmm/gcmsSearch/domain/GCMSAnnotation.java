@@ -51,7 +51,10 @@ public class GCMSAnnotation {
         int sizeListgcmsCompundSpectrum = this.gcmsCompound.getGCMSSpectrum().size();
         for (int i=0; i<sizeListgcmsCompundSpectrum; i++){
             Spectrum gcmsSpectrumCompound = this.gcmsCompound.getGCMSSpectrum().get(i);
+            score = 0; // score = WHATEVER.modifiedCosine(gcmsSpectrumExperimental, gcmsSpectrumCompound);
+            // We should get the highest score from the spectra belonging to that annotation!
         }
+
         //return score;
         this.gcmsCosineScore = score;
     }
