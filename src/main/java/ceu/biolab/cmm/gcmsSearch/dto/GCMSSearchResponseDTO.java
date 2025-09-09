@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Data
 public class GCMSSearchResponseDTO {
     private List<GCMSFeature> gcmsFeatures;
@@ -17,6 +18,10 @@ public class GCMSSearchResponseDTO {
         this.gcmsFeatures = gcmsFeatures != null ? gcmsFeatures : new ArrayList<>();
     }
 
+    /**
+     * Adds the new GCMSFeatures
+     * @param gcmsFeature
+     */
     public void addGcmsFeatures(GCMSFeature gcmsFeature) {
         if (gcmsFeature != null) {
             this.gcmsFeatures.add(gcmsFeature);

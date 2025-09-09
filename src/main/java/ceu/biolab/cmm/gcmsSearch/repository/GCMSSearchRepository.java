@@ -35,11 +35,11 @@ public class GCMSSearchRepository {
     }
 
     /**
-     * With the information given by the user (queryData) and a query it gets the information from a database (compound_id, compound_name, mass, formula,
-     * inchi, inchi_key, smiles, RT, RI & gcms_spectrum_id) & creates the GCMSCompound
+     * With the information given by the user (queryData) and using a query,
+     * it gets the compound information from the database & creates the GCMSCompound
      *
      * @param queryData  GCMSFeatureQueryDTO that contains the information that is needed for the search
-     * @return gcmsCompoundList - a list of GCMSCompound with the information of the database
+     * @return a list of GCMSCompound with the information from the database
      * @throws IOException
      */
     private List<GCMSCompound> getCompoundInformation(GCMSFeatureQueryDTO queryData) throws IOException {
@@ -54,18 +54,10 @@ public class GCMSSearchRepository {
         params1.addValue("DerivatizationType", queryData.getDerivatizationMethod().name());
 
         /*
-        WITH THE QUERY AND THE GIVEN PARAMETERS, WE OBTAIN THE DATA WE ARE LOOKING FOR
-        (COMPOUND, IDENTIFIERS, RI, RT, SPECTRUM ID)
-        THEN THE VALUES ARE MAPPED TO THE CLASS GCMSCompound. spectrumId IS SAVED ON THE CLASS Spectrum
-        THE RESULTING OBJECTS ARE SAVED ON A LIST OF COMPOUNDS
+        SINCE THE INFORMATION OBTAINED FROM THE DATABASE CORRESPONDS TO TWO DIFFERENT CLASSES,
+        A RowMapper IS USED, AS IT ALLOWS TO STORE THE DATA IN DIFFERENT CLASSES
         */
-
         RowMapper<GCMSCompound> gcmsCompoundCustomMapper = (rs, rowNum) -> {
-            //FROM THE DATA BASE I WILL OBTAIN compound_id, compound_name, mass, formula,
-            //              inchi, inchi_key, smiles, RT, RI & gcms_spectrum_id
-            //FROM queryData (I USED THEM TO FIND THE VALUES ON MY DATABASE SO THE VALUES ARE GOING TO BE CONSTANT
-            // FOR EVERY COMPOUND) I OBTAIN THE derivatizationMethod & gcColumn
-
             //CREATION OF THE GCMSCompound
             GCMSCompound compound = GCMSCompound.builder()
                     .compoundId(rs.getInt("compound_id"))
@@ -84,51 +76,40 @@ public class GCMSSearchRepository {
                     .inchiKey(rs.getString("inchi_key"))
                     .smiles(rs.getString("smiles"))
                     .dbRI(rs.getDouble("RI"))
-                    //.dbRT(rs.getDouble("RT"))
-                    .derivatizationMethod(queryData.getDerivatizationMethod())//.derivatizationMethod(DerivatizationMethod.valueOf(rs.getString("derivatization_method")))
+                    .derivatizationMethod(queryData.getDerivatizationMethod())
                     .gcColumn(queryData.getColumnType())
                     .GCMSSpectrum(new ArrayList<>())
                     .build();
 
-            System.out.println("MAPEO COMPOUND/GCMS: \n"+
-                    " name: "+compound.getCompoundName()+
-                    "; cass: "+compound.getCasId()+
-                    "; inchi: "+compound.getInchi()+
-                    "; inchikey: "+compound.getInchiKey()+
-                    "; smiles: "+compound.getSmiles());
-
-            //CREATION OF THE Spectrum (IT WILL ONLY CONTAIN THE Id) -> SpectrumId
+            //CREATION OF THE Spectrum
             Spectrum spectrum = Spectrum.builder()
                     .spectrumId(rs.getInt("gcms_spectrum_id"))
                     .build();
 
-            //ADD THE SPECTRUM TO THE LIST
             compound.getGCMSSpectrum().add(spectrum);
 
             return compound;
         };
 
-        //CREATE A LIST WITH ALL THE RECEIVED COMPOUNDS (GCMSCompound) USING AS TEMPLATE THE gcmsCompoundCustomMapper
-        //INSTEAD OF BeanPropertyRowMapper<>(GCMSCompound.class) SINCE I HAVE A ATTRIBUTE (spectrumId) THAT IS INSIDE ANOTHER CLASS (Spectrum)
         List<GCMSCompound> gcmsCompoundList = jdbcTemplate.query(sql1, params1, gcmsCompoundCustomMapper);
 
         return gcmsCompoundList;
     }
 
     /**
-     * From GCMSCompoundList, gets the ids of each of the spectrum of each compound
+     * From a list of GCMSCompound, gets the ids of each spectrum of the compounds
      * @param gcmsCompoundsList  list of GCMSCompound
-     * @return listId - list of all spectrum id of all compounds from gcmsCompoundsList
+     * @return a list with all the spectrum ids of the compounds
      */
     private List<Integer> listAllSpectrumIdsCompounds (List<GCMSCompound> gcmsCompoundsList){
         List<Integer> listId = new ArrayList<>();
 
         int compoundListSize = gcmsCompoundsList.size();
 
-        for(int i=0; i<compoundListSize; i++){ //ITERATES OVER THE COMPOUND LIST
-            int spectrumListSize = gcmsCompoundsList.get(i).getGCMSSpectrum().size(); //Sice of each Spectra
-            for(int j=0; j<spectrumListSize; j++){ //ITERATES OVER THE SPECTRUM LIST OF EACH COMPOUND
-                int spectrumId = gcmsCompoundsList.get(i).getGCMSSpectrum().get(j).getSpectrumId(); //Gets the Id of aech Spectrum
+        for(int i=0; i<compoundListSize; i++){
+            int spectrumListSize = gcmsCompoundsList.get(i).getGCMSSpectrum().size(); //Size of the Spectra
+            for(int j=0; j<spectrumListSize; j++){
+                int spectrumId = gcmsCompoundsList.get(i).getGCMSSpectrum().get(j).getSpectrumId(); //Gets the id of each Spectrum
                 listId.add(spectrumId);
             }
         }
@@ -136,49 +117,41 @@ public class GCMSSearchRepository {
     }
 
     /**
-     * Is the ResultSetExtractor, where for each spectrum_id, access the database and relates the information
-     * with the classes Spectrum and Peak
+     * It is a ResultSetExtractor, that for each spectrum id, it accesses the database and
+     * stores the information in the Spectrum and Peak
      *
-     * @param spectrumId is used for the creation of a Spectrum
-     * @return spectrum with all its peaks
+     * @param spectrumId is the database spectrum id and is used for the creation of a Spectrum
+     * @return a spectrum with all its peaks
      */
-    //private ResultSetExtractor<List<Spectrum>> SpectrumPeaksExtractor(int spectrumId) {
     private ResultSetExtractor<Spectrum> spectrumPeaksExtractor(int spectrumId) {
         return rs -> {
-            //Map<Integer, Spectrum> spectrumMap = new LinkedHashMap<>(); -> I don't need it because I will do it for each spectrumid
             Spectrum spectrum = new Spectrum();
             while (rs.next()) {
-                //int spectrumId = rs.getInt("spectrum_id");
 
                 //IF spectrum DOES NOT HAVE THE DATA OF THE DATABASE IT WILL BE CREATED
                 if(spectrum.getSpectrumId() == -1) {
-                    spectrum = //spectrumMap.computeIfAbsent(spectrumId, id ->
-                            Spectrum.builder()
-                                    //.compoundId(rs.getInt("compound_id"))
-                                    .spectrumId(spectrumId)
-                                    .spectrum(new ArrayList<>())
-                                    .build();
+                    spectrum = Spectrum.builder()
+                                .spectrumId(spectrumId)
+                                .spectrum(new ArrayList<>())
+                                .build();
                 }
                 //CREATION OF EACH Peak
                 Peak peak = Peak.builder()
                         .mzValue(rs.getDouble("mz"))
                         .intensity(rs.getDouble("intensity"))
                         .build();
-                //ADDITION OF EACH peak TO spectrum
+                //ADDS EACH peak TO spectrum
                 spectrum.getSpectrum().add(peak);
             }
-            ///return new ArrayList<>(spectrumMap.values());
-            //List<Spectrum> sptr = new ArrayList<>(spectrumMap.values());
             return spectrum;
         };
     }
 
     /**
-     * Using the query and spectrum_id, looks for the Peaks of the spectrum in the database.
-     * It uses a ResultSetExtractor: SpectrumPeaksExtractor(spectrumId)
+     * Using a query and the spectrum id, it searches for the Peaks of the spectrum in the database.
      *
      * @param spectrumId
-     * @return spectrum - Spectrum. For an id its spectrum
+     * @return the Spectrum of an id
      * @throws IOException
      */
     private Spectrum spectrumWithPeaksFromDB(int spectrumId) throws IOException {
@@ -188,38 +161,27 @@ public class GCMSSearchRepository {
         MapSqlParameterSource params2 = new MapSqlParameterSource();
         params2.addValue("SpectrumId", spectrumId);
 
-        //SINCE IM DOING A LOOP FOR EACH ID I WILL ONLY HAVE 1 SPECTRUM
         Spectrum spectrum = jdbcTemplate.query(sql2, params2, spectrumPeaksExtractor(spectrumId));
         return spectrum;
     }
 
     /**
-     * For each of the spectrumId, using a query, looks for the Spectrum information (list of Peaks).
+     * For each of the spectrumId, using a query, searches for the Spectrum information (list of Peaks).
      * Then assigns the spectrum to the compound with the same spectrumId
      *
      * @param gcmsCompoundList  GCMSCompound List that contains GCMSCompound information
      * @throws IOException
      */
-    //private List<Spectrum> getSpectrumInformation(List<Integer> completeListSpectrumIds) throws IOException {
     private void getSpectrumInformation(List<GCMSCompound> gcmsCompoundList) throws IOException {
-
-        //List<Spectrum> spectrumList = new ArrayList<>();
 
         List<Integer> completeListSpectrumIds =  listAllSpectrumIdsCompounds(gcmsCompoundList);
         int sizeIdList = completeListSpectrumIds.size();
         int sizeCompoundList = gcmsCompoundList.size();
 
-        //Resource resource2 = resourceLoader.getResource("classpath:sql/gcms_query2.sql");
-        //String sql2 = new String(Files.readAllBytes(Paths.get(resource2.getURI())));
-
-        for(int i=0; i<sizeIdList; i++){ //ITERATES OVER completeListSpectrumIds
+        for(int i=0; i<sizeIdList; i++){
             int spectrumId = completeListSpectrumIds.get(i);
 
-            //MapSqlParameterSource params2 = new MapSqlParameterSource();
-            //params2.addValue("gcms_spectrum_id", spectrumId);
-
             Spectrum spectrum = spectrumWithPeaksFromDB(spectrumId);
-            //spectrumList.add(spectrum);
 
             for(int j=0; j<sizeCompoundList; j++){
                 int sizeGCMSSpectrumList = gcmsCompoundList.get(j).getGCMSSpectrum().size();
@@ -232,136 +194,16 @@ public class GCMSSearchRepository {
                 }
             }
         }
-
-        //return spectrumList;
-
-        /*ResultSetExtractor<List<Spectrum>> extractor = rs -> {
-            Map<Integer, Spectrum> spectrumMap = new LinkedHashMap<>();
-
-            while (rs.next()) {
-                int spectrumId = rs.getInt("spectrum_id");
-
-                // Creamos o recuperamos el Spectrum
-                Spectrum spectrum = spectrumMap.computeIfAbsent(spectrumId, id ->
-                        Spectrum.builder()
-                                .spectrumId(id)
-                                .peaks(new ArrayList<>())
-                                .build()
-                );
-
-                // Creamos el peak del resultSet
-                Peak peak = Peak.builder()
-                        .mz(rs.getDouble("mz"))
-                        .intensity(rs.getDouble("intensity"))
-                        .build();
-
-                // Lo agregamos al Spectrum correspondiente
-                spectrum.getPeaks().add(peak);
-            }
-
-            return new ArrayList<>(spectrumMap.values());
-        };
-
-        List<Spectrum> spectrumList = jdbcTemplate.query(
-            "SELECT spectrum_id, mz, intensity FROM peaks WHERE spectrum_id IN (:ids)",
-            new MapSqlParameterSource("ids", spectrumIds), // Lista con los ids
-            extractor
-        );*/
-
     }
 
     /**
-     * NOT ANYMORE!
-     * Match each GCMSCompound with its Spectrum using the compound id
-     *
-     * @param gcmsCompoundList GCMSCompoun List - The Spectrum only has the id
-     * @param spectrumWithPeaksList Spectrum with its Peak List
-     *
-    @Deprecated
-    private void joinCompoundSpectrum (List<GCMSCompound> gcmsCompoundList, List<Spectrum> spectrumWithPeaksList){
-        int sizeCompoundList = gcmsCompoundList.size();
-        int sizeSpectrumPeakList = spectrumWithPeaksList.size();
-        Spectrum spectrum;
-
-        //COMPARES THE LIST TO KNOW WHICH ONE IS THE LARGEST SO THAT THE ASSOCIATION BETWEEN BOTH LISTS CAN BE MADE
-        for(int i=0; i<sizeCompoundList; i++) { //ITERATES OVER gcmsCompoundList
-            int idCompoundFromCompound = gcmsCompoundList.get(i).getCompoundId();
-            for (int j = 0; j < sizeSpectrumPeakList; j++) {//ITERATES OVER spectrumWithPeaksList
-                int idCompoundFromSpectrum = spectrumWithPeaksList.get(j).getCompoundId();
-                if (idCompoundFromCompound == idCompoundFromSpectrum) {
-                    spectrum = spectrumWithPeaksList.get(j); //Spectrum FROM spectrumWithPeaksList
-                    //gcmsCompoundList.get(i).getGCMSSpectrum().add(spectrum);
-                    int tam = gcmsCompoundList.get(i).getGCMSSpectrum().size();
-                    for (int k = 0; k < tam; k++) {
-                        if (gcmsCompoundList.get(i).getGCMSSpectrum().get(k).getSpectrumId() == idCompoundFromSpectrum) {
-                            gcmsCompoundList.get(i).getGCMSSpectrum().get(k).setSpectrum(spectrum.getSpectrum());
-                        }
-                    }
-                }
-            }
-        }
-    }*/
-    /*INCORRECCTO
-    private void joinCompoundSpectrum (List<GCMSCompound> gcmsCompoundList, List<Spectrum> spectrumWithPeaksList){
-        int sizeCompoundList = gcmsCompoundList.size();
-        int sizeSpectrumPeakList = spectrumWithPeaksList.size();
-        int largestList;
-        int shortestList;
-        Spectrum spectrum;
-
-        //COMPARES THE LIST TO KNOW WHICH ONE IS THE LARGEST SO THAT THE ASSOCIATION BETWEEN BOTH LISTS CAN BE MADE
-        if(sizeCompoundList>=sizeSpectrumPeakList){
-            largestList = sizeCompoundList;
-            shortestList = sizeSpectrumPeakList;
-
-            for(int i=0; i<largestList; i++){ //ITERATES OVER gcmsCompoundList
-                int idCompoundFromCompound = gcmsCompoundList.get(i).getCompoundId();
-                for(int j=0; j<shortestList; j++){//ITERATES OVER spectrumWithPeaksList
-                    int idCompoundFromSpectrum = spectrumWithPeaksList.get(j).getCompoundId();
-                    if(idCompoundFromCompound==idCompoundFromSpectrum){
-                        spectrum = spectrumWithPeaksList.get(j); //Spectrum FROM spectrumWithPeaksList
-                        //gcmsCompoundList.get(i).getGCMSSpectrum().add(spectrum);
-                        int tam = gcmsCompoundList.get(i).getGCMSSpectrum().size();
-                        for(int k=0; k<tam; k++){
-                            if(gcmsCompoundList.get(i).getGCMSSpectrum().get(k).getSpectrumId() == idCompoundFromSpectrum){
-                                gcmsCompoundList.get(i).getGCMSSpectrum().get(k).setSpectrum(spectrum.getSpectrum());
-                            }
-                        }
-                    }
-                }
-            }
-        } else{
-            largestList = sizeSpectrumPeakList;
-            shortestList = sizeCompoundList;
-            for(int i=0; i<largestList; i++){ //ITERATES OVER spectrumWithPeaksList
-                int idCompoundFromSpectrum = spectrumWithPeaksList.get(i).getCompoundId();
-                for(int j=0; j<shortestList; j++){//ITERATES OVER gcmsCompoundList
-                    int idCompoundFromCompound = gcmsCompoundList.get(j).getCompoundId();
-                    if(idCompoundFromCompound==idCompoundFromSpectrum){
-                        spectrum = spectrumWithPeaksList.get(i); //Spectrum FROM spectrumWithPeaksList
-                        //gcmsCompoundList.get(j).getGCMSSpectrum().add(spectrum);
-                        int tam = gcmsCompoundList.get(j).getGCMSSpectrum().size();
-                        for(int k=0; k<tam; k++){
-                            if(gcmsCompoundList.get(j).getGCMSSpectrum().get(k).getSpectrumId() == idCompoundFromSpectrum){
-                                gcmsCompoundList.get(j).getGCMSSpectrum().get(k).setSpectrum(spectrum.getSpectrum());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }*/
-
-    /**
      * Creates the GCMSQueryResponseDTO from a GCMSCompound List (gcmsCompoundList)
-     * @param gcmsCompoundList Relevant GCMSCompounds grouped in a GCMSCompound list
-     * @return GCMSQueryResponseDTO List with the information of gcmsCompoundList
+     * @param gcmsCompoundList the list containning the found GCMSCompounds
+     * @return a list with the information of gcmsCompoundList
      */
     private List<GCMSQueryResponseDTO> creationGCMSQueryResponseDTOFromgcmsCompoundList(List<GCMSCompound> gcmsCompoundList){
         List<GCMSQueryResponseDTO> infoAllRelevantCompounds = new ArrayList<>();
         GCMSQueryResponseDTO queryResponseDTO = new GCMSQueryResponseDTO();
-        //List<Spectrum> spectrumListCopy = new ArrayList<>();
-        //List<Peak> peakListCopy = new ArrayList<>();
 
         //COMPOUND
         int size = gcmsCompoundList.size();
@@ -388,7 +230,6 @@ public class GCMSSearchRepository {
             ColumnType gcColumn = gcmsCompoundList.get(i).getGcColumn();
 
             double RI = gcmsCompoundList.get(i).getDbRI();
-            //double RT = gcmsCompoundList.get(i).getDbRT();
 
             //SPECTRUM
             int sizeSpectrum = gcmsCompoundList.get(i).getGCMSSpectrum().size();
@@ -396,7 +237,6 @@ public class GCMSSearchRepository {
             for (int j=0; j<sizeSpectrum; j++){
                 Spectrum spectrum = gcmsCompoundList.get(i).getGCMSSpectrum().get(j);
                 int spectrumId = spectrum.getSpectrumId();
-                //int compoundIdSpectrum = spectrum.getCompoundId();
 
                 //PEAKS
                 int sizePeak = spectrum.getSpectrum().size();
@@ -409,9 +249,10 @@ public class GCMSSearchRepository {
                     peakListCopy.add(peakCopy);
                 }
                 Spectrum spectrumCopy = Spectrum.builder().spectrumId(spectrumId)
-                        /*.compoundId(compoundIdSpectrum)*/.spectrum(peakListCopy).build();
+                        .spectrum(peakListCopy).build();
                 spectrumListCopy.add(spectrumCopy);
             }
+
             queryResponseDTO = GCMSQueryResponseDTO.builder()
                     .compoundId(compoundId).compoundName(compoundName).monoisotopicMass(compoundMonoisotopicMass)
                     .formula(compoundFormula).formulaType(formulaType).logP(logP).casId(casId)
@@ -419,7 +260,7 @@ public class GCMSSearchRepository {
                     .compound_status(compoundStatus).formula_type_int(formulaTypeInt)
                     .inchi(inchi).inchiKey(inchiKey).smiles(smiles)
                     .dertype(derivatizationMethod).gcColumn(gcColumn)
-                    .RI(RI)/*.RT(RT)*/.GCMSSpectrum(spectrumListCopy)
+                    .RI(RI).GCMSSpectrum(spectrumListCopy)
                     .build();
             infoAllRelevantCompounds.add(queryResponseDTO);
         }
@@ -427,7 +268,7 @@ public class GCMSSearchRepository {
     }
 
     /**
-     * From the information given by the user, it looks in the database the compounds that matches
+     * From the information given by the user, it checks in the database for the matching compounds.
      * @param queryData information given by the user
      * @return a list with the matching compounds
      * @throws IOException
@@ -436,39 +277,10 @@ public class GCMSSearchRepository {
         List<GCMSQueryResponseDTO> infoAllRelevantCompounds = new ArrayList<>();
 
         List<GCMSCompound> gcmsCompoundList = getCompoundInformation(queryData);
-        GCMSCompound gcmsc = gcmsCompoundList.get(0);
 
-        System.out.println("FIND MATCH COMPOUNDS RESUL LIST MAPEO: \n"+
-                " name: "+gcmsc.getCompoundName()+
-                "; inchi: "+gcmsc.getInchi()+
-                "; inchikey: "+gcmsc.getInchiKey()+
-                "; smiles: "+gcmsc.getSmiles());
-
-        //List<Integer> completeListSpectrumIds =  listAllSpectrumIdsCompounds(gcmsCompoundList); //inside spectruminfo
-
-        //GETS SPECTRUM LIST WITH THE PEAKS
-        //List<Spectrum> spectrumWithPeakList = getSpectrumInformation(completeListSpectrumIds);
-
-        //GCMSCompound WITH EACH Spectrum
         getSpectrumInformation(gcmsCompoundList);
-        System.out.println("FIND MATCH COMPOUNDS RESUL LIST MAPEO despues SPECTRUM UNION: \n"+
-                " name: "+gcmsc.getCompoundName()+
-                "; inchi: "+gcmsc.getInchi()+
-                "; inchikey: "+gcmsc.getInchiKey()+
-                "; smiles: "+gcmsc.getSmiles()+
-                "; spect: "+gcmsc.getGCMSSpectrum().get(0));
-
-        //JOIN EACH GCMSCompound WITH THE CORRECT Spectrum
-        //joinCompoundSpectrum(gcmsCompoundList, spectrumWithPeakList);
 
         infoAllRelevantCompounds = creationGCMSQueryResponseDTOFromgcmsCompoundList(gcmsCompoundList);
-        System.out.println("FIND MATCH COMPOUNDS RESUL LIST MAPEO INFOALL (queryResponseDTO): \n"+
-                " name: "+gcmsc.getCompoundName()+
-                "; inchi: "+gcmsc.getInchi()+
-                "; inchikey: "+gcmsc.getInchiKey()+
-                "; smiles: "+gcmsc.getSmiles()+
-                "; casId: "+gcmsc.getCasId()+
-                "; spect: "+gcmsc.getGCMSSpectrum().get(0));
 
         return infoAllRelevantCompounds;
     }

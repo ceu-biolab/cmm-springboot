@@ -1,61 +1,31 @@
 package ceu.biolab.cmm.gcmsSearch.domain;
-import ceu.biolab.cmm.shared.domain.compound.Compound;
-import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
+
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
-import java.util.Optional;
 
 @Data
 @SuperBuilder
 public class GCMSAnnotation {
     private GCMSCompound gcmsCompound;
-    //private GCMSCompoundAll gcmsCompoundAll;
-    private double gcmsCosineScore; // calculation of the msmsCosineScore based on the input data vs database data
+    private double gcmsCosineScore;
 
-    private double experimentalRI; // is the one that the user use
-    private double deltaRI; //experimental - dbRI
-    //private Optional<Double> experimentalRT;
-    //private Optional<Double> deltaRT;
+    private double experimentalRI;
+    private double deltaRI;
 
-    /*public GCMSAnnotation(Compound compound, GCMSCompound gcmsCompound,
-                          double msmsCosineScore, double deltaRI, Optional<Double> deltaRT) {
-        super(compound);
-        this.gcmsCompound = gcmsCompound;
-        this.msmsCosineScore = msmsCosineScore;
-        this.deltaRI = deltaRI;
-        this.deltaRT = deltaRT;
-    }*/
-    /*public GCMSAnnotation(Compound compound, GCMSCompound gcmsCompound,
-                          double gcmsCosineScore, double deltaRI) {
-        super(compound);
-        this.gcmsCompound = gcmsCompound;
-        this.gcmsCosineScore = gcmsCosineScore;
-        this.deltaRI = deltaRI;
-        this.deltaRT = Optional.empty();
-    }*/
-    /*public GCMSAnnotation(Compound compound, GCMSCompound gcmsCompound,
-                          double gcmsCosineScore, double deltaRI, double deltaRT) {
-        super(compound);
-        this.gcmsCompound = gcmsCompound;
-        this.gcmsCosineScore = gcmsCosineScore;
-        this.deltaRI = deltaRI;
-        this.deltaRT = Optional.of(deltaRT);
-    }*/
-
-    //TODO not the correct method
+    /**
+     * Currently this method returns a score of 0.
+     * In the future it should return the highest score of the spectra belonging to an annotation.
+     * The score is the similarity between the experimental spectrum and the spectrum of the annotated compound
+     * @param gcmsSpectrumExperimental
+     */
     public void cosineScoreFunction(Spectrum gcmsSpectrumExperimental){
         int score=0;
         int sizeListgcmsCompundSpectrum = this.gcmsCompound.getGCMSSpectrum().size();
         for (int i=0; i<sizeListgcmsCompundSpectrum; i++){
             Spectrum gcmsSpectrumCompound = this.gcmsCompound.getGCMSSpectrum().get(i);
-            score = 0; // score = WHATEVER.modifiedCosine(gcmsSpectrumExperimental, gcmsSpectrumCompound);
-            // We should get the highest score from the spectra belonging to that annotation!
+            score = 0; // score = modifiedCosine(gcmsSpectrumExperimental, gcmsSpectrumCompound);
         }
-
-        //return score;
         this.gcmsCosineScore = score;
     }
 

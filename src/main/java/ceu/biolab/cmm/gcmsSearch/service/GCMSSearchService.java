@@ -8,7 +8,6 @@ import ceu.biolab.cmm.gcmsSearch.dto.GCMSSearchResponseDTO;
 import ceu.biolab.cmm.gcmsSearch.repository.GCMSSearchRepository;
 
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
-import lombok.experimental.SuperBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-//@SuperBuilder
 public class GCMSSearchService {
 
     @Autowired
@@ -25,21 +23,15 @@ public class GCMSSearchService {
 
     public GCMSSearchResponseDTO search(GCMSSearchRequestDTO request) {
 
-        //int nSpectrum = request.getGcmsSpectrum().size(); //NUMBER OF GCMS SPECTRUM
-
         Spectrum gcmsSpectrumExperimental = request.getGcmsSpectrumExperimental();
 
         ColumnType columnType = request.getColumnType();
         DerivatizationMethod derivatizationMethod = request.getDerivatizationMethod();
         double RI = request.getRetentionIndex();
-        //double RITolerance = request.getRetentionIndexTolerance()*0.01; //Data is %
-        double RITolerance = request.getRetentionIndexTolerance();
+        double RITolerance = request.getRetentionIndexTolerance(); //%
         double RIToleranceFinal;
 
-        System.out.println("DATOS REQUEST: "+ gcmsSpectrumExperimental + "; ct: "+
-                columnType + "; dt: "+ derivatizationMethod + "; ri: "+ RI + "; ritol: "+ RITolerance);
-
-        if (RITolerance >= 0 && RITolerance <= 100){//
+        if (RITolerance >= 0 && RITolerance <= 100){
             RIToleranceFinal = RITolerance*0.01;
         } else {
             throw new IllegalArgumentException("Retentention Index Tolerance must be positive(%)" +request.getRetentionIndexTolerance());
@@ -47,28 +39,10 @@ public class GCMSSearchService {
 
         GCMSSearchResponseDTO response = new GCMSSearchResponseDTO();
 
-        /*Spectrum spectrum = new Spectrum();
-        //ITERATES OVER THE SPECTRA
-        for (int i = 0; i < nSpectrum; i++) {
-            //NUMBER OF PEAKS PER SPECTRUM
-            int nPeaksSpectrum = request.getGcmsSpectrum().get(i).getSpectrum().size();
-            //ITERATES OVER THE PEAKS OF THE SPECTRUM i
-            for(int j=0; j<nPeaksSpectrum; j++){
-                spectrum = request.getGcmsSpectrum().get(i); //Spectrum i
-                List<Peak> peakList = spectrum.getSpectrum(); //Peak list of my spectrum
-                Peak peak = spectrum.getSpectrum().get(j);
-                double mz = spectrum.getSpectrum().get(j).getMzValue();
-                double intensity = spectrum.getSpectrum().get(j).getIntensity();
-            }
-        }*/
-
-        //GCMSFeature gcmsFeature = new GCMSFeature(feature);
-
         double RIDifference = RI * RIToleranceFinal;
         double RILower = RI - RIDifference;
         double RIUpper = RI + RIDifference;
 
-        //GCMSFeatureQueryDTO queryData = new GCMSFeatureQueryDTO(RILower, RIUpper, derivatizationMethod, columnType);
         GCMSFeatureQueryDTO queryData = GCMSFeatureQueryDTO.builder().minRI(RILower).maxRI(RIUpper)
                 .derivatizationMethod(derivatizationMethod).columnType(columnType).build();
 
@@ -78,7 +52,6 @@ public class GCMSSearchService {
 
             List<GCMSAnnotation> gcmsAnnotationList = new ArrayList<>();
 
-            //ITERATES OVER THE RESULTS OF THE QUERY
             for (GCMSQueryResponseDTO queryResult : queryResults) {
                 GCMSCompound gcmsCompound = GCMSCompound.builder()
                         .compoundId(queryResult.getCompoundId())
@@ -97,29 +70,26 @@ public class GCMSSearchService {
                         .inchiKey(queryResult.getInchiKey())
                         .smiles(queryResult.getSmiles())
                         .dbRI(queryResult.getRI())
-                        //.dbRT(queryResult.getRT())
                         .derivatizationMethod(queryResult.getDertype())
                         .gcColumn(queryResult.getGcColumn())
                         .GCMSSpectrum(queryResult.getGCMSSpectrum())
                         .build();
 
-                System.out.println("GCMSCompound SERVICE BUILD: \n"+
-                        " inchi: "+gcmsCompound.getInchi()+
-                        "; inchikey: "+gcmsCompound.getInchiKey()+
-                        "; smiles: "+gcmsCompound.getSmiles());
-
                 double dbRI = queryResult.getRI();
-                //RI by user (experimental) - RI database -> absolute value so that it is positive
+                //EXPERIMENTAL RI (RI USER) - RI DATABASE -> ABSOLUTE VALUE SO THAT THE RESULT IS POSITIVE
                 double deltaRI = Math.abs(RI - dbRI);
+
                 GCMSAnnotation gcmsAnnotation = GCMSAnnotation.builder().gcmsCompound(gcmsCompound)
                         .experimentalRI(RI).deltaRI(deltaRI)
                         .build();
-                // Recibe el espectro experimental para calcular el cosine Score
+
+                //CALCULATES THE SCORE WITH THE EXPERIMENTAL SPECTRUM
                 gcmsAnnotation.cosineScoreFunction(gcmsSpectrumExperimental);
 
                 gcmsAnnotationList.add(gcmsAnnotation);
 
             }
+
             GCMSFeature gcmsFeature = GCMSFeature.builder()
                     .gcmsAnnotations(gcmsAnnotationList)
                     .gcmsSpectrumExperimental(gcmsSpectrumExperimental)

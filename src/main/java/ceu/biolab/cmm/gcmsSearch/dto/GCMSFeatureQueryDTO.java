@@ -5,15 +5,12 @@ import ceu.biolab.cmm.gcmsSearch.domain.DerivatizationMethod;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
-
-//IT CONTAINS THE INFO THAT I USE TO FIND THE INFO THAT I WANT OF THE DATABASE
-@Data //set, get,...
+@Data
 @SuperBuilder
 public class GCMSFeatureQueryDTO {
     private double minRI;
     private double maxRI;
     private DerivatizationMethod derivatizationMethod;
     private ColumnType columnType;
-
 
 }

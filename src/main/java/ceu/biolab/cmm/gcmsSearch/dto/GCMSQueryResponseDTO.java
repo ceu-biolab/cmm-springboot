@@ -10,7 +10,6 @@ import lombok.experimental.SuperBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-//CONTAINS WHAT I HAVE FOUND ON THE DATA BASE --> GCMSCompound -> helps save the data to organize it here
 @Data
 @SuperBuilder
 public class GCMSQueryResponseDTO {
@@ -37,15 +36,10 @@ public class GCMSQueryResponseDTO {
     private List<Spectrum> GCMSSpectrum = null;
 
     private double RI;
-    //private double RT;
-
-
 
     public GCMSQueryResponseDTO(int compoundId, String compoundName, double monoisotopicMass,
-                                String formula, /*String formulaType, String compoundType, Double logP,
-                                String pathwayName, Integer pathwayId, String pathwayMap,*/
-                                DerivatizationMethod dertype, ColumnType gcColumn, List<Spectrum> GCMSSpectrum,
-                                double RI, double RT) {
+                                String formula, DerivatizationMethod dertype, ColumnType gcColumn, List<Spectrum> GCMSSpectrum,
+                                double RI) {
         this.compoundId = compoundId;
         this.compoundName = compoundName;
         this.monoisotopicMass = monoisotopicMass;
@@ -54,7 +48,6 @@ public class GCMSQueryResponseDTO {
         this.gcColumn = gcColumn;
         this.GCMSSpectrum = GCMSSpectrum != null ? GCMSSpectrum : new ArrayList<>();
         this.RI = RI;
-        //this.RT = RT;
     }
 
     public GCMSQueryResponseDTO() {
@@ -80,8 +73,6 @@ public class GCMSQueryResponseDTO {
         this.gcColumn = ColumnType.STANDARD_NON_POLAR;
         this.GCMSSpectrum = new ArrayList<>();
         this.RI = -1;
-        //this.RT = -1;
     }
-
 
 }
