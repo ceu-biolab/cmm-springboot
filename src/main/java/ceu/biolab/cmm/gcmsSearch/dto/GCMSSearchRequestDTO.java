@@ -16,18 +16,22 @@ public class GCMSSearchRequestDTO {
     private DerivatizationMethod derivatizationMethod;
     private ColumnType columnType;
 
+    public GCMSSearchRequestDTO() {
+        this(null, 0.0, 0.0, null, null);
+    }
+
     public GCMSSearchRequestDTO(Spectrum gcmsSpectrum, double retentionIndex, double retentionIndexTolerance,
                                 DerivatizationMethod derivatizationMethod, ColumnType columnType) {
         this.gcmsSpectrumExperimental = gcmsSpectrum != null ? gcmsSpectrum : new Spectrum();
         this.retentionIndex = retentionIndex;
-        this.retentionIndexTolerance = retentionIndexTolerance;
-        this.derivatizationMethod = derivatizationMethod != null ? derivatizationMethod : derivatizationMethod.METHYL_CHLOROFORMATE;
-        this.columnType = columnType != null ? columnType : columnType.SEMISTANDARD_NON_POLAR;
+        setRetentionIndexTolerance(retentionIndexTolerance);
+        this.derivatizationMethod = derivatizationMethod != null ? derivatizationMethod : DerivatizationMethod.METHYL_CHLOROFORMATE;
+        this.columnType = columnType != null ? columnType : ColumnType.SEMISTANDARD_NON_POLAR;
     }
 
     public void setRetentionIndexTolerance(double retentionIndexTolerance) {
         if (retentionIndexTolerance < 0) {
-            throw new IllegalArgumentException("retentionIndexTolerance must be positive");
+            throw new IllegalArgumentException("retentionIndexTolerance must be non-negative");
         }
         this.retentionIndexTolerance = retentionIndexTolerance;
     }

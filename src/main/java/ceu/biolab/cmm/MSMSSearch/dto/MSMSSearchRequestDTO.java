@@ -1,8 +1,9 @@
 package ceu.biolab.cmm.MSMSSearch.dto;
 
-import ceu.biolab.cmm.MSMSSearch.domain.*;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
+import ceu.biolab.cmm.MSMSSearch.domain.*;
 import lombok.Data;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package ceu.biolab.cmm.unit.MSMSSearch.repository;
 
 import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
-import ceu.biolab.cmm.MSMSSearch.domain.ScoreType;
+import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.repository.MSMSSearchRepository;
 import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;

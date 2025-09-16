@@ -1,7 +1,7 @@
 package ceu.biolab.cmm.unit.MSMSSearch.service;
 
 import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
-import ceu.biolab.cmm.MSMSSearch.domain.ScoreType;
+import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.MSMSSearch.repository.MSMSSearchRepository;
@@ -97,4 +97,3 @@ public class MSMSSearchServiceTest {
         assertNotNull(resp);
     }
 }
-

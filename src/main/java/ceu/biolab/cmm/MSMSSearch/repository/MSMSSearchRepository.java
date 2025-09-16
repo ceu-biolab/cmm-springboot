@@ -3,12 +3,13 @@ package ceu.biolab.cmm.MSMSSearch.repository;
 import ceu.biolab.cmm.MSMSSearch.domain.*;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
-import ceu.biolab.cmm.MSMSSearch.service.SpectrumScorer;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
+import ceu.biolab.cmm.shared.service.SpectrumScorer;
 import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -195,7 +196,7 @@ public class MSMSSearchRepository {
         SpectrumScorer comparator = new SpectrumScorer(MzToleranceMode.valueOf(queryTolMode), tolValue);
         Set<MSMSAnnotation> matched = new HashSet<>();
         for (MSMSAnnotation lib : libraryMsms) {
-            double score = comparator.compute(scoreType, lib.getSpectrum(), queryMsms.getFragmentsMZsIntensities());
+            double score = comparator.compute(scoreType, lib.getSpectrum().getPeaks(), queryMsms.getFragmentsMZsIntensities().getPeaks());
             if (score >= 0.5) {
                 lib.setMsmsCosineScore(score);
                 matched.add(lib);

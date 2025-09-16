@@ -1,10 +1,10 @@
 package ceu.biolab.cmm.unit.MSMSSearch.service;
 
-import ceu.biolab.cmm.MSMSSearch.domain.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
-import ceu.biolab.cmm.MSMSSearch.service.SpectrumScorer;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
+import ceu.biolab.cmm.shared.service.SpectrumScorer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class SpectrumScorerMoreTests {
         ));
 
         SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 100.0);
-        var pair = scorer.padMSPeaks(a, b);
+        var pair = scorer.padMSPeaks(a.getPeaks(), b.getPeaks());
         double[] vecA = pair.getLeft();
         double[] vecB = pair.getRight();
 
@@ -61,7 +61,7 @@ public class SpectrumScorerMoreTests {
         ));
 
         SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 100.0);
-        double score = scorer.compute(ScoreType.MODIFIED_COSINE, a, b);
+        double score = scorer.compute(ScoreType.MODIFIED_COSINE, a.getPeaks(), b.getPeaks());
 
         assertEquals(1.0, score, 1e-9);
     }

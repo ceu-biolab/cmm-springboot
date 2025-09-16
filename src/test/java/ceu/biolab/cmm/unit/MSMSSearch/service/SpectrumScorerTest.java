@@ -1,10 +1,10 @@
 package ceu.biolab.cmm.unit.MSMSSearch.service;
 
-import ceu.biolab.cmm.MSMSSearch.domain.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
-import ceu.biolab.cmm.MSMSSearch.service.SpectrumScorer;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
+import ceu.biolab.cmm.shared.service.SpectrumScorer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class SpectrumScorerTest {
         ));
 
         SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.PPM, 10.0);
-        scorer.normalizeIntensities(s);
+        scorer.normalizeIntensities(s.getPeaks());
 
         assertEquals(1.0, s.getPeaks().get(0).getIntensity(), 1e-9);
         assertEquals(0.5, s.getPeaks().get(1).getIntensity(), 1e-9);
@@ -43,7 +43,7 @@ public class SpectrumScorerTest {
 
         // 0.1 Da == 100 mDa
         SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 100.0);
-        double score = scorer.compute(ScoreType.COSINE, a, b);
+        double score = scorer.compute(ScoreType.COSINE, a.getPeaks(), b.getPeaks());
         assertEquals(1.0, score, 1e-9);
     }
 
@@ -62,7 +62,7 @@ public class SpectrumScorerTest {
 
         // 0.1 Da == 100 mDa
         SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 100.0);
-        double score = scorer.compute(ScoreType.COSINE, a, b);
+        double score = scorer.compute(ScoreType.COSINE, a.getPeaks(), b.getPeaks());
         assertTrue(score > 0.98, "Expected high similarity when peaks match within tolerance");
     }
 
@@ -79,7 +79,7 @@ public class SpectrumScorerTest {
 
         // 0.1 Da == 100 mDa
         SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 100.0);
-        double score = scorer.compute(ScoreType.COSINE, a, b);
+        double score = scorer.compute(ScoreType.COSINE, a.getPeaks(), b.getPeaks());
         assertEquals(0.0, score, 1e-9);
     }
 
@@ -99,11 +99,11 @@ public class SpectrumScorerTest {
         ));
 
         SpectrumScorer scorerTight = new SpectrumScorer(MzToleranceMode.PPM, 5.0);
-        double scoreWithin = scorerTight.compute(ScoreType.COSINE, a, bWithin);
+        double scoreWithin = scorerTight.compute(ScoreType.COSINE, a.getPeaks(), bWithin.getPeaks());
         assertTrue(scoreWithin > 0.9, "Expected match within 5 ppm tolerance");
 
         SpectrumScorer scorerTight2 = new SpectrumScorer(MzToleranceMode.PPM, 5.0);
-        double scoreOutside = scorerTight2.compute(ScoreType.COSINE, a, bOutside);
+        double scoreOutside = scorerTight2.compute(ScoreType.COSINE, a.getPeaks(), bOutside.getPeaks());
         assertEquals(0.0, scoreOutside, 1e-9, "Expected no match outside 5 ppm tolerance");
     }
 }
