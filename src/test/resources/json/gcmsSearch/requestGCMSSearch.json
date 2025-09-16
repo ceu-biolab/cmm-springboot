@@ -1,0 +1,33 @@
+{
+	"gcmsSpectrumExperimental":{
+		"spectrum":[
+			{"mzValue": 115.0376, "intensity": 100.0},
+			{"mzValue": 55.0177, "intensity": 40.31255},
+			{"mzValue": 59.0128, "intensity": 18.103279999999998},
+			{"mzValue": 87.0427, "intensity": 15.904760000000001},
+			{"mzValue": 71.0855, "intensity": 6.213241000000001},
+			{"mzValue": 57.0698, "intensity": 5.426879},
+			{"mzValue": 116.0395, "intensity": 5.407668},
+			{"mzValue": 43.0292, "intensity": 5.190646999999999},
+			{"mzValue": 85.1014, "intensity": 3.522497},
+			{"mzValue": 43.0541, "intensity": 3.2214859999999996},
+			{"mzValue": 143.0325, "intensity": 2.812858},
+			{"mzValue": 113.1323, "intensity": 2.04844},
+			{"mzValue": 56.0257, "intensity": 2.012552},
+			{"mzValue": 84.0934, "intensity": 1.6977140000000002},
+			{"mzValue": 121.9918, "intensity": 1.1016940000000002},
+			{"mzValue": 326.9567, "intensity": 1.095998},
+			{"mzValue": 127.1478, "intensity": 1.063178},
+			{"mzValue": 151.9783, "intensity": 1.049012},
+			{"mzValue": 107.5385, "intensity": 1.0477180000000001}
+		]
+	},
+	"retentionIndex": 1500, 
+	"retentionIndexTolerance": 10, 
+	"derivatizationMethod": "METHYL_CHLOROFORMATE", 
+	"columnType": "STANDARD_NON_POLAR" 
+}
+
+
+
+
