@@ -23,9 +23,13 @@ public class SpectrumScorer {
     }
 
     public double compute(ScoreType type, List<MSPeak> spec1, List<MSPeak> spec2) {
+        return compute(type, spec1, spec2, null, null);
+    }
+
+    public double compute(ScoreType type, List<MSPeak> spec1, List<MSPeak> spec2, Double precursor1, Double precursor2) {
         return switch (type) {
             case COSINE -> cosineScore(spec1, spec2);
-            case MODIFIED_COSINE -> modifiedCosine(spec1, spec2);
+            case MODIFIED_COSINE -> modifiedCosine(spec1, precursor1, spec2, precursor2);
         };
     }
 
@@ -113,7 +117,83 @@ public class SpectrumScorer {
     }
 
     public double modifiedCosine(List<MSPeak> specA, List<MSPeak> specB) {
-        return cosineScore(specA, specB);
+        return modifiedCosine(specA, null, specB, null);
+    }
+
+    public double modifiedCosine(List<MSPeak> specA, Double precursorA, List<MSPeak> specB, Double precursorB) {
+        List<MSPeak> a = getNormalizedPeaks(specA);
+        List<MSPeak> b = getNormalizedPeaks(specB);
+        if (a.isEmpty() || b.isEmpty()) {
+            return 0.0;
+        }
+
+        double normA = 0.0;
+        double normB = 0.0;
+        for (MSPeak p : a) {
+            normA += p.getIntensity() * p.getIntensity();
+        }
+        for (MSPeak p : b) {
+            normB += p.getIntensity() * p.getIntensity();
+        }
+        if (normA == 0.0 || normB == 0.0) {
+            return 0.0;
+        }
+
+        boolean allowNeutralLoss = precursorA != null && precursorB != null;
+        List<MatchCandidate> candidates = new ArrayList<>();
+        for (int i = 0; i < a.size(); i++) {
+            MSPeak pa = a.get(i);
+            for (int j = 0; j < b.size(); j++) {
+                MSPeak pb = b.get(j);
+                double centerMz = (pa.getMz() + pb.getMz()) * 0.5;
+                double tolDa = toleranceDa(centerMz);
+                double diff = Math.abs(pa.getMz() - pb.getMz());
+                boolean direct = diff <= tolDa;
+                boolean shifted = false;
+                if (!direct && allowNeutralLoss) {
+                    double lossA = precursorA - pa.getMz();
+                    double lossB = precursorB - pb.getMz();
+                    shifted = Math.abs(lossA - lossB) <= tolDa;
+                }
+                if (direct || shifted) {
+                    double dot = pa.getIntensity() * pb.getIntensity();
+                    candidates.add(new MatchCandidate(i, j, dot, shifted));
+                }
+            }
+        }
+
+        if (candidates.isEmpty()) {
+            return 0.0;
+        }
+
+        candidates.sort((c1, c2) -> {
+            int cmp = Double.compare(c2.dot, c1.dot);
+            if (cmp != 0) {
+                return cmp;
+            }
+            // Prefer direct matches (shifted == false)
+            return Boolean.compare(c1.shifted, c2.shifted);
+        });
+
+        boolean[] usedA = new boolean[a.size()];
+        boolean[] usedB = new boolean[b.size()];
+        double dot = 0.0;
+        int matched = 0;
+        for (MatchCandidate candidate : candidates) {
+            if (usedA[candidate.indexA] || usedB[candidate.indexB]) {
+                continue;
+            }
+            usedA[candidate.indexA] = true;
+            usedB[candidate.indexB] = true;
+            dot += candidate.dot;
+            matched++;
+        }
+
+        if (matched == 0 || dot == 0.0) {
+            return 0.0;
+        }
+
+        return dot / (Math.sqrt(normA) * Math.sqrt(normB));
     }
 
     public void normalizeIntensities(List<MSPeak> peaks) {
@@ -191,5 +271,18 @@ public class SpectrumScorer {
                 ? mzRef * tolValue / 1_000_000.0
                 : tolValue / 1000.0;
     }
-}
 
+    private static final class MatchCandidate {
+        final int indexA;
+        final int indexB;
+        final double dot;
+        final boolean shifted;
+
+        MatchCandidate(int indexA, int indexB, double dot, boolean shifted) {
+            this.indexA = indexA;
+            this.indexB = indexB;
+            this.dot = dot;
+            this.shifted = shifted;
+        }
+    }
+}

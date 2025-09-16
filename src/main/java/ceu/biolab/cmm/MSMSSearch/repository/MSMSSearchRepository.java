@@ -181,7 +181,7 @@ public class MSMSSearchRepository {
         sql = sql.replace("(:msmsId)", String.valueOf(msmsId));
 
         List<MSPeak> peaks = new ArrayList<>();
-        jdbcTemplate.query(sql, (rs, rowNum) -> {
+        jdbcTemplate.query(sql, (rs, _) -> {
             double mz = rs.getDouble("mz");
             double intensity = rs.getDouble("intensity");
             MSPeak pk = new MSPeak(mz, intensity);
@@ -196,7 +196,13 @@ public class MSMSSearchRepository {
         SpectrumScorer comparator = new SpectrumScorer(MzToleranceMode.valueOf(queryTolMode), tolValue);
         Set<MSMSAnnotation> matched = new HashSet<>();
         for (MSMSAnnotation lib : libraryMsms) {
-            double score = comparator.compute(scoreType, lib.getSpectrum().getPeaks(), queryMsms.getFragmentsMZsIntensities().getPeaks());
+            Double libPrecursor = lib.getSpectrum() != null ? lib.getSpectrum().getPrecursorMz() : null;
+            Double queryPrecursor = queryMsms.getFragmentsMZsIntensities() != null ? queryMsms.getFragmentsMZsIntensities().getPrecursorMz() : null;
+            double score = comparator.compute(scoreType,
+                    lib.getSpectrum().getPeaks(),
+                    queryMsms.getFragmentsMZsIntensities().getPeaks(),
+                    libPrecursor,
+                    queryPrecursor);
             if (score >= 0.5) {
                 lib.setMsmsCosineScore(score);
                 matched.add(lib);

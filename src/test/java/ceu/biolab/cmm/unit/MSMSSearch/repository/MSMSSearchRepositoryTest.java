@@ -86,6 +86,30 @@ public class MSMSSearchRepositoryTest {
     }
 
     @Test
+    void getMSMSWithScores_modifiedCosineMatchesNeutralLoss() throws Exception {
+        MSMSAnnotation lib = new MSMSAnnotation();
+        lib.setCompound(dummyCompound(1));
+        lib.setSpectrum(new Spectrum(480.0, List.of(new MSPeak(380.0, 1.0))));
+
+        List<MSMSAnnotation> libs = List.of(lib);
+
+        MSMSSearchRequestDTO query = new MSMSSearchRequestDTO();
+        query.setFragmentsMZsIntensities(new Spectrum(500.0, new ArrayList<>(List.of(new MSPeak(400.0, 1.0)))));
+        query.setScoreType(ScoreType.MODIFIED_COSINE);
+        query.setToleranceModePrecursorIon(MzToleranceMode.MDA);
+        query.setToleranceFragments(500.0); // 0.5 Da
+
+        MSMSSearchRepository repo = new MSMSSearchRepository(null, null);
+        List<MSMSAnnotation> out = repo.getMSMSWithScores(ScoreType.MODIFIED_COSINE, libs, query,
+                query.getToleranceModePrecursorIon().toString(), query.getToleranceFragments());
+
+        assertEquals(1, out.size(), "Modified cosine should recover neutral-loss matches");
+        assertEquals(1, out.get(0).getCompound().getCompoundId());
+        assertNotNull(out.get(0).getMsmsCosineScore());
+        assertTrue(out.get(0).getMsmsCosineScore() > 0.9);
+    }
+
+    @Test
     void getMSMSWithScores_usesFragmentToleranceMode_notPrecursorMode() throws Exception {
         // Library has a peak at 100.000
         MSMSAnnotation lib = new MSMSAnnotation();

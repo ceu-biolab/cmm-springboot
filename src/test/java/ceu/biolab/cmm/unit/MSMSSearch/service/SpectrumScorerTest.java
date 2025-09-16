@@ -8,6 +8,7 @@ import ceu.biolab.cmm.shared.service.SpectrumScorer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -105,5 +106,24 @@ public class SpectrumScorerTest {
         SpectrumScorer scorerTight2 = new SpectrumScorer(MzToleranceMode.PPM, 5.0);
         double scoreOutside = scorerTight2.compute(ScoreType.COSINE, a.getPeaks(), bOutside.getPeaks());
         assertEquals(0.0, scoreOutside, 1e-9, "Expected no match outside 5 ppm tolerance");
+    }
+
+    @Test
+    void modifiedCosine_alignsNeutralLossMatches() {
+        List<MSPeak> queryPeaks = Arrays.asList(
+                new MSPeak(400.0, 100.0),
+                new MSPeak(300.0, 50.0)
+        );
+        List<MSPeak> libraryPeaks = Arrays.asList(
+                new MSPeak(380.0, 100.0),
+                new MSPeak(280.0, 50.0)
+        );
+
+        SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 500.0);
+        double scoreCosine = scorer.cosineScore(queryPeaks, libraryPeaks);
+        assertEquals(0.0, scoreCosine, 1e-9, "Direct cosine should not match large m/z shifts");
+
+        double scoreModified = scorer.compute(ScoreType.MODIFIED_COSINE, queryPeaks, libraryPeaks, 500.0, 480.0);
+        assertTrue(scoreModified > 0.95, "Modified cosine should match neutral-loss aligned peaks");
     }
 }
