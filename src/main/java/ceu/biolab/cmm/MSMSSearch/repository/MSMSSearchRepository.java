@@ -7,7 +7,6 @@ import ceu.biolab.cmm.MSMSSearch.service.SpectrumScorer;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
@@ -67,14 +66,13 @@ public class MSMSSearchRepository {
             double neutralMass = AdductTransformer.getMonoisotopicMassFromMZ(
                     queryData.getPrecursorIonMZ(), adduct, queryData.getIonizationMode()
             );
-            double delta;  // Variable para la diferencia de tolerancia
-
+            double delta;
             if (queryData.getToleranceModePrecursorIon() == MzToleranceMode.PPM) {
-                // Tolerancia en PPM: se calcula en función del m/z
+                // ppm to Da at neutral mass
                 delta = neutralMass * (queryData.getTolerancePrecursorIon() / 1_000_000.0);
             } else {
-                // Tolerancia en Da: se calcula de forma directa
-                delta = queryData.getTolerancePrecursorIon();
+                // mDa to Da
+                delta = queryData.getTolerancePrecursorIon() / 1000.0;
             }
             double lowerBound = neutralMass - delta ;
             double upperBound = neutralMass + delta ;
@@ -97,10 +95,17 @@ public class MSMSSearchRepository {
 
             Set<MSMSAnnotation> libSpectra= new HashSet<>();
             for (Compound compound : compoundsSet) {
-                System.out.println("Searching spectra for compound: " + compound.getCompoundName() + " (ID: " + compound.getCompoundId() + ")");
                 libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), adduct, querySpectrum.getPrecursorMz()));
             }
-            matchedSpectra.addAll(getMSMSWithScores(queryData.getScoreType(), new ArrayList<>(libSpectra), queryData,queryData.getToleranceModePrecursorIon().toString(),queryData.getToleranceFragments()));
+            matchedSpectra.addAll(
+                    getMSMSWithScores(
+                            queryData.getScoreType(),
+                            new ArrayList<>(libSpectra),
+                            queryData,
+                            queryData.getToleranceModeFragments().toString(),
+                            queryData.getToleranceFragments()
+                    )
+            );
         }
 
         matchedSpectra=selectBestPerCompound(new ArrayList<>(matchedSpectra));
@@ -138,26 +143,32 @@ public class MSMSSearchRepository {
 
         Set<MSMSAnnotation> msmsSet = new HashSet<>();
         jdbcTemplate.query(sql, (rs, rowNum) -> {
-           if(!rs.wasNull()){
-               MSMSAnnotation msms = new MSMSAnnotation();
-               msms.setCompound(compound);
-               msms.setMsmsId(rs.getInt("msms_id"));
+            MSMSAnnotation msms = new MSMSAnnotation();
+            msms.setCompound(compound);
+            msms.setMsmsId(rs.getInt("msms_id"));
+            try {
+                double ce = rs.getDouble("ionization_voltage");
+                if (!rs.wasNull()) {
+                    msms.setCollisionEnergy(ce);
+                }
+            } catch (Exception ignored) {
+                // Column missing in some schemas; leave collisionEnergy null
+            }
 
-               // Compute theoretical precursor m/z for this compound with the requested adduct
-               String formattedAdduct = AdductProcessing.formatAdductString(adduct, ionMode);
-               Double libPrecursorMz = AdductTransformer.getMassOfAdductFromMonoMass(compound.getMass(), formattedAdduct, ionMode);
-               Spectrum spectrum = new Spectrum(libPrecursorMz, new ArrayList<>());
-               msms.setSpectrum(spectrum);
+            // Compute theoretical precursor m/z for this compound with the requested adduct
+            String formattedAdduct = AdductProcessing.formatAdductString(adduct, ionMode);
+            Double libPrecursorMz = AdductTransformer.getMassOfAdductFromMonoMass(compound.getMass(), formattedAdduct, ionMode);
+            Spectrum spectrum = new Spectrum(libPrecursorMz, new ArrayList<>());
+            msms.setSpectrum(spectrum);
 
-               // Signed ppm difference between query precursor and library precursor
-               double deltaPPM = ((queryMz - libPrecursorMz) / libPrecursorMz) * 1_000_000.0;
-               msms.setDeltaPpmPrecursorIon(deltaPPM);
+            // Signed ppm difference between query precursor and library precursor
+            double deltaPPM = ((queryMz - libPrecursorMz) / libPrecursorMz) * 1_000_000.0;
+            msms.setDeltaPpmPrecursorIon(deltaPPM);
 
-               // Set adduct used
-               msms.setAdduct(adduct);
+            // Set adduct used
+            msms.setAdduct(adduct);
 
-               msmsSet.add(msms);
-           }
+            msmsSet.add(msms);
             return null;
         });
         return msmsSet;
@@ -173,7 +184,6 @@ public class MSMSSearchRepository {
             double mz = rs.getDouble("mz");
             double intensity = rs.getDouble("intensity");
             MSPeak pk = new MSPeak(mz, intensity);
-            System.out.println("Peak found: " + pk);
             peaks.add(pk);
             return null;
         });
@@ -182,11 +192,10 @@ public class MSMSSearchRepository {
     }
 
     public List<MSMSAnnotation> getMSMSWithScores(ScoreType scoreType, List<MSMSAnnotation> libraryMsms, MSMSSearchRequestDTO queryMsms, String queryTolMode, Double tolValue) throws IOException {
-        SpectrumScorer comparator = new SpectrumScorer(MzToleranceMode.valueOf(queryTolMode),tolValue);
+        SpectrumScorer comparator = new SpectrumScorer(MzToleranceMode.valueOf(queryTolMode), tolValue);
         Set<MSMSAnnotation> matched = new HashSet<>();
         for (MSMSAnnotation lib : libraryMsms) {
-            double score = comparator.compute(scoreType,lib.getSpectrum(),queryMsms.getFragmentsMZsIntensities());
-            System.out.println("Score for compound " + lib.getCompound().getCompoundId() + ": " + score);
+            double score = comparator.compute(scoreType, lib.getSpectrum(), queryMsms.getFragmentsMZsIntensities());
             if (score >= 0.5) {
                 lib.setMsmsCosineScore(score);
                 matched.add(lib);

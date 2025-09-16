@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 public class MSMSAnnotation {
-    // TODO MISSING msms ionization voltage!!
     private int msmsId;
     private Compound compound;
     private String adduct;
     private Double deltaPpmPrecursorIon;
     private Double msmsCosineScore;
+    private Double collisionEnergy;
     private Spectrum spectrum;
 }

@@ -53,6 +53,7 @@
             "adduct": "M+H",
             "deltaPpmPrecursorIon": -3.279643144683768,
             "msmsCosineScore": 0.9999999999999998,
+            "collisionEnergy": 25,
             "spectrum": {
                 "precursorMz": 287.23694203466783,
                 "peaks": [

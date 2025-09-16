@@ -4,7 +4,6 @@ public enum CIDEnergy {
     LOW(10),
     MED(20),
     HIGH(40);
-    //TODO en vez de ventanas que seleccione de voltage lever el to string.
 
     private final int value;
 

@@ -9,8 +9,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
-import static java.lang.Math.max;
-
 @Data
 public class SpectrumScorer {
     private MzToleranceMode tolMode;
@@ -33,123 +31,85 @@ public class SpectrumScorer {
     }
 
     public Pair<double[], double[]> padMSPeaks(Spectrum specA, Spectrum specB) {
-        normalizeIntensities(specA);
-        normalizeIntensities(specB);
+        // Build normalized copies of the peaks so we do not mutate inputs
+        List<MSPeak> a = getNormalizedPeaks(specA);
+        List<MSPeak> b = getNormalizedPeaks(specB);
 
-        List<Double> mzOrder = new ArrayList<>();
-        Map<Double, Double> mapA = new LinkedHashMap<>();
-        Map<Double, Double> mapB = new HashMap<>();
+        // Collect all m/z values from collapsed, normalized peaks and sort
+        List<Double> allMz = new ArrayList<>();
+        for (MSPeak p : a) allMz.add(p.getMz());
+        for (MSPeak p : b) allMz.add(p.getMz());
+        Collections.sort(allMz);
 
-        // 1) Recorre specA en su orden y anota m/z + intensidad
-        for (MSPeak peak : specA.getPeaks()) {
-            double mz = peak.getMz();
-            if (!mzOrder.contains(mz)) {
-                mzOrder.add(mz);
-                mapA.put(mz, peak.getIntensity());
+        // Merge into non-overlapping bins using tolerance
+        List<Double> centers = new ArrayList<>();
+        for (Double mz : allMz) {
+            if (centers.isEmpty()) {
+                centers.add(mz);
             } else {
-                mapA.put(mz, max(mapA.get(mz), peak.getIntensity()));
-            }
-        }
-
-        // 2) Mapea specB pero solo guarda en mapB;  lo usaremos luego
-        for (MSPeak p : specB.getPeaks()) {
-            double mz = p.getMz();
-            // Si B tiene duplicados en misma m/z, sumamos intensidades
-            mapB.merge(mz, p.getIntensity(), Double::sum);
-        }
-
-        // todo revisar si esto es correcto, porque no se está teniendo en cuenta la tolerancia
-        // 3) Añade al final de mzOrder los m/z de B que no estaban en A
-        for (Double mzB : mapB.keySet()) {
-            boolean matched = false;
-            for (Double mzA : mzOrder) {
-                double delta = Math.abs(mzA - mzB);
-                double tolDa = (tolMode == MzToleranceMode.PPM)
-                        ? mzA * tolValue / 1_000_000.0
-                        : tolValue / 1000.0; // MDA to Da
-                if (delta <= tolDa) {
-                    matched = true;
-                    break;
+                double last = centers.get(centers.size() - 1);
+                double tolDa = toleranceDa(last);
+                if (Math.abs(mz - last) <= tolDa) {
+                    // keep center as the first encountered value to maintain stable order
+                    continue;
+                } else {
+                    centers.add(mz);
                 }
             }
-            if (!matched) {
-                mzOrder.add(mzB);
-            }
         }
 
-        int n = mzOrder.size();
+        int n = centers.size();
         double[] vecA = new double[n];
         double[] vecB = new double[n];
 
         for (int i = 0; i < n; i++) {
-            double mzRef = mzOrder.get(i);
-            // calculamos la tolerancia en Da para este bin
-            double tolDa = (tolMode == MzToleranceMode.PPM)
-                    ? mzRef * tolValue / 1_000_000.0
-                    : tolValue / 1000.0; // MDA to Da
-
-            // sumamos todas las intensidades que entren en esa ventana
-            vecA[i] = sumIntensitiesWithinTol(specA, mzRef, tolDa);
-            vecB[i] = sumIntensitiesWithinTol(specB, mzRef, tolDa);
+            double center = centers.get(i);
+            double tolDa = toleranceDa(center);
+            vecA[i] = sumIntensitiesWithinTol(a, center, tolDa);
+            vecB[i] = sumIntensitiesWithinTol(b, center, tolDa);
         }
 
-        System.out.println("Mz Order: " + Arrays.toString(mzOrder.toArray()));
-        System.out.println("Vector A: " + Arrays.toString(vecA));
-        System.out.println("Vector B: " + Arrays.toString(vecB));
         return Pair.of(vecA, vecB);
     }
 
     public  double cosineScore(Spectrum specA, Spectrum specB) {
-        Pair<double[], double[]> padded = padMSPeaks(specA, specB);
-        return cosine(padded.getLeft(), padded.getRight());
-    }
+        // Greedy one-to-one matching within tolerance using normalized intensities
+        List<MSPeak> a = getNormalizedPeaks(specA);
+        List<MSPeak> b = getNormalizedPeaks(specB);
+        a.sort(Comparator.comparingDouble(MSPeak::getMz));
+        b.sort(Comparator.comparingDouble(MSPeak::getMz));
 
-    public  double modifiedCosine(Spectrum specA, Spectrum specB) {
-        normalizeIntensities(specA);
-        normalizeIntensities(specB);
+        double normA = 0.0, normB = 0.0;
+        for (MSPeak p : a) normA += p.getIntensity() * p.getIntensity();
+        for (MSPeak p : b) normB += p.getIntensity() * p.getIntensity();
+        if (normA == 0.0 || normB == 0.0) return 0.0;
 
-        // 2) Hacer el padding manteniendo orden de A primero, luego B-only
-        Pair<double[], double[]> padded = padMSPeaks(specA, specB);
-        double[] vecA = padded.getLeft();
-        double[] vecB = padded.getRight();
-
-        //3) Reconstruir la lista de m/z en el mismo orden
-        List<Double> mzOrder = new ArrayList<>();
-        boolean[] usedB = new boolean[mzOrder.size()];
-
-        double dot = 0, normA = 0, normB = 0;
-
-        for (int i = 0; i < mzOrder.size(); i++) {
-            double aI = vecA[i];
-            if (aI <= 0) continue;
-
-            double aMz = mzOrder.get(i);
-
-            // busca el primer pico de B dentro de tolerancia
-            for (int j = 0; j < mzOrder.size(); j++) {
-                if (usedB[j]) continue;
-
-                double bMz = mzOrder.get(j);
-                double tolDa = (tolMode == MzToleranceMode.PPM)
-                        ? aMz * tolValue / 1_000_000.0
-                        : tolValue / 1000.0; // MDA to Da
-                if (Math.abs(aMz - bMz) <= tolDa) {
-                    double bI = vecB[j];
-                    if (bI > 0) {
-                        usedB[j] = true;
-                        dot += aI * bI;
-                        normA += aI * aI;
-                        normB += bI * bI;
-                    }
-                    break;
-                }
+        int i = 0, j = 0;
+        double dot = 0.0;
+        while (i < a.size() && j < b.size()) {
+            MSPeak pa = a.get(i);
+            MSPeak pb = b.get(j);
+            double mzA = pa.getMz();
+            double mzB = pb.getMz();
+            double tolDa = toleranceDa(mzA);
+            double diff = mzA - mzB;
+            if (Math.abs(diff) <= tolDa) {
+                dot += pa.getIntensity() * pb.getIntensity();
+                i++; j++;
+            } else if (diff > 0) {
+                j++;
+            } else {
+                i++;
             }
         }
 
-        if (normA == 0 || normB == 0) {
-            return 0.0;
-        }
-        return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+        return (dot == 0.0) ? 0.0 : (dot / (Math.sqrt(normA) * Math.sqrt(normB)));
+    }
+
+    public  double modifiedCosine(Spectrum specA, Spectrum specB) {
+        // Basic variant without precursor shift: same greedy matching as cosine.
+        // Keeping separate method for future enhancements (e.g., precursor-shift alignment).
+        return cosineScore(specA, specB);
     }
 
 
@@ -209,6 +169,53 @@ public class SpectrumScorer {
             }
         }
         return sum;
+    }
+
+    private double sumIntensitiesWithinTol(List<MSPeak> peaks, double mzRef, double tolDa) {
+        double sum = 0.0;
+        for (MSPeak p : peaks) {
+            if (Math.abs(p.getMz() - mzRef) <= tolDa) {
+                sum += p.getIntensity();
+            }
+        }
+        return sum;
+    }
+
+    private List<MSPeak> getNormalizedPeaks(Spectrum fragment) {
+        if (fragment == null || fragment.getPeaks().isEmpty()) return new ArrayList<>();
+        // Collapse close/duplicate peaks within tolerance using max intensity, keep first m/z
+        List<MSPeak> peaks = new ArrayList<>(fragment.getPeaks());
+        peaks.sort(Comparator.comparingDouble(MSPeak::getMz));
+        List<MSPeak> collapsed = new ArrayList<>();
+        MSPeak current = null;
+        for (MSPeak p : peaks) {
+            if (current == null) {
+                current = new MSPeak(p.getMz(), p.getIntensity());
+            } else {
+                double tolDa = toleranceDa(current.getMz());
+                if (Math.abs(p.getMz() - current.getMz()) <= tolDa) {
+                    // merge by max intensity, keep center m/z
+                    current.setIntensity(Math.max(current.getIntensity(), p.getIntensity()));
+                } else {
+                    collapsed.add(current);
+                    current = new MSPeak(p.getMz(), p.getIntensity());
+                }
+            }
+        }
+        if (current != null) collapsed.add(current);
+
+        // Normalize to unit max
+        double maxI = 0.0;
+        for (MSPeak p : collapsed) maxI = Math.max(maxI, p.getIntensity());
+        if (maxI <= 0.0) maxI = 1.0;
+        for (MSPeak p : collapsed) p.setIntensity(p.getIntensity() / maxI);
+        return collapsed;
+    }
+
+    private double toleranceDa(double mzRef) {
+        return (tolMode == MzToleranceMode.PPM)
+                ? mzRef * tolValue / 1_000_000.0
+                : tolValue / 1000.0; // MDA to Da
     }
 
 }

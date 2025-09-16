@@ -36,14 +36,11 @@ public class MSMSSearchService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CID energy is required.");
         }
 
-        // Ejecución principal
+        // Execute search
         try {
-            System.out.println("Starting MSMS search with precursor m/z: " + request.getPrecursorIonMZ());
             return msmsSearchRepository.findMatchingCompoundsAndSpectra(request);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error during MSMS search.");
-            return new MSMSSearchResponseDTO(); // devolver vacío si falla
+            return new MSMSSearchResponseDTO();
         }
     }
 }
