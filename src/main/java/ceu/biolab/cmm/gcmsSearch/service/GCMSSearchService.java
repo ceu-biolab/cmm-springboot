@@ -6,17 +6,25 @@ import ceu.biolab.cmm.gcmsSearch.dto.GCMSQueryResponseDTO;
 import ceu.biolab.cmm.gcmsSearch.dto.GCMSSearchRequestDTO;
 import ceu.biolab.cmm.gcmsSearch.dto.GCMSSearchResponseDTO;
 import ceu.biolab.cmm.gcmsSearch.repository.GCMSSearchRepository;
-
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import ceu.biolab.cmm.shared.domain.msFeature.Peak;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
+import ceu.biolab.cmm.shared.service.SpectrumScorer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
 public class GCMSSearchService {
+
+    private static final double GCMS_SCORE_THRESHOLD = 0.3;
+    // TODO: make this configurable, probably in the request
+    private static final double GCMS_MZ_TOLERANCE_MDA = 100.0;
 
     @Autowired
     private GCMSSearchRepository gcmsSearchRepository;
@@ -24,18 +32,17 @@ public class GCMSSearchService {
     public GCMSSearchResponseDTO search(GCMSSearchRequestDTO request) {
 
         Spectrum gcmsSpectrumExperimental = request.getGcmsSpectrumExperimental();
+        List<MSPeak> experimentalPeaks = toMsPeaks(gcmsSpectrumExperimental);
+        SpectrumScorer spectrumScorer = new SpectrumScorer(MzToleranceMode.MDA, GCMS_MZ_TOLERANCE_MDA);
 
         ColumnType columnType = request.getColumnType();
         DerivatizationMethod derivatizationMethod = request.getDerivatizationMethod();
         double RI = request.getRetentionIndex();
         double RITolerance = request.getRetentionIndexTolerance(); //%
-        double RIToleranceFinal;
-
-        if (RITolerance >= 0 && RITolerance <= 100){
-            RIToleranceFinal = RITolerance*0.01;
-        } else {
-            throw new IllegalArgumentException("Retentention Index Tolerance must be positive(%)" +request.getRetentionIndexTolerance());
+        if (RITolerance < 0 || RITolerance > 100) {
+            throw new IllegalArgumentException("Retention index tolerance must be between 0 and 100%: " + request.getRetentionIndexTolerance());
         }
+        double RIToleranceFinal = RITolerance * 0.01;
 
         GCMSSearchResponseDTO response = new GCMSSearchResponseDTO();
 
@@ -83,12 +90,14 @@ public class GCMSSearchService {
                         .experimentalRI(RI).deltaRI(deltaRI)
                         .build();
 
-                //CALCULATES THE SCORE WITH THE EXPERIMENTAL SPECTRUM
-                gcmsAnnotation.cosineScoreFunction(gcmsSpectrumExperimental);
-
-                gcmsAnnotationList.add(gcmsAnnotation);
+                double score = gcmsAnnotation.computeCosineScore(experimentalPeaks, spectrumScorer);
+                if (score >= GCMS_SCORE_THRESHOLD) {
+                    gcmsAnnotationList.add(gcmsAnnotation);
+                }
 
             }
+
+            gcmsAnnotationList.sort(Comparator.comparingDouble(GCMSAnnotation::getGcmsCosineScore).reversed());
 
             GCMSFeature gcmsFeature = GCMSFeature.builder()
                     .gcmsAnnotations(gcmsAnnotationList)
@@ -105,4 +114,14 @@ public class GCMSSearchService {
         return response;
     }
 
+    private List<MSPeak> toMsPeaks(Spectrum spectrum) {
+        List<MSPeak> converted = new ArrayList<>();
+        if (spectrum == null || spectrum.getSpectrum() == null) {
+            return converted;
+        }
+        for (Peak peak : spectrum.getSpectrum()) {
+            converted.add(new MSPeak(peak.getMzValue(), peak.getIntensity()));
+        }
+        return converted;
+    }
 }

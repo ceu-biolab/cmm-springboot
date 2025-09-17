@@ -1,0 +1,129 @@
+package ceu.biolab.cmm.unit.MSMSSearch.service;
+
+import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
+import ceu.biolab.cmm.shared.service.SpectrumScorer;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class SpectrumScorerTest {
+
+    @Test
+    void normalizeIntensities_scalesToUnitMax() {
+        Spectrum s = new Spectrum();
+        s.getPeaks().addAll(Arrays.asList(
+                new MSPeak(100.0, 100.0),
+                new MSPeak(150.0, 50.0)
+        ));
+
+        SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.PPM, 10.0);
+        scorer.normalizeIntensities(s.getPeaks());
+
+        assertEquals(1.0, s.getPeaks().get(0).getIntensity(), 1e-9);
+        assertEquals(0.5, s.getPeaks().get(1).getIntensity(), 1e-9);
+    }
+
+    @Test
+    void cosineScore_identicalSpectra_returnsOne() {
+        Spectrum a = new Spectrum();
+        a.getPeaks().addAll(Arrays.asList(
+                new MSPeak(100.0, 100.0),
+                new MSPeak(200.0, 50.0)
+        ));
+        Spectrum b = new Spectrum();
+        b.getPeaks().addAll(Arrays.asList(
+                new MSPeak(100.0, 100.0),
+                new MSPeak(200.0, 50.0)
+        ));
+
+        // 0.1 Da == 100 mDa
+        SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 100.0);
+        double score = scorer.compute(ScoreType.COSINE, a.getPeaks(), b.getPeaks());
+        assertEquals(1.0, score, 1e-9);
+    }
+
+    @Test
+    void cosineScore_withinDaTolerance_matchesPeaks() {
+        Spectrum a = new Spectrum();
+        a.getPeaks().addAll(Arrays.asList(
+                new MSPeak(100.00, 100.0),
+                new MSPeak(200.00, 50.0)
+        ));
+        Spectrum b = new Spectrum();
+        b.getPeaks().addAll(Arrays.asList(
+                new MSPeak(100.05, 80.0),   // within 0.1 Da
+                new MSPeak(199.98, 50.0)    // within 0.1 Da
+        ));
+
+        // 0.1 Da == 100 mDa
+        SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 100.0);
+        double score = scorer.compute(ScoreType.COSINE, a.getPeaks(), b.getPeaks());
+        assertTrue(score > 0.98, "Expected high similarity when peaks match within tolerance");
+    }
+
+    @Test
+    void cosineScore_outsideDaTolerance_noMatch() {
+        Spectrum a = new Spectrum();
+        a.getPeaks().addAll(Arrays.asList(
+                new MSPeak(100.00, 100.0)
+        ));
+        Spectrum b = new Spectrum();
+        b.getPeaks().addAll(Arrays.asList(
+                new MSPeak(100.50, 100.0)   // outside 0.1 Da tolerance
+        ));
+
+        // 0.1 Da == 100 mDa
+        SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 100.0);
+        double score = scorer.compute(ScoreType.COSINE, a.getPeaks(), b.getPeaks());
+        assertEquals(0.0, score, 1e-9);
+    }
+
+    @Test
+    void cosineScore_ppmTolerance_respectsWindow() {
+        Spectrum a = new Spectrum();
+        a.getPeaks().addAll(Arrays.asList(
+                new MSPeak(400.0000, 100.0)
+        ));
+        Spectrum bWithin = new Spectrum();
+        bWithin.getPeaks().addAll(Arrays.asList(
+                new MSPeak(400.0012, 90.0)   // 3 ppm shift
+        ));
+        Spectrum bOutside = new Spectrum();
+        bOutside.getPeaks().addAll(Arrays.asList(
+                new MSPeak(400.0100, 90.0)   // 25 ppm shift
+        ));
+
+        SpectrumScorer scorerTight = new SpectrumScorer(MzToleranceMode.PPM, 5.0);
+        double scoreWithin = scorerTight.compute(ScoreType.COSINE, a.getPeaks(), bWithin.getPeaks());
+        assertTrue(scoreWithin > 0.9, "Expected match within 5 ppm tolerance");
+
+        SpectrumScorer scorerTight2 = new SpectrumScorer(MzToleranceMode.PPM, 5.0);
+        double scoreOutside = scorerTight2.compute(ScoreType.COSINE, a.getPeaks(), bOutside.getPeaks());
+        assertEquals(0.0, scoreOutside, 1e-9, "Expected no match outside 5 ppm tolerance");
+    }
+
+    @Test
+    void modifiedCosine_alignsNeutralLossMatches() {
+        List<MSPeak> queryPeaks = Arrays.asList(
+                new MSPeak(400.0, 100.0),
+                new MSPeak(300.0, 50.0)
+        );
+        List<MSPeak> libraryPeaks = Arrays.asList(
+                new MSPeak(380.0, 100.0),
+                new MSPeak(280.0, 50.0)
+        );
+
+        SpectrumScorer scorer = new SpectrumScorer(MzToleranceMode.MDA, 500.0);
+        double scoreCosine = scorer.cosineScore(queryPeaks, libraryPeaks);
+        assertEquals(0.0, scoreCosine, 1e-9, "Direct cosine should not match large m/z shifts");
+
+        double scoreModified = scorer.compute(ScoreType.MODIFIED_COSINE, queryPeaks, libraryPeaks, 500.0, 480.0);
+        assertTrue(scoreModified > 0.95, "Modified cosine should match neutral-loss aligned peaks");
+    }
+}

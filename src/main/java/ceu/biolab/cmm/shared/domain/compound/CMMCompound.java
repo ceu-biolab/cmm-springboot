@@ -19,7 +19,6 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound> {
     private final Integer fahfaID;
     private final Integer ohPositionID;
     private final String aspergillusWebName;
-    private final String mol2;
 
     public CMMCompound(int compoundId, String casId, String compoundName, String formula, double mass,
                        int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
@@ -43,7 +42,6 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound> {
         this.fahfaID = fahfaID;
         this.ohPositionID = ohPositionID;
         this.aspergillusWebName = aspergillusWebName;
-        this.mol2 = mol2;
     }
 
     public String getkeggID() {
@@ -96,10 +94,6 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound> {
 
     public String getAspergillusWebName() {
         return aspergillusWebName;
-    }
-
-    public String getMol2() {
-        return mol2;
     }
 
 

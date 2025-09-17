@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.msSearch.domain.msFeature;
+package ceu.biolab.cmm.shared.domain.msFeature;
 
 import java.util.Objects;
 

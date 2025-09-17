@@ -108,35 +108,7 @@ public class CompoundRepository {
                     annotatedFeature.getAnnotationsByAdducts().add(annotationsByAdduct);
                 }
 
-                List<String> databaseConditions = new ArrayList<>();
-
-                if (databases.contains(Database.HMDB)) {
-                    databaseConditions.add("c.hmdb_id IS NOT NULL");
-                }
-                if (databases.contains(Database.LIPIDMAPS)) {
-                    databaseConditions.add("c.lm_id IS NOT NULL");
-                }
-                if (databases.contains(Database.KEGG)) {
-                    databaseConditions.add("c.kegg_id IS NOT NULL");
-                }
-                if (databases.contains(Database.INHOUSE)) {
-                    databaseConditions.add("c.in_house_id IS NOT NULL");
-                }
-                if (databases.contains(Database.ASPERGILLUS)) {
-                    databaseConditions.add("c.aspergillus_id IS NOT NULL");
-                }
-                if (databases.contains(Database.FAHFA)) {
-                    databaseConditions.add("c.fahfa_id IS NOT NULL");
-                }
-                if (databases.contains(Database.CHEBI)) {
-                    databaseConditions.add("c.chebi_id IS NOT NULL");
-                }
-                if (databases.contains(Database.PUBCHEM)) {
-                    databaseConditions.add("c.pc_id IS NOT NULL");
-                }
-                if (databases.contains(Database.NPATLAS)) {
-                    databaseConditions.add("c.npatlas_id IS NOT NULL");
-                }
+                List<String> databaseConditions = Database.databaseConditions(databases);
 
                 double monoIsotopicMassFromMZAndAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductString, ionizationMode);
 

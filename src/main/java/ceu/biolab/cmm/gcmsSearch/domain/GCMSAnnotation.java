@@ -1,8 +1,14 @@
 package ceu.biolab.cmm.gcmsSearch.domain;
 
+import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import ceu.biolab.cmm.shared.domain.msFeature.Peak;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
+import ceu.biolab.cmm.shared.service.SpectrumScorer;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @SuperBuilder
@@ -13,20 +19,39 @@ public class GCMSAnnotation {
     private double experimentalRI;
     private double deltaRI;
 
-    /**
-     * Currently this method returns a score of 0.
-     * In the future it should return the highest score of the spectra belonging to an annotation.
-     * The score is the similarity between the experimental spectrum and the spectrum of the annotated compound
-     * @param gcmsSpectrumExperimental
-     */
-    public void cosineScoreFunction(Spectrum gcmsSpectrumExperimental){
-        int score=0;
-        int sizeListgcmsCompundSpectrum = this.gcmsCompound.getGCMSSpectrum().size();
-        for (int i=0; i<sizeListgcmsCompundSpectrum; i++){
-            Spectrum gcmsSpectrumCompound = this.gcmsCompound.getGCMSSpectrum().get(i);
-            score = 0; // score = modifiedCosine(gcmsSpectrumExperimental, gcmsSpectrumCompound);
+    public double computeCosineScore(List<MSPeak> experimentalPeaks, SpectrumScorer scorer) {
+        if (experimentalPeaks == null || experimentalPeaks.isEmpty() || scorer == null) {
+            this.gcmsCosineScore = 0.0;
+            return this.gcmsCosineScore;
         }
-        this.gcmsCosineScore = score;
+
+        double bestScore = 0.0;
+        if (gcmsCompound != null && gcmsCompound.getGCMSSpectrum() != null) {
+            for (Spectrum librarySpectrum : gcmsCompound.getGCMSSpectrum()) {
+                List<MSPeak> libraryPeaks = toMsPeaks(librarySpectrum);
+                if (libraryPeaks.isEmpty()) {
+                    continue;
+                }
+                double score = scorer.cosineScore(experimentalPeaks, libraryPeaks);
+                if (score > bestScore) {
+                    bestScore = score;
+                }
+            }
+        }
+
+        this.gcmsCosineScore = bestScore;
+        return bestScore;
+    }
+
+    private List<MSPeak> toMsPeaks(Spectrum spectrum) {
+        List<MSPeak> converted = new ArrayList<>();
+        if (spectrum == null || spectrum.getSpectrum() == null) {
+            return converted;
+        }
+        for (Peak peak : spectrum.getSpectrum()) {
+            converted.add(new MSPeak(peak.getMzValue(), peak.getIntensity()));
+        }
+        return converted;
     }
 
 }
