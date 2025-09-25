@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CE-MS Search Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "background_electrolyte",
+    "polarity",
+    "chemical_alphabet",
+    "input_mass_mode",
+    "ionization_mode",
+    "adducts",
+    "mz_values",
+    "effective_mobilities",
+    "mz_tolerance",
+    "mz_tolerance_mode",
+    "eff_mob_tolerance"
+  ],
+  "properties": {
+    "background_electrolyte": {
+      "type": "string",
+      "description": "Background electrolyte (BGE)."
+    },
+    "polarity": {
+      "type": "string",
+      "enum": ["Direct", "Reverse"],
+      "description": "CE polarity setting."
+    },
+    "chemical_alphabet": {
+      "type": "string",
+      "description": "Allowed element letters. Example: CHNOPS (only C, H, N, O, P, S)."
+    },
+    "ionization_mode": {
+      "type": "string",
+      "enum": ["Positive", "Negative"]
+    },
+    "adducts": {
+      "type": "array",
+      "description": "Candidate adducts to consider during matching.",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "mz_values": {
+      "type": "array",
+      "description": "m/z values depending on input_mass_mode.",
+      "items": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "minItems": 1
+    },
+    "effective_mobilities": {
+      "type": "array",
+      "description": "List of effective mobilities.",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 1
+    },
+    "mz_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Mass tolerance value. Interpreted per mz_tolerance_mode."
+    },
+    "mz_tolerance_mode": {
+      "type": "string",
+      "enum": ["ppm", "mDa"]
+    },
+    "eff_mob_tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Effective mobility tolerance as a percentage."
+    }
+  },
+
+  "examples": [
+    {
+      "background_electrolyte": "Ammonium Acetate",
+      "polarity": "Direct",
+      "chemical_alphabet": "CHNOPS",
+      "input_mass_mode": "Neutral Masses",
+      "ionization_mode": "Positive",
+      "adducts": ["M+H", "M+Na"],
+      "mz_values": [291.3, 298.6, 305.1, 322.8],
+      "effective_mobilities": [1174, 1060, 995, 880],
+      "mz_tolerance": 10,
+      "mz_tolerance_mode": "ppm",
+      "eff_mob_tolerance": 5
+    }
+  ]
+}

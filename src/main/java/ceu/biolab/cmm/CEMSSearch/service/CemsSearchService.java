@@ -1,0 +1,278 @@
+package ceu.biolab.cmm.CEMSSearch.service;
+
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.OptionalInt;
+import java.util.HashSet;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import ceu.biolab.cmm.CEMSSearch.domain.CeBufferDictionary;
+import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
+import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
+import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationsByAdductDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CeFeatureAnnotationsDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CeFeatureDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsFeatureQueryDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsQueryResponseDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
+import ceu.biolab.cmm.CEMSSearch.repository.CemsSearchRepository;
+import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
+
+@Service
+public class CemsSearchService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CemsSearchService.class);
+
+    private final CemsSearchRepository repository;
+
+    public CemsSearchService(CemsSearchRepository repository) {
+        this.repository = repository;
+    }
+
+    public CemsSearchResponseDTO search(CemsSearchRequestDTO request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request payload cannot be null");
+        }
+        validateRequest(request);
+
+        OptionalInt bufferId = CeBufferDictionary.findBufferId(request.getBackgroundElectrolyte());
+        if (bufferId.isEmpty()) {
+            throw new IllegalArgumentException("Unknown background electrolyte: " + request.getBackgroundElectrolyte());
+        }
+
+        CePolarity polarity = request.getPolarity();
+        int polarityId = polarity.getDatabaseValue();
+
+        IonizationMode ionizationMode = request.getIonizationMode();
+        int ionizationModeId = CeIonizationModeMapper.toDatabaseValue(ionizationMode);
+
+        Map<String, String> adductMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
+
+        CemsSearchResponseDTO response = new CemsSearchResponseDTO();
+
+        List<Double> mzValues = request.getMzValues();
+        List<Double> effectiveMobilities = request.getEffectiveMobilities();
+
+        for (int i = 0; i < mzValues.size(); i++) {
+            double mz = mzValues.get(i);
+            double effMob = effectiveMobilities.get(i);
+
+            CeFeatureDTO featureDTO = CeFeatureDTO.builder()
+                    .mzValue(mz)
+                    .effectiveMobility(effMob)
+                    .intensity(null)
+                    .build();
+
+            CeFeatureAnnotationsDTO featureAnnotations = new CeFeatureAnnotationsDTO();
+            featureAnnotations.setFeature(featureDTO);
+
+            for (String adduct : request.getAdducts()) {
+                String trimmedAdduct = adduct.trim();
+                String adductValueRaw = adductMap.get(trimmedAdduct);
+                if (adductValueRaw == null) {
+                    LOGGER.warn("Skipping adduct '{}' because it is not supported for ionization mode {}", trimmedAdduct, ionizationMode);
+                    continue;
+                }
+
+                double adductValue;
+                try {
+                    adductValue = Double.parseDouble(adductValueRaw);
+                } catch (NumberFormatException ex) {
+                    LOGGER.warn("Unable to parse adduct mass difference '{}' for adduct '{}'", adductValueRaw, trimmedAdduct, ex);
+                    continue;
+                }
+
+                double neutralMass = AdductProcessing.getMassToSearch(mz, trimmedAdduct, adductValue);
+                double massWindow = computeMassWindow(request.getMzToleranceMode(), request.getMzTolerance(), neutralMass);
+                double mobilityWindow = computeMobilityWindow(effMob, request.getEffectiveMobilityTolerance());
+
+                CemsFeatureQueryDTO query = CemsFeatureQueryDTO.builder()
+                        .massLower(neutralMass - massWindow)
+                        .massUpper(neutralMass + massWindow)
+                        .mobilityLower(effMob - mobilityWindow)
+                        .mobilityUpper(effMob + mobilityWindow)
+                        .bufferId(bufferId.getAsInt())
+                        .polarityId(polarityId)
+                        .ionizationModeId(ionizationModeId)
+                        .build();
+
+                List<CemsQueryResponseDTO> candidates;
+                try {
+                    candidates = repository.findMatchingCompounds(query);
+                } catch (IOException e) {
+                    throw new IllegalStateException("Failed to read CE-MS search SQL", e);
+                }
+
+                candidates.sort(Comparator.comparingDouble(candidate -> rankingScore(candidate, neutralMass, effMob)));
+
+                CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(trimmedAdduct);
+                int rank = 1;
+                for (CemsQueryResponseDTO candidate : candidates) {
+                    Compound compound = toCompound(candidate);
+
+                    Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), neutralMass);
+                    Double mzCalc = computeTheoreticalMz(candidate.getMass(), trimmedAdduct, ionizationMode);
+                    Double mobilityErrorPct = computeMobilityErrorPct(candidate.getExperimentalEffMob(), effMob);
+
+                    CeAnnotationDTO annotation = CeAnnotationDTO.builder()
+                            .compound(compound)
+                            .rank(rank++)
+                            .massErrorPpm(massErrorPpm)
+                            .mzCalc(mzCalc)
+                            .neutralMassCalc(candidate.getMass())
+                            .mobilityErrorPct(mobilityErrorPct)
+                            .score(null)
+                            .isotopicMatch(null)
+                            .notes(null)
+                            .build();
+
+                    annotationsByAdduct.addAnnotation(annotation);
+                }
+
+                featureAnnotations.addAnnotationsByAdduct(annotationsByAdduct);
+            }
+
+            response.addFeature(featureAnnotations);
+        }
+
+        return response;
+    }
+
+    private void validateRequest(CemsSearchRequestDTO request) {
+        if (request.getMzValues() == null || request.getEffectiveMobilities() == null) {
+            throw new IllegalArgumentException("Both mz_values and effective_mobilities are required");
+        }
+        if (request.getMzValues().isEmpty()) {
+            throw new IllegalArgumentException("At least one mz value must be provided");
+        }
+        if (request.getMzValues().size() != request.getEffectiveMobilities().size()) {
+            throw new IllegalArgumentException("Number of mz values and effective mobilities must match");
+        }
+        if (request.getAdducts() == null || request.getAdducts().isEmpty()) {
+            throw new IllegalArgumentException("At least one adduct must be provided");
+        }
+    }
+
+    private double computeMassWindow(MzToleranceMode toleranceMode, double tolerance, double neutralMass) {
+        if (toleranceMode == MzToleranceMode.PPM) {
+            return Math.abs(neutralMass) * tolerance * 1e-6;
+        } else if (toleranceMode == MzToleranceMode.MDA) {
+            return tolerance * 0.001;
+        }
+        throw new IllegalArgumentException("Unsupported m/z tolerance mode: " + toleranceMode);
+    }
+
+    private double computeMobilityWindow(double effectiveMobility, double tolerancePercent) {
+        double window = Math.abs(effectiveMobility) * (tolerancePercent * 0.01);
+        return window;
+    }
+
+    private double rankingScore(CemsQueryResponseDTO candidate, double targetMass, double targetMobility) {
+        double massDelta = candidate.getMass() != null
+                ? Math.abs(candidate.getMass() - targetMass)
+                : 1e9;
+        double mobilityDelta = candidate.getExperimentalEffMob() != null
+                ? Math.abs(candidate.getExperimentalEffMob() - targetMobility)
+                : 1e9;
+        return massDelta + mobilityDelta;
+    }
+
+    private Double computeMassErrorPpm(Double candidateMass, double targetMass) {
+        if (candidateMass == null || targetMass == 0d) {
+            return null;
+        }
+        return (candidateMass - targetMass) / targetMass * 1e6;
+    }
+
+    private Double computeTheoreticalMz(Double neutralMass, String adduct, IonizationMode ionizationMode) {
+        if (neutralMass == null) {
+            return null;
+        }
+        try {
+            return AdductProcessing.getMassOfAdductFromMonoWeight(neutralMass, adduct, ionizationMode);
+        } catch (RuntimeException ex) {
+            LOGGER.warn("Unable to compute theoretical m/z for adduct '{}'", adduct, ex);
+            return null;
+        }
+    }
+
+    private Double computeMobilityErrorPct(Double candidateMobility, double targetMobility) {
+        if (candidateMobility == null || targetMobility == 0d) {
+            return null;
+        }
+        return (candidateMobility - targetMobility) / targetMobility * 100d;
+    }
+
+    private Compound toCompound(CemsQueryResponseDTO candidate) {
+        Compound compound = new Compound();
+        long candidateId = candidate.getCompoundId();
+        try {
+            compound.setCompoundId(Math.toIntExact(candidateId));
+        } catch (ArithmeticException ex) {
+            LOGGER.warn("Compound id {} exceeds integer range, truncating for response", candidateId);
+            compound.setCompoundId((int) candidateId);
+        }
+        compound.setCasId(candidate.getCasId());
+        compound.setCompoundName(candidate.getCompoundName());
+        compound.setFormula(candidate.getFormula());
+        compound.setMass(candidate.getMass() != null ? candidate.getMass() : 0d);
+        compound.setChargeType(safeLongToInt(candidate.getChargeType()));
+        compound.setChargeNumber(safeLongToInt(candidate.getChargeNumber()));
+
+        Integer formulaTypeInt = candidate.getFormulaTypeInt();
+        if (formulaTypeInt != null) {
+            compound.setFormulaTypeInt(formulaTypeInt);
+            try {
+                compound.setFormulaType(FormulaType.getFormulTypefromInt(formulaTypeInt));
+            } catch (IllegalArgumentException ex) {
+                LOGGER.warn("Unknown formula type int {} for compound {}", formulaTypeInt, candidateId);
+            }
+        }
+
+        compound.setCompoundType(candidate.getCompoundType() != null ? candidate.getCompoundType() : 0);
+        compound.setCompoundStatus(candidate.getCompoundStatus() != null ? candidate.getCompoundStatus() : 0);
+        compound.setLogP(candidate.getLogp());
+        compound.setRtPred(candidate.getRtPred());
+        compound.setInchi(candidate.getInchi());
+        compound.setInchiKey(candidate.getInchiKey());
+        compound.setSmiles(candidate.getSmiles());
+        compound.setLipidType(candidate.getLipidType());
+        compound.setNumChains(candidate.getNumChains());
+        compound.setNumCarbons(candidate.getNumberCarbons());
+        compound.setDoubleBonds(candidate.getDoubleBonds());
+        compound.setBiologicalActivity(candidate.getBiologicalActivity());
+        compound.setMeshNomenclature(candidate.getMeshNomenclature());
+        compound.setIupacClassification(candidate.getIupacClassification());
+        compound.setMol2(null);
+        if (compound.getPathways() == null) {
+            compound.setPathways(new HashSet<>());
+        }
+        if (compound.getLipidMapsClassifications() == null) {
+            compound.setLipidMapsClassifications(new HashSet<>());
+        }
+        return compound;
+    }
+
+    private int safeLongToInt(Long value) {
+        if (value == null) {
+            return 0;
+        }
+        try {
+            return Math.toIntExact(value);
+        } catch (ArithmeticException ex) {
+            LOGGER.warn("Value {} exceeds integer range, truncating", value);
+            return value > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        }
+    }
+}
