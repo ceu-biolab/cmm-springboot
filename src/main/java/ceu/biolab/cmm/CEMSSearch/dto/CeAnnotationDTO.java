@@ -14,6 +14,4 @@ public class CeAnnotationDTO {
     Double mzCalc;
     Double neutralMassCalc;
     Double mobilityErrorPct;
-    Boolean isotopicMatch;
-    String notes;
 }

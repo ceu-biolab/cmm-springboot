@@ -2,10 +2,11 @@ package ceu.biolab.cmm.CEMSSearch.service;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
-import java.util.HashSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,8 +114,7 @@ public class CemsSearchService {
                 } catch (IOException e) {
                     throw new IllegalStateException("Failed to read CE-MS search SQL", e);
                 }
-
-                candidates.sort(Comparator.comparingDouble(candidate -> rankingScore(candidate, neutralMass, effMob)));
+                candidates = deduplicateCandidates(candidates, neutralMass, effMob);
 
                 CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(trimmedAdduct);
                 int rank = 1;
@@ -133,8 +133,6 @@ public class CemsSearchService {
                             .neutralMassCalc(candidate.getMass())
                             .mobilityErrorPct(mobilityErrorPct)
                             .score(null)
-                            .isotopicMatch(null)
-                            .notes(null)
                             .build();
 
                     annotationsByAdduct.addAnnotation(annotation);
@@ -212,6 +210,27 @@ public class CemsSearchService {
             return null;
         }
         return (candidateMobility - targetMobility) / targetMobility * 100d;
+    }
+
+    private List<CemsQueryResponseDTO> deduplicateCandidates(List<CemsQueryResponseDTO> candidates,
+                                                             double targetMass,
+                                                             double targetMobility) {
+        Map<Long, CemsQueryResponseDTO> bestCandidatePerCompound = new HashMap<>();
+        Map<Long, Double> bestScorePerCompound = new HashMap<>();
+
+        for (CemsQueryResponseDTO candidate : candidates) {
+            long compoundId = candidate.getCompoundId();
+            double score = rankingScore(candidate, targetMass, targetMobility);
+            Double bestScore = bestScorePerCompound.get(compoundId);
+            if (bestScore == null || score < bestScore) {
+                bestScorePerCompound.put(compoundId, score);
+                bestCandidatePerCompound.put(compoundId, candidate);
+            }
+        }
+
+        List<CemsQueryResponseDTO> deduplicated = new java.util.ArrayList<>(bestCandidatePerCompound.values());
+        deduplicated.sort(Comparator.comparingDouble(candidate -> rankingScore(candidate, targetMass, targetMobility)));
+        return deduplicated;
     }
 
     private Compound toCompound(CemsQueryResponseDTO candidate) {
