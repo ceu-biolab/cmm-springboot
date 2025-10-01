@@ -3,6 +3,7 @@ package ceu.biolab.cmm.gcmsSearch.dto;
 import ceu.biolab.cmm.gcmsSearch.domain.ColumnType;
 import ceu.biolab.cmm.gcmsSearch.domain.DerivatizationMethod;
 import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -23,9 +24,7 @@ public class GCMSQueryResponseDTO {
     private String casId;
     private int charge_type;
     private int charge_number;
-    private int compound_type;
-    private int compound_status;
-    private int formula_type_int;
+    private CompoundType compound_type;
 
     private String inchi;
     private String inchiKey;
@@ -61,9 +60,7 @@ public class GCMSQueryResponseDTO {
         this.casId = "";
         this.charge_type = -1;
         this.charge_number = -1;
-        this.compound_type = -1;
-        this.compound_status = -1;
-        this.formula_type_int = -1;
+        this.compound_type = CompoundType.NON_LIPID;
 
         this.inchi = "";
         this.inchiKey = "";

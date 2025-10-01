@@ -1,106 +1,145 @@
 package ceu.biolab.cmm.unit.CEMSSearch;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationsByAdductDTO;
-import ceu.biolab.cmm.CEMSSearch.dto.CeFeatureAnnotationsDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsFeatureQueryDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsQueryResponseDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
 import ceu.biolab.cmm.CEMSSearch.repository.CemsSearchRepository;
 import ceu.biolab.cmm.CEMSSearch.service.CemsSearchService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.sql.DataSource;
 import java.util.List;
 
-@SpringBootTest
-@ActiveProfiles("local")
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class CemsSearchServiceTest {
 
-    @Autowired
-    private DataSource dataSource;
+    @Mock
+    private CemsSearchRepository repository;
 
-    private CemsSearchService cemsSearchService;
+    @InjectMocks
+    private CemsSearchService service;
 
-    @BeforeEach
-    void setUp() {
-        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        CemsSearchRepository repository = new CemsSearchRepository(jdbcTemplate, new DefaultResourceLoader());
-        cemsSearchService = new CemsSearchService(repository);
-    }
-
-    @Test
-    void searchThrowsForUnknownBackgroundElectrolyte() {
-        CemsSearchRequestDTO request = new CemsSearchRequestDTO();
-        request.setBackgroundElectrolyte("not-a-known-bge");
-        request.setPolarity("Direct");
-        request.setIonizationMode("Positive");
-        request.setAdducts(List.of("M+H"));
-        request.setMzValues(List.of(100.0));
-        request.setEffectiveMobilities(List.of(1000.0));
-        request.setMzToleranceMode("ppm");
-        request.setMzTolerance(10.0);
-        request.setEffectiveMobilityTolerance(5.0);
-
-        assertThrows(IllegalArgumentException.class, () -> cemsSearchService.search(request));
-    }
-
-    @Test
-    void searchThrowsWhenFeatureSizesDoNotMatch() {
-        CemsSearchRequestDTO request = new CemsSearchRequestDTO();
-        request.setBackgroundElectrolyte("formic acid 1M");
-        request.setPolarity("Direct");
-        request.setIonizationMode("Positive");
-        request.setAdducts(List.of("M+H"));
-        request.setMzValues(List.of(100.0));
-        request.setEffectiveMobilities(List.of(1000.0, 2000.0));
-        request.setMzToleranceMode("ppm");
-        request.setMzTolerance(10.0);
-        request.setEffectiveMobilityTolerance(5.0);
-
-        assertThrows(IllegalArgumentException.class, () -> cemsSearchService.search(request));
-    }
-
-    @Test
-    void searchReturnsSingleAnnotationPerCompound() {
+    private CemsSearchRequestDTO baseRequest() {
         CemsSearchRequestDTO request = new CemsSearchRequestDTO();
         request.setBackgroundElectrolyte("formic acid 0.1M");
         request.setPolarity("Reverse");
         request.setIonizationMode("Negative");
-        request.setChemicalAlphabet("CHNOPS");
+        request.setChemicalAlphabet("ALL");
         request.setInputMassMode("m/z");
         request.setAdducts(List.of("M-H"));
-        request.setMzValues(List.of(115.003658616));
-        request.setEffectiveMobilities(List.of(1699.0335686356439));
+        request.setMzValues(List.of(100.0));
+        request.setEffectiveMobilities(List.of(1500.0));
         request.setMzToleranceMode("ppm");
-        request.setMzTolerance(30.0);
-        request.setEffectiveMobilityTolerance(10.0);
+        request.setMzTolerance(10.0);
+        request.setEffectiveMobilityTolerance(5.0);
+        return request;
+    }
 
-        CemsSearchResponseDTO response = cemsSearchService.search(request);
+    private CemsQueryResponseDTO candidate(long compoundId, String formula, double mass, double effMob) {
+        CemsQueryResponseDTO dto = new CemsQueryResponseDTO();
+        dto.setCompoundId(compoundId);
+        dto.setCompoundName("Compound " + compoundId);
+        dto.setFormula(formula);
+        dto.setMass(mass);
+        dto.setChargeNumber(1L);
+        dto.setChargeType(1L);
+        dto.setExperimentalEffMob(effMob);
+        dto.setMobility(effMob);
+        dto.setIonizationModeId(1);
+        dto.setPolarityId(1);
+        dto.setBufferId(1);
+        dto.setFormulaType("CHNOPS");
+        dto.setCompoundType(0);
+        return dto;
+    }
 
-        assertEquals(1, response.getCeFeatures().size(), "One feature expected");
-        List<CeFeatureAnnotationsDTO> features = response.getCeFeatures();
-        List<CeAnnotationsByAdductDTO> annotationsByAdduct = features.get(0).getAnnotationsByAdducts();
-        assertEquals(1, annotationsByAdduct.size(), "Single adduct should be returned");
+    @Test
+    void searchThrowsForUnknownBackgroundElectrolyte() {
+        CemsSearchRequestDTO request = baseRequest();
+        request.setBackgroundElectrolyte("not-a-known-bge");
+
+        assertThrows(IllegalArgumentException.class, () -> service.search(request));
+    }
+
+    @Test
+    void searchThrowsWhenFeatureSizesDoNotMatch() {
+        CemsSearchRequestDTO request = baseRequest();
+        request.setEffectiveMobilities(List.of(1500.0, 1600.0));
+
+        assertThrows(IllegalArgumentException.class, () -> service.search(request));
+    }
+
+    @Test
+    void searchReturnsSingleAnnotationPerCompound() throws Exception {
+        CemsSearchRequestDTO request = baseRequest();
+
+        CemsQueryResponseDTO c1 = candidate(1, "C5H11NO2", 117.078979, 1500.0);
+        CemsQueryResponseDTO c1Alt = candidate(1, "C5H11NO2", 117.078989, 1501.0);
+        CemsQueryResponseDTO c2 = candidate(2, "C6H12O6", 180.06339, 1502.0);
+
+        when(repository.findMatchingCompounds(any(CemsFeatureQueryDTO.class)))
+                .thenReturn(List.of(c1, c1Alt, c2));
+
+        CemsSearchResponseDTO response = service.search(request);
+
+        assertEquals(1, response.getCeFeatures().size());
+        List<CeAnnotationsByAdductDTO> annotationsByAdduct = response.getCeFeatures().get(0).getAnnotationsByAdducts();
+        assertEquals(1, annotationsByAdduct.size());
 
         List<CeAnnotationDTO> annotations = annotationsByAdduct.get(0).getAnnotations();
+        assertEquals(2, annotations.size(), "Expected unique annotation per compound");
+        long distinctIds = annotations.stream().map(a -> a.getCompound().getCompoundId()).distinct().count();
+        assertEquals(distinctIds, annotations.size(), "Must remain unique per compound");
+    }
 
-        long distinctCompoundIds = annotations
-                .stream()
-                .map(annotation -> annotation.getCompound().getCompoundId())
-                .distinct()
-                .count();
+    @Test
+    void searchFiltersOutCompoundsOutsideChemicalAlphabet() throws Exception {
+        CemsSearchRequestDTO request = baseRequest();
+        request.setChemicalAlphabet("CHNOPS");
 
-        assertEquals(distinctCompoundIds, annotations.size(), "Annotations must be unique per compound");
-        assertTrue(annotations.size() > 0, "Expected at least one annotation for the feature");
+        CemsQueryResponseDTO allowed = candidate(1, "C6H12O6", 180.06339, 1500.0);
+        CemsQueryResponseDTO rejected = candidate(2, "C6H12ClO6", 214.0249, 1500.0);
+
+        when(repository.findMatchingCompounds(any(CemsFeatureQueryDTO.class)))
+                .thenReturn(List.of(allowed, rejected));
+
+        CemsSearchResponseDTO response = service.search(request);
+        List<CeAnnotationsByAdductDTO> annotationsByAdduct = response.getCeFeatures().get(0).getAnnotationsByAdducts();
+        List<CeAnnotationDTO> annotations = annotationsByAdduct.get(0).getAnnotations();
+
+        assertEquals(1, annotations.size(), "Only compounds matching alphabet should survive");
+        assertEquals(1, annotations.get(0).getCompound().getCompoundId());
+    }
+
+    @Test
+    void searchIncludesCompoundsWithoutFormulaWhenAlphabetSpecified() throws Exception {
+        CemsSearchRequestDTO request = baseRequest();
+        request.setChemicalAlphabet("CHNOPS");
+
+        CemsQueryResponseDTO noFormula = candidate(3, null, 150.0, 1500.0);
+        CemsQueryResponseDTO allowed = candidate(4, "C2H4", 28.0313, 1500.0);
+
+        when(repository.findMatchingCompounds(any(CemsFeatureQueryDTO.class)))
+                .thenReturn(List.of(noFormula, allowed));
+
+        CemsSearchResponseDTO response = service.search(request);
+        List<CeAnnotationDTO> annotations = response.getCeFeatures()
+                .get(0)
+                .getAnnotationsByAdducts()
+                .get(0)
+                .getAnnotations();
+
+        assertEquals(2, annotations.size(), "Compounds without formula should not be filtered out");
+        assertTrue(annotations.stream().anyMatch(a -> a.getCompound().getCompoundId() == 3));
     }
 }

@@ -11,9 +11,8 @@ public class CemsQueryResponseDTO {
     private Double mass;
     private Long chargeType;
     private Long chargeNumber;
-    private Integer formulaTypeInt;
+    private String formulaType;
     private Integer compoundType;
-    private Integer compoundStatus;
     private Double logp;
     private Double rtPred;
     private String inchi;

@@ -28,7 +28,7 @@ public class BrowseSearchService {
         String compoundName = request.getCompoundName();
         String formula = request.getFormula();
 
-        if (!hasValidName(request) || !hasValidFormula(request)) {
+        if (!hasValidName(request) && !hasValidFormula(request)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide a compound name (min 3 characters) or a formula.");
         }
 

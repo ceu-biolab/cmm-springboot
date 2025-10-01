@@ -91,7 +91,7 @@ public class CompoundSimpleSearchRequestDTO {
         return formulaType;
     }
 
-    public void setFormulaTypeInt(Optional<FormulaType> formulaType) {
+    public void setFormulaType(Optional<FormulaType> formulaType) {
         this.formulaType = formulaType;
     }
 
@@ -141,6 +141,5 @@ public class CompoundSimpleSearchRequestDTO {
                 '}';
     }
 }
-
 
 

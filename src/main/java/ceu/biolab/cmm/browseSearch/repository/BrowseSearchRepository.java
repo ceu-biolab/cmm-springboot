@@ -8,6 +8,7 @@ import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +57,14 @@ import java.util.Set;
                 filterCondition += " AND (" + String.join(" OR ", databaseConditions) + ")";
             }
 
-            int compoundType = 0;
-
-            if(queryData.getMetaboliteType().equals(MetaboliteType.ONLYLIPIDS)) {
-                compoundType=1;
+            CompoundType compoundType = null;
+            if (queryData.getMetaboliteType().equals(MetaboliteType.ONLYLIPIDS)) {
+                compoundType = CompoundType.LIPID;
             }
 
-            filterCondition = filterCondition + " AND c.compound_type = " + compoundType;
+            if (compoundType != null) {
+                filterCondition = filterCondition + " AND c.compound_type = " + compoundType.getDbValue();
+            }
             sql = sql.replace("(:databaseFilterCondition)", filterCondition);
 
             String nameFilterBlock = "";
@@ -102,4 +104,3 @@ import java.util.Set;
     }
 
 }
-

@@ -71,8 +71,6 @@ public class GCMSSearchService {
                         .chargeType(queryResult.getCharge_type())
                         .chargeNumber(queryResult.getCharge_number())
                         .compoundType(queryResult.getCompound_type())
-                        .compoundStatus(queryResult.getCompound_status())
-                        .formulaTypeInt(queryResult.getFormula_type_int())
                         .inchi(queryResult.getInchi())
                         .inchiKey(queryResult.getInchiKey())
                         .smiles(queryResult.getSmiles())

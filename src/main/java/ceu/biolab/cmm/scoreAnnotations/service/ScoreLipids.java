@@ -11,6 +11,7 @@ import ceu.biolab.cmm.scoreAnnotations.domain.EvaluatedLipid;
 import ceu.biolab.cmm.scoreAnnotations.domain.Lipid;
 import ceu.biolab.cmm.scoreAnnotations.domain.LipidScores;
 import ceu.biolab.cmm.shared.domain.ExperimentParameters;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
@@ -54,7 +55,8 @@ public class ScoreLipids {
                     String adduct = annotationsByAdduct.getAdduct();
                     for (Annotation annotation : annotationsByAdduct.getAnnotations()) {
                         //if (annotation.getCompound() instanceof Lipid lipid) {
-                        if (annotation.getCompound().getCompoundType() == 1 || annotation.getCompound() instanceof Lipid) {
+                        CompoundType compoundType = annotation.getCompound().getCompoundType();
+                        if (CompoundType.LIPID.equals(compoundType) || annotation.getCompound() instanceof Lipid) {
                             Lipid lipid;
                             if (!(annotation.getCompound() instanceof Lipid)) {
                                 // Workaround for now in case lipid compounds are not send as Lipid objects

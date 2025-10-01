@@ -20,12 +20,11 @@ public class BatchAdvancedSearchRequestDTO {
     private List<Double> retentionTimes;
     private List<Map<Double, Double>> compositeSpectrum;
     private FormulaType formulaType;
-    private Optional<Integer> formulaTypeInt;
     private boolean deuterium;
     private String modifiersType;
 
     public BatchAdvancedSearchRequestDTO(List<Double> mzs, MzToleranceMode mzToleranceMode, Double tolerance,
-                                         IonizationMode ionizationMode, Optional<String> detectedAdduct, Optional<Integer> formulaTypeInt, Set<String> adductsString,
+                                         IonizationMode ionizationMode, Optional<String> detectedAdduct, Set<String> adductsString,
                                          Set<Database> databases, MetaboliteType metaboliteType, List<Double> retentionTimes,
                                          List<Map<Double, Double>> compositeSpectrum, FormulaType formulaType, boolean deuterium, String modifiersType) {
         this.mzs = mzs;
@@ -33,7 +32,6 @@ public class BatchAdvancedSearchRequestDTO {
         this.tolerance = tolerance;
         this.ionizationMode = ionizationMode;
         this.detectedAdduct = detectedAdduct;
-        this.formulaTypeInt = formulaTypeInt;
         this.adductsString = adductsString;
         this.databases = databases;
         this.metaboliteType = metaboliteType;
@@ -90,14 +88,6 @@ public class BatchAdvancedSearchRequestDTO {
 
     public void setFormulaType(FormulaType formulaType) {
         this.formulaType = formulaType;
-    }
-
-    public Optional<Integer> getFormulaTypeInt() {
-        return formulaTypeInt;
-    }
-
-    public void setFormulaTypeInt(Optional<Integer> formulaTypeInt) {
-        this.formulaTypeInt = formulaTypeInt;
     }
 
     public Set<String> getAdductsString() {
@@ -169,12 +159,12 @@ public class BatchAdvancedSearchRequestDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BatchAdvancedSearchRequestDTO that = (BatchAdvancedSearchRequestDTO) o;
-        return deuterium == that.deuterium && Objects.equals(mzs, that.mzs) && mzToleranceMode == that.mzToleranceMode && Objects.equals(tolerance, that.tolerance) && ionizationMode == that.ionizationMode && Objects.equals(detectedAdduct, that.detectedAdduct) && Objects.equals(adductsString, that.adductsString) && Objects.equals(databases, that.databases) && metaboliteType == that.metaboliteType && Objects.equals(retentionTimes, that.retentionTimes) && Objects.equals(compositeSpectrum, that.compositeSpectrum) && formulaType == that.formulaType && Objects.equals(formulaTypeInt, that.formulaTypeInt) && Objects.equals(modifiersType, that.modifiersType);
+        return deuterium == that.deuterium && Objects.equals(mzs, that.mzs) && mzToleranceMode == that.mzToleranceMode && Objects.equals(tolerance, that.tolerance) && ionizationMode == that.ionizationMode && Objects.equals(detectedAdduct, that.detectedAdduct) && Objects.equals(adductsString, that.adductsString) && Objects.equals(databases, that.databases) && metaboliteType == that.metaboliteType && Objects.equals(retentionTimes, that.retentionTimes) && Objects.equals(compositeSpectrum, that.compositeSpectrum) && formulaType == that.formulaType && Objects.equals(modifiersType, that.modifiersType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mzs, mzToleranceMode, tolerance, ionizationMode, detectedAdduct, adductsString, databases, metaboliteType, retentionTimes, compositeSpectrum, formulaType, formulaTypeInt, deuterium, modifiersType);
+        return Objects.hash(mzs, mzToleranceMode, tolerance, ionizationMode, detectedAdduct, adductsString, databases, metaboliteType, retentionTimes, compositeSpectrum, formulaType, deuterium, modifiersType);
     }
 
     @Override
@@ -185,7 +175,6 @@ public class BatchAdvancedSearchRequestDTO {
                 ", tolerance=" + tolerance +
                 ", ionizationMode=" + ionizationMode +
                 ", detectedAdduct=" + detectedAdduct +
-                ", formulaTypeInt=" + formulaTypeInt +
                 ", adductsString=" + adductsString +
                 ", databases=" + databases +
                 ", metaboliteType=" + metaboliteType +
@@ -197,4 +186,3 @@ public class BatchAdvancedSearchRequestDTO {
                 '}';
     }
 }
-

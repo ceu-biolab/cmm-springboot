@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +33,7 @@ import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
 
 @Service
@@ -64,6 +70,7 @@ public class CemsSearchService {
 
         List<Double> mzValues = request.getMzValues();
         List<Double> effectiveMobilities = request.getEffectiveMobilities();
+        Optional<Set<String>> allowedElements = parseChemicalAlphabet(request.getChemicalAlphabet());
 
         for (int i = 0; i < mzValues.size(); i++) {
             double mz = mzValues.get(i);
@@ -120,6 +127,9 @@ public class CemsSearchService {
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
                     Compound compound = toCompound(candidate);
+                    if (!matchesAlphabet(compound, allowedElements)) {
+                        continue;
+                    }
 
                     Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), neutralMass);
                     Double mzCalc = computeTheoreticalMz(candidate.getMass(), trimmedAdduct, ionizationMode);
@@ -249,18 +259,28 @@ public class CemsSearchService {
         compound.setChargeType(safeLongToInt(candidate.getChargeType()));
         compound.setChargeNumber(safeLongToInt(candidate.getChargeNumber()));
 
-        Integer formulaTypeInt = candidate.getFormulaTypeInt();
-        if (formulaTypeInt != null) {
-            compound.setFormulaTypeInt(formulaTypeInt);
+        String formulaTypeValue = candidate.getFormulaType();
+        if (formulaTypeValue != null) {
             try {
-                compound.setFormulaType(FormulaType.getFormulTypefromInt(formulaTypeInt));
+                compound.setFormulaType(FormulaType.valueOf(formulaTypeValue.toUpperCase()));
             } catch (IllegalArgumentException ex) {
-                LOGGER.warn("Unknown formula type int {} for compound {}", formulaTypeInt, candidateId);
+                LOGGER.warn("Unknown formula type '{}' for compound {}", formulaTypeValue, candidateId);
             }
         }
 
-        compound.setCompoundType(candidate.getCompoundType() != null ? candidate.getCompoundType() : 0);
-        compound.setCompoundStatus(candidate.getCompoundStatus() != null ? candidate.getCompoundStatus() : 0);
+        Integer compoundTypeRaw = candidate.getCompoundType();
+        CompoundType compoundType = null;
+        if (compoundTypeRaw != null) {
+            try {
+                compoundType = CompoundType.fromDbValue(compoundTypeRaw);
+            } catch (IllegalArgumentException ex) {
+                LOGGER.warn("Unknown compound type {} for compound {}", compoundTypeRaw, candidateId);
+            }
+        }
+        if (compoundType == null) {
+            compoundType = CompoundType.NON_LIPID;
+        }
+        compound.setCompoundType(compoundType);
         compound.setLogP(candidate.getLogp());
         compound.setRtPred(candidate.getRtPred());
         compound.setInchi(candidate.getInchi());
@@ -283,6 +303,34 @@ public class CemsSearchService {
         return compound;
     }
 
+    private Optional<Set<String>> parseChemicalAlphabet(String alphabet) {
+        if (alphabet == null || alphabet.isBlank()) {
+            return Optional.empty();
+        }
+        String normalized = alphabet.trim().toUpperCase();
+        if ("ALL".equals(normalized) || "ALLD".equals(normalized)) {
+            return Optional.empty();
+        }
+        Set<String> elements = new LinkedHashSet<>();
+        Matcher matcher = ELEMENT_PATTERN.matcher(normalized);
+        while (matcher.find()) {
+            elements.add(matcher.group(1));
+        }
+        return elements.isEmpty() ? Optional.empty() : Optional.of(elements);
+    }
+
+    private boolean matchesAlphabet(Compound compound, Optional<Set<String>> allowedElements) {
+        if (allowedElements.isEmpty()) {
+            return true;
+        }
+        Optional<Set<String>> compoundElements = compound.formulaElements();
+        if (compoundElements.isEmpty()) {
+            // Compounds without a formula are included by default for every alphabet.
+            return true;
+        }
+        return allowedElements.get().containsAll(compoundElements.get());
+    }
+
     private int safeLongToInt(Long value) {
         if (value == null) {
             return 0;
@@ -294,4 +342,6 @@ public class CemsSearchService {
             return value > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
         }
     }
+
+    private static final Pattern ELEMENT_PATTERN = Pattern.compile("([A-Z][a-z]?)");
 }

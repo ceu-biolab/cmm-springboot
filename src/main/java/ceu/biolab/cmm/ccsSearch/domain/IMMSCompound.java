@@ -22,7 +22,7 @@ public class IMMSCompound extends Compound {
     public IMMSCompound(Compound compound, double ccsValue) {
         super(compound.getCompoundId(), compound.getCasId(), compound.getCompoundName(), compound.getFormula(),
               compound.getMass(), compound.getChargeType(), compound.getChargeNumber(), compound.getFormulaType(),
-              compound.getCompoundType(), compound.getCompoundStatus(), compound.getFormulaTypeInt(),
+              compound.getCompoundType(),
               compound.getLogP(), compound.getRtPred(), compound.getInchi(), compound.getInchiKey(),
               compound.getSmiles(), compound.getLipidType(), compound.getNumChains(), compound.getNumCarbons(),
               compound.getDoubleBonds(), compound.getBiologicalActivity(), compound.getMeshNomenclature(),

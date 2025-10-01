@@ -12,6 +12,7 @@ import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
 import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
 import com.apicatalog.jsonld.StringUtils;
@@ -21,11 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -55,15 +60,17 @@ public class CompoundRepository {
                                             MetaboliteType metaboliteType) {
         List<AnnotatedFeature> annotatedMSFeature = new ArrayList<>();
         logger.info("request: {}", detectedAdduct);
-        Integer compoundType = null;
+        CompoundType compoundType = null;
 
         if (mz == null || tolerance == null || mzToleranceMode == null || ionizationMode == null) {
             return annotatedMSFeature;
         }
 
         if (metaboliteType == MetaboliteType.ONLYLIPIDS) {
-            compoundType = 1;
+            compoundType = CompoundType.LIPID;
         }
+
+        Optional<Set<String>> allowedElements = resolveAllowedElements(formulaType);
 
         double lowerBound, upperBound;
 
@@ -122,24 +129,16 @@ public class CompoundRepository {
                     upperBound = monoIsotopicMassFromMZAndAdduct + tolerancePPM;
                 }
 
-                final Integer compoundTypeFinal = compoundType;
+                final CompoundType compoundTypeFinal = compoundType;
                 final double lowerBoundFinal = lowerBound;
                 final double upperBoundFinal = upperBound;
 
                 String sql = "SELECT c.* FROM compounds_view c WHERE ";
                 sql += "c.mass BETWEEN " + lowerBoundFinal + " AND " + upperBoundFinal;
 
-                if (metaboliteType == MetaboliteType.ONLYLIPIDS) {
-                    sql += " AND c.compound_type = " + compoundTypeFinal;
+                if (compoundTypeFinal != null) {
+                    sql += " AND c.compound_type = " + compoundTypeFinal.getDbValue();
                 }
-
-                String formulaTypeIntSql = "";
-                if(formulaType != null && formulaType.isPresent()){
-                    int formulaTypeInt = formulaType.get().getFormulaTypeIntValue();
-                    formulaTypeIntSql = " AND c.formula_type_int = " + formulaTypeInt;
-                }
-
-                sql += formulaTypeIntSql;
 
                  if (!databaseConditions.isEmpty()) {
                     sql += " AND (" + String.join(" OR ", databaseConditions) + ")";
@@ -160,8 +159,12 @@ public class CompoundRepository {
 
                 logger.info("QUERY: {} ", finalSql);
 
+                Set<Compound> filteredCompounds = compounds.stream()
+                        .filter(comp -> matchesRequestedAlphabet(comp, allowedElements))
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
+
                 List<Annotation> annotations = new ArrayList<>();
-                for (Compound compound : compounds) {
+                for (Compound compound : filteredCompounds) {
                     annotations.add(new Annotation(compound));
                 }
                 annotationsByAdduct.setAnnotations(annotations);
@@ -173,6 +176,40 @@ public class CompoundRepository {
         return annotatedMSFeature;
     }
 
+    private Optional<Set<String>> resolveAllowedElements(Optional<FormulaType> formulaType) {
+        if (formulaType == null || formulaType.isEmpty()) {
+            return Optional.empty();
+        }
+        FormulaType requested = formulaType.get();
+        if (requested == FormulaType.ALL || requested == FormulaType.ALLD) {
+            return Optional.empty();
+        }
+        return Optional.of(parseAlphabetToElements(requested.name()));
+    }
+
+    private boolean matchesRequestedAlphabet(Compound compound, Optional<Set<String>> allowedElements) {
+        if (allowedElements == null || allowedElements.isEmpty()) {
+            return true;
+        }
+        Optional<Set<String>> compoundElements = compound.formulaElements();
+        if (compoundElements.isEmpty()) {
+            // Compounds without a formula should be included for all requested alphabets.
+            return true;
+        }
+        return allowedElements.get().containsAll(compoundElements.get());
+    }
+
+    private Set<String> parseAlphabetToElements(String alphabet) {
+        Set<String> elements = new LinkedHashSet<>();
+        if (alphabet == null) {
+            return elements;
+        }
+        Matcher matcher = ALPHABET_PATTERN.matcher(alphabet.toUpperCase());
+        while (matcher.find()) {
+            elements.add(matcher.group(1));
+        }
+        return elements;
+    }
 
     /**
      * This method obtains the pathways for a specific compound
@@ -197,4 +234,5 @@ public class CompoundRepository {
         return new HashSet<>(pathwayList);
     }
 
+    private static final Pattern ALPHABET_PATTERN = Pattern.compile("([A-Z][a-z]?)");
 }
