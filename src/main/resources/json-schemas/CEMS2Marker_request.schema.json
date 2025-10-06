@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TwoMarkerMobilityRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "masses": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "number" },
+      "description": "Observed m/z (or mass) values matching mass_mode."
+    },
+    "tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Mass tolerance value (interpreted per tolerance_mode)."
+    },
+    "tolerance_mode": {
+      "type": "string",
+      "enum": ["ppm", "mDa"],
+      "description": "Mass tolerance mode: ppm or milliDalton (mDa)."
+    },
+    "mt": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "number" },
+      "description": "Migration times (minutes) in the same order as 'masses'."
+    },
+    "mt_tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Allowed deviation for migration times (interpreted per mt_tolerance_mode)."
+    },
+    "mt_tolerance_mode": {
+      "type": "string",
+      "enum": ["percentage", "absolute"],
+      "description": "How to interpret mt_tolerance (percentage of value or absolute minutes)."
+    },
+    "buffer": {
+      "type": "string",
+      "description": "Buffer code exactly matching ce_eff_mob_view.buffer_code."
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Temperature in Celsius (used for DB lookup of marker mobility)."
+    },
+    "polarity": {
+      "type": "string",
+      "enum": ["Direct", "Reverse", "direct", "reverse"],
+      "description": "CE polarity matching the database polarity codes."
+    },
+    "marker1": {
+      "type": "string",
+      "description": "Primary marker compound name for DB lookup."
+    },
+    "marker1_time": {
+      "type": "number",
+      "description": "Primary marker migration time in minutes."
+    },
+    "marker2": {
+      "type": "string",
+      "description": "Secondary marker compound name for DB lookup."
+    },
+    "marker2_time": {
+      "type": "number",
+      "description": "Secondary marker migration time in minutes."
+    },
+    "chemical_alphabet": {
+      "type": "string",
+      "description": "Allowed elements for downstream identification (passed through unchanged)."
+    },
+    "ion_mode": {
+      "type": "string",
+      "enum": ["positive", "negative"],
+      "description": "Ionization polarity used for DB lookup."
+    },
+    "mass_mode": {
+      "type": "string",
+      "enum": ["mz", "mass"],
+      "description": "Indicates whether 'masses' contains m/z or neutral masses."
+    },
+    "adducts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Candidate adduct strings for the downstream matcher."
+    }
+  },
+  "required": [
+    "masses",
+    "tolerance",
+    "tolerance_mode",
+    "mt",
+    "mt_tolerance",
+    "mt_tolerance_mode",
+    "buffer",
+    "temperature",
+    "polarity",
+    "marker1",
+    "marker1_time",
+    "marker2",
+    "marker2_time",
+    "chemical_alphabet",
+    "ion_mode",
+    "mass_mode",
+    "adducts"
+  ]
+}

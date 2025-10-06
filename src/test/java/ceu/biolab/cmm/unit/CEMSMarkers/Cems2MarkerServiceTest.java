@@ -8,9 +8,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ceu.biolab.cmm.CEMSMarkers.domain.MarkerMobility;
-import ceu.biolab.cmm.CEMSMarkers.dto.CemsMarkersRequestDTO;
+import ceu.biolab.cmm.CEMSMarkers.dto.CemsMarkersTwoRequestDTO;
 import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
-import ceu.biolab.cmm.CEMSMarkers.service.CemsMarkersService;
+import ceu.biolab.cmm.CEMSMarkers.service.Cems2MarkerService;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
@@ -28,7 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CemsMarkersServiceTest {
+class Cems2MarkerServiceTest {
 
     @Mock
     private CemsMarkersRepository markersRepository;
@@ -37,16 +37,16 @@ class CemsMarkersServiceTest {
     private CemsSearchService cemsSearchService;
 
     @InjectMocks
-    private CemsMarkersService service;
+    private Cems2MarkerService service;
 
     @Captor
     private ArgumentCaptor<CemsSearchRequestDTO> requestCaptor;
 
-    private CemsMarkersRequestDTO sampleRequest;
+    private CemsMarkersTwoRequestDTO sampleRequest;
 
     @BeforeEach
     void setUp() {
-        sampleRequest = new CemsMarkersRequestDTO();
+        sampleRequest = new CemsMarkersTwoRequestDTO();
         sampleRequest.setMasses(List.of(291.1299, 298.098, 308.094, 316.2488, 55.055));
         sampleRequest.setTolerance(10);
         sampleRequest.setToleranceMode("mDa");
@@ -56,10 +56,10 @@ class CemsMarkersServiceTest {
         sampleRequest.setBuffer("FORMIC_ACID_1M");
         sampleRequest.setTemperature(20d);
         sampleRequest.setPolarity("Direct");
-        sampleRequest.setMarker("L-Methionine sulfone");
-        sampleRequest.setMarkerTime(14.24);
-        sampleRequest.setCapillaryLength(1000);
-        sampleRequest.setCapillaryVoltage(30);
+        sampleRequest.setMarker1("L-Methionine sulfone");
+        sampleRequest.setMarker1Time(14.24);
+        sampleRequest.setMarker2("Hippuric acid");
+        sampleRequest.setMarker2Time(25.29);
         sampleRequest.setChemicalAlphabet("CHNOPS");
         sampleRequest.setIonMode("positive");
         sampleRequest.setMassMode("mz");
@@ -69,7 +69,10 @@ class CemsMarkersServiceTest {
     @Test
     void searchComputesMobilitiesAndDelegatesToCemsSearch() {
         when(markersRepository.findMarkerMobility(any(), any(), anyDouble(), any(CePolarity.class)))
-                .thenReturn(Optional.of(new MarkerMobility(774.7394, 7, CePolarity.DIRECT)));
+                .thenReturn(
+                        Optional.of(new MarkerMobility(774.7394, 7, CePolarity.DIRECT)),
+                        Optional.of(new MarkerMobility(-43.8585522259217, 7, CePolarity.DIRECT))
+                );
         CemsSearchResponseDTO expectedResponse = new CemsSearchResponseDTO();
         when(cemsSearchService.search(any(CemsSearchRequestDTO.class))).thenReturn(expectedResponse);
 
@@ -81,18 +84,18 @@ class CemsMarkersServiceTest {
         CemsSearchRequestDTO forwarded = requestCaptor.getValue();
 
         double[] expectedMobilities = {
-                1317.4217736765027,
-                875.9178719649888,
-                567.9316484858075,
-                1081.519348416346,
-                3202.632645031693
+                1209.083738627556,
+                855.7191749487557,
+                609.2175765327253,
+                1020.2755372737782,
+                2717.941790428516
         };
         for (int i = 0; i < expectedMobilities.length; i++) {
             assertEquals(expectedMobilities[i], forwarded.getEffectiveMobilities().get(i), 1e-9,
                     "Effective mobility mismatch at index " + i);
         }
 
-        assertEquals(41.75025529945909, forwarded.getEffectiveMobilityTolerance(), 1e-9);
+        assertEquals(31.15094534757435, forwarded.getEffectiveMobilityTolerance(), 1e-9);
         assertEquals(sampleRequest.getMasses(), forwarded.getMzValues());
         assertEquals(sampleRequest.getAdducts(), forwarded.getAdducts());
         assertEquals("m/z", forwarded.getInputMassMode());

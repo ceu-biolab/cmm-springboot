@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
-class CemsMarkersIntegrationTest {
+class Cems2MarkerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -28,14 +28,14 @@ class CemsMarkersIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void cemsMarkersEndpointMatchesStoredResponse() throws Exception {
-        ClassPathResource requestResource = new ClassPathResource("json/cemsMarkers/CEMS1Marker_request1.json");
-        ClassPathResource responseResource = new ClassPathResource("json/cemsMarkers/CEMS1Marker_response1.json");
+    void cems2MarkerEndpointMatchesStoredResponse() throws Exception {
+        ClassPathResource requestResource = new ClassPathResource("json/cemsMarkers/CEMS2Marker_request1.json");
+        ClassPathResource responseResource = new ClassPathResource("json/cemsMarkers/CEMS2Marker_response1.json");
 
         String requestJson = new String(requestResource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         JsonNode expected = objectMapper.readTree(responseResource.getInputStream());
 
-        MvcResult mvcResult = mockMvc.perform(post("/api/CEMSMarkers")
+        MvcResult mvcResult = mockMvc.perform(post("/api/CEMS2Marker")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
