@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OneMarkerMobilityRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "masses": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "number" },
+      "description": "Observed m/z (or mass) values matching masses_mode."
+    },
+    "tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Mass tolerance value (interpreted per tolerance_mode)."
+    },
+    "tolerance_mode": {
+      "type": "string",
+      "enum": ["ppm", "mDa"],
+      "description": "Mass tolerance mode: ppm or milliDalton (mDa)."
+    },
+    "mt": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "number" },
+      "description": "Migration times (minutes) in the same order as 'masses'."
+    },
+    "mt_tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Allowed deviation for migration times (interpreted per mt_tolerance_mode)."
+    },
+    "mt_tolerance_mode": {
+      "type": "string",
+      "enum": ["percentage", "absolute"],
+      "description": "How to interpret mt_tolerance (percentage of value or absolute minutes)."
+    },
+    "buffer": {
+      "type": "string",
+      "description": "Buffer code exactly matching ce_eff_mob_view.buffer_code (e.g. FORMIC_ACID_1M)."
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Temperature in Celsius (used for DB lookup of marker mobility)."
+    },
+    "polarity": {
+      "type": "string",
+      "enum": ["Direct", "Reverse", "direct", "reverse"],
+      "description": "CE polarity matching the database polarity codes."
+    },
+    "marker": {
+      "type": "string",
+      "description": "Marker compound name (used for DB lookup of its known effective mobility under 'buffer' and 'ion_mode')."
+    },
+    "marker_time": {
+      "type": "number",
+      "description": "Marker migration time in minutes."
+    },
+    "capillary_length": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Effective length to detector (mm)."
+    },
+    "capillary_voltage": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Applied voltage (kV)."
+    },
+    "chemical_alphabet": {
+      "type": "string",
+      "description": "Allowed elements for downstream identification (passed through unchanged)."
+    },
+    "ion_mode": {
+      "type": "string",
+      "enum": ["positive", "negative"],
+      "description": "Ionization polarity used for DB lookup."
+    },
+    "mass_mode": {
+      "type": "string",
+      "enum": ["mz", "mass"],
+      "description": "Indicates whether 'masses' contains m/z or neutral masses."
+    },
+    "adducts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Candidate adduct strings for the downstream matcher."
+    }
+  },
+  "required": [
+    "masses",
+    "tolerance",
+    "tolerance_mode",
+    "mt",
+    "mt_tolerance",
+    "mt_tolerance_mode",
+    "buffer",
+    "temperature",
+    "polarity",
+    "marker",
+    "marker_time",
+    "capillary_length",
+    "capillary_voltage",
+    "chemical_alphabet",
+    "ion_mode",
+    "mass_mode",
+    "adducts"
+  ]
+}

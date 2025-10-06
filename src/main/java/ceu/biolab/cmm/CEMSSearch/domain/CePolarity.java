@@ -33,4 +33,13 @@ public enum CePolarity {
         }
         throw new IllegalArgumentException("Unknown CE polarity: " + value);
     }
+
+    public static CePolarity fromDatabaseValue(int value) {
+        for (CePolarity polarity : values()) {
+            if (polarity.databaseValue == value) {
+                return polarity;
+            }
+        }
+        throw new IllegalArgumentException("Unknown CE polarity database value: " + value);
+    }
 }

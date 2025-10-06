@@ -53,7 +53,10 @@ public class CemsSearchService {
         }
         validateRequest(request);
 
-        OptionalInt bufferId = CeBufferDictionary.findBufferId(request.getBackgroundElectrolyte());
+        OptionalInt bufferId = request.getBufferIdOverrideOptional();
+        if (bufferId.isEmpty()) {
+            bufferId = CeBufferDictionary.findBufferId(request.getBackgroundElectrolyte());
+        }
         if (bufferId.isEmpty()) {
             throw new IllegalArgumentException("Unknown background electrolyte: " + request.getBackgroundElectrolyte());
         }

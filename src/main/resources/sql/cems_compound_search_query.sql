@@ -6,7 +6,6 @@ SELECT
   cv.mass AS mass,
   cv.charge_type AS charge_type,
   cv.charge_number AS charge_number,
-  cv.formula_type AS formula_type,
   cv.compound_type AS compound_type,
   cv.logp AS logp,
   cv.rt_pred AS rt_pred,

@@ -42,6 +42,9 @@ public class CemsSearchRequestDTO {
     @JsonProperty("eff_mob_tolerance")
     private double effectiveMobilityTolerance;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private Integer bufferIdOverride;
+
     public CemsSearchRequestDTO() {
         this.adducts = new ArrayList<>();
         this.mzValues = new ArrayList<>();
@@ -49,6 +52,10 @@ public class CemsSearchRequestDTO {
         this.mzToleranceMode = MzToleranceMode.PPM;
         this.polarity = CePolarity.DIRECT;
         this.ionizationMode = IonizationMode.POSITIVE;
+    }
+
+    public java.util.OptionalInt getBufferIdOverrideOptional() {
+        return bufferIdOverride == null ? java.util.OptionalInt.empty() : java.util.OptionalInt.of(bufferIdOverride);
     }
 
     @JsonProperty("polarity")
