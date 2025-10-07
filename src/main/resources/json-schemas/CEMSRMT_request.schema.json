@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CE-MS RMT Search Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "masses",
+    "tolerance",
+    "tolerance_mode",
+    "rmt",
+    "rmt_tolerance",
+    "rmt_tolerance_mode",
+    "buffer",
+    "temperature",
+    "polarity",
+    "rmt_reference",
+    "ion_mode",
+    "mass_mode",
+    "adducts"
+  ],
+  "properties": {
+    "masses": {
+      "type": "array",
+      "items": { "type": "number", "exclusiveMinimum": 0 },
+      "minItems": 1,
+      "description": "Measured m/z or neutral masses depending on mass_mode."
+    },
+    "tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Mass tolerance value interpreted per tolerance_mode."
+    },
+    "tolerance_mode": {
+      "type": "string",
+      "enum": ["ppm", "mDa"],
+      "description": "Mass tolerance unit."
+    },
+    "rmt": {
+      "type": "array",
+      "items": { "type": "number", "minimum": 0 },
+      "minItems": 1,
+      "description": "Relative migration time values aligned with masses."
+    },
+    "rmt_tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "description": "RMT tolerance interpreted per rmt_tolerance_mode."
+    },
+    "rmt_tolerance_mode": {
+      "type": "string",
+      "enum": ["percentage", "absolute"],
+      "description": "Mode for interpreting rmt_tolerance."
+    },
+    "buffer": {
+      "type": "string",
+      "description": "Buffer code (ce_buffer_type.buffer_code)."
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Experimental temperature in Celsius."
+    },
+    "polarity": {
+      "type": "string",
+      "enum": ["Direct", "Reverse"],
+      "description": "CE polarity setting."
+    },
+    "rmt_reference": {
+      "type": "string",
+      "description": "Reference compound name used for RMT normalization."
+    },
+    "chemical_alphabet": {
+      "type": "string",
+      "description": "Allowed element letters, e.g. CHNOPS."
+    },
+    "ion_mode": {
+      "type": "string",
+      "enum": ["positive", "negative"],
+      "description": "Ionization mode."
+    },
+    "mass_mode": {
+      "type": "string",
+      "enum": ["mz", "mass"],
+      "description": "Indicates whether masses array contains m/z or neutral masses."
+    },
+    "adducts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Candidate adducts to evaluate."
+    }
+  },
+  "examples": [
+    {
+      "masses": [291.1299, 298.098, 308.094, 316.2488, 55.055],
+      "tolerance": 10,
+      "tolerance_mode": "ppm",
+      "rmt": [0.85, 0.86, 1.07, 0.93, 0.42],
+      "rmt_tolerance": 10,
+      "rmt_tolerance_mode": "percentage",
+      "buffer": "FORMIC_ACID_1M",
+      "temperature": 20,
+      "polarity": "Direct",
+      "rmt_reference": "L-Methionine sulfone",
+      "chemical_alphabet": "CHNOPS",
+      "ion_mode": "positive",
+      "mass_mode": "mz",
+      "adducts": ["M+H", "M+2H", "M+Na", "M+K", "M+NH4", "M+H-H2O"]
+    }
+  ]
+}

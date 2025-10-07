@@ -14,12 +14,17 @@
     "effective_mobilities",
     "mz_tolerance",
     "mz_tolerance_mode",
-    "eff_mob_tolerance"
+    "eff_mob_tolerance",
+    "temperature"
   ],
   "properties": {
     "buffer_code": {
       "type": "string",
       "description": "Buffer code as stored in ce_buffer_type.buffer_code (e.g. FORMIC_ACID_1M)."
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Experimental temperature in Celsius"
     },
     "polarity": {
       "type": "string",
@@ -70,8 +75,12 @@
     "eff_mob_tolerance": {
       "type": "number",
       "minimum": 0,
-      "maximum": 100,
-      "description": "Effective mobility tolerance as a percentage."
+      "description": "Effective mobility tolerance interpreted per eff_mob_tolerance_mode."
+    },
+    "eff_mob_tolerance_mode": {
+      "type": "string",
+      "enum": ["percentage", "absolute"],
+      "description": "Specifies how eff_mob_tolerance should be applied."
     }
   },
 
@@ -87,7 +96,9 @@
       "effective_mobilities": [1174, 1060, 995, 880],
       "mz_tolerance": 10,
       "mz_tolerance_mode": "ppm",
-      "eff_mob_tolerance": 5
+      "eff_mob_tolerance": 5,
+      "eff_mob_tolerance_mode": "percentage",
+      "temperature": 20
     }
   ]
 }

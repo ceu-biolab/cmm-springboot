@@ -102,6 +102,9 @@ class Cems2MarkerServiceTest {
         assertEquals("FORMIC_ACID_1M", forwarded.getBufferCode());
         assertEquals(10d, forwarded.getMzTolerance());
         assertEquals(MzToleranceMode.MDA, forwarded.getMzToleranceMode());
+        assertEquals(sampleRequest.getTemperature(), forwarded.getTemperature());
+        assertEquals(ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode.PERCENTAGE,
+                forwarded.getEffectiveMobilityToleranceMode());
     }
 
     @Test

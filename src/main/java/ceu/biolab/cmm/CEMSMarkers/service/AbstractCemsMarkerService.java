@@ -4,6 +4,7 @@ import ceu.biolab.cmm.CEMSMarkers.domain.MassMode;
 import ceu.biolab.cmm.CEMSMarkers.domain.MtToleranceMode;
 import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
+import ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
 import ceu.biolab.cmm.CEMSSearch.service.CemsSearchService;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
@@ -85,6 +86,7 @@ abstract class AbstractCemsMarkerService {
                                                           MassMode massMode,
                                                           double mzTolerance,
                                                           MzToleranceMode toleranceMode,
+                                                          Double temperature,
                                                           double mobilityTolerancePercent,
                                                           CePolarity polarity,
                                                           IonizationMode ionMode) {
@@ -100,6 +102,8 @@ abstract class AbstractCemsMarkerService {
         requestDTO.setMzTolerance(mzTolerance);
         requestDTO.setMzToleranceMode(toleranceMode.name());
         requestDTO.setEffectiveMobilityTolerance(mobilityTolerancePercent);
+        requestDTO.setTemperature(temperature);
+        requestDTO.setEffectiveMobilityToleranceMode(EffMobToleranceMode.PERCENTAGE);
         return requestDTO;
     }
 }

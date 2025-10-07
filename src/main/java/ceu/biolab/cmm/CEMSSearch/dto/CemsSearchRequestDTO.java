@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
+import ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import lombok.Data;
@@ -42,6 +43,10 @@ public class CemsSearchRequestDTO {
     @JsonProperty("eff_mob_tolerance")
     private double effectiveMobilityTolerance;
 
+    private Double temperature;
+
+    private EffMobToleranceMode effectiveMobilityToleranceMode = EffMobToleranceMode.PERCENTAGE;
+
     public CemsSearchRequestDTO() {
         this.adducts = new ArrayList<>();
         this.mzValues = new ArrayList<>();
@@ -64,5 +69,10 @@ public class CemsSearchRequestDTO {
     @JsonProperty("mz_tolerance_mode")
     public void setMzToleranceMode(String value) {
         this.mzToleranceMode = MzToleranceMode.valueOf(value.toUpperCase());
+    }
+
+    @JsonProperty("eff_mob_tolerance_mode")
+    public void setEffMobToleranceMode(String value) {
+        this.effectiveMobilityToleranceMode = EffMobToleranceMode.fromValue(value);
     }
 }

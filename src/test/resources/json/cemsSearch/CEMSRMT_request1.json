@@ -1,0 +1,35 @@
+{
+    "masses": [
+        291.1299,
+        298.098,
+        308.094,
+        316.2488,
+        55.055
+    ],
+    "tolerance": 10,
+    "tolerance_mode": "ppm",
+    "rmt": [
+        0.85,
+        0.86,
+        1.07,
+        0.93,
+        0.42
+    ],
+    "rmt_tolerance": 10,
+    "rmt_tolerance_mode": "percentage",
+    "buffer": "FORMIC_ACID_1M",
+    "temperature": 20,
+    "polarity": "Direct",
+    "rmt_reference": "L-Methionine sulfone",
+    "chemical_alphabet": "CHNOPS",
+    "ion_mode": "positive",
+    "mass_mode": "mz",
+    "adducts": [
+        "M+H",
+        "M+2H",
+        "M+Na",
+        "M+K",
+        "M+NH4",
+        "M+H-H2O"
+    ]
+}

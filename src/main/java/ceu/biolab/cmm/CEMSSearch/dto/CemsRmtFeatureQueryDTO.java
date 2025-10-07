@@ -5,13 +5,14 @@ import lombok.Value;
 
 @Value
 @Builder
-public class CemsFeatureQueryDTO {
+public class CemsRmtFeatureQueryDTO {
     double massLower;
     double massUpper;
-    double mobilityLower;
-    double mobilityUpper;
+    double rmtLower;
+    double rmtUpper;
     String bufferCode;
     int polarityId;
     int ionizationModeId;
     long temperature;
+    long referenceCompoundId;
 }

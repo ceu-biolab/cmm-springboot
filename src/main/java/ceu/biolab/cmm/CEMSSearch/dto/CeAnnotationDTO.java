@@ -14,4 +14,7 @@ public class CeAnnotationDTO {
     Double mzCalc;
     Double neutralMassCalc;
     Double mobilityErrorPct;
+    Double rmtErrorPct;
+    Double relativeMt;
+    Double absoluteMt;
 }

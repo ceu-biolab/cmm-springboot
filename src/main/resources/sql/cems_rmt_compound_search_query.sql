@@ -21,21 +21,20 @@ SELECT
   cv.iupac_classification AS iupac_classification,
   meta.experimental_mz AS experimental_mz,
   meta.exp_eff_mob AS experimental_eff_mob,
-  em.eff_mobility AS mobility,
+  NULL::double precision AS mobility,
   meta.ce_exp_prop_metadata_id AS ce_exp_prop_metadata_id,
   meta.ce_exp_prop_id AS ce_exp_prop_id,
   bt.buffer_code AS buffer_code,
-  props.temperature AS temperature,
   props.polarity AS polarity_id,
-  cep.ionization_mode AS ionization_mode_id
+  cep.ionization_mode AS ionization_mode_id,
+  meta.relative_mt AS relative_mt,
+  meta.absolute_mt AS absolute_mt,
+  meta.rmt_ref_compound_id AS rmt_reference_compound_id
 FROM ce_experimental_properties_metadata meta
 JOIN ce_experimental_properties cep
   ON meta.ce_exp_prop_id = cep.ce_exp_prop_id
-JOIN eff_mob em
-  ON em.ce_exp_prop_id = meta.ce_exp_prop_id
- AND em.compound_id = meta.compound_id
 JOIN eff_mob_experimental_properties props
-  ON em.eff_mob_exp_prop_id = props.eff_mob_exp_prop_id
+  ON cep.eff_mob_exp_prop_id = props.eff_mob_exp_prop_id
 JOIN ce_buffer_type bt
   ON props.buffer = bt.buffer_id
 JOIN compounds_view cv
@@ -43,7 +42,8 @@ JOIN compounds_view cv
 WHERE
   bt.buffer_code = :bufferCode
   AND props.polarity = :polarityId
-  AND props.temperature = :temperature
   AND cep.ionization_mode = :ionizationModeId
+  AND props.temperature = :temperature
+  AND meta.rmt_ref_compound_id = :referenceCompoundId
   AND cv.mass BETWEEN :massLower AND :massUpper
-  AND meta.exp_eff_mob BETWEEN :mobilityLower AND :mobilityUpper;
+  AND meta.relative_mt BETWEEN :rmtLower AND :rmtUpper;
