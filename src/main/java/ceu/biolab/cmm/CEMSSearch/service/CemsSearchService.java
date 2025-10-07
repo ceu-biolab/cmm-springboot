@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import ceu.biolab.cmm.CEMSSearch.domain.CeBufferDictionary;
 import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
 import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationDTO;
@@ -53,12 +52,9 @@ public class CemsSearchService {
         }
         validateRequest(request);
 
-        OptionalInt bufferId = request.getBufferIdOverrideOptional();
-        if (bufferId.isEmpty()) {
-            bufferId = CeBufferDictionary.findBufferId(request.getBackgroundElectrolyte());
-        }
-        if (bufferId.isEmpty()) {
-            throw new IllegalArgumentException("Unknown background electrolyte: " + request.getBackgroundElectrolyte());
+        String bufferCode = normalizeBufferCode(request.getBufferCode());
+        if (bufferCode == null) {
+            throw new IllegalArgumentException("buffer_code is required");
         }
 
         CePolarity polarity = request.getPolarity();
@@ -113,7 +109,7 @@ public class CemsSearchService {
                         .massUpper(neutralMass + massWindow)
                         .mobilityLower(effMob - mobilityWindow)
                         .mobilityUpper(effMob + mobilityWindow)
-                        .bufferId(bufferId.getAsInt())
+                        .bufferCode(bufferCode)
                         .polarityId(polarityId)
                         .ionizationModeId(ionizationModeId)
                         .build();
@@ -158,6 +154,14 @@ public class CemsSearchService {
         }
 
         return response;
+    }
+
+    private String normalizeBufferCode(String bufferCode) {
+        if (bufferCode == null) {
+            return null;
+        }
+        String normalized = bufferCode.trim().toUpperCase(Locale.ROOT);
+        return normalized.isEmpty() ? null : normalized;
     }
 
     private void validateRequest(CemsSearchRequestDTO request) {

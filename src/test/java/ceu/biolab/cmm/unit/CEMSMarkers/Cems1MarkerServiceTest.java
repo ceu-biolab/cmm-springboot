@@ -69,7 +69,7 @@ class Cems1MarkerServiceTest {
     @Test
     void searchComputesMobilitiesAndDelegatesToCemsSearch() {
         when(markersRepository.findMarkerMobility(any(), any(), anyDouble(), any(CePolarity.class)))
-                .thenReturn(Optional.of(new MarkerMobility(774.7394, 7, CePolarity.DIRECT)));
+                .thenReturn(Optional.of(new MarkerMobility(774.7394, "FORMIC_ACID_1M", CePolarity.DIRECT)));
         CemsSearchResponseDTO expectedResponse = new CemsSearchResponseDTO();
         when(cemsSearchService.search(any(CemsSearchRequestDTO.class))).thenReturn(expectedResponse);
 
@@ -96,7 +96,7 @@ class Cems1MarkerServiceTest {
         assertEquals(sampleRequest.getMasses(), forwarded.getMzValues());
         assertEquals(sampleRequest.getAdducts(), forwarded.getAdducts());
         assertEquals("m/z", forwarded.getInputMassMode());
-        assertEquals(Integer.valueOf(7), forwarded.getBufferIdOverride());
+        assertEquals("FORMIC_ACID_1M", forwarded.getBufferCode());
         assertEquals(10d, forwarded.getMzTolerance());
         assertEquals(MzToleranceMode.MDA, forwarded.getMzToleranceMode());
     }

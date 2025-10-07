@@ -86,11 +86,10 @@ abstract class AbstractCemsMarkerService {
                                                           double mzTolerance,
                                                           MzToleranceMode toleranceMode,
                                                           double mobilityTolerancePercent,
-                                                          int bufferId,
                                                           CePolarity polarity,
                                                           IonizationMode ionMode) {
         CemsSearchRequestDTO requestDTO = new CemsSearchRequestDTO();
-        requestDTO.setBackgroundElectrolyte(bufferCode);
+        requestDTO.setBufferCode(bufferCode);
         requestDTO.setChemicalAlphabet(ensureChemicalAlphabet(chemicalAlphabet));
         requestDTO.setInputMassMode(Objects.requireNonNull(massMode).getCemsEquivalent());
         requestDTO.setIonizationMode(Objects.requireNonNull(ionMode).name());
@@ -101,7 +100,6 @@ abstract class AbstractCemsMarkerService {
         requestDTO.setMzTolerance(mzTolerance);
         requestDTO.setMzToleranceMode(toleranceMode.name());
         requestDTO.setEffectiveMobilityTolerance(mobilityTolerancePercent);
-        requestDTO.setBufferIdOverride(bufferId);
         return requestDTO;
     }
 }

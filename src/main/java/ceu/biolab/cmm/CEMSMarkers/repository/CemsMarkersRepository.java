@@ -29,7 +29,7 @@ public class CemsMarkersRepository {
         }
 
         String sql = """
-                SELECT eff_mobility, buffer_id, polarity
+                SELECT eff_mobility, buffer_code, polarity
                 FROM ce_eff_mob_view
                 WHERE lower(compound_name) = lower(:marker)
                   AND buffer_code = :buffer
@@ -48,10 +48,10 @@ public class CemsMarkersRepository {
         return jdbcTemplate.query(sql, params, rs -> {
             if (rs.next()) {
                 double effMobility = rs.getDouble("eff_mobility");
-                int bufferId = rs.getInt("buffer_id");
+                String bufferCodeNormalized = rs.getString("buffer_code");
                 int polarityDb = rs.getInt("polarity");
                 CePolarity cePolarity = CePolarity.fromDatabaseValue(polarityDb);
-                return Optional.of(new MarkerMobility(effMobility, bufferId, cePolarity));
+                return Optional.of(new MarkerMobility(effMobility, bufferCodeNormalized, cePolarity));
             }
             return Optional.empty();
         });

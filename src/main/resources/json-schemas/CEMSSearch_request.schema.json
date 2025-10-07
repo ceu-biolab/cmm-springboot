@@ -4,7 +4,7 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "background_electrolyte",
+    "buffer_code",
     "polarity",
     "chemical_alphabet",
     "input_mass_mode",
@@ -17,9 +17,9 @@
     "eff_mob_tolerance"
   ],
   "properties": {
-    "background_electrolyte": {
+    "buffer_code": {
       "type": "string",
-      "description": "Background electrolyte (BGE)."
+      "description": "Buffer code as stored in ce_buffer_type.buffer_code (e.g. FORMIC_ACID_1M)."
     },
     "polarity": {
       "type": "string",
@@ -77,7 +77,7 @@
 
   "examples": [
     {
-      "background_electrolyte": "Ammonium Acetate",
+      "buffer_code": "AMMONIUM_ACETATE_50mM",
       "polarity": "Direct",
       "chemical_alphabet": "CHNOPS",
       "input_mass_mode": "Neutral Masses",

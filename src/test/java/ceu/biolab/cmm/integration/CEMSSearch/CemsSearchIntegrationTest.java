@@ -35,7 +35,7 @@ class CemsSearchIntegrationTest {
     void cemsEndpointReturnsUniqueCompoundsPerFeature() throws Exception {
         String requestJson = """
                 {
-                  \"background_electrolyte\": \"formic acid 0.1M\",
+                  \"buffer_code\": \"FORMIC_ACID_0DOT1M\",
                   \"polarity\": \"Reverse\",
                   \"chemical_alphabet\": \"CHNOPS\",
                   \"input_mass_mode\": \"m/z\",

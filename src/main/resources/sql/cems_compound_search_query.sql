@@ -24,7 +24,7 @@ SELECT
   em.eff_mobility AS mobility,
   meta.ce_exp_prop_metadata_id AS ce_exp_prop_metadata_id,
   meta.ce_exp_prop_id AS ce_exp_prop_id,
-  props.buffer AS buffer_id,
+  bt.buffer_code AS buffer_code,
   props.polarity AS polarity_id,
   cep.ionization_mode AS ionization_mode_id
 FROM ce_experimental_properties_metadata meta
@@ -35,10 +35,12 @@ JOIN eff_mob em
  AND em.compound_id = meta.compound_id
 JOIN eff_mob_experimental_properties props
   ON em.eff_mob_exp_prop_id = props.eff_mob_exp_prop_id
+JOIN ce_buffer_type bt
+  ON props.buffer = bt.buffer_id
 JOIN compounds_view cv
   ON meta.compound_id = cv.compound_id
 WHERE
-  props.buffer = :bufferId
+  bt.buffer_code = :bufferCode
   AND props.polarity = :polarityId
   AND cep.ionization_mode = :ionizationModeId
   AND cv.mass BETWEEN :massLower AND :massUpper

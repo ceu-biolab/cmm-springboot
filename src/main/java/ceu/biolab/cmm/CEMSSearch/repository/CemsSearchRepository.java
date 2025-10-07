@@ -37,7 +37,7 @@ public class CemsSearchRepository {
         params.addValue("massUpper", queryData.getMassUpper());
         params.addValue("mobilityLower", queryData.getMobilityLower());
         params.addValue("mobilityUpper", queryData.getMobilityUpper());
-        params.addValue("bufferId", queryData.getBufferId());
+        params.addValue("bufferCode", queryData.getBufferCode());
         params.addValue("polarityId", queryData.getPolarityId());
         params.addValue("ionizationModeId", queryData.getIonizationModeId());
 

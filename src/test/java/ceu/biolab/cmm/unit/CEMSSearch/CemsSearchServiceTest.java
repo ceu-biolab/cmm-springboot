@@ -31,7 +31,7 @@ class CemsSearchServiceTest {
 
     private CemsSearchRequestDTO baseRequest() {
         CemsSearchRequestDTO request = new CemsSearchRequestDTO();
-        request.setBackgroundElectrolyte("formic acid 0.1M");
+        request.setBufferCode("FORMIC_ACID_0DOT1M");
         request.setPolarity("Reverse");
         request.setIonizationMode("Negative");
         request.setChemicalAlphabet("ALL");
@@ -57,16 +57,16 @@ class CemsSearchServiceTest {
         dto.setMobility(effMob);
         dto.setIonizationModeId(1);
         dto.setPolarityId(1);
-        dto.setBufferId(1);
+        dto.setBufferCode("FORMIC_ACID_0DOT1M");
         dto.setFormulaType("CHNOPS");
         dto.setCompoundType(0);
         return dto;
     }
 
     @Test
-    void searchThrowsForUnknownBackgroundElectrolyte() {
+    void searchThrowsWhenBufferCodeMissing() {
         CemsSearchRequestDTO request = baseRequest();
-        request.setBackgroundElectrolyte("not-a-known-bge");
+        request.setBufferCode(" ");
 
         assertThrows(IllegalArgumentException.class, () -> service.search(request));
     }

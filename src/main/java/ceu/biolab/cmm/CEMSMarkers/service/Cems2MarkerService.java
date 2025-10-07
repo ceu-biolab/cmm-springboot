@@ -33,8 +33,8 @@ public class Cems2MarkerService extends AbstractCemsMarkerService {
                 .findMarkerMobility(request.getMarker2(), request.getBuffer(), request.getTemperature(), request.getPolarity())
                 .orElseThrow(() -> new IllegalArgumentException("Marker mobility not found for marker=" + request.getMarker2()));
 
-        if (marker1Mobility.bufferId() != marker2Mobility.bufferId()) {
-            throw new IllegalArgumentException("Marker mobilities retrieved with different buffer ids");
+        if (!marker1Mobility.bufferCode().equals(marker2Mobility.bufferCode())) {
+            throw new IllegalArgumentException("Marker mobilities retrieved with different buffer codes");
         }
 
         double marker1Time = request.getMarker1Time();
@@ -68,7 +68,6 @@ public class Cems2MarkerService extends AbstractCemsMarkerService {
                 request.getTolerance(),
                 request.getToleranceMode(),
                 mobilityTolerancePercent,
-                marker1Mobility.bufferId(),
                 request.getPolarity(),
                 request.getIonMode()
         ));

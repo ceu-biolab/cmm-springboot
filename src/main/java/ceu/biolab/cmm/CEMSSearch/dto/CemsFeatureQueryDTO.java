@@ -10,7 +10,7 @@ public class CemsFeatureQueryDTO {
     double massUpper;
     double mobilityLower;
     double mobilityUpper;
-    int bufferId;
+    String bufferCode;
     int polarityId;
     int ionizationModeId;
 }

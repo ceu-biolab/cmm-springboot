@@ -30,7 +30,7 @@ public class CemsQueryResponseDTO {
     private Double mobility;
     private Long ceExpPropMetadataId;
     private Integer ceExpPropId;
-    private Integer bufferId;
+    private String bufferCode;
     private Integer polarityId;
     private Integer ionizationModeId;
 }

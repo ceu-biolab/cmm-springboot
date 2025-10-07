@@ -59,7 +59,6 @@ public class Cems1MarkerService extends AbstractCemsMarkerService {
                 request.getTolerance(),
                 request.getToleranceMode(),
                 mobilityTolerancePercent,
-                markerMobility.bufferId(),
                 request.getPolarity(),
                 request.getIonMode()
         ));
