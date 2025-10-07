@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CE-MS Annotation Response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ceFeatures"],
+  "properties": {
+    "ceFeatures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["feature", "annotationsByAdducts"],
+        "properties": {
+          "feature": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["mzValue", "effectiveMobility"],
+            "properties": {
+              "mzValue": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "m/z (Th) when input_mass_mode = m/z Masses."
+              },
+              "effectiveMobility": {
+                "type": "number",
+                "description": "Effective mobility in your chosen units (e.g., 10^-9 m^2 V^-1 s^-1)."
+              }
+            }
+          },
+          "annotationsByAdducts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["adduct", "annotations"],
+              "properties": {
+                "adduct": {
+                  "type": "string",
+                  "description": "Adduct for which annotations are reported (must be one of the request's adducts)."
+                },
+                "annotations": {
+                  "type": "array",
+                  "minItems": 0,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["compound"],
+                    "properties": {
+                      "compound": {
+                        "type": "object",
+                        "additionalProperties": true,
+                        "required": ["compoundId", "compoundName", "formula", "mass"],
+                        "properties": {
+                          "compoundId": { "type": "integer" },
+                          "compoundName": { "type": "string" },
+                          "formula": {
+                            "type": "string",
+                            "description": "Hill formula.",
+                            "pattern": "^[A-Z][a-z]?\\d*(?:[A-Z][a-z]?\\d*)*$"
+                          },
+                          "mass": {
+                            "type": "number",
+                            "description": "Monoisotopic neutral mass (Da).",
+                            "exclusiveMinimum": 0
+                          },
+                          "inchiKey": { "type": "string" },
+                          "smiles": { "type": "string" },
+                          "database": { "type": "string" },
+                          "databaseAccession": { "type": ["string", "integer"] }
+                        }
+                      },
+                      "score": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100,
+                        "description": "Overall matching score (0-100)."
+                      },
+                      "rank": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Rank within this adduct's annotations (1 = best)."
+                      },
+                      "massErrorPpm": {
+                        "type": "number",
+                        "description": "Signed mass error (ppm)."
+                      },
+                      "mzCalc": {
+                        "type": "number",
+                        "description": "Calculated m/z for this compound + adduct (if applicable)."
+                      },
+                      "neutralMassCalc": {
+                        "type": "number",
+                        "description": "Back-calculated neutral mass from feature + adduct."
+                      },
+                      "mobilityErrorPct": {
+                        "type": "number",
+                        "description": "Signed % error vs. predicted/expected effective mobility."
+                      },
+                      "isotopicMatch": {
+                        "type": ["boolean", "null"],
+                        "description": "True if isotopic pattern matched (when available)."
+                      },
+                      "notes": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "ceFeatures": [
+        {
+          "feature": {
+            "mzValue": 400.3432,
+            "effectiveMobility": 1174.0,
+            "intensity": null
+          },
+          "annotationsByAdducts": [
+            {
+              "adduct": "M+H",
+              "annotations": [
+                {
+                  "compound": {
+                    "compoundId": 32600,
+                    "compoundName": "Palmitoylcarnitine",
+                    "formula": "C23H45NO4",
+                    "mass": 399.3406
+                  },
+                  "score": 92.3,
+                  "rank": 1,
+                  "massErrorPpm": -2.1,
+                  "mzCalc": 400.3480,
+                  "neutralMassCalc": 399.3406,
+                  "mobilityErrorPct": 1.4,
+                  "isotopicMatch": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "feature": {
+            "neutralMass": 281.2477,
+            "effectiveMobility": 1060.0,
+            "intensity": null
+          },
+          "annotationsByAdducts": [
+            {
+              "adduct": "M+Na",
+              "annotations": []
+            }
+          ]
+        }
+      ],
+      "meta": {
+        "requestId": "a3f1c2e0",
+        "processingTimeMs": 128,
+        "dbVersion": "chemdb-2025.09",
+        "searchParamsEcho": {
+          "polarity": "Normal",
+          "ionization_mode": "Positive",
+          "mz_tolerance_mode": "ppm",
+          "mz_tolerance": 10,
+          "eff_mob_tolerance": 5
+        }
+      }
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import ceu.biolab.cmm.gcmsSearch.domain.GCMSCompound;
 import ceu.biolab.cmm.gcmsSearch.dto.GCMSFeatureQueryDTO;
 import ceu.biolab.cmm.gcmsSearch.dto.GCMSQueryResponseDTO;
 import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.Peak;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,19 +60,23 @@ public class GCMSSearchRepository {
         */
         RowMapper<GCMSCompound> gcmsCompoundCustomMapper = (rs, rowNum) -> {
             //CREATION OF THE GCMSCompound
+            Integer compoundTypeRaw = (Integer) rs.getObject("compound_type");
+            CompoundType compoundType = CompoundType.fromDbValue(compoundTypeRaw);
+            if (compoundType == null) {
+                compoundType = CompoundType.NON_LIPID;
+            }
+
             GCMSCompound compound = GCMSCompound.builder()
                     .compoundId(rs.getInt("compound_id"))
                     .compoundName(rs.getString("compound_name"))
                     .mass(rs.getDouble("mass"))
                     .formula(rs.getString("formula"))
-                    .formulaType(FormulaType.valueOf(rs.getString("formula_type")))
+                    .formulaType(parseFormulaType(rs.getString("formula_type")))
                     .logP(rs.getDouble("logP"))
                     .casId(rs.getString("cas_id"))
                     .chargeType(rs.getInt("charge_type"))
                     .chargeNumber(rs.getInt("charge_number"))
-                    .compoundType(rs.getInt("compound_type"))
-                    .compoundStatus(rs.getInt("compound_status"))
-                    .formulaTypeInt(rs.getInt("formula_type_int"))
+                    .compoundType(compoundType)
                     .inchi(rs.getString("inchi"))
                     .inchiKey(rs.getString("inchi_key"))
                     .smiles(rs.getString("smiles"))
@@ -218,9 +223,7 @@ public class GCMSSearchRepository {
 
             int chargeType = gcmsCompoundList.get(i).getChargeType();
             int chargeNumber = gcmsCompoundList.get(i).getChargeNumber();
-            int compoundType = gcmsCompoundList.get(i).getCompoundType();
-            int compoundStatus = gcmsCompoundList.get(i).getCompoundStatus();
-            int formulaTypeInt = gcmsCompoundList.get(i).getFormulaTypeInt();
+            CompoundType compoundType = gcmsCompoundList.get(i).getCompoundType();
 
             String inchi = gcmsCompoundList.get(i).getInchi();
             String inchiKey = gcmsCompoundList.get(i).getInchiKey();
@@ -257,7 +260,6 @@ public class GCMSSearchRepository {
                     .compoundId(compoundId).compoundName(compoundName).monoisotopicMass(compoundMonoisotopicMass)
                     .formula(compoundFormula).formulaType(formulaType).logP(logP).casId(casId)
                     .charge_type(chargeType).charge_number(chargeNumber).compound_type(compoundType)
-                    .compound_status(compoundStatus).formula_type_int(formulaTypeInt)
                     .inchi(inchi).inchiKey(inchiKey).smiles(smiles)
                     .dertype(derivatizationMethod).gcColumn(gcColumn)
                     .RI(RI).GCMSSpectrum(spectrumListCopy)
@@ -283,6 +285,17 @@ public class GCMSSearchRepository {
         infoAllRelevantCompounds = creationGCMSQueryResponseDTOFromgcmsCompoundList(gcmsCompoundList);
 
         return infoAllRelevantCompounds;
+    }
+
+    private FormulaType parseFormulaType(String formulaTypeValue) {
+        if (formulaTypeValue == null) {
+            return null;
+        }
+        try {
+            return FormulaType.valueOf(formulaTypeValue.toUpperCase());
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 
 }

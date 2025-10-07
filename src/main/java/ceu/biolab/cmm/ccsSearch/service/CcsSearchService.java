@@ -13,6 +13,7 @@ import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 
@@ -100,6 +101,11 @@ public class CcsSearchService {
                             }
                         }
                         if (!found) {
+                            CompoundType compoundType = CompoundType.fromDbValue(queryResult.getCompoundType());
+                            if (compoundType == null) {
+                                compoundType = CompoundType.NON_LIPID;
+                            }
+
                             IMMSCompound imCompound = IMMSCompound.builder()
                                     .compoundId(queryResult.getCompoundId())
                                     .compoundName(queryResult.getCompoundName())
@@ -108,7 +114,7 @@ public class CcsSearchService {
                                     .formula(queryResult.getFormula())
                                     // TODO formula type in compound shouldnt be a int
                                     //.formulaType(queryResult.getFormulaType())
-                                    .compoundType(queryResult.getCompoundType())
+                                    .compoundType(compoundType)
                                     .logP(queryResult.getLogP())
                                     .build();
                             imCompound.addPathway(pathway);

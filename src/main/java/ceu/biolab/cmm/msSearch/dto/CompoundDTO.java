@@ -1,8 +1,9 @@
 package ceu.biolab.cmm.msSearch.dto;
 
 import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
-import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import lombok.Data;
 
 import java.sql.ResultSet;
@@ -20,9 +21,7 @@ public class CompoundDTO {
     private final int chargeType;
     private final int chargeNumber;
     private final FormulaType formulaType;
-    private final int compoundType;
-    private final int compoundStatus;
-    private final Integer formulaTypeInt;
+    private final CompoundType compoundType;
     private final Double logP;
     private final Double rtPred;
     private final String inchi;
@@ -53,7 +52,7 @@ public class CompoundDTO {
     private Set<Pathway> pathways;
 
     public CompoundDTO(int compoundId, String casId, String compoundName, String formula, double mass, int chargeType, int chargeNumber,
-                       FormulaType formulaType, int compoundType, int compoundStatus, Integer formulaTypeInt, Double logP, Double rtPred, String inchi,
+                       FormulaType formulaType, CompoundType compoundType, Double logP, Double rtPred, String inchi,
                        String inchiKey, String smiles, String lipidType, Integer numChains, Integer numberCarbons, Integer doubleBonds, String category,
                        String mainClass, String subClass, String classLevel4, String biologicalActivity, String meshNomenclature, String iupacClassification,
                        String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID, Integer aspergillusID,
@@ -67,8 +66,6 @@ public class CompoundDTO {
         this.chargeNumber = chargeNumber;
         this.formulaType = formulaType;
         this.compoundType = compoundType;
-        this.compoundStatus = compoundStatus;
-        this.formulaTypeInt = formulaTypeInt;
         this.logP = logP;
         this.rtPred = rtPred;
         this.inchi = inchi;
@@ -109,10 +106,23 @@ public class CompoundDTO {
         this.mass = rs.getDouble("mass");
         this.chargeType = rs.getInt("charge_type");
         this.chargeNumber = rs.getInt("charge_number");
-        this.compoundType = rs.getInt("compound_type");
-        this.compoundStatus = rs.getInt("compound_status");
-        this.formulaTypeInt = rs.getInt("formula_type_int");
-        this.formulaType = FormulaType.getFormulTypefromInt(formulaTypeInt);
+        Integer compoundTypeValue = null;
+        Object compoundTypeRaw = rs.getObject("compound_type");
+        if (compoundTypeRaw instanceof Number number) {
+            compoundTypeValue = number.intValue();
+        }
+        CompoundType parsedCompoundType = CompoundType.fromDbValue(compoundTypeValue);
+        this.compoundType = parsedCompoundType != null ? parsedCompoundType : CompoundType.NON_LIPID;
+        String formulaTypeValue = rs.getString("formula_type");
+        FormulaType parsedFormulaType = null;
+        if (formulaTypeValue != null) {
+            try {
+                parsedFormulaType = FormulaType.valueOf(formulaTypeValue.toUpperCase());
+            } catch (IllegalArgumentException ignored) {
+                parsedFormulaType = null;
+            }
+        }
+        this.formulaType = parsedFormulaType;
         this.logP = rs.getDouble("logP");
         this.rtPred = rs.getDouble("rt_pred");
         this.inchi = rs.getString("inchi");

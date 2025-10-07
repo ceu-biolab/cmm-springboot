@@ -93,8 +93,8 @@ public class CompoundBatchSearchRequestDTO {
         return formulaType;
     }
 
-    public void setFormulaTypeInt(Optional<FormulaType> formulaTypeInt) {
-        this.formulaType = formulaTypeInt;
+    public void setFormulaType(Optional<FormulaType> formulaType) {
+        this.formulaType = formulaType;
     }
 
     public Set<Database> getDatabases() {
@@ -143,4 +143,3 @@ public class CompoundBatchSearchRequestDTO {
                 '}';
     }
 }
-

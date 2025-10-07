@@ -6,8 +6,12 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Data
 @SuperBuilder
@@ -20,10 +24,7 @@ public class Compound {
     private int chargeType;
     private int chargeNumber;
     private FormulaType formulaType;
-    // TODO this should not be an int?
-    private int compoundType;
-    private int compoundStatus;
-    private Integer formulaTypeInt;
+    private CompoundType compoundType;
     private Double logP;
     private Double rtPred;
     private String inchi;
@@ -40,10 +41,9 @@ public class Compound {
     private String mol2;
     private Set<Pathway> pathways;
 
-// TODO add pathways
-
     public Compound() {
         this.lipidMapsClassifications = new HashSet<>();
+        this.compoundType = CompoundType.NON_LIPID;
     }
 
     public Compound(Compound compound) {
@@ -56,8 +56,6 @@ public class Compound {
         this.chargeNumber = compound.chargeNumber;
         this.formulaType = compound.formulaType;
         this.compoundType = compound.compoundType;
-        this.compoundStatus = compound.compoundStatus;
-        this.formulaTypeInt = compound.formulaTypeInt;
         this.logP = compound.logP;
         this.rtPred = compound.rtPred;
         this.inchi = compound.inchi;
@@ -71,8 +69,8 @@ public class Compound {
     }
 
     public Compound(int compoundId, String casId, String compoundName, String formula, double mass,
-                    int chargeType, int chargeNumber, FormulaType formulaType, int compoundType,
-                    int compoundStatus, int formulaTypeInt, Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
+                    int chargeType, int chargeNumber, FormulaType formulaType, CompoundType compoundType,
+                    Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
                     Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
                     String meshNomenclature, String iupacClassification, String mol2, Set<Pathway> pathways) {
         this.compoundId = compoundId;
@@ -84,8 +82,6 @@ public class Compound {
         this.chargeNumber = chargeNumber;
         this.formulaType = formulaType;
         this.compoundType = compoundType;
-        this.compoundStatus = compoundStatus;
-        this.formulaTypeInt = formulaTypeInt;
         this.logP = logP;
         this.rtPred = rtPred;
         this.inchi = inchi;
@@ -135,16 +131,8 @@ public class Compound {
         return formulaType;
     }
 
-    public int getCompoundType() {
+    public CompoundType getCompoundType() {
         return compoundType;
-    }
-
-    public int getCompoundStatus() {
-        return compoundStatus;
-    }
-
-    public Integer getFormulaTypeInt() {
-        return formulaTypeInt;
     }
 
     public Double getLogP() {
@@ -250,8 +238,6 @@ public class Compound {
                 ", chargeNumber=" + this.chargeNumber +
                 ", formulaType=" + this.formulaType +
                 ", compoundType=" + this.compoundType +
-                ", compoundStatus=" + this.compoundStatus +
-                ", formulaTypeInt=" + this.formulaTypeInt +
                 ", logP=" + this.logP +
                 ", rtPred=" + this.rtPred +
                 ", inchi='" + inchi + '\'' + ", inchiKey='" + inchiKey + '\'' + ", smiles='" + smiles + '\'' +
@@ -261,6 +247,37 @@ public class Compound {
                 + ", iupacClassification='" + iupacClassification + '\'' + ", mol2='" + mol2 + '\''
                 + ", pathways='" + pathways + '}';
     }
+
+    /**
+     * Returns the set of unique element symbols present in the molecular formula, keeping the order of first appearance.
+     * When the formula is null or blank we return {@code Optional.empty()} so the caller can treat the compound as
+     * belonging to every alphabet (see dynamic filtering logic).
+     */
+    public Optional<Set<String>> formulaElements() {
+        if (formula == null || formula.isBlank()) {
+            return Optional.empty();
+        }
+        Matcher matcher = ELEMENT_PATTERN.matcher(formula);
+        Set<String> elements = new LinkedHashSet<>();
+        while (matcher.find()) {
+            elements.add(matcher.group(1));
+        }
+        if (elements.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(java.util.Collections.unmodifiableSet(new LinkedHashSet<>(elements)));
+    }
+
+    /**
+     * Convenience method returning the ordered concatenation of {@link #formulaElements()} for logging and filtering.
+     */
+    public Optional<String> formulaAlphabet() {
+        return formulaElements().map(elements -> {
+            StringBuilder builder = new StringBuilder();
+            elements.forEach(builder::append);
+            return builder.toString();
+        });
+    }
+
+    private static final Pattern ELEMENT_PATTERN = Pattern.compile("([A-Z][a-z]?)(?:[0-9]+(?:\\.[0-9]+)?)?");
 }
-
-

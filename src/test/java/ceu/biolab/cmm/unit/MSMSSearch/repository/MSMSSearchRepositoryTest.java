@@ -8,6 +8,7 @@ import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class MSMSSearchRepositoryTest {
     private Compound dummyCompound(int id) {
         return new Compound(
                 id, "cas", "name", "H2O", 18.0,
-                0, 0, FormulaType.CHNOPS, 0, 0, 0,
+                0, 0, FormulaType.CHNOPS, CompoundType.NON_LIPID,
                 0.0, 0.0, "inchi", "inchikey", "smiles", "lipid",
                 0, 0, 0, "bio", "mesh", "iupac", "mol2", new HashSet<Pathway>()
         );

@@ -1,0 +1,38 @@
+{
+    "masses": [
+        291.1299,
+        298.098,
+        308.094,
+        316.2488,
+        55.055
+    ],
+    "tolerance": 10,
+    "tolerance_mode": "ppm",
+    "mt": [
+        11.56,
+        13.65,
+        15.62,
+        12.59,
+        6.99
+    ],
+    "mt_tolerance": 10,
+    "mt_tolerance_mode": "percentage",
+    "buffer": "FORMIC_ACID_1M",
+    "temperature": 20,
+    "polarity": "Direct",
+    "marker1": "L-Methionine sulfone",
+    "marker1_time": 14.24,
+    "marker2": "Hippuric acid",
+    "marker2_time": 25.29,
+    "chemical_alphabet": "CHNOPS",
+    "ion_mode": "positive",
+    "mass_mode": "mz",
+    "adducts": [
+        "M+H",
+        "M+2H",
+        "M+Na",
+        "M+K",
+        "M+NH4",
+        "M+H-H2O"
+    ]
+}

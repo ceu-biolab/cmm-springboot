@@ -1,10 +1,11 @@
 package ceu.biolab.cmm.msSearch.domain.compound;
 
 import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
-import ceu.biolab.cmm.shared.domain.FormulaType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +21,17 @@ public class CompoundMapper {
      * @throws SQLException
      */
     public static CompoundDTO fromResultSet(ResultSet rs) throws SQLException {
-        FormulaType formulaType = null;
         Set<Pathway> pathways = new HashSet<>();
+        Integer compoundTypeValue = null;
+        Object compoundTypeRaw = rs.getObject("compound_type");
+        if (compoundTypeRaw instanceof Number number) {
+            compoundTypeValue = number.intValue();
+        }
+        CompoundType compoundType = CompoundType.fromDbValue(compoundTypeValue);
+        if (compoundType == null) {
+            compoundType = CompoundType.NON_LIPID;
+        }
+
         return new CompoundDTO(
                 rs.getInt("compound_id"),
                 rs.getString("cas_id"),
@@ -30,10 +40,8 @@ public class CompoundMapper {
                 rs.getDouble("mass"),
                 rs.getInt("charge_type"),
                 rs.getInt("charge_number"),
-                formulaType = FormulaType.getFormulTypefromInt(rs.getInt("formula_type_int")),
-                rs.getInt("compound_type"),
-                rs.getInt("compound_status"),
-                rs.getInt("formula_type_int"),
+                parseFormulaType(rs.getString("formula_type")),
+                compoundType,
                 rs.getDouble("logP"),
                 rs.getDouble("rt_pred"),
                 rs.getString("inchi"),
@@ -68,6 +76,17 @@ public class CompoundMapper {
         );
     }
 
+    private static FormulaType parseFormulaType(String formulaTypeValue) {
+        if (formulaTypeValue == null) {
+            return null;
+        }
+        try {
+            return FormulaType.valueOf(formulaTypeValue.toUpperCase());
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
+    }
+
 
     /**
      * This methods parses the CompoundDTO to a Compound
@@ -91,7 +110,7 @@ public class CompoundMapper {
         Compound compound = new CMMCompound(
                 compoundDTO.getCompoundId(), compoundDTO.getCasId(), compoundDTO.getCompoundName(), compoundDTO.getFormula(),
                 compoundDTO.getMass(), compoundDTO.getChargeType(), compoundDTO.getChargeNumber(), compoundDTO.getFormulaType(),
-                compoundDTO.getCompoundType(), compoundDTO.getCompoundStatus(), compoundDTO.getFormulaTypeInt(),
+                compoundDTO.getCompoundType(),
                 compoundDTO.getLogP(), compoundDTO.getRtPred(), compoundDTO.getInchi(), compoundDTO.getInchiKey(), compoundDTO.getSmiles(),
                 compoundDTO.getLipidType(), compoundDTO.getNumChains(), compoundDTO.getNumberCarbons(), compoundDTO.getDoubleBonds(),
                 compoundDTO.getBiologicalActivity(), compoundDTO.getMeshNomenclature(), compoundDTO.getIupacClassification(),
