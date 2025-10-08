@@ -1,4 +1,4 @@
-SELECT c.compound_id, c.compound_name, c.mass, cc.ccs_value, c.formula, c.formula_type, cp.pathway_id, c.logP, p.pathway_name, p.pathway_map
+SELECT c.compound_id, c.compound_name, c.mass, cc.ccs_value, c.formula, cp.pathway_id, c.logP, p.pathway_name, p.pathway_map
 FROM compounds as c
 INNER JOIN compound_ccs as cc
   ON c.compound_id = cc.compound_id
@@ -16,4 +16,3 @@ WHERE
   c.mass BETWEEN :massLower AND :massUpper
   AND cc.ccs_value BETWEEN :ccsLower AND :ccsUpper
 ;
-

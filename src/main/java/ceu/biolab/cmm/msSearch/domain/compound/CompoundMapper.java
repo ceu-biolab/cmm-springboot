@@ -32,6 +32,8 @@ public class CompoundMapper {
             compoundType = CompoundType.NON_LIPID;
         }
 
+        FormulaType inferredFormulaType = FormulaType.inferFromFormula(rs.getString("formula")).orElse(null);
+
         return new CompoundDTO(
                 rs.getInt("compound_id"),
                 rs.getString("cas_id"),
@@ -40,7 +42,7 @@ public class CompoundMapper {
                 rs.getDouble("mass"),
                 rs.getInt("charge_type"),
                 rs.getInt("charge_number"),
-                parseFormulaType(rs.getString("formula_type")),
+                inferredFormulaType,
                 compoundType,
                 rs.getDouble("logP"),
                 rs.getDouble("rt_pred"),
@@ -76,18 +78,6 @@ public class CompoundMapper {
         );
     }
 
-    private static FormulaType parseFormulaType(String formulaTypeValue) {
-        if (formulaTypeValue == null) {
-            return null;
-        }
-        try {
-            return FormulaType.valueOf(formulaTypeValue.toUpperCase());
-        } catch (IllegalArgumentException ignored) {
-            return null;
-        }
-    }
-
-
     /**
      * This methods parses the CompoundDTO to a Compound
      * @param compoundDTO the compoundDTO to parse
@@ -122,6 +112,9 @@ public class CompoundMapper {
         );
 
         compound.setLipidMapsClassifications(lipidMapsClassifications);
+        if (compound.getFormulaType() == null) {
+            compound.setFormulaType(FormulaType.inferFromFormula(compound.getFormula()).orElse(null));
+        }
         return compound;
     }
 }

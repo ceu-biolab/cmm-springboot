@@ -60,18 +60,21 @@ public class GCMSSearchRepository {
         */
         RowMapper<GCMSCompound> gcmsCompoundCustomMapper = (rs, rowNum) -> {
             //CREATION OF THE GCMSCompound
-            Integer compoundTypeRaw = (Integer) rs.getObject("compound_type");
+            Number compoundTypeDb = (Number) rs.getObject("compound_type");
+            Integer compoundTypeRaw = compoundTypeDb == null ? null : compoundTypeDb.intValue();
             CompoundType compoundType = CompoundType.fromDbValue(compoundTypeRaw);
             if (compoundType == null) {
                 compoundType = CompoundType.NON_LIPID;
             }
+
+            FormulaType inferredFormulaType = FormulaType.inferFromFormula(rs.getString("formula")).orElse(null);
 
             GCMSCompound compound = GCMSCompound.builder()
                     .compoundId(rs.getInt("compound_id"))
                     .compoundName(rs.getString("compound_name"))
                     .mass(rs.getDouble("mass"))
                     .formula(rs.getString("formula"))
-                    .formulaType(parseFormulaType(rs.getString("formula_type")))
+                    .formulaType(inferredFormulaType)
                     .logP(rs.getDouble("logP"))
                     .casId(rs.getString("cas_id"))
                     .chargeType(rs.getInt("charge_type"))
@@ -285,17 +288,6 @@ public class GCMSSearchRepository {
         infoAllRelevantCompounds = creationGCMSQueryResponseDTOFromgcmsCompoundList(gcmsCompoundList);
 
         return infoAllRelevantCompounds;
-    }
-
-    private FormulaType parseFormulaType(String formulaTypeValue) {
-        if (formulaTypeValue == null) {
-            return null;
-        }
-        try {
-            return FormulaType.valueOf(formulaTypeValue.toUpperCase());
-        } catch (IllegalArgumentException ignored) {
-            return null;
-        }
     }
 
 }

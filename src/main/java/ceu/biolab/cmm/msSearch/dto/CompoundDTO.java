@@ -64,7 +64,8 @@ public class CompoundDTO {
         this.mass = mass;
         this.chargeType = chargeType;
         this.chargeNumber = chargeNumber;
-        this.formulaType = formulaType;
+        FormulaType inferredFormulaType = FormulaType.inferFromFormula(formula).orElse(null);
+        this.formulaType = formulaType != null ? formulaType : inferredFormulaType;
         this.compoundType = compoundType;
         this.logP = logP;
         this.rtPred = rtPred;
@@ -113,16 +114,7 @@ public class CompoundDTO {
         }
         CompoundType parsedCompoundType = CompoundType.fromDbValue(compoundTypeValue);
         this.compoundType = parsedCompoundType != null ? parsedCompoundType : CompoundType.NON_LIPID;
-        String formulaTypeValue = rs.getString("formula_type");
-        FormulaType parsedFormulaType = null;
-        if (formulaTypeValue != null) {
-            try {
-                parsedFormulaType = FormulaType.valueOf(formulaTypeValue.toUpperCase());
-            } catch (IllegalArgumentException ignored) {
-                parsedFormulaType = null;
-            }
-        }
-        this.formulaType = parsedFormulaType;
+        this.formulaType = FormulaType.inferFromFormula(this.formula).orElse(null);
         this.logP = rs.getDouble("logP");
         this.rtPred = rs.getDouble("rt_pred");
         this.inchi = rs.getString("inchi");
