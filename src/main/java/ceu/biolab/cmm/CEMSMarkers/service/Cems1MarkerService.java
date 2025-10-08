@@ -55,7 +55,6 @@ public class Cems1MarkerService extends AbstractCemsMarkerService {
                 request.getAdducts(),
                 request.getChemicalAlphabet(),
                 request.getBuffer(),
-                request.getMassMode(),
                 request.getTolerance(),
                 request.getToleranceMode(),
                 request.getTemperature(),

@@ -22,9 +22,6 @@ public class CemsSearchRequestDTO {
     @JsonProperty("chemical_alphabet")
     private String chemicalAlphabet;
 
-    @JsonProperty("input_mass_mode")
-    private String inputMassMode;
-
     private IonizationMode ionizationMode;
 
     private List<String> adducts;

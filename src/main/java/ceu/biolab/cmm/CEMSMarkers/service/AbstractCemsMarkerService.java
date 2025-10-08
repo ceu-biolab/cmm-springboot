@@ -83,7 +83,6 @@ abstract class AbstractCemsMarkerService {
                                                           List<String> adducts,
                                                           String chemicalAlphabet,
                                                           String bufferCode,
-                                                          MassMode massMode,
                                                           double mzTolerance,
                                                           MzToleranceMode toleranceMode,
                                                           Double temperature,
@@ -93,7 +92,6 @@ abstract class AbstractCemsMarkerService {
         CemsSearchRequestDTO requestDTO = new CemsSearchRequestDTO();
         requestDTO.setBufferCode(bufferCode);
         requestDTO.setChemicalAlphabet(ensureChemicalAlphabet(chemicalAlphabet));
-        requestDTO.setInputMassMode(Objects.requireNonNull(massMode).getCemsEquivalent());
         requestDTO.setIonizationMode(Objects.requireNonNull(ionMode).name());
         requestDTO.setPolarity(polarity.getLabel());
         requestDTO.setAdducts(new ArrayList<>(adducts));

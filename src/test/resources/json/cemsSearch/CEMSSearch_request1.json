@@ -9,7 +9,6 @@
   "eff_mob_tolerance": 10,
   "eff_mob_tolerance_mode": "percentage",
   "chemical_alphabet": "CHNOPS",
-  "input_mass_mode": "m/z",
   "ionization_mode": "Positive",
   "adducts": ["M+H", "M+2H", "M+Na", "M+K", "M+NH4", "M+H2O"]
 }

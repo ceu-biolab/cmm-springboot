@@ -98,7 +98,6 @@ class Cems2MarkerServiceTest {
         assertEquals(31.15094534757435, forwarded.getEffectiveMobilityTolerance(), 1e-9);
         assertEquals(sampleRequest.getMasses(), forwarded.getMzValues());
         assertEquals(sampleRequest.getAdducts(), forwarded.getAdducts());
-        assertEquals("m/z", forwarded.getInputMassMode());
         assertEquals("FORMIC_ACID_1M", forwarded.getBufferCode());
         assertEquals(10d, forwarded.getMzTolerance());
         assertEquals(MzToleranceMode.MDA, forwarded.getMzToleranceMode());

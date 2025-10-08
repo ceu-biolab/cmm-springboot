@@ -7,7 +7,6 @@
     "buffer_code",
     "polarity",
     "chemical_alphabet",
-    "input_mass_mode",
     "ionization_mode",
     "adducts",
     "mz_values",
@@ -48,7 +47,7 @@
     },
     "mz_values": {
       "type": "array",
-      "description": "m/z values depending on input_mass_mode.",
+      "description": "Observed m/z values to search.",
       "items": {
         "type": "number",
         "exclusiveMinimum": 0
@@ -89,7 +88,6 @@
       "buffer_code": "AMMONIUM_ACETATE_50mM",
       "polarity": "Direct",
       "chemical_alphabet": "CHNOPS",
-      "input_mass_mode": "Neutral Masses",
       "ionization_mode": "Positive",
       "adducts": ["M+H", "M+Na"],
       "mz_values": [291.3, 298.6, 305.1, 322.8],

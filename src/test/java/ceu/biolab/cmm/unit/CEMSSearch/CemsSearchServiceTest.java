@@ -41,7 +41,6 @@ class CemsSearchServiceTest {
         request.setPolarity("Reverse");
         request.setIonizationMode("Negative");
         request.setChemicalAlphabet("ALL");
-        request.setInputMassMode("m/z");
         request.setAdducts(List.of("M-H"));
         request.setMzValues(List.of(100.0));
         request.setEffectiveMobilities(List.of(1500.0));

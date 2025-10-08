@@ -23,7 +23,6 @@
     "rmt_reference": "L-Methionine sulfone",
     "chemical_alphabet": "CHNOPS",
     "ion_mode": "positive",
-    "mass_mode": "mz",
     "adducts": [
         "M+H",
         "M+2H",

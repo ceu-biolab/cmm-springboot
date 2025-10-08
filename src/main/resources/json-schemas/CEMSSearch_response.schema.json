@@ -21,7 +21,7 @@
               "mzValue": {
                 "type": "number",
                 "exclusiveMinimum": 0,
-                "description": "m/z (Th) when input_mass_mode = m/z Masses."
+                "description": "Observed m/z (Th)."
               },
               "effectiveMobility": {
                 "type": "number",
