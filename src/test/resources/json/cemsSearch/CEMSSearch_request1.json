@@ -1,0 +1,14 @@
+{
+  "mz_values": [291.1299, 298.098, 308.094, 316.2488, 55.055],
+  "effective_mobilities": [1174, 1060, 646, 931, 3192],
+  "mz_tolerance": 10,
+  "mz_tolerance_mode": "mDa",
+  "buffer_code": "FORMIC_ACID_1M",
+  "temperature": 20,
+  "polarity": "Direct",
+  "eff_mob_tolerance": 10,
+  "eff_mob_tolerance_mode": "percentage",
+  "chemical_alphabet": "CHNOPS",
+  "ionization_mode": "Positive",
+  "adducts": ["M+H", "M+2H", "M+Na", "M+K", "M+NH4", "M+H2O"]
+}

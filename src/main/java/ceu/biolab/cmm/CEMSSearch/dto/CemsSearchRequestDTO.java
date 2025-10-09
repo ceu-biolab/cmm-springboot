@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
+import ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import lombok.Data;
@@ -13,16 +14,13 @@ import lombok.Data;
 @Data
 public class CemsSearchRequestDTO {
 
-    @JsonProperty("background_electrolyte")
-    private String backgroundElectrolyte;
+    @JsonProperty("buffer_code")
+    private String bufferCode;
 
     private CePolarity polarity;
 
     @JsonProperty("chemical_alphabet")
     private String chemicalAlphabet;
-
-    @JsonProperty("input_mass_mode")
-    private String inputMassMode;
 
     private IonizationMode ionizationMode;
 
@@ -42,8 +40,9 @@ public class CemsSearchRequestDTO {
     @JsonProperty("eff_mob_tolerance")
     private double effectiveMobilityTolerance;
 
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    private Integer bufferIdOverride;
+    private Double temperature;
+
+    private EffMobToleranceMode effectiveMobilityToleranceMode = EffMobToleranceMode.PERCENTAGE;
 
     public CemsSearchRequestDTO() {
         this.adducts = new ArrayList<>();
@@ -52,10 +51,6 @@ public class CemsSearchRequestDTO {
         this.mzToleranceMode = MzToleranceMode.PPM;
         this.polarity = CePolarity.DIRECT;
         this.ionizationMode = IonizationMode.POSITIVE;
-    }
-
-    public java.util.OptionalInt getBufferIdOverrideOptional() {
-        return bufferIdOverride == null ? java.util.OptionalInt.empty() : java.util.OptionalInt.of(bufferIdOverride);
     }
 
     @JsonProperty("polarity")
@@ -71,5 +66,10 @@ public class CemsSearchRequestDTO {
     @JsonProperty("mz_tolerance_mode")
     public void setMzToleranceMode(String value) {
         this.mzToleranceMode = MzToleranceMode.valueOf(value.toUpperCase());
+    }
+
+    @JsonProperty("eff_mob_tolerance_mode")
+    public void setEffMobToleranceMode(String value) {
+        this.effectiveMobilityToleranceMode = EffMobToleranceMode.fromValue(value);
     }
 }

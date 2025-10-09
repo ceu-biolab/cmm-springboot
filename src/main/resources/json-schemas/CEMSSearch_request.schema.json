@@ -4,22 +4,26 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "background_electrolyte",
+    "buffer_code",
     "polarity",
     "chemical_alphabet",
-    "input_mass_mode",
     "ionization_mode",
     "adducts",
     "mz_values",
     "effective_mobilities",
     "mz_tolerance",
     "mz_tolerance_mode",
-    "eff_mob_tolerance"
+    "eff_mob_tolerance",
+    "temperature"
   ],
   "properties": {
-    "background_electrolyte": {
+    "buffer_code": {
       "type": "string",
-      "description": "Background electrolyte (BGE)."
+      "description": "Buffer code as stored in ce_buffer_type.buffer_code (e.g. FORMIC_ACID_1M)."
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Experimental temperature in Celsius"
     },
     "polarity": {
       "type": "string",
@@ -43,7 +47,7 @@
     },
     "mz_values": {
       "type": "array",
-      "description": "m/z values depending on input_mass_mode.",
+      "description": "Observed m/z values to search.",
       "items": {
         "type": "number",
         "exclusiveMinimum": 0
@@ -70,24 +74,29 @@
     "eff_mob_tolerance": {
       "type": "number",
       "minimum": 0,
-      "maximum": 100,
-      "description": "Effective mobility tolerance as a percentage."
+      "description": "Effective mobility tolerance interpreted per eff_mob_tolerance_mode."
+    },
+    "eff_mob_tolerance_mode": {
+      "type": "string",
+      "enum": ["percentage", "absolute"],
+      "description": "Specifies how eff_mob_tolerance should be applied."
     }
   },
 
   "examples": [
     {
-      "background_electrolyte": "Ammonium Acetate",
+      "buffer_code": "AMMONIUM_ACETATE_50mM",
       "polarity": "Direct",
       "chemical_alphabet": "CHNOPS",
-      "input_mass_mode": "Neutral Masses",
       "ionization_mode": "Positive",
       "adducts": ["M+H", "M+Na"],
       "mz_values": [291.3, 298.6, 305.1, 322.8],
       "effective_mobilities": [1174, 1060, 995, 880],
       "mz_tolerance": 10,
       "mz_tolerance_mode": "ppm",
-      "eff_mob_tolerance": 5
+      "eff_mob_tolerance": 5,
+      "eff_mob_tolerance_mode": "percentage",
+      "temperature": 20
     }
   ]
 }

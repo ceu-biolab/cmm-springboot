@@ -70,8 +70,8 @@ class Cems2MarkerServiceTest {
     void searchComputesMobilitiesAndDelegatesToCemsSearch() {
         when(markersRepository.findMarkerMobility(any(), any(), anyDouble(), any(CePolarity.class)))
                 .thenReturn(
-                        Optional.of(new MarkerMobility(774.7394, 7, CePolarity.DIRECT)),
-                        Optional.of(new MarkerMobility(-43.8585522259217, 7, CePolarity.DIRECT))
+                        Optional.of(new MarkerMobility(774.7394, "FORMIC_ACID_1M", CePolarity.DIRECT)),
+                        Optional.of(new MarkerMobility(-43.8585522259217, "FORMIC_ACID_1M", CePolarity.DIRECT))
                 );
         CemsSearchResponseDTO expectedResponse = new CemsSearchResponseDTO();
         when(cemsSearchService.search(any(CemsSearchRequestDTO.class))).thenReturn(expectedResponse);
@@ -98,10 +98,12 @@ class Cems2MarkerServiceTest {
         assertEquals(31.15094534757435, forwarded.getEffectiveMobilityTolerance(), 1e-9);
         assertEquals(sampleRequest.getMasses(), forwarded.getMzValues());
         assertEquals(sampleRequest.getAdducts(), forwarded.getAdducts());
-        assertEquals("m/z", forwarded.getInputMassMode());
-        assertEquals(Integer.valueOf(7), forwarded.getBufferIdOverride());
+        assertEquals("FORMIC_ACID_1M", forwarded.getBufferCode());
         assertEquals(10d, forwarded.getMzTolerance());
         assertEquals(MzToleranceMode.MDA, forwarded.getMzToleranceMode());
+        assertEquals(sampleRequest.getTemperature(), forwarded.getTemperature());
+        assertEquals(ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode.PERCENTAGE,
+                forwarded.getEffectiveMobilityToleranceMode());
     }
 
     @Test

@@ -42,4 +42,3 @@ public class CcsSearchIntegrationTest {
                 .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
     }
 }
- 

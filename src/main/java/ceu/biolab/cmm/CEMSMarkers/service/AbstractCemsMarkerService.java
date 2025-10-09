@@ -4,6 +4,7 @@ import ceu.biolab.cmm.CEMSMarkers.domain.MassMode;
 import ceu.biolab.cmm.CEMSMarkers.domain.MtToleranceMode;
 import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
+import ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
 import ceu.biolab.cmm.CEMSSearch.service.CemsSearchService;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
@@ -82,17 +83,15 @@ abstract class AbstractCemsMarkerService {
                                                           List<String> adducts,
                                                           String chemicalAlphabet,
                                                           String bufferCode,
-                                                          MassMode massMode,
                                                           double mzTolerance,
                                                           MzToleranceMode toleranceMode,
+                                                          Double temperature,
                                                           double mobilityTolerancePercent,
-                                                          int bufferId,
                                                           CePolarity polarity,
                                                           IonizationMode ionMode) {
         CemsSearchRequestDTO requestDTO = new CemsSearchRequestDTO();
-        requestDTO.setBackgroundElectrolyte(bufferCode);
+        requestDTO.setBufferCode(bufferCode);
         requestDTO.setChemicalAlphabet(ensureChemicalAlphabet(chemicalAlphabet));
-        requestDTO.setInputMassMode(Objects.requireNonNull(massMode).getCemsEquivalent());
         requestDTO.setIonizationMode(Objects.requireNonNull(ionMode).name());
         requestDTO.setPolarity(polarity.getLabel());
         requestDTO.setAdducts(new ArrayList<>(adducts));
@@ -101,7 +100,8 @@ abstract class AbstractCemsMarkerService {
         requestDTO.setMzTolerance(mzTolerance);
         requestDTO.setMzToleranceMode(toleranceMode.name());
         requestDTO.setEffectiveMobilityTolerance(mobilityTolerancePercent);
-        requestDTO.setBufferIdOverride(bufferId);
+        requestDTO.setTemperature(temperature);
+        requestDTO.setEffectiveMobilityToleranceMode(EffMobToleranceMode.PERCENTAGE);
         return requestDTO;
     }
 }

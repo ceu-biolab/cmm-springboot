@@ -1,7 +1,24 @@
 package ceu.biolab.cmm.CEMSSearch.service;
 
+import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
+import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
+import ceu.biolab.cmm.CEMSSearch.domain.RmtToleranceMode;
+import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationsByAdductDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CeFeatureAnnotationsDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CeFeatureDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsQueryResponseDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsRmtFeatureQueryDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsRmtSearchRequestDTO;
+import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
+import ceu.biolab.cmm.CEMSSearch.repository.CemsRmtSearchRepository;
+import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
+import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -9,45 +26,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalLong;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
-import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
-import ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode;
-import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationDTO;
-import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationsByAdductDTO;
-import ceu.biolab.cmm.CEMSSearch.dto.CeFeatureAnnotationsDTO;
-import ceu.biolab.cmm.CEMSSearch.dto.CeFeatureDTO;
-import ceu.biolab.cmm.CEMSSearch.dto.CemsFeatureQueryDTO;
-import ceu.biolab.cmm.CEMSSearch.dto.CemsQueryResponseDTO;
-import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
-import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
-import ceu.biolab.cmm.CEMSSearch.repository.CemsSearchRepository;
-import ceu.biolab.cmm.shared.domain.FormulaType;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.compound.Compound;
-import ceu.biolab.cmm.shared.domain.compound.CompoundType;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
-
 @Service
-public class CemsSearchService {
+public class CemsRmtSearchService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CemsSearchService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CemsRmtSearchService.class);
 
-    private final CemsSearchRepository repository;
+    private final CemsRmtSearchRepository repository;
 
-    public CemsSearchService(CemsSearchRepository repository) {
+    public CemsRmtSearchService(CemsRmtSearchRepository repository) {
         this.repository = repository;
     }
 
-    public CemsSearchResponseDTO search(CemsSearchRequestDTO request) {
+    public CemsSearchResponseDTO search(CemsRmtSearchRequestDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("Request payload cannot be null");
         }
@@ -55,36 +53,41 @@ public class CemsSearchService {
 
         String bufferCode = normalizeBufferCode(request.getBufferCode());
         if (bufferCode == null) {
-            throw new IllegalArgumentException("buffer_code is required");
+            throw new IllegalArgumentException("buffer is required");
         }
 
-        Double temperatureValue = request.getTemperature();
-        if (temperatureValue == null) {
+        if (request.getTemperature() == null) {
             throw new IllegalArgumentException("temperature is required");
         }
-        long temperature = Math.round(temperatureValue);
+        long temperature = Math.round(request.getTemperature());
 
         CePolarity polarity = request.getPolarity();
         int polarityId = polarity.getDatabaseValue();
 
-        IonizationMode ionizationMode = request.getIonizationMode();
+        IonizationMode ionizationMode = request.getIonMode();
         int ionizationModeId = CeIonizationModeMapper.toDatabaseValue(ionizationMode);
+
+        OptionalLong referenceIdOptional = repository.findReferenceCompoundId(request.getRmtReference());
+        if (referenceIdOptional.isEmpty()) {
+            throw new IllegalArgumentException("Unknown rmt_reference: " + request.getRmtReference());
+        }
+        long referenceCompoundId = referenceIdOptional.getAsLong();
 
         Map<String, String> adductMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
 
         CemsSearchResponseDTO response = new CemsSearchResponseDTO();
 
-        List<Double> mzValues = request.getMzValues();
-        List<Double> effectiveMobilities = request.getEffectiveMobilities();
+        List<Double> mzValues = request.getMasses();
+        List<Double> rmtValues = request.getRelativeMigrationTimes();
         Optional<Set<String>> allowedElements = parseChemicalAlphabet(request.getChemicalAlphabet());
 
         for (int i = 0; i < mzValues.size(); i++) {
             double mz = mzValues.get(i);
-            double effMob = effectiveMobilities.get(i);
+            double rmt = rmtValues.get(i);
 
             CeFeatureDTO featureDTO = CeFeatureDTO.builder()
                     .mzValue(mz)
-                    .effectiveMobility(effMob)
+                    .effectiveMobility(0d)
                     .intensity(null)
                     .build();
 
@@ -108,30 +111,31 @@ public class CemsSearchService {
                 }
 
                 double neutralMass = AdductProcessing.getMassToSearch(mz, trimmedAdduct, adductValue);
-                double massWindow = computeMassWindow(request.getMzToleranceMode(), request.getMzTolerance(), neutralMass);
-                double mobilityWindow = computeMobilityWindow(
-                        effMob,
-                        request.getEffectiveMobilityToleranceMode(),
-                        request.getEffectiveMobilityTolerance());
+                double massWindow = computeMassWindow(request.getToleranceMode(), request.getTolerance(), neutralMass);
+                double rmtWindow = computeRmtWindow(request.getRmtToleranceMode(), request.getRmtTolerance(), rmt);
 
-                CemsFeatureQueryDTO query = CemsFeatureQueryDTO.builder()
+                CemsRmtFeatureQueryDTO query = CemsRmtFeatureQueryDTO.builder()
                         .massLower(neutralMass - massWindow)
                         .massUpper(neutralMass + massWindow)
-                        .mobilityLower(effMob - mobilityWindow)
-                        .mobilityUpper(effMob + mobilityWindow)
+                        .rmtLower(rmt - rmtWindow)
+                        .rmtUpper(rmt + rmtWindow)
                         .bufferCode(bufferCode)
-                        .temperature(temperature)
                         .polarityId(polarityId)
                         .ionizationModeId(ionizationModeId)
+                        .temperature(temperature)
+                        .referenceCompoundId(referenceCompoundId)
                         .build();
 
                 List<CemsQueryResponseDTO> candidates;
                 try {
                     candidates = repository.findMatchingCompounds(query);
                 } catch (IOException e) {
-                    throw new IllegalStateException("Failed to read CE-MS search SQL", e);
+                    throw new IllegalStateException("Failed to read CE-MS RMT search SQL", e);
                 }
-                candidates = deduplicateCandidates(candidates, neutralMass, effMob);
+
+                double targetMass = neutralMass;
+                double targetRmt = rmt;
+                candidates = deduplicateCandidates(candidates, targetMass, targetRmt);
 
                 CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(trimmedAdduct);
                 int rank = 1;
@@ -141,9 +145,9 @@ public class CemsSearchService {
                         continue;
                     }
 
-                    Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), neutralMass);
+                    Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), targetMass);
                     Double mzCalc = computeTheoreticalMz(candidate.getMass(), trimmedAdduct, ionizationMode);
-                    Double mobilityErrorPct = computeMobilityErrorPct(candidate.getExperimentalEffMob(), effMob);
+                    Double rmtErrorPct = computeRmtErrorPct(candidate.getRelativeMt(), targetRmt);
 
                     CeAnnotationDTO annotation = CeAnnotationDTO.builder()
                             .compound(compound)
@@ -151,7 +155,10 @@ public class CemsSearchService {
                             .massErrorPpm(massErrorPpm)
                             .mzCalc(mzCalc)
                             .neutralMassCalc(candidate.getMass())
-                            .mobilityErrorPct(mobilityErrorPct)
+                            .mobilityErrorPct(null)
+                            .rmtErrorPct(rmtErrorPct)
+                            .relativeMt(candidate.getRelativeMt())
+                            .absoluteMt(candidate.getAbsoluteMt())
                             .score(null)
                             .build();
 
@@ -167,26 +174,21 @@ public class CemsSearchService {
         return response;
     }
 
-    private String normalizeBufferCode(String bufferCode) {
-        if (bufferCode == null) {
-            return null;
+    private void validateRequest(CemsRmtSearchRequestDTO request) {
+        if (request.getMasses() == null || request.getMasses().isEmpty()) {
+            throw new IllegalArgumentException("masses must contain at least one value");
         }
-        String normalized = bufferCode.trim().toUpperCase(Locale.ROOT);
-        return normalized.isEmpty() ? null : normalized;
-    }
-
-    private void validateRequest(CemsSearchRequestDTO request) {
-        if (request.getMzValues() == null || request.getEffectiveMobilities() == null) {
-            throw new IllegalArgumentException("Both mz_values and effective_mobilities are required");
+        if (request.getRelativeMigrationTimes() == null || request.getRelativeMigrationTimes().isEmpty()) {
+            throw new IllegalArgumentException("rmt must contain at least one value");
         }
-        if (request.getMzValues().isEmpty()) {
-            throw new IllegalArgumentException("At least one mz value must be provided");
-        }
-        if (request.getMzValues().size() != request.getEffectiveMobilities().size()) {
-            throw new IllegalArgumentException("Number of mz values and effective mobilities must match");
+        if (request.getMasses().size() != request.getRelativeMigrationTimes().size()) {
+            throw new IllegalArgumentException("Number of masses and rmt values must match");
         }
         if (request.getAdducts() == null || request.getAdducts().isEmpty()) {
             throw new IllegalArgumentException("At least one adduct must be provided");
+        }
+        if (request.getRmtReference() == null || request.getRmtReference().isBlank()) {
+            throw new IllegalArgumentException("rmt_reference is required");
         }
     }
 
@@ -199,23 +201,42 @@ public class CemsSearchService {
         throw new IllegalArgumentException("Unsupported m/z tolerance mode: " + toleranceMode);
     }
 
-    private double computeMobilityWindow(double effectiveMobility,
-                                         EffMobToleranceMode toleranceMode,
-                                         double toleranceValue) {
+    private double computeRmtWindow(RmtToleranceMode toleranceMode, double tolerance, double baseRmt) {
         return switch (toleranceMode) {
-            case PERCENTAGE -> Math.abs(effectiveMobility) * (toleranceValue * 0.01);
-            case ABSOLUTE -> toleranceValue;
+            case PERCENTAGE -> Math.abs(baseRmt) * (tolerance * 0.01d);
+            case ABSOLUTE -> tolerance;
         };
     }
 
-    private double rankingScore(CemsQueryResponseDTO candidate, double targetMass, double targetMobility) {
+    private List<CemsQueryResponseDTO> deduplicateCandidates(List<CemsQueryResponseDTO> candidates,
+                                                             double targetMass,
+                                                             double targetRmt) {
+        Map<Long, CemsQueryResponseDTO> bestCandidatePerCompound = new HashMap<>();
+        Map<Long, Double> bestScorePerCompound = new HashMap<>();
+
+        for (CemsQueryResponseDTO candidate : candidates) {
+            long compoundId = candidate.getCompoundId();
+            double score = rankingScore(candidate, targetMass, targetRmt);
+            Double bestScore = bestScorePerCompound.get(compoundId);
+            if (bestScore == null || score < bestScore) {
+                bestScorePerCompound.put(compoundId, score);
+                bestCandidatePerCompound.put(compoundId, candidate);
+            }
+        }
+
+        List<CemsQueryResponseDTO> deduplicated = new java.util.ArrayList<>(bestCandidatePerCompound.values());
+        deduplicated.sort(java.util.Comparator.comparingDouble(candidate -> rankingScore(candidate, targetMass, targetRmt)));
+        return deduplicated;
+    }
+
+    private double rankingScore(CemsQueryResponseDTO candidate, double targetMass, double targetRmt) {
         double massDelta = candidate.getMass() != null
                 ? Math.abs(candidate.getMass() - targetMass)
                 : 1e9;
-        double mobilityDelta = candidate.getExperimentalEffMob() != null
-                ? Math.abs(candidate.getExperimentalEffMob() - targetMobility)
+        double rmtDelta = candidate.getRelativeMt() != null
+                ? Math.abs(candidate.getRelativeMt() - targetRmt)
                 : 1e9;
-        return massDelta + mobilityDelta;
+        return massDelta + rmtDelta;
     }
 
     private Double computeMassErrorPpm(Double candidateMass, double targetMass) {
@@ -237,32 +258,47 @@ public class CemsSearchService {
         }
     }
 
-    private Double computeMobilityErrorPct(Double candidateMobility, double targetMobility) {
-        if (candidateMobility == null || targetMobility == 0d) {
+    private Double computeRmtErrorPct(Double candidateRmt, double targetRmt) {
+        if (candidateRmt == null || targetRmt == 0d) {
             return null;
         }
-        return (candidateMobility - targetMobility) / targetMobility * 100d;
+        return (candidateRmt - targetRmt) / targetRmt * 100d;
     }
 
-    private List<CemsQueryResponseDTO> deduplicateCandidates(List<CemsQueryResponseDTO> candidates,
-                                                             double targetMass,
-                                                             double targetMobility) {
-        Map<Long, CemsQueryResponseDTO> bestCandidatePerCompound = new HashMap<>();
-        Map<Long, Double> bestScorePerCompound = new HashMap<>();
+    private String normalizeBufferCode(String bufferCode) {
+        if (bufferCode == null) {
+            return null;
+        }
+        String normalized = bufferCode.trim().toUpperCase(Locale.ROOT);
+        return normalized.isEmpty() ? null : normalized;
+    }
 
-        for (CemsQueryResponseDTO candidate : candidates) {
-            long compoundId = candidate.getCompoundId();
-            double score = rankingScore(candidate, targetMass, targetMobility);
-            Double bestScore = bestScorePerCompound.get(compoundId);
-            if (bestScore == null || score < bestScore) {
-                bestScorePerCompound.put(compoundId, score);
-                bestCandidatePerCompound.put(compoundId, candidate);
-            }
+    private Optional<Set<String>> parseChemicalAlphabet(String alphabet) {
+        if (alphabet == null || alphabet.isBlank()) {
+            return Optional.empty();
+        }
+        String normalized = alphabet.trim().toUpperCase(Locale.ROOT);
+        if ("ALL".equals(normalized) || "ALLD".equals(normalized)) {
+            return Optional.empty();
         }
 
-        List<CemsQueryResponseDTO> deduplicated = new java.util.ArrayList<>(bestCandidatePerCompound.values());
-        deduplicated.sort(Comparator.comparingDouble(candidate -> rankingScore(candidate, targetMass, targetMobility)));
-        return deduplicated;
+        Set<String> elements = new LinkedHashSet<>();
+        Matcher matcher = ELEMENT_PATTERN.matcher(normalized);
+        while (matcher.find()) {
+            elements.add(matcher.group(1));
+        }
+        return elements.isEmpty() ? Optional.empty() : Optional.of(elements);
+    }
+
+    private boolean matchesAlphabet(Compound compound, Optional<Set<String>> allowedElements) {
+        if (allowedElements.isEmpty()) {
+            return true;
+        }
+        Optional<Set<String>> compoundElements = compound.formulaElements();
+        if (compoundElements.isEmpty()) {
+            return true;
+        }
+        return allowedElements.get().containsAll(compoundElements.get());
     }
 
     private Compound toCompound(CemsQueryResponseDTO candidate) {
@@ -284,7 +320,7 @@ public class CemsSearchService {
         String formulaTypeValue = candidate.getFormulaType();
         if (formulaTypeValue != null) {
             try {
-                compound.setFormulaType(FormulaType.valueOf(formulaTypeValue.toUpperCase()));
+                compound.setFormulaType(FormulaType.valueOf(formulaTypeValue.toUpperCase(Locale.ROOT)));
             } catch (IllegalArgumentException ex) {
                 LOGGER.warn("Unknown formula type '{}' for compound {}", formulaTypeValue, candidateId);
             }
@@ -323,34 +359,6 @@ public class CemsSearchService {
             compound.setLipidMapsClassifications(new HashSet<>());
         }
         return compound;
-    }
-
-    private Optional<Set<String>> parseChemicalAlphabet(String alphabet) {
-        if (alphabet == null || alphabet.isBlank()) {
-            return Optional.empty();
-        }
-        String normalized = alphabet.trim().toUpperCase();
-        if ("ALL".equals(normalized) || "ALLD".equals(normalized)) {
-            return Optional.empty();
-        }
-        Set<String> elements = new LinkedHashSet<>();
-        Matcher matcher = ELEMENT_PATTERN.matcher(normalized);
-        while (matcher.find()) {
-            elements.add(matcher.group(1));
-        }
-        return elements.isEmpty() ? Optional.empty() : Optional.of(elements);
-    }
-
-    private boolean matchesAlphabet(Compound compound, Optional<Set<String>> allowedElements) {
-        if (allowedElements.isEmpty()) {
-            return true;
-        }
-        Optional<Set<String>> compoundElements = compound.formulaElements();
-        if (compoundElements.isEmpty()) {
-            // Compounds without a formula are included by default for every alphabet.
-            return true;
-        }
-        return allowedElements.get().containsAll(compoundElements.get());
     }
 
     private int safeLongToInt(Long value) {

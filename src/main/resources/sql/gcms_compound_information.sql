@@ -6,7 +6,7 @@
 -- OUTPUT: compound information, identifiers, spectrum id, RI & RT 
 			-- It is not necessary the column name & the derivatization method name since I use them to find my data, so I could access them directly
 
-SELECT c.compound_id, c.compound_name, c.mass, c.formula, c.formula_type, c.logP, c.cas_id,
+SELECT c.compound_id, c.compound_name, c.mass, c.formula, c.logP, c.cas_id,
 		c.charge_type, c.charge_number, c.compound_type,
 		i.inchi, i.inchi_key, i.smiles, 
         rirt.RT, rirt.RI, -- they will be dbRT & dbRI as arguments of the java class

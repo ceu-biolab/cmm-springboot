@@ -3,7 +3,7 @@
         {
             "feature": {
                 "mzValue": 291.1299,
-                "effectiveMobility": 1317.4217736765027,
+                "effectiveMobility": 1174.0,
                 "intensity": null
             },
             "annotationsByAdducts": [
@@ -14,7 +14,7 @@
                             "compound": {
                                 "compoundId": 82106,
                                 "casId": "2387-71-5",
-                                "compoundName": "L-Argininosuccinic\u00a0acid",
+                                "compoundName": "L-Argininosuccinic acid",
                                 "formula": "C10H18N4O6",
                                 "mass": 290.122634328,
                                 "chargeType": 0,
@@ -42,44 +42,7 @@
                             "massErrorPpm": 0.035598740391475155,
                             "mzCalc": 291.129910328,
                             "neutralMassCalc": 290.122634328,
-                            "mobilityErrorPct": -10.897526467666317,
-                            "rmtErrorPct": null,
-                            "relativeMt": null,
-                            "absoluteMt": null
-                        },
-                        {
-                            "compound": {
-                                "compoundId": 285758,
-                                "casId": null,
-                                "compoundName": "ARGININOSUCCINATE",
-                                "formula": "C10H18N4O6",
-                                "mass": 290.122634316,
-                                "chargeType": 0,
-                                "chargeNumber": 0,
-                                "formulaType": null,
-                                "compoundType": "NON_LIPID",
-                                "logP": null,
-                                "rtPred": null,
-                                "inchi": "InChI=1S/C10H18N4O6/c11-5(8(17)18)2-1-3-13-10(12)14-6(9(19)20)4-7(15)16/h5-6H,1-4,11H2,(H,15,16)(H,17,18)(H,19,20)(H3,12,13,14)",
-                                "inchiKey": "KDZOASGQNOPSCU-UHFFFAOYSA-N",
-                                "smiles": "NC(CCCNC(=N)NC(CC(O)=O)C(O)=O)C(O)=O",
-                                "lipidType": null,
-                                "numChains": null,
-                                "numCarbons": null,
-                                "doubleBonds": null,
-                                "lipidMapsClassifications": [],
-                                "biologicalActivity": null,
-                                "meshNomenclature": null,
-                                "iupacClassification": null,
-                                "mol2": null,
-                                "pathways": []
-                            },
-                            "score": null,
-                            "rank": 2,
-                            "massErrorPpm": 0.03555737861617965,
-                            "mzCalc": 291.129910316,
-                            "neutralMassCalc": 290.122634316,
-                            "mobilityErrorPct": 16.777141048286342,
+                            "mobilityErrorPct": -0.012317955766036351,
                             "rmtErrorPct": null,
                             "relativeMt": null,
                             "absoluteMt": null
@@ -101,17 +64,13 @@
                 {
                     "adduct": "M+NH4",
                     "annotations": []
-                },
-                {
-                    "adduct": "M+H-H2O",
-                    "annotations": []
                 }
             ]
         },
         {
             "feature": {
                 "mzValue": 298.098,
-                "effectiveMobility": 875.9178719649888,
+                "effectiveMobility": 1060.0,
                 "intensity": null
             },
             "annotationsByAdducts": [
@@ -150,7 +109,7 @@
                             "massErrorPpm": -3.9177897726516093,
                             "mzCalc": 298.096836061,
                             "neutralMassCalc": 297.089560061,
-                            "mobilityErrorPct": 21.206653402041283,
+                            "mobilityErrorPct": 0.15761690180562804,
                             "rmtErrorPct": null,
                             "relativeMt": null,
                             "absoluteMt": null
@@ -172,17 +131,13 @@
                 {
                     "adduct": "M+NH4",
                     "annotations": []
-                },
-                {
-                    "adduct": "M+H-H2O",
-                    "annotations": []
                 }
             ]
         },
         {
             "feature": {
                 "mzValue": 308.094,
-                "effectiveMobility": 567.9316484858075,
+                "effectiveMobility": 646.0,
                 "intensity": null
             },
             "annotationsByAdducts": [
@@ -221,7 +176,7 @@
                             "massErrorPpm": -9.50226360157465,
                             "mzCalc": 308.091081981,
                             "neutralMassCalc": 307.083805981,
-                            "mobilityErrorPct": 13.741927113462783,
+                            "mobilityErrorPct": -0.0036529914837750764,
                             "rmtErrorPct": null,
                             "relativeMt": null,
                             "absoluteMt": null
@@ -243,17 +198,13 @@
                 {
                     "adduct": "M+NH4",
                     "annotations": []
-                },
-                {
-                    "adduct": "M+H-H2O",
-                    "annotations": []
                 }
             ]
         },
         {
             "feature": {
                 "mzValue": 316.2488,
-                "effectiveMobility": 1081.519348416346,
+                "effectiveMobility": 931.0,
                 "intensity": null
             },
             "annotationsByAdducts": [
@@ -292,7 +243,7 @@
                             "massErrorPpm": -1.7937135719329653,
                             "mzCalc": 316.248234547,
                             "neutralMassCalc": 315.240958547,
-                            "mobilityErrorPct": -13.893018363537369,
+                            "mobilityErrorPct": 0.028320809414970304,
                             "rmtErrorPct": null,
                             "relativeMt": null,
                             "absoluteMt": null
@@ -314,17 +265,13 @@
                 {
                     "adduct": "M+NH4",
                     "annotations": []
-                },
-                {
-                    "adduct": "M+H-H2O",
-                    "annotations": []
                 }
             ]
         },
         {
             "feature": {
                 "mzValue": 55.055,
-                "effectiveMobility": 3202.632645031693,
+                "effectiveMobility": 3192.0,
                 "intensity": null
             },
             "annotationsByAdducts": [
@@ -346,10 +293,6 @@
                 },
                 {
                     "adduct": "M+NH4",
-                    "annotations": []
-                },
-                {
-                    "adduct": "M+H-H2O",
                     "annotations": []
                 }
             ]
