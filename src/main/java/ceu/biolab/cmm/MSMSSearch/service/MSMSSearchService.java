@@ -40,7 +40,11 @@ public class MSMSSearchService {
         try {
             return msmsSearchRepository.findMatchingCompoundsAndSpectra(request);
         } catch (Exception e) {
-            return new MSMSSearchResponseDTO();
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to execute MS/MS search",
+                    e
+            );
         }
     }
 }

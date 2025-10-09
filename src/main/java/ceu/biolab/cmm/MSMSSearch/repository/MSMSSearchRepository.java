@@ -1,9 +1,12 @@
 package ceu.biolab.cmm.MSMSSearch.repository;
 
-import ceu.biolab.cmm.MSMSSearch.domain.*;
+import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
+import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
+import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
+import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
@@ -22,6 +25,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Repository
 public class MSMSSearchRepository {
@@ -89,6 +94,7 @@ public class MSMSSearchRepository {
                     Compound compound = CompoundMapper.toCompound(
                             CompoundMapper.fromResultSet(rs)
                     );
+                    normalizeLipidMapsClassification(compound);
                     compoundsSet.add(compound);
                 }
                 return null;
@@ -184,6 +190,9 @@ public class MSMSSearchRepository {
         jdbcTemplate.query(sql, (rs, _) -> {
             double mz = rs.getDouble("mz");
             double intensity = rs.getDouble("intensity");
+            if (intensity > 1.0) {
+                intensity = intensity / 100.0;
+            }
             MSPeak pk = new MSPeak(mz, intensity);
             peaks.add(pk);
             return null;
@@ -224,5 +233,33 @@ public class MSMSSearchRepository {
         }
         return new HashSet<> (best.values());
     }
+
+    private void normalizeLipidMapsClassification(Compound compound) {
+        if (compound == null || compound.getLipidMapsClassifications() == null) {
+            return;
+        }
+        for (LipidMapsClassification classification : compound.getLipidMapsClassifications()) {
+            if (classification == null) {
+                continue;
+            }
+            classification.setCategory(extractCode(classification.getCategory()));
+            classification.setMainClass(extractCode(classification.getMainClass()));
+            classification.setSubClass(extractCode(classification.getSubClass()));
+            classification.setClassLevel4(extractCode(classification.getClassLevel4()));
+        }
+    }
+
+    private String extractCode(String value) {
+        if (value == null) {
+            return "";
+        }
+        Matcher matcher = BRACKET_CODE_PATTERN.matcher(value);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        return value;
+    }
+
+    private static final Pattern BRACKET_CODE_PATTERN = Pattern.compile(".*\\[(.+?)\\].*");
 
 }
