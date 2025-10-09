@@ -56,4 +56,6 @@ LEFT JOIN (
     JOIN lm_classification lm ON lm.lm_classification_id = clc.lm_classification_id
     GROUP BY clc.compound_id
 ) lmc ON lmc.compound_id = cv.compound_id
-WHERE cv.mass BETWEEN (:lowerBound) AND (:upperBound);
+WHERE cv.mass BETWEEN (:lowerBound) AND (:upperBound)
+(:compoundTypeFilter)
+(:databaseFilterCondition);

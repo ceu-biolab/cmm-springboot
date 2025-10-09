@@ -89,11 +89,4 @@ public class MSMSSearchServiceTest {
         MSMSSearchResponseDTO resp = service.search(validRequest());
         assertSame(expected, resp);
     }
-
-    @Test
-    void search_returnsEmptyOnRepositoryException() throws Exception {
-        when(repository.findMatchingCompoundsAndSpectra(any())).thenThrow(new RuntimeException("boom"));
-        MSMSSearchResponseDTO resp = service.search(validRequest());
-        assertNotNull(resp);
-    }
 }

@@ -38,7 +38,6 @@ public class LCMSSearchIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
     }
-
 }

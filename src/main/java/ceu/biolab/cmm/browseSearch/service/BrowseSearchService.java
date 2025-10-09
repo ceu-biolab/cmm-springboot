@@ -34,18 +34,12 @@ public class BrowseSearchService {
 
         // Validación: bases de datos no pueden estar vacías
         if (request.getDatabases() == null || request.getDatabases().isEmpty()) {
-            //** Alternative: set a default value
-            Set<Database> databases = new HashSet<>();
-            databases.add(Database.ALL);
-            request.setDatabases(databases);
-            //throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide at least one database.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide at least one database.");
         }
 
         // Validación: metaboliteType obligatorio
         if (request.getMetaboliteType() == null) {
-            //throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide a metabolite type.");
-            //** Alternative: set a default value
-            request.setMetaboliteType(MetaboliteType.ALL);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide a metabolite type.");
         }
 
         // Ejecución principal

@@ -32,8 +32,6 @@ public class CompoundMapper {
             compoundType = CompoundType.NON_LIPID;
         }
 
-        FormulaType inferredFormulaType = FormulaType.inferFromFormula(rs.getString("formula")).orElse(null);
-
         return new CompoundDTO(
                 rs.getInt("compound_id"),
                 rs.getString("cas_id"),
@@ -42,7 +40,6 @@ public class CompoundMapper {
                 rs.getDouble("mass"),
                 rs.getInt("charge_type"),
                 rs.getInt("charge_number"),
-                inferredFormulaType,
                 compoundType,
                 rs.getDouble("logP"),
                 rs.getDouble("rt_pred"),

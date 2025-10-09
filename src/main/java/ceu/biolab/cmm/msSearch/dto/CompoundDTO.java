@@ -52,7 +52,7 @@ public class CompoundDTO {
     private Set<Pathway> pathways;
 
     public CompoundDTO(int compoundId, String casId, String compoundName, String formula, double mass, int chargeType, int chargeNumber,
-                       FormulaType formulaType, CompoundType compoundType, Double logP, Double rtPred, String inchi,
+                       CompoundType compoundType, Double logP, Double rtPred, String inchi,
                        String inchiKey, String smiles, String lipidType, Integer numChains, Integer numberCarbons, Integer doubleBonds, String category,
                        String mainClass, String subClass, String classLevel4, String biologicalActivity, String meshNomenclature, String iupacClassification,
                        String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID, Integer aspergillusID,
@@ -65,7 +65,7 @@ public class CompoundDTO {
         this.chargeType = chargeType;
         this.chargeNumber = chargeNumber;
         FormulaType inferredFormulaType = FormulaType.inferFromFormula(formula).orElse(null);
-        this.formulaType = formulaType != null ? formulaType : inferredFormulaType;
+        this.formulaType = inferredFormulaType;
         this.compoundType = compoundType;
         this.logP = logP;
         this.rtPred = rtPred;

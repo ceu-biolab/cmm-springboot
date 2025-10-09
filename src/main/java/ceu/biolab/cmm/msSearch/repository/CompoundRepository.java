@@ -19,6 +19,8 @@ import com.apicatalog.jsonld.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +30,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -40,6 +45,10 @@ public class CompoundRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private ResourceLoader resourceLoader;
+
+    private String msSearchQueryTemplate;
 
     /**
      * This method annotates the MS features
@@ -133,18 +142,22 @@ public class CompoundRepository {
                 final double lowerBoundFinal = lowerBound;
                 final double upperBoundFinal = upperBound;
 
-                String sql = "SELECT c.* FROM compounds_view c WHERE ";
-                sql += "c.mass BETWEEN " + lowerBoundFinal + " AND " + upperBoundFinal;
+                String sqlTemplate = loadMsSearchQueryTemplate();
+                String compoundTypeClause = compoundTypeFinal != null ? " AND cv.compound_type = " + compoundTypeFinal.getDbValue() : "";
 
-                if (compoundTypeFinal != null) {
-                    sql += " AND c.compound_type = " + compoundTypeFinal.getDbValue();
+                String databaseClause = "";
+                if (!databaseConditions.isEmpty()) {
+                    List<String> normalizedConditions = databaseConditions.stream()
+                            .map(condition -> condition.replace("c.", "cv."))
+                            .collect(Collectors.toList());
+                    databaseClause = " AND (" + String.join(" OR ", normalizedConditions) + ")";
                 }
 
-                 if (!databaseConditions.isEmpty()) {
-                    sql += " AND (" + String.join(" OR ", databaseConditions) + ")";
-                }
-
-                String finalSql = sql;
+                String finalSql = sqlTemplate
+                        .replace("(:lowerBound)", String.valueOf(lowerBoundFinal))
+                        .replace("(:upperBound)", String.valueOf(upperBoundFinal))
+                        .replace("(:compoundTypeFilter)", compoundTypeClause)
+                        .replace("(:databaseFilterCondition)", databaseClause);
 
                 Set<Compound> compounds = jdbcTemplate.query(
                         finalSql, rs -> {
@@ -160,6 +173,7 @@ public class CompoundRepository {
                 logger.info("QUERY: {} ", finalSql);
 
                 Set<Compound> filteredCompounds = compounds.stream()
+                        .peek(this::normalizeLipidMapsClassification)
                         .filter(comp -> matchesRequestedAlphabet(comp, allowedElements))
                         .collect(Collectors.toCollection(LinkedHashSet::new));
 
@@ -233,6 +247,44 @@ public class CompoundRepository {
 
         return new HashSet<>(pathwayList);
     }
+    private String extractCode(String value) {
+        if (value == null) {
+            return "";
+        }
+        Matcher matcher = BRACKET_CODE_PATTERN.matcher(value);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        return value;
+    }
+
+    private void normalizeLipidMapsClassification(Compound compound) {
+        if (compound == null || compound.getLipidMapsClassifications() == null) {
+            return;
+        }
+        for (ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification classification : compound.getLipidMapsClassifications()) {
+            if (classification == null) {
+                continue;
+            }
+            classification.setCategory(extractCode(classification.getCategory()));
+            classification.setMainClass(extractCode(classification.getMainClass()));
+            classification.setSubClass(extractCode(classification.getSubClass()));
+            classification.setClassLevel4(extractCode(classification.getClassLevel4()));
+        }
+    }
 
     private static final Pattern ALPHABET_PATTERN = Pattern.compile("([A-Z][a-z]?)");
+    private static final Pattern BRACKET_CODE_PATTERN = Pattern.compile(".*\\[(.+?)\\].*");
+
+    private String loadMsSearchQueryTemplate() {
+        if (msSearchQueryTemplate == null) {
+            Resource resource = resourceLoader.getResource("classpath:sql/msSearch/compound_window_search.sql");
+            try (InputStream is = resource.getInputStream()) {
+                msSearchQueryTemplate = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw new IllegalStateException("Unable to load MS search SQL template", e);
+            }
+        }
+        return msSearchQueryTemplate;
+    }
 }

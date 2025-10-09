@@ -72,20 +72,24 @@ class BrowseSearchServiceTest {
     }
 
     @Test
-    void searchBackfillsDefaultsWhenMissingDbOrMetabolite() throws Exception {
+    void searchThrowsWhenDatabasesMissing() {
         BrowseSearchRequest request = new BrowseSearchRequest();
         request.setFormula("C6H12O6");
+        request.setDatabases(Set.of());
+        request.setMetaboliteType(MetaboliteType.ALL);
 
-        when(repository.findMatchingCompounds(any(BrowseSearchRequest.class)))
-                .thenReturn(new BrowseQueryResponse());
+        assertThrows(ResponseStatusException.class, () -> service.search(request));
+        verifyNoInteractions(repository);
+    }
 
-        service.search(request);
+    @Test
+    void searchThrowsWhenMetaboliteMissing() {
+        BrowseSearchRequest request = new BrowseSearchRequest();
+        request.setFormula("C6H12O6");
+        request.setDatabases(Set.of(Database.ALL));
+        request.setMetaboliteType(null);
 
-        ArgumentCaptor<BrowseSearchRequest> captor = ArgumentCaptor.forClass(BrowseSearchRequest.class);
-        verify(repository).findMatchingCompounds(captor.capture());
-
-        BrowseSearchRequest forwarded = captor.getValue();
-        assertEquals(Set.of(Database.ALL), forwarded.getDatabases());
-        assertEquals(MetaboliteType.ALL, forwarded.getMetaboliteType());
+        assertThrows(ResponseStatusException.class, () -> service.search(request));
+        verifyNoInteractions(repository);
     }
 }
