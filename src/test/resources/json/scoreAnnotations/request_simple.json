@@ -1,0 +1,90 @@
+{
+  "features": [
+    {
+      "feature": {
+        "mzValue": 800.5,
+        "rtValue": 6.0
+      },
+      "annotationsByAdducts": [
+        {
+          "adduct": "M+H",
+          "annotations": [
+            {
+              "compound": {
+                "compoundId": 1001,
+                "compoundType": "LIPID",
+                "lipidType": "PC",
+                "numChains": 2,
+                "numCarbons": 36,
+                "doubleBonds": 2,
+                "lipidMapsClassifications": [
+                  {
+                    "category": "GP",
+                    "mainClass": "GP01",
+                    "subClass": "GP0101",
+                    "classLevel4": ""
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "adduct": "M+Na",
+          "annotations": [
+            {
+              "compound": {
+                "compoundId": 1001,
+                "compoundType": "LIPID",
+                "lipidType": "PC",
+                "numChains": 2,
+                "numCarbons": 36,
+                "doubleBonds": 2,
+                "lipidMapsClassifications": [
+                  {
+                    "category": "GP",
+                    "mainClass": "GP01",
+                    "subClass": "GP0101",
+                    "classLevel4": ""
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "feature": {
+        "mzValue": 800.5,
+        "rtValue": 5.0
+      },
+      "annotationsByAdducts": [
+        {
+          "adduct": "M+H",
+          "annotations": [
+            {
+              "compound": {
+                "compoundId": 1002,
+                "compoundType": "LIPID",
+                "lipidType": "PC",
+                "numChains": 2,
+                "numCarbons": 36,
+                "doubleBonds": 4,
+                "lipidMapsClassifications": [
+                  {
+                    "category": "GP",
+                    "mainClass": "GP01",
+                    "subClass": "GP0101",
+                    "classLevel4": ""
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "experimentParameters": null
+}

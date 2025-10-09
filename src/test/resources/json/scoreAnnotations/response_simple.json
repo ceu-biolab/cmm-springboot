@@ -1,0 +1,126 @@
+[
+  {
+    "feature": {
+      "mzValue": 800.5,
+      "rtValue": 6.0
+    },
+    "annotationsByAdducts": [
+      {
+        "adduct": "M+H",
+        "annotations": [
+          {
+            "compound": {
+              "compoundId": 1001,
+              "lipidType": "PC",
+              "numChains": 2,
+              "numCarbons": 36,
+              "doubleBonds": 2,
+              "lipidMapsClassifications": [
+                {
+                  "category": "GP",
+                  "mainClass": "GP01",
+                  "subClass": "GP0101",
+                  "classLevel4": ""
+                }
+              ]
+            },
+            "scores": [
+              {
+                "rtScoreMap": {
+                  "800.55.0": [true]
+                },
+                "ionizationScore": 1.0,
+                "adductRelationScore": 1.0,
+                "scores": {
+                  "rt": "",
+                  "adduct": "1.0",
+                  "ionization": "1.0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "adduct": "M+Na",
+        "annotations": [
+          {
+            "compound": {
+              "compoundId": 1001,
+              "lipidType": "PC",
+              "numChains": 2,
+              "numCarbons": 36,
+              "doubleBonds": 2,
+              "lipidMapsClassifications": [
+                {
+                  "category": "GP",
+                  "mainClass": "GP01",
+                  "subClass": "GP0101",
+                  "classLevel4": ""
+                }
+              ]
+            },
+            "scores": [
+              {
+                "rtScoreMap": {
+                  "800.55.0": [true]
+                },
+                "ionizationScore": 1.0,
+                "adductRelationScore": 1.0,
+                "scores": {
+                  "rt": "",
+                  "adduct": "1.0",
+                  "ionization": "1.0"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feature": {
+      "mzValue": 800.5,
+      "rtValue": 5.0
+    },
+    "annotationsByAdducts": [
+      {
+        "adduct": "M+H",
+        "annotations": [
+          {
+            "compound": {
+              "compoundId": 1002,
+              "lipidType": "PC",
+              "numChains": 2,
+              "numCarbons": 36,
+              "doubleBonds": 4,
+              "lipidMapsClassifications": [
+                {
+                  "category": "GP",
+                  "mainClass": "GP01",
+                  "subClass": "GP0101",
+                  "classLevel4": ""
+                }
+              ]
+            },
+            "scores": [
+              {
+                "rtScoreMap": {
+                  "800.56.0": [true, true]
+                },
+                "ionizationScore": null,
+                "adductRelationScore": null,
+                "scores": {
+                  "rt": "",
+                  "adduct": "",
+                  "ionization": ""
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

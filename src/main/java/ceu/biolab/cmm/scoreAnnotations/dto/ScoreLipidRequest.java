@@ -11,9 +11,12 @@ public class ScoreLipidRequest {
     private List<AnnotatedFeature> features;
     private ExperimentParameters experimentParameters;
 
+    public ScoreLipidRequest() {
+        // default constructor required for Jackson
+    }
+
     public ScoreLipidRequest(List<AnnotatedFeature> features, ExperimentParameters experimentParameters) {
         this.features = features;
         this.experimentParameters = experimentParameters;
     }
-
 }

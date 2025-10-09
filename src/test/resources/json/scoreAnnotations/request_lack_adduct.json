@@ -1,0 +1,39 @@
+{
+  "features": [
+    {
+      "feature": {
+        "mzValue": 750.25,
+        "rtValue": 4.2
+      },
+      "annotationsByAdducts": [
+        {
+          "adduct": "M+Na",
+          "annotations": [
+            {
+              "compound": {
+                "compoundId": 2001,
+                "compoundType": "LIPID",
+                "lipidType": "PC",
+                "numChains": 2,
+                "numCarbons": 34,
+                "doubleBonds": 1,
+                "lipidMapsClassifications": [
+                  {
+                    "category": "GP",
+                    "mainClass": "GP01",
+                    "subClass": "GP0101",
+                    "classLevel4": ""
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "experimentParameters": {
+    "ionMode": "POSITIVE",
+    "modifierType": "NONE"
+  }
+}

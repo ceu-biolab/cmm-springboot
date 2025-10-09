@@ -1,0 +1,66 @@
+{
+  "features": [
+    {
+      "feature": {
+        "mzValue": 820.1,
+        "rtValue": 5.0
+      },
+      "annotationsByAdducts": [
+        {
+          "adduct": "M+H",
+          "annotations": [
+            {
+              "compound": {
+                "compoundId": 3001,
+                "compoundType": "LIPID",
+                "lipidType": "PC",
+                "numChains": 2,
+                "numCarbons": 36,
+                "doubleBonds": 0,
+                "lipidMapsClassifications": [
+                  {
+                    "category": "GP",
+                    "mainClass": "GP01",
+                    "subClass": "GP0101",
+                    "classLevel4": ""
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "feature": {
+        "mzValue": 820.1,
+        "rtValue": 7.0
+      },
+      "annotationsByAdducts": [
+        {
+          "adduct": "M+H",
+          "annotations": [
+            {
+              "compound": {
+                "compoundId": 3002,
+                "compoundType": "LIPID",
+                "lipidType": "PC",
+                "numChains": 2,
+                "numCarbons": 36,
+                "doubleBonds": 8,
+                "lipidMapsClassifications": [
+                  {
+                    "category": "GP",
+                    "mainClass": "GP01",
+                    "subClass": "GP0101",
+                    "classLevel4": ""
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
