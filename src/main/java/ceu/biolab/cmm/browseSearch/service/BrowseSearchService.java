@@ -39,9 +39,7 @@ public class BrowseSearchService {
 
         // Validación: metaboliteType obligatorio
         if (request.getMetaboliteType() == null) {
-            //throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide a metabolite type.");
-            //** Alternative: set a default value
-            request.setMetaboliteType(MetaboliteType.ALL);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must provide a metabolite type.");
         }
 
         // Ejecución principal
