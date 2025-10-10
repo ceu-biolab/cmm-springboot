@@ -18,8 +18,11 @@ public enum IonizationMode {
     }
 
     public static IonizationMode fromString(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Invalid IonMode value: null");
+        }
         for (IonizationMode mode : IonizationMode.values()) {
-            if (mode.value == value) {
+            if (mode.value.equalsIgnoreCase(value)) {
                 return mode;
             }
         }

@@ -10,11 +10,8 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AdductProcessing {
     private static final Logger logger = LoggerFactory.getLogger(CompoundRepository.class);
@@ -98,61 +95,55 @@ public class AdductProcessing {
         // Define adduct map for positive and negative ionization modes
         Map<String, String> mapAdducts = getAdductMapByIonizationMode(ionizationMode);
         List<String> allAdductsForCheckRelation = new LinkedList<>(mapAdducts.keySet());
+        return tryDetectAdduct(mz, groupedPeaksFiltered, ionizationMode, mapAdducts, allAdductsForCheckRelation, allAdductsForCheckRelation);
+    }
 
-        double adductDouble;
-        double adductDoubleForCheckRelation;
-        double massToSearchInCompositeSpectrumForCheckRelation;
-        double differenceMassAndPeak;
+    private static String tryDetectAdduct(Double mz,
+                                          Map<Double, Double> groupedPeaksFiltered,
+                                          IonizationMode ionizationMode,
+                                          Map<String, String> mapAdducts,
+                                          List<String> candidateAdducts,
+                                          List<String> relationAdducts) {
+        if (candidateAdducts == null || candidateAdducts.isEmpty()) {
+            return "";
+        }
 
-        // ** Hypothesis: adduct is adduct name
-        for (String adductName : allAdductsForCheckRelation) {
+        List<String> relations = relationAdducts == null || relationAdducts.isEmpty()
+                ? candidateAdducts
+                : relationAdducts;
+
+        for (String adductName : candidateAdducts) {
             String adductValue = mapAdducts.get(adductName);
             if (adductValue == null) {
-                break;
+                continue;
             }
 
-            adductDouble = Double.parseDouble(adductValue);
+            double adductDouble = Double.parseDouble(adductValue);
+            Double neutralMassBasedOnAdduct = getMassToSearch(mz, adductName, adductDouble);
 
-            // Calculate neutral mass based on m/z and adduct
-            Double neutralMassBasedOnAdduct = getMassToSearch(mz, adductName, adductDouble);  // Formula for neutral mass from m/z
-
-            // Check relations with other adducts
-            for (String adductNameForCheckRelation : allAdductsForCheckRelation) {
+            for (String adductNameForCheckRelation : relations) {
                 String adductValueForCheckRelation = mapAdducts.get(adductNameForCheckRelation);
                 if (adductValueForCheckRelation == null) {
-                    break;
+                    continue;
                 }
-                adductDoubleForCheckRelation = Double.parseDouble(adductValueForCheckRelation);
+                double adductDoubleForCheckRelation = Double.parseDouble(adductValueForCheckRelation);
                 logger.info("adduct mass check: {}", adductDoubleForCheckRelation);
 
                 if (!adductName.equals(adductNameForCheckRelation)) {
-                    // Calculate mass to search in composite spectrum for this adduct
-                    massToSearchInCompositeSpectrumForCheckRelation = getMassOfAdductFromMonoWeight(neutralMassBasedOnAdduct, adductNameForCheckRelation, ionizationMode);
+                    double massToSearchInCompositeSpectrumForCheckRelation =
+                            getMassOfAdductFromMonoWeight(neutralMassBasedOnAdduct, adductNameForCheckRelation, ionizationMode);
 
-                    // ** Hypothesis: Peak
                     for (Double peak : groupedPeaksFiltered.keySet()) {
-                        differenceMassAndPeak = Math.abs(peak - massToSearchInCompositeSpectrumForCheckRelation);
+                        double differenceMassAndPeak = Math.abs(peak - massToSearchInCompositeSpectrumForCheckRelation);
                         if (differenceMassAndPeak < Constants.ADDUCT_AUTOMATIC_DETECTION_WINDOW) {
-                            adductDetected = adductName;
-                            String adductNameFormatted = "[" + adductDetected + "]";
-                            if (ionizationMode == IonizationMode.POSITIVE) {
-                                adductNameFormatted += "+";
-                            } else if (ionizationMode == IonizationMode.NEGATIVE) {
-                                adductNameFormatted += "-";
-                            }
-                            return adductDetected;
+                            return adductName;
                         }
                     }
                 }
             }
         }
-        String adductNameFormatted = "[" + adductDetected + "]";
-        if (ionizationMode == IonizationMode.POSITIVE) {
-            adductNameFormatted += "+";
-        } else if (ionizationMode == IonizationMode.NEGATIVE) {
-            adductNameFormatted += "-";
-        }
-        return adductDetected;
+
+        return "";
     }
 
     /**
@@ -345,4 +336,3 @@ public class AdductProcessing {
     }
 
 }
-

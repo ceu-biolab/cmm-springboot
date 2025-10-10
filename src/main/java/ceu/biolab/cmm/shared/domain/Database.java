@@ -58,6 +58,7 @@ public enum Database {
             databasesConditionsList.add("c.npatlas_id IS NOT NULL");
         }
         if (databaseList.contains(Database.ALL)) {
+            databasesConditionsList.add("c.hmdb_id IS NOT NULL");
             databasesConditionsList.add("c.npatlas_id IS NOT NULL");
             databasesConditionsList.add("c.lm_id IS NOT NULL");
             databasesConditionsList.add("c.kegg_id IS NOT NULL");

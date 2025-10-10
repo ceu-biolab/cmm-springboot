@@ -64,13 +64,7 @@ public enum FormulaType {
      * @return the corresponding integer formula_type_int
      */
     public static int dbValueForFormulaType(String alphabet, boolean deuterium) {
-        String normalized = alphabet.trim().toUpperCase();
-        for (FormulaType formulaType : FormulaType.values()) {
-            if (formulaType.name().equals(normalized) && formulaType.includesDeuterium() == deuterium) {
-                return formulaType.getFormulaTypeIntValue();
-            }
-        }
-        throw new IllegalArgumentException("Invalid formula type or deuterium combination: " + alphabet + " (D=" + deuterium + ")");
+        return resolveFormulaType(alphabet, deuterium).getFormulaTypeIntValue();
     }
 
     public static FormulaType getFormulTypefromInt(int value) {

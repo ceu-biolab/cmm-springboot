@@ -133,7 +133,6 @@ public class AdductProcessingTest {
      */
     @Test
     public void testDetectAdductBasedOnCompositeSpectrum() {
-        String massesMode = "mz";
         IonizationMode ionizationMode = IonizationMode.POSITIVE;
         Double inputMass = 281.24765d;
         Set<String> adducts = new HashSet<>();
@@ -149,8 +148,6 @@ public class AdductProcessingTest {
         adducts.add(adduct4);
         adducts.add(adduct5);
         adducts.add(adduct6);
-
-        Map<String, String> provisionalMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
 
         Map<Double, Double> compositeSpectrum = new TreeMap();
 
@@ -169,9 +166,7 @@ public class AdductProcessingTest {
         assertEquals(expResult, result);
 
         // positive M+H-H2O
-        massesMode = "mz";
         inputMass = 265.25244d;
-        provisionalMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
 
         compositeSpectrum = new TreeMap();
 
