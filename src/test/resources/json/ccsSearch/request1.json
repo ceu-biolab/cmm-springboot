@@ -9,5 +9,8 @@
     "mzTolerance": 10,
     "ccsToleranceMode": "PERCENTAGE",
     "ccsTolerance": 2,
-    "ionMode": "POSITIVE"
+    "ionizationMode": "POSITIVE",
+    "bufferGas": "N2",
+    "adducts": ["M+H"],
+    "formulaType": "CHNOPS"
 }

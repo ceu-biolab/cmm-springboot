@@ -67,7 +67,7 @@ public enum FormulaType {
         return resolveFormulaType(alphabet, deuterium).getFormulaTypeIntValue();
     }
 
-    public static FormulaType getFormulTypefromInt(int value) {
+    public static FormulaType getFormulaTypefromInt(int value) {
         for (FormulaType formulaType : FormulaType.values()) {
             if (formulaType.getFormulaTypeIntValue() == value) {
                 return formulaType;

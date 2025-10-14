@@ -10,6 +10,7 @@ import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
 import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
+import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductList;
@@ -29,8 +30,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
-import java.text.Normalizer.Form;
 import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -123,7 +124,6 @@ public class CcsSearchService {
                         boolean found = false;
                         for (Annotation annotation : annotations) {
                             Compound compound = annotation.getCompound();
-                            // TODO remove mutation after refactoring Compound
                             if (compound instanceof IMMSCompound imCompound) {
                                 if (imCompound.getCompoundId() == queryResult.getCompoundId()) {
                                     imCompound.addPathway(pathway);
@@ -140,16 +140,52 @@ public class CcsSearchService {
 
                             String formula = queryResult.getFormula();
                             FormulaType formulaType = FormulaType.inferFromFormula(formula).orElse(null);
+                            if (formulaType == null && queryResult.getFormulaTypeInt() != null) {
+                                try {
+                                    formulaType = FormulaType.getFormulaTypefromInt(queryResult.getFormulaTypeInt());
+                                } catch (IllegalArgumentException e) {
+                                    // Ignore and leave formulaType as null
+                                }
+                            }
+
+                            int chargeType = queryResult.getChargeType() != null ? queryResult.getChargeType() : 0;
+                            int chargeNumber = queryResult.getChargeNumber() != null ? queryResult.getChargeNumber() : 0;
 
                             IMMSCompound.IMMSCompoundBuilder<?, ?> builder = IMMSCompound.builder()
                                     .compoundId(queryResult.getCompoundId())
+                                    .casId(queryResult.getCasId())
                                     .compoundName(queryResult.getCompoundName())
-                                    .mass(queryResult.getMonoisotopicMass())
-                                    .dbCcs(queryResult.getDbCcs())
                                     .formula(formula)
                                     .formulaType(formulaType)
+                                    .mass(queryResult.getMonoisotopicMass())
+                                    .chargeType(chargeType)
+                                    .chargeNumber(chargeNumber)
                                     .compoundType(compoundType)
-                                    .logP(queryResult.getLogP());
+                                    .logP(queryResult.getLogP())
+                                    .rtPred(queryResult.getRtPred())
+                                    .inchi(queryResult.getInchi())
+                                    .inchiKey(queryResult.getInchiKey())
+                                    .smiles(queryResult.getSmiles())
+                                    .lipidType(queryResult.getLipidType())
+                                    .numChains(queryResult.getNumChains())
+                                    .numCarbons(queryResult.getNumberCarbons())
+                                    .doubleBonds(queryResult.getDoubleBonds())
+                                    .biologicalActivity(queryResult.getBiologicalActivity())
+                                    .meshNomenclature(queryResult.getMeshNomenclature())
+                                    .iupacClassification(queryResult.getIupacClassification())
+                                    .dbCcs(queryResult.getDbCcs());
+
+                            if (queryResult.getCategory() != null || queryResult.getMainClass() != null
+                                    || queryResult.getSubClass() != null || queryResult.getClassLevel4() != null) {
+                                Set<LipidMapsClassification> lipidClasses = new HashSet<>();
+                                lipidClasses.add(new LipidMapsClassification(
+                                        queryResult.getCategory(),
+                                        queryResult.getMainClass(),
+                                        queryResult.getSubClass(),
+                                        queryResult.getClassLevel4()));
+                                builder = builder.lipidMapsClassifications(lipidClasses);
+                            }
+
                             IMMSCompound imCompound = builder.build();
                             imCompound.addPathway(pathway);
                             Annotation annotation = new Annotation(imCompound);
