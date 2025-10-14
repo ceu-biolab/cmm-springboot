@@ -2,7 +2,6 @@ package ceu.biolab.cmm.ccsSearch.dto;
 
 import lombok.Data;
 
-// TODO inherit compound from shared domain
 @Data
 public class CcsQueryResponseDTO {
     private int compoundId;
@@ -10,7 +9,6 @@ public class CcsQueryResponseDTO {
     private double monoisotopicMass;
     private double dbCcs;
     private String formula;
-    private String formulaType;
     private Integer compoundType;
     private Double logP;
     private Integer pathwayId;
@@ -23,7 +21,6 @@ public class CcsQueryResponseDTO {
         this.monoisotopicMass = monoisotopicMass;
         this.dbCcs = dbCcs;
         this.formula = formula;
-        this.formulaType = formulaType;
         this.compoundType = compoundType;
         this.logP = logP;
         this.pathwayName = pathwayName;
@@ -37,7 +34,6 @@ public class CcsQueryResponseDTO {
         this.monoisotopicMass = 0.0;
         this.dbCcs = 0.0;
         this.formula = "";
-        this.formulaType = "";
         this.compoundType = null;
         this.logP = null;
         this.pathwayName = "";

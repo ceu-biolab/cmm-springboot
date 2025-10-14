@@ -12,8 +12,8 @@ import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponseDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQueryDTO;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Repository
@@ -30,8 +30,10 @@ public class CcsSearchRepository {
     public List<CcsQueryResponseDTO> findMatchingCompounds(CcsFeatureQueryDTO queryData) throws IOException {
         Resource resource = resourceLoader.getResource("classpath:sql/ccs_compound_search_query.sql");
 
-        // TODO check materialized views
-        String sql = new String(Files.readAllBytes(Paths.get(resource.getURI())));
+        String sql;
+        try (InputStream inputStream = resource.getInputStream()) {
+            sql = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("adductType", queryData.getAdduct());

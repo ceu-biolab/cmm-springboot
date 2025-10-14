@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.ccsSearch.service;
 
+import ceu.biolab.IncorrectAdduct;
 import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQueryDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponseDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequestDTO;
@@ -11,11 +12,16 @@ import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
+import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +29,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
+import java.text.Normalizer.Form;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Service
 public class CcsSearchService {
@@ -38,15 +47,30 @@ public class CcsSearchService {
         MzToleranceMode mzToleranceMode = request.getMzToleranceMode();
         CcsToleranceMode ccsToleranceMode = request.getCcsToleranceMode();
         BufferGas bufferGas = request.getBufferGas();
+        IonizationMode ionizationMode = request.getIonizationMode();
 
-        double absoluteCcsTolerance;
-        if (ccsToleranceMode == CcsToleranceMode.PERCENTAGE) {
-            absoluteCcsTolerance = request.getCcsTolerance() * 0.01;
-        } else if (ccsToleranceMode == CcsToleranceMode.ABSOLUTE) {
-            absoluteCcsTolerance = request.getCcsTolerance();
-        } else {
-            throw new IllegalArgumentException("Invalid tolerance mode: " + request.getCcsToleranceMode());
+        List<String> requestedAdducts = request.getAdducts();
+        Set<String> normalizedAdducts = new LinkedHashSet<>();
+        if (requestedAdducts != null) {
+            normalizedAdducts.addAll(requestedAdducts);
         }
+        if (normalizedAdducts.isEmpty()) {
+            if (ionizationMode == IonizationMode.NEGATIVE) {
+                normalizedAdducts.add(AdductList.DEFAULT_ADDUCTS_NEGATIVE.get(0));
+            } else {
+                normalizedAdducts.add(AdductList.DEFAULT_ADDUCTS_POSITIVE.get(0));
+            }
+        }
+
+        var adductMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
+        List<String> effectiveAdducts = normalizedAdducts.stream()
+                .filter(adductMap::containsKey)
+                .toList();
+
+        if (effectiveAdducts.isEmpty()) {
+            throw new IllegalArgumentException("No valid adducts provided for ionization mode " + ionizationMode);
+        }
+
 
         CcsSearchResponseDTO response = new CcsSearchResponseDTO();
         for (int i = 0; i < nFeatures; i++) 
@@ -56,28 +80,36 @@ public class CcsSearchService {
             IMFeature feature = new IMFeature(mz, ccs);
             AnnotatedFeature imAnnotatedFeature = new AnnotatedFeature(feature);
 
-            // TODO: Dummy adduct. Replace with actual adducts from request. Also add IonMode check?
-            ArrayList<String> adducts = new ArrayList<>(java.util.Arrays.asList("M+H"));
-            ArrayList<Double> adductIonMassDifferences = new ArrayList<>(java.util.Arrays.asList(1.007276));
-            for (int j = 0; j < adducts.size(); j++) {
-                String adduct = adducts.get(j);
-                double ionMassDifference = adductIonMassDifferences.get(j);
+            for (String adduct : effectiveAdducts) {
+                try {
+                    AdductProcessing.getAdductFromString(adduct, ionizationMode, mz);
+                } catch (IncorrectAdduct e) {
+                    throw new IllegalArgumentException("Invalid adduct '" + adduct + "' for ion mode " + ionizationMode, e);
+                }
 
-                double ccsDifference = ccs * absoluteCcsTolerance;
-                double ccsLower = ccs - ccsDifference;
-                double ccsUpper = ccs + ccsDifference;
+                double neutralMass = AdductTransformer.getMonoisotopicMassFromMZ(mz, adduct, ionizationMode);
 
-                double neutralMass = mz - ionMassDifference;
                 double mzDifference;
                 if (mzToleranceMode == MzToleranceMode.PPM) {
-                    mzDifference = mz * request.getMzTolerance() * 0.000001;
+                    mzDifference = neutralMass * request.getMzTolerance() * 0.000001;
                 } else if (mzToleranceMode == MzToleranceMode.MDA) {
                     mzDifference = request.getMzTolerance() * 0.001;
                 } else {
-                    throw new IllegalArgumentException("Invalid tolerance mode: " + request.getMzToleranceMode());
+                    throw new IllegalArgumentException("Invalid mz tolerance mode: " + request.getMzToleranceMode());
                 }
                 double massLower = neutralMass - mzDifference;
                 double massUpper = neutralMass + mzDifference;
+
+                double ccsDifference;
+                if (ccsToleranceMode == CcsToleranceMode.PERCENTAGE) {
+                    ccsDifference = ccs * (request.getCcsTolerance() / 100.0);
+                } else if (ccsToleranceMode == CcsToleranceMode.ABSOLUTE) {
+                    ccsDifference = request.getCcsTolerance();
+                } else {
+                    throw new IllegalArgumentException("Invalid CCS tolerance mode: " + request.getCcsToleranceMode());
+                }
+                double ccsLower = ccs - ccsDifference;
+                double ccsUpper = ccs + ccsDifference;
 
                 CcsFeatureQueryDTO queryData = new CcsFeatureQueryDTO(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct);
                 try {
@@ -106,27 +138,28 @@ public class CcsSearchService {
                                 compoundType = CompoundType.NON_LIPID;
                             }
 
-                            IMMSCompound imCompound = IMMSCompound.builder()
+                            String formula = queryResult.getFormula();
+                            FormulaType formulaType = FormulaType.inferFromFormula(formula).orElse(null);
+
+                            IMMSCompound.IMMSCompoundBuilder<?, ?> builder = IMMSCompound.builder()
                                     .compoundId(queryResult.getCompoundId())
                                     .compoundName(queryResult.getCompoundName())
                                     .mass(queryResult.getMonoisotopicMass())
                                     .dbCcs(queryResult.getDbCcs())
-                                    .formula(queryResult.getFormula())
-                                    // TODO formula type in compound shouldnt be a int
-                                    //.formulaType(queryResult.getFormulaType())
+                                    .formula(formula)
+                                    .formulaType(formulaType)
                                     .compoundType(compoundType)
-                                    .logP(queryResult.getLogP())
-                                    .build();
+                                    .logP(queryResult.getLogP());
+                            IMMSCompound imCompound = builder.build();
                             imCompound.addPathway(pathway);
                             Annotation annotation = new Annotation(imCompound);
                             annotations.add(annotation);
                         }
                     }
-                    //AnnotationsByAdduct annotations = new AnnotationsByAdduct(adduct, annotations);
                     AnnotationsByAdduct annotationsByAdduct = new AnnotationsByAdduct(adduct, annotations);
                     imAnnotatedFeature.addAnnotationByAdduct(annotationsByAdduct);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new IllegalStateException("Failed to execute CCS search query", e);
                 }
             }
 

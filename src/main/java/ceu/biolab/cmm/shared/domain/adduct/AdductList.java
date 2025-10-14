@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+// TODO refactor this class entirely. Wrong values and ignores stoichiometry.
+// For neutral mass calculation, use a function instead and don't expose these maps
 public class AdductList {
     public static final List<SelectItem> LISTNEUTRALMODESFORCEMS;
 
