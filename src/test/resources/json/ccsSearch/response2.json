@@ -1,0 +1,60 @@
+{
+    "imFeatures": [
+        {
+            "feature": {
+                "mzValue": 247.0131022146678,
+                "ccsValue": 156.117,
+                "intensity": null
+            },
+            "annotationsByAdducts": [
+                {
+                    "adduct": "M+H",
+                    "annotations": [
+                        {
+                            "compound": {
+                                "compoundId": 1,
+                                "compoundName": "Dimethylallyl pyrophosphate",
+                                "formula": "C5H12O7P2",
+                                "mass": 246.005825762,
+                                "dbCcs": 156.117
+                            },
+                            "scores": []
+                        }
+                    ]
+                },
+                {
+                    "adduct": "M+Na",
+                    "annotations": []
+                }
+            ]
+        },
+        {
+            "feature": {
+                "mzValue": 268.9950464625678,
+                "ccsValue": 156.233,
+                "intensity": null
+            },
+            "annotationsByAdducts": [
+                {
+                    "adduct": "M+H",
+                    "annotations": []
+                },
+                {
+                    "adduct": "M+Na",
+                    "annotations": [
+                        {
+                            "compound": {
+                                "compoundId": 1,
+                                "compoundName": "Dimethylallyl pyrophosphate",
+                                "formula": "C5H12O7P2",
+                                "mass": 246.005825762,
+                                "dbCcs": 156.233
+                            },
+                            "scores": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

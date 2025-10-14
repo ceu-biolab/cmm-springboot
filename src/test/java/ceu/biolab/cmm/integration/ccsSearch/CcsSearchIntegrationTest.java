@@ -41,4 +41,28 @@ public class CcsSearchIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
     }
+
+    @Test
+    void testCcsSearchEndpointWithMultipleAdducts() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request2.json");
+        String expectedResponse = loadJson("json/ccsSearch/response2.json");
+
+        mockMvc.perform(post("/api/ccs")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+    }
+
+    @Test
+    void testCcsSearchEndpointNegativeMode() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request3.json");
+        String expectedResponse = loadJson("json/ccsSearch/response3.json");
+
+        mockMvc.perform(post("/api/ccs")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+    }
 }

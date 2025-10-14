@@ -3,6 +3,7 @@ package ceu.biolab.cmm.shared.domain.compound;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
 import lombok.Data;
+import lombok.Builder.Default;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
@@ -34,12 +35,14 @@ public class Compound {
     private Integer numChains;
     private Integer numCarbons;
     private Integer doubleBonds;
-    private Set<LipidMapsClassification> lipidMapsClassifications;
+    @Default
+    private Set<LipidMapsClassification> lipidMapsClassifications = new HashSet<>();
     private String biologicalActivity;
     private String meshNomenclature;
     private String iupacClassification;
     private String mol2;
-    private Set<Pathway> pathways;
+    @Default
+    private Set<Pathway> pathways = new HashSet<>();
 
     public Compound() {
         this.lipidMapsClassifications = new HashSet<>();
