@@ -13,6 +13,6 @@
     "ccsTolerance": 1,
     "ionizationMode": "POSITIVE",
     "bufferGas": "N2",
-    "adducts": ["M+H", "M+Na"],
+    "adducts": ["[M+H]+", "[M+Na]+"],
     "formulaType": "CHNOPS"
 }

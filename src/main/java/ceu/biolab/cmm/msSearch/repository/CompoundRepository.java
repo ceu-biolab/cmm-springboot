@@ -8,8 +8,8 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
-import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
@@ -26,8 +26,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.nio.charset.StandardCharsets;
@@ -88,15 +90,19 @@ public class CompoundRepository {
         try {
             IMSFeature msFeature = new MSFeature(mz, 0.0);
             AnnotatedFeature annotatedFeature = new AnnotatedFeature(msFeature);
-            Set<String> adductsToProcess = new HashSet<>();
+            Map<String, AdductDefinition> adductsToProcess = new LinkedHashMap<>();
 
             logger.info("detected adduct: {}", detectedAdduct);
             logger.info(" adductS: {}", adductsString);
 
             if (detectedAdduct != null && detectedAdduct.isPresent() && !detectedAdduct.isEmpty() && StringUtils.isNotBlank(detectedAdduct.get())) {
-                adductsToProcess.add(detectedAdduct.get());
+                AdductDefinition detectedDefinition = AdductService.requireDefinition(ionizationMode, detectedAdduct.get().trim());
+                adductsToProcess.putIfAbsent(detectedDefinition.canonical(), detectedDefinition);
             } else {
-                adductsToProcess.addAll(adductsString);
+                for (String adduct : adductsString) {
+                    AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct);
+                    adductsToProcess.putIfAbsent(definition.canonical(), definition);
+                }
             }
 
             logger.info(" adductS process: {}", adductsToProcess);
@@ -104,11 +110,10 @@ public class CompoundRepository {
                 return annotatedMSFeature;
             }
 
-            for (String adductString : adductsToProcess) {
+            for (AdductDefinition adductDefinition : adductsToProcess.values()) {
+                String adductString = adductDefinition.canonical();
 
                 Set<Compound> compoundsSet = new HashSet<>();
-                Adduct adduct = AdductProcessing.getAdductFromString(adductString, ionizationMode, mz);
-                double adductMass = adduct.getAdductMass();
 
                 AnnotationsByAdduct annotationsByAdduct = null;
 
@@ -126,7 +131,7 @@ public class CompoundRepository {
 
                 List<String> databaseConditions = Database.databaseConditions(databases);
 
-                double monoIsotopicMassFromMZAndAdduct = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductString, ionizationMode);
+                double monoIsotopicMassFromMZAndAdduct = AdductService.neutralMassFromMz(mz, adductDefinition);
 
                 // Calculate tolerance range based on PPM or DA
                 if (mzToleranceMode == MzToleranceMode.MDA) {

@@ -196,9 +196,9 @@ public class ScoreLipidsServiceTest {
         // Test rule: "Adduct Relation"
         // Test with two compounds that should apply the rule and get a score
         AnnotatedFeature feature1 = createEmptyAnnotatedFeature(800.5, 0.85);
-        addAdductLipidToAnnotations(feature1, 1, "M+Na");
+        addAdductLipidToAnnotations(feature1, 1, "[M+Na]+");
         AnnotatedFeature feature2 = createEmptyAnnotatedFeature(800.5, 0.86);
-        addAdductLipidToAnnotations(feature2, 1, "M+H");
+        addAdductLipidToAnnotations(feature2, 1, "[M+H]+");
         List<AnnotatedFeature> features = List.of(feature1, feature2);
 
         ScoreLipids.scoreLipidAnnotations(features, Optional.empty());
@@ -333,7 +333,7 @@ public class ScoreLipidsServiceTest {
      * Adds a lipid annotation with the specified compound ID and adduct
      * @param feature The feature to annotate
      * @param compoundId The compound ID to add
-     * @param adduct The adduct to use (e.g. "M+H", "M+Na")
+     * @param adduct The adduct to use (e.g. "[M+H]+", "[M+Na]+")
      */
     private void addAdductLipidToAnnotations(AnnotatedFeature feature, int compoundId, String adduct) {
         Lipid lipid = Lipid.builder()

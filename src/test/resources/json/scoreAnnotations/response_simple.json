@@ -6,7 +6,7 @@
     },
     "annotationsByAdducts": [
       {
-        "adduct": "M+H",
+        "adduct": "[M+H]+",
         "annotations": [
           {
             "compound": {
@@ -42,7 +42,7 @@
         ]
       },
       {
-        "adduct": "M+Na",
+        "adduct": "[M+Na]+",
         "annotations": [
           {
             "compound": {
@@ -86,7 +86,7 @@
     },
     "annotationsByAdducts": [
       {
-        "adduct": "M+H",
+        "adduct": "[M+H]+",
         "annotations": [
           {
             "compound": {

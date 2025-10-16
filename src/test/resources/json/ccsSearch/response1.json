@@ -8,7 +8,7 @@
             },
             "annotationsByAdducts": [
                 {
-                    "adduct": "M+H",
+                    "adduct": "[M+H]+",
                     "annotations": [
                         {
                             "compound": {
@@ -149,7 +149,7 @@
             },
             "annotationsByAdducts": [
                 {
-                    "adduct": "M+H",
+                    "adduct": "[M+H]+",
                     "annotations": [
                         {
                             "compound": {

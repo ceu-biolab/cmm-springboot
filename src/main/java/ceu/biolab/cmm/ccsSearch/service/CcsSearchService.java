@@ -1,6 +1,5 @@
 package ceu.biolab.cmm.ccsSearch.service;
 
-import ceu.biolab.IncorrectAdduct;
 import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQueryDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponseDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequestDTO;
@@ -13,7 +12,6 @@ import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
 import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.domain.adduct.AdductList;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
@@ -21,8 +19,8 @@ import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
-import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +34,9 @@ import java.util.Set;
 
 @Service
 public class CcsSearchService {
+
+    private static final String DEFAULT_POSITIVE_ADDUCT = "[M+H]+";
+    private static final String DEFAULT_NEGATIVE_ADDUCT = "[M-H]-";
 
     @Autowired
     private CcsSearchRepository ccsSearchRepository;
@@ -53,19 +54,17 @@ public class CcsSearchService {
         List<String> requestedAdducts = request.getAdducts();
         Set<String> normalizedAdducts = new LinkedHashSet<>();
         if (requestedAdducts != null) {
-            normalizedAdducts.addAll(requestedAdducts);
+            requestedAdducts.stream()
+                    .filter(adduct -> adduct != null && !adduct.isBlank())
+                    .map(String::trim)
+                    .forEach(normalizedAdducts::add);
         }
         if (normalizedAdducts.isEmpty()) {
-            if (ionizationMode == IonizationMode.NEGATIVE) {
-                normalizedAdducts.add(AdductList.DEFAULT_ADDUCTS_NEGATIVE.get(0));
-            } else {
-                normalizedAdducts.add(AdductList.DEFAULT_ADDUCTS_POSITIVE.get(0));
-            }
+            normalizedAdducts.add(ionizationMode == IonizationMode.NEGATIVE ? DEFAULT_NEGATIVE_ADDUCT : DEFAULT_POSITIVE_ADDUCT);
         }
 
-        var adductMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
-        List<String> effectiveAdducts = normalizedAdducts.stream()
-                .filter(adductMap::containsKey)
+        List<AdductDefinition> effectiveAdducts = normalizedAdducts.stream()
+                .map(adduct -> AdductService.requireDefinition(ionizationMode, adduct))
                 .toList();
 
         if (effectiveAdducts.isEmpty()) {
@@ -81,14 +80,8 @@ public class CcsSearchService {
             IMFeature feature = new IMFeature(mz, ccs);
             AnnotatedFeature imAnnotatedFeature = new AnnotatedFeature(feature);
 
-            for (String adduct : effectiveAdducts) {
-                try {
-                    AdductProcessing.getAdductFromString(adduct, ionizationMode, mz);
-                } catch (IncorrectAdduct e) {
-                    throw new IllegalArgumentException("Invalid adduct '" + adduct + "' for ion mode " + ionizationMode, e);
-                }
-
-                double neutralMass = AdductTransformer.getMonoisotopicMassFromMZ(mz, adduct, ionizationMode);
+            for (AdductDefinition adduct : effectiveAdducts) {
+                double neutralMass = AdductService.neutralMassFromMz(mz, adduct);
 
                 double mzDifference;
                 if (mzToleranceMode == MzToleranceMode.PPM) {
@@ -112,7 +105,7 @@ public class CcsSearchService {
                 double ccsLower = ccs - ccsDifference;
                 double ccsUpper = ccs + ccsDifference;
 
-                CcsFeatureQueryDTO queryData = new CcsFeatureQueryDTO(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct);
+                CcsFeatureQueryDTO queryData = new CcsFeatureQueryDTO(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct.canonical());
                 try {
                     List<CcsQueryResponseDTO> queryResults = ccsSearchRepository.findMatchingCompounds(queryData);
                     // QueryResults may have duplicate results where the same compound is found with different pathways.
@@ -192,7 +185,7 @@ public class CcsSearchService {
                             annotations.add(annotation);
                         }
                     }
-                    AnnotationsByAdduct annotationsByAdduct = new AnnotationsByAdduct(adduct, annotations);
+                    AnnotationsByAdduct annotationsByAdduct = new AnnotationsByAdduct(adduct.canonical(), annotations);
                     imAnnotatedFeature.addAnnotationByAdduct(annotationsByAdduct);
                 } catch (IOException e) {
                     throw new IllegalStateException("Failed to execute CCS search query", e);

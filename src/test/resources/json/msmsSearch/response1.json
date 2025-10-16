@@ -48,7 +48,7 @@
                 ],
                 "pathways": []
             },
-            "adduct": "M+H",
+            "adduct": "[M+H]+",
             "deltaPpmPrecursorIon": -3.279643144683768,
             "msmsCosineScore": 0.9999999999999998,
             "collisionEnergy": 25.0,

@@ -7,7 +7,7 @@
   "toleranceModeFragments": "PPM",
   "ionizationMode": "POSITIVE",
   "adducts": [
-    "M+H"
+    "[M+H]+"
   ],
   "fragmentsMZsIntensities": {
     "precursorMz": 287.23,

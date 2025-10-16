@@ -28,11 +28,11 @@
     "ion_mode": "positive",
     "mass_mode": "mz",
     "adducts": [
-        "M+H",
-        "M+2H",
-        "M+Na",
-        "M+K",
-        "M+NH4",
-        "M+H-H2O"
+        "[M+H]+",
+        "[M+2H]2+",
+        "[M+Na]+",
+        "[M+K]+",
+        "[M+NH4]+",
+        "[M+H-H2O]+"
     ]
 }

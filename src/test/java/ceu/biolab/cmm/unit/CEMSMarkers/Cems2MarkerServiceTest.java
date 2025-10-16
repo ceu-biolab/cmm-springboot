@@ -63,7 +63,7 @@ class Cems2MarkerServiceTest {
         sampleRequest.setChemicalAlphabet("CHNOPS");
         sampleRequest.setIonMode("positive");
         sampleRequest.setMassMode("mz");
-        sampleRequest.setAdducts(List.of("M+H", "M+Na"));
+        sampleRequest.setAdducts(List.of("[M+H]+", "[M+Na]+"));
     }
 
     @Test

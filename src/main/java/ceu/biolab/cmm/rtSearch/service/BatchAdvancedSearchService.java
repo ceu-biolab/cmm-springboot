@@ -1,7 +1,5 @@
 package ceu.biolab.cmm.rtSearch.service;
 
-import ceu.biolab.Adduct;
-import ceu.biolab.IncorrectAdduct;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.rtSearch.dto.BatchAdvancedSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
@@ -9,16 +7,16 @@ import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.service.CompoundService;
 import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
 import ceu.biolab.cmm.shared.domain.ExperimentParameters;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.ModifierType;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.LCMSFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.Normalizer;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BatchAdvancedSearchService {
@@ -32,7 +30,6 @@ public class BatchAdvancedSearchService {
 
             // 1. We detect adduct from composite spectrum
             Set<String> adducts = batchAdvancedRequest.getAdductsString();
-            Set<String> formattedAdducts = new HashSet<>();
             List<Double> mzs = batchAdvancedRequest.getMz();
             List<Double> retentionTimes = batchAdvancedRequest.getRetentionTimes();
             List<Map<Double,Double>> compositeSpectrumList = batchAdvancedRequest.getCompositeSpectrum();
@@ -47,28 +44,28 @@ public class BatchAdvancedSearchService {
                 double rt = retentionTimes.get(i);
                 Map<Double, Double> compositeSpectrum = compositeSpectrumList.get(i);
 
-                for (String adduct : adducts) {
-                    String formattedAdduct = AdductProcessing.formatAdductString(adduct, batchAdvancedRequest.getIonizationMode());
-                    formattedAdducts.add(formattedAdduct);
-                }
+                // Validate adducts upfront so invalid inputs fail fast
+                Set<String> canonicalAdducts = adducts.stream()
+                        .map(candidate -> AdductService.requireDefinition(batchAdvancedRequest.getIonizationMode(), candidate).canonical())
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
 
-                String detectedAdduct = AdductProcessing.detectAdductBasedOnCompositeSpectrum(batchAdvancedRequest.getIonizationMode(),
-                        mz, batchAdvancedRequest.getAdductsString(), compositeSpectrum);
+                String detectedAdduct = AdductService.detectAdduct(
+                                batchAdvancedRequest.getIonizationMode(),
+                                mz,
+                                canonicalAdducts,
+                                compositeSpectrum)
+                        .map(AdductDefinition::canonical)
+                        .orElse("");
 
                 FormulaType formulaType = FormulaType.resolveFormulaType(String.valueOf(batchAdvancedRequest.getFormulaType()), batchAdvancedRequest.isDeuterium());
 
                 //2. Simple search with detected Adduct
-                String formattedDetectedAdduct = null;
-                if (detectedAdduct != null && !detectedAdduct.isEmpty()) {
-                    formattedDetectedAdduct = AdductProcessing.formatAdductString(detectedAdduct, batchAdvancedRequest.getIonizationMode());
-                }
-
                 logger.info("detected adduct : {}", detectedAdduct);
-                logger.info("detected adduct formatted : {}", formattedDetectedAdduct);
                 logger.info("adducts formatted : {}", batchAdvancedRequest.getAdductsString());
                 CompoundSimpleSearchRequestDTO compoundSimpleSearchRequestDTO = new CompoundSimpleSearchRequestDTO(mz,
                         batchAdvancedRequest.getMzToleranceMode(), batchAdvancedRequest.getTolerance(), batchAdvancedRequest.getIonizationMode(),
-                        batchAdvancedRequest.getAdductsString(), Optional.of(detectedAdduct), Optional.of(formulaType), batchAdvancedRequest.getDatabases(), batchAdvancedRequest.getMetaboliteType());
+                        canonicalAdducts, Optional.ofNullable(detectedAdduct).filter(s -> !s.isEmpty()),
+                        Optional.of(formulaType), batchAdvancedRequest.getDatabases(), batchAdvancedRequest.getMetaboliteType());
 
                 RTSearchResponseDTO response = compoundService.findCompoundsByMz(compoundSimpleSearchRequestDTO);
                 annotatedFeatures = response.getMSFeatures();

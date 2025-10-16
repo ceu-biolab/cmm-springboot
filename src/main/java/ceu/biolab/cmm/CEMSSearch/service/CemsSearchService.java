@@ -34,7 +34,8 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 
 @Service
 public class CemsSearchService {
@@ -70,8 +71,6 @@ public class CemsSearchService {
         IonizationMode ionizationMode = request.getIonizationMode();
         int ionizationModeId = CeIonizationModeMapper.toDatabaseValue(ionizationMode);
 
-        Map<String, String> adductMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
-
         CemsSearchResponseDTO response = new CemsSearchResponseDTO();
 
         List<Double> mzValues = request.getMzValues();
@@ -92,22 +91,8 @@ public class CemsSearchService {
             featureAnnotations.setFeature(featureDTO);
 
             for (String adduct : request.getAdducts()) {
-                String trimmedAdduct = adduct.trim();
-                String adductValueRaw = adductMap.get(trimmedAdduct);
-                if (adductValueRaw == null) {
-                    LOGGER.warn("Skipping adduct '{}' because it is not supported for ionization mode {}", trimmedAdduct, ionizationMode);
-                    continue;
-                }
-
-                double adductValue;
-                try {
-                    adductValue = Double.parseDouble(adductValueRaw);
-                } catch (NumberFormatException ex) {
-                    LOGGER.warn("Unable to parse adduct mass difference '{}' for adduct '{}'", adductValueRaw, trimmedAdduct, ex);
-                    continue;
-                }
-
-                double neutralMass = AdductProcessing.getMassToSearch(mz, trimmedAdduct, adductValue);
+                AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                double neutralMass = AdductService.neutralMassFromMz(mz, definition);
                 double massWindow = computeMassWindow(request.getMzToleranceMode(), request.getMzTolerance(), neutralMass);
                 double mobilityWindow = computeMobilityWindow(
                         effMob,
@@ -133,7 +118,7 @@ public class CemsSearchService {
                 }
                 candidates = deduplicateCandidates(candidates, neutralMass, effMob);
 
-                CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(trimmedAdduct);
+                CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(definition.canonical());
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
                     Compound compound = toCompound(candidate);
@@ -142,7 +127,7 @@ public class CemsSearchService {
                     }
 
                     Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), neutralMass);
-                    Double mzCalc = computeTheoreticalMz(candidate.getMass(), trimmedAdduct, ionizationMode);
+                    Double mzCalc = computeTheoreticalMz(candidate.getMass(), definition);
                     Double mobilityErrorPct = computeMobilityErrorPct(candidate.getExperimentalEffMob(), effMob);
 
                     CeAnnotationDTO annotation = CeAnnotationDTO.builder()
@@ -225,14 +210,14 @@ public class CemsSearchService {
         return (candidateMass - targetMass) / targetMass * 1e6;
     }
 
-    private Double computeTheoreticalMz(Double neutralMass, String adduct, IonizationMode ionizationMode) {
+    private Double computeTheoreticalMz(Double neutralMass, AdductDefinition definition) {
         if (neutralMass == null) {
             return null;
         }
         try {
-            return AdductProcessing.getMassOfAdductFromMonoWeight(neutralMass, adduct, ionizationMode);
+            return AdductService.mzFromNeutralMass(neutralMass, definition);
         } catch (RuntimeException ex) {
-            LOGGER.warn("Unable to compute theoretical m/z for adduct '{}'", adduct, ex);
+            LOGGER.warn("Unable to compute theoretical m/z for adduct '{}'", definition.canonical(), ex);
             return null;
         }
     }

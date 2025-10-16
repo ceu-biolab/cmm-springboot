@@ -2,7 +2,8 @@ package ceu.biolab.cmm.unit.msSearch.service;
 
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
-import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ public class SimpleSearchServiceTest {
     @Test
     void testRangeWith1Da() {
         double mz = 500.0;
-        String adduct = "M+H";
+        String adduct = "[M+H]+";
         Set<String> adductsString = new HashSet<>();
         adductsString.add(adduct);
         IonizationMode ionizationMode = IonizationMode.POSITIVE;
@@ -32,7 +33,7 @@ public class SimpleSearchServiceTest {
     @Test
     void testRangeWith10Da() {
         double mz = 500.0;
-        String adduct = "M+H";
+        String adduct = "[M+H]+";
         Set<String> adductsString = new HashSet<>();
         adductsString.add(adduct);
         IonizationMode ionizationMode = IonizationMode.POSITIVE;
@@ -42,7 +43,7 @@ public class SimpleSearchServiceTest {
     @Test
     void testRangeWith100Da() {
         double mz = 500.0;
-        String adduct = "M+H";
+        String adduct = "[M+H]+";
         Set<String> adductsString = new HashSet<>();
         adductsString.add(adduct);
         IonizationMode ionizationMode = IonizationMode.POSITIVE;
@@ -52,7 +53,7 @@ public class SimpleSearchServiceTest {
     @Test
     void testRangeWith100PPM() {
         double mz = 500.0;
-        String adduct = "M+H";
+        String adduct = "[M+H]+";
         Set<String> adductsString = new HashSet<>();
         adductsString.add(adduct);
         IonizationMode ionizationMode = IonizationMode.POSITIVE;
@@ -62,7 +63,7 @@ public class SimpleSearchServiceTest {
     @Test
     void testRangeWith1000PPM() {
         double mz = 500.0;
-        String adduct = "M+H";
+        String adduct = "[M+H]+";
         Set<String> adductsString = new HashSet<>();
         adductsString.add(adduct);
         IonizationMode ionizationMode = IonizationMode.POSITIVE;
@@ -71,7 +72,8 @@ public class SimpleSearchServiceTest {
 
     private void assertMassRange(double mz, Set<String> adduct, IonizationMode ionMode, double tolerance, MzToleranceMode mode) {
         for(String adductString : adduct) {
-            double monoMass = AdductTransformer.getMonoisotopicMassFromMZ(mz, adductString, ionMode);
+            AdductDefinition definition = AdductService.requireDefinition(ionMode, adductString);
+            double monoMass = AdductService.neutralMassFromMz(mz, definition);
             double lowerBound;
             double upperBound;
 

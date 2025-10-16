@@ -50,7 +50,7 @@ class CemsRmtSearchServiceTest {
         request.setChemicalAlphabet("ALL");
         request.setIonMode("positive");
         request.setMassMode("mz");
-        request.setAdducts(List.of("M+H"));
+        request.setAdducts(List.of("[M+H]+"));
         return request;
     }
 

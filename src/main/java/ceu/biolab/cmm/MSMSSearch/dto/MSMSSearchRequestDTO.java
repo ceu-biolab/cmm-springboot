@@ -18,7 +18,7 @@ public class MSMSSearchRequestDTO {
     private double toleranceFragments;
     private MzToleranceMode toleranceModeFragments;     // "PPM" or "mDA"
     private IonizationMode ionizationMode;             // "POSITIVE" or "NEGATIVE"
-    private List<String> adducts;              // e.g., ["M+H", "M+Na"]
+    private List<String> adducts;              // e.g., ["[M+H]+", "[M+Na]+"]
     private Spectrum fragmentsMZsIntensities;   // List of mz-intensity pairs
     private ScoreType scoreType;
 

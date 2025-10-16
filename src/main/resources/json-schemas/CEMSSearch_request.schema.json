@@ -89,7 +89,7 @@
       "polarity": "Direct",
       "chemical_alphabet": "CHNOPS",
       "ionization_mode": "Positive",
-      "adducts": ["M+H", "M+Na"],
+      "adducts": ["[M+H]+", "[M+Na]+"],
       "mz_values": [291.3, 298.6, 305.1, 322.8],
       "effective_mobilities": [1174, 1060, 995, 880],
       "mz_tolerance": 10,
