@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.rtSearch.dto;
+package ceu.biolab.cmm.lcmsSearch.dto;
 
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.Database;

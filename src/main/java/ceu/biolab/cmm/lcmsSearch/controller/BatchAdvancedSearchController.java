@@ -1,8 +1,8 @@
-package ceu.biolab.cmm.rtSearch.controller;
+package ceu.biolab.cmm.lcmsSearch.controller;
 
 
-import ceu.biolab.cmm.rtSearch.dto.BatchAdvancedSearchRequestDTO;
-import ceu.biolab.cmm.rtSearch.service.BatchAdvancedSearchService;
+import ceu.biolab.cmm.lcmsSearch.dto.BatchAdvancedSearchRequestDTO;
+import ceu.biolab.cmm.lcmsSearch.service.BatchAdvancedSearchService;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

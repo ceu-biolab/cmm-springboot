@@ -1,7 +1,7 @@
-package ceu.biolab.cmm.rtSearch.service;
+package ceu.biolab.cmm.lcmsSearch.service;
 
 import ceu.biolab.cmm.shared.domain.FormulaType;
-import ceu.biolab.cmm.rtSearch.dto.BatchAdvancedSearchRequestDTO;
+import ceu.biolab.cmm.lcmsSearch.dto.BatchAdvancedSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.service.CompoundService;
