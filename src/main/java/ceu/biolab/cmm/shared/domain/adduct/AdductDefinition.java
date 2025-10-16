@@ -9,6 +9,7 @@ import java.util.Objects;
  */
 public final class AdductDefinition {
     private final String canonical;
+    private final String body;
     private final IonizationMode ionizationMode;
     private final int multimer;
     private final String descriptor;
@@ -16,12 +17,14 @@ public final class AdductDefinition {
     private final double offset;
 
     AdductDefinition(String canonical,
+                     String body,
                      IonizationMode ionizationMode,
                      int multimer,
                      String descriptor,
                      int charge,
                      double offset) {
         this.canonical = Objects.requireNonNull(canonical, "canonical");
+        this.body = Objects.requireNonNull(body, "body");
         this.ionizationMode = Objects.requireNonNull(ionizationMode, "ionizationMode");
         this.multimer = multimer;
         this.descriptor = Objects.requireNonNull(descriptor, "descriptor");
@@ -35,6 +38,13 @@ public final class AdductDefinition {
 
     public IonizationMode ionizationMode() {
         return ionizationMode;
+    }
+
+    /**
+     * Returns the adduct notation as stored in legacy datasets (contents inside the brackets).
+     */
+    public String legacyKey() {
+        return body;
     }
 
     /**

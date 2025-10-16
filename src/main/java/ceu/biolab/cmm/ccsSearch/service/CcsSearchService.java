@@ -105,7 +105,7 @@ public class CcsSearchService {
                 double ccsLower = ccs - ccsDifference;
                 double ccsUpper = ccs + ccsDifference;
 
-                CcsFeatureQueryDTO queryData = new CcsFeatureQueryDTO(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct.canonical());
+                CcsFeatureQueryDTO queryData = new CcsFeatureQueryDTO(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct.legacyKey());
                 try {
                     List<CcsQueryResponseDTO> queryResults = ccsSearchRepository.findMatchingCompounds(queryData);
                     // QueryResults may have duplicate results where the same compound is found with different pathways.
