@@ -1,7 +1,6 @@
 package ceu.biolab.cmm.CEMSSearch.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ceu.biolab.cmm.CEMSMarkers.domain.MassMode;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
 import ceu.biolab.cmm.CEMSSearch.domain.RmtToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
@@ -42,7 +41,6 @@ public class CemsRmtSearchRequestDTO {
 
     private IonizationMode ionMode = IonizationMode.POSITIVE;
 
-    private MassMode massMode = MassMode.MZ;
 
     private List<String> adducts = new ArrayList<>();
 
@@ -79,8 +77,4 @@ public class CemsRmtSearchRequestDTO {
         this.rmtToleranceMode = RmtToleranceMode.fromValue(value);
     }
 
-    @JsonProperty("mass_mode")
-    public void setMassMode(String value) {
-        this.massMode = MassMode.fromValue(value);
-    }
 }

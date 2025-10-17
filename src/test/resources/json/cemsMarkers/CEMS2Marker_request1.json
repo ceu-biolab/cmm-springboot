@@ -26,7 +26,6 @@
     "marker2_time": 25.29,
     "chemical_alphabet": "CHNOPS",
     "ion_mode": "positive",
-    "mass_mode": "mz",
     "adducts": [
         "[M+H]+",
         "[M+2H]2+",

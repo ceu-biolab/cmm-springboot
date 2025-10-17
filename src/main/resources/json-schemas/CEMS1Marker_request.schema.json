@@ -8,7 +8,7 @@
       "type": "array",
       "minItems": 1,
       "items": { "type": "number" },
-      "description": "Observed m/z (or mass) values matching masses_mode."
+      "description": "Observed m/z values."
     },
     "tolerance": {
       "type": "number",
@@ -76,11 +76,6 @@
       "enum": ["positive", "negative"],
       "description": "Ionization polarity used for DB lookup."
     },
-    "mass_mode": {
-      "type": "string",
-      "enum": ["mz", "mass"],
-      "description": "Indicates whether 'masses' contains m/z or neutral masses."
-    },
     "adducts": {
       "type": "array",
       "minItems": 1,
@@ -104,7 +99,6 @@
     "capillary_voltage",
     "chemical_alphabet",
     "ion_mode",
-    "mass_mode",
     "adducts"
   ]
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
-import ceu.biolab.cmm.CEMSMarkers.domain.MassMode;
 import ceu.biolab.cmm.CEMSMarkers.domain.MtToleranceMode;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
@@ -49,8 +48,6 @@ public class CemsMarkersRequestDTO {
 
     private IonizationMode ionMode = IonizationMode.POSITIVE;
 
-    private MassMode massMode = MassMode.MZ;
-
     private List<String> adducts = new ArrayList<>();
 
     @JsonProperty("tolerance_mode")
@@ -93,12 +90,4 @@ public class CemsMarkersRequestDTO {
         this.ionMode = IonizationMode.valueOf(value.trim().toUpperCase());
     }
 
-    @JsonProperty("mass_mode")
-    public void setMassMode(String value) {
-        this.massMode = MassMode.fromValue(value);
-    }
-
-    public void setMassMode(MassMode massMode) {
-        this.massMode = massMode;
-    }
 }

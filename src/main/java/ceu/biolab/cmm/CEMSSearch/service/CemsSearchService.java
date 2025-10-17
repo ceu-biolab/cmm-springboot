@@ -15,7 +15,9 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
@@ -50,18 +52,18 @@ public class CemsSearchService {
 
     public CemsSearchResponseDTO search(CemsSearchRequestDTO request) {
         if (request == null) {
-            throw new IllegalArgumentException("Request payload cannot be null");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request payload cannot be null");
         }
         validateRequest(request);
 
         String bufferCode = normalizeBufferCode(request.getBufferCode());
         if (bufferCode == null) {
-            throw new IllegalArgumentException("buffer_code is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "buffer_code is required");
         }
 
         Double temperatureValue = request.getTemperature();
         if (temperatureValue == null) {
-            throw new IllegalArgumentException("temperature is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature is required");
         }
         long temperature = Math.round(temperatureValue);
 
@@ -162,16 +164,16 @@ public class CemsSearchService {
 
     private void validateRequest(CemsSearchRequestDTO request) {
         if (request.getMzValues() == null || request.getEffectiveMobilities() == null) {
-            throw new IllegalArgumentException("Both mz_values and effective_mobilities are required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Both mz_values and effective_mobilities are required");
         }
         if (request.getMzValues().isEmpty()) {
-            throw new IllegalArgumentException("At least one mz value must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one mz value must be provided");
         }
         if (request.getMzValues().size() != request.getEffectiveMobilities().size()) {
-            throw new IllegalArgumentException("Number of mz values and effective mobilities must match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of mz values and effective mobilities must match");
         }
         if (request.getAdducts() == null || request.getAdducts().isEmpty()) {
-            throw new IllegalArgumentException("At least one adduct must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
         }
     }
 
@@ -181,7 +183,7 @@ public class CemsSearchService {
         } else if (toleranceMode == MzToleranceMode.MDA) {
             return tolerance * 0.001;
         }
-        throw new IllegalArgumentException("Unsupported m/z tolerance mode: " + toleranceMode);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode);
     }
 
     private double computeMobilityWindow(double effectiveMobility,

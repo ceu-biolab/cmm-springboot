@@ -1,6 +1,5 @@
 package ceu.biolab.cmm.CEMSMarkers.service;
 
-import ceu.biolab.cmm.CEMSMarkers.domain.MassMode;
 import ceu.biolab.cmm.CEMSMarkers.domain.MtToleranceMode;
 import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
@@ -13,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.DoubleUnaryOperator;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 abstract class AbstractCemsMarkerService {
 
@@ -33,13 +34,13 @@ abstract class AbstractCemsMarkerService {
         int massesSize = masses == null ? 0 : masses.size();
         int mtSize = migrationTimes == null ? 0 : migrationTimes.size();
         if (massesSize == 0 || mtSize == 0) {
-            throw new IllegalArgumentException("Both masses and mt arrays must contain at least one value");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Both masses and mt arrays must contain at least one value");
         }
         if (massesSize != mtSize) {
-            throw new IllegalArgumentException("The number of masses must match the number of migration times");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The number of masses must match the number of migration times");
         }
         if (adducts == null || adducts.isEmpty()) {
-            throw new IllegalArgumentException("At least one adduct must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
         }
     }
 

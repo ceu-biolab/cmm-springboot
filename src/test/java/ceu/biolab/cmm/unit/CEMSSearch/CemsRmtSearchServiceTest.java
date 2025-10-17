@@ -17,6 +17,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,7 +50,6 @@ class CemsRmtSearchServiceTest {
         request.setRmtReference("L-Methionine sulfone");
         request.setChemicalAlphabet("ALL");
         request.setIonMode("positive");
-        request.setMassMode("mz");
         request.setAdducts(List.of("[M+H]+"));
         return request;
     }
@@ -79,7 +79,7 @@ class CemsRmtSearchServiceTest {
         when(repository.findReferenceCompoundId(request.getRmtReference()))
                 .thenReturn(OptionalLong.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> service.search(request));
+        assertThrows(ResponseStatusException.class, () -> service.search(request));
     }
 
     @Test
@@ -124,6 +124,6 @@ class CemsRmtSearchServiceTest {
         CemsRmtSearchRequestDTO request = baseRequest();
         request.setBufferCode(" ");
 
-        assertThrows(IllegalArgumentException.class, () -> service.search(request));
+        assertThrows(ResponseStatusException.class, () -> service.search(request));
     }
 }

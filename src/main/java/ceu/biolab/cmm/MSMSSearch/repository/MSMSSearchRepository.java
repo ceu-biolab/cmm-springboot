@@ -145,7 +145,7 @@ public class MSMSSearchRepository {
                 .replace("(:voltage_level)", voltage.toString());
 
         Set<MSMSAnnotation> msmsSet = new HashSet<>();
-        jdbcTemplate.query(sql, (rs, rowNum) -> {
+        jdbcTemplate.query(sql, (rs, _) -> {
             MSMSAnnotation msms = new MSMSAnnotation();
             msms.setCompound(compound);
             msms.setMsmsId(rs.getInt("msms_id"));
@@ -218,7 +218,7 @@ public class MSMSSearchRepository {
     public static Set<MSMSAnnotation> selectBestPerCompound(List<MSMSAnnotation> allSpectra) {
         Map<String, MSMSAnnotation> best = new HashMap<>();
         for (MSMSAnnotation sp : allSpectra) {
-            best.compute(String.valueOf(sp.getCompound().getCompoundId()), (id, currentBest) -> {
+            best.compute(String.valueOf(sp.getCompound().getCompoundId()), (_, currentBest) -> {
                 if (currentBest == null || sp.getMsmsCosineScore() > currentBest.getMsmsCosineScore()) {
                     return sp;
                 } else {

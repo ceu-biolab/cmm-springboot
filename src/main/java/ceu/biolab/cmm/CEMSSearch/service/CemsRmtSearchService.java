@@ -33,7 +33,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CemsRmtSearchService {
@@ -48,17 +50,17 @@ public class CemsRmtSearchService {
 
     public CemsSearchResponseDTO search(CemsRmtSearchRequestDTO request) {
         if (request == null) {
-            throw new IllegalArgumentException("Request payload cannot be null");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request payload cannot be null");
         }
         validateRequest(request);
 
         String bufferCode = normalizeBufferCode(request.getBufferCode());
         if (bufferCode == null) {
-            throw new IllegalArgumentException("buffer is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "buffer is required");
         }
 
         if (request.getTemperature() == null) {
-            throw new IllegalArgumentException("temperature is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature is required");
         }
         long temperature = Math.round(request.getTemperature());
 
@@ -70,7 +72,7 @@ public class CemsRmtSearchService {
 
         OptionalLong referenceIdOptional = repository.findReferenceCompoundId(request.getRmtReference());
         if (referenceIdOptional.isEmpty()) {
-            throw new IllegalArgumentException("Unknown rmt_reference: " + request.getRmtReference());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown rmt_reference: " + request.getRmtReference());
         }
         long referenceCompoundId = referenceIdOptional.getAsLong();
 
@@ -161,19 +163,19 @@ public class CemsRmtSearchService {
 
     private void validateRequest(CemsRmtSearchRequestDTO request) {
         if (request.getMasses() == null || request.getMasses().isEmpty()) {
-            throw new IllegalArgumentException("masses must contain at least one value");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "masses must contain at least one value");
         }
         if (request.getRelativeMigrationTimes() == null || request.getRelativeMigrationTimes().isEmpty()) {
-            throw new IllegalArgumentException("rmt must contain at least one value");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt must contain at least one value");
         }
         if (request.getMasses().size() != request.getRelativeMigrationTimes().size()) {
-            throw new IllegalArgumentException("Number of masses and rmt values must match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of masses and rmt values must match");
         }
         if (request.getAdducts() == null || request.getAdducts().isEmpty()) {
-            throw new IllegalArgumentException("At least one adduct must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
         }
         if (request.getRmtReference() == null || request.getRmtReference().isBlank()) {
-            throw new IllegalArgumentException("rmt_reference is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_reference is required");
         }
     }
 
@@ -183,7 +185,7 @@ public class CemsRmtSearchService {
         } else if (toleranceMode == MzToleranceMode.MDA) {
             return tolerance * 0.001;
         }
-        throw new IllegalArgumentException("Unsupported m/z tolerance mode: " + toleranceMode);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode);
     }
 
     private double computeRmtWindow(RmtToleranceMode toleranceMode, double tolerance, double baseRmt) {

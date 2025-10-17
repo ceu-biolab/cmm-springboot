@@ -1,8 +1,8 @@
 package ceu.biolab.cmm.CEMSSearch.repository;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class CemsSearchRepository {
 
     public List<CemsQueryResponseDTO> findMatchingCompounds(CemsFeatureQueryDTO queryData) throws IOException {
         Resource resource = resourceLoader.getResource("classpath:sql/cems_compound_search_query.sql");
-        String sql = Files.readString(Paths.get(resource.getURI()));
+        String sql = loadSql(resource);
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("massLower", queryData.getMassLower());
@@ -43,5 +43,11 @@ public class CemsSearchRepository {
         params.addValue("temperature", queryData.getTemperature());
 
         return jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(CemsQueryResponseDTO.class));
+    }
+
+    private String loadSql(Resource resource) throws IOException {
+        try (InputStream inputStream = resource.getInputStream()) {
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 }
