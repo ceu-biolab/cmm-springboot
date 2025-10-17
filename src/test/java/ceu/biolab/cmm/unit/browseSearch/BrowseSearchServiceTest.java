@@ -91,4 +91,18 @@ class BrowseSearchServiceTest {
         assertThrows(ResponseStatusException.class, () -> service.search(request));
         verifyNoInteractions(repository);
     }
+
+    @Test
+    void constructorKeepsProvidedFormulaAndName() {
+        BrowseSearchRequest request = new BrowseSearchRequest(
+                "Glucose",
+                "C6H12O6",
+                Set.of(Database.ALL),
+                MetaboliteType.ALL,
+                false
+        );
+
+        assertEquals("Glucose", request.getCompoundName());
+        assertEquals("C6H12O6", request.getFormula());
+    }
 }
