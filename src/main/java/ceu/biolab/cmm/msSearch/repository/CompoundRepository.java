@@ -1,6 +1,5 @@
 package ceu.biolab.cmm.msSearch.repository;
 
-import ceu.biolab.*;
 import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 
@@ -246,7 +245,7 @@ public class CompoundRepository {
         WHERE cp.compound_id = ?
     """;
 
-        List<Pathway> pathwayList = jdbcTemplate.query(sql, new Object[]{compoundId}, (rs, rowNum) -> {
+        List<Pathway> pathwayList = jdbcTemplate.query(sql, ps -> ps.setInt(1, compoundId), (rs, _) -> {
             Pathway pathway = new Pathway();
             pathway.setPathwayId(rs.getInt("pathway_id"));
             pathway.setPathwayMap(rs.getString("pathway_map"));

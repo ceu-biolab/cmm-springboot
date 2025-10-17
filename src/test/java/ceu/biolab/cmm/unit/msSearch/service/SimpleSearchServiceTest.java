@@ -4,7 +4,6 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
-import ceu.biolab.cmm.shared.domain.msFeature.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,23 +95,4 @@ public class SimpleSearchServiceTest {
             assertEquals(monoMass, (lowerBound + upperBound) / 2, 1e-6);
         }
     }
-
-    private AnnotatedFeature createEmptyAnnotatedFeature(double mz) {
-        AnnotatedFeature feature = new AnnotatedFeature(mz);
-        feature.setFeature(new MSFeature(mz));
-        return feature;
-    }
-
-    // Extract all compounds from a list of annotated features
-    private List<Annotation> extractAnnotations(List<AnnotatedFeature> features) {
-        List<Annotation> compounds = new ArrayList<>();
-        for (AnnotatedFeature feature : features) {
-            for (AnnotationsByAdduct commpoundsAnnotatedByAdduct : feature.getAnnotationsByAdducts()) {
-                compounds.addAll(commpoundsAnnotatedByAdduct.getAnnotations());
-            }
-        }
-        return compounds;
-    }
 }
-
-//TODO test about methods of AdductTransformer

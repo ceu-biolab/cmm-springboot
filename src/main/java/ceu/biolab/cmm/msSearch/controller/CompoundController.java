@@ -3,10 +3,7 @@ import ceu.biolab.cmm.msSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.service.CompoundService;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-
-import org.slf4j.Logger;
 
 @RestController
 @RequestMapping("/api/compounds")
@@ -14,7 +11,7 @@ import org.slf4j.Logger;
 
 public class CompoundController {
     private final CompoundService compoundService;
-    private static final Logger logger = LoggerFactory.getLogger(CompoundController.class);
+    // private static final Logger logger = LoggerFactory.getLogger(CompoundController.class);
 
     public CompoundController(CompoundService compoundService) {
         this.compoundService = compoundService;

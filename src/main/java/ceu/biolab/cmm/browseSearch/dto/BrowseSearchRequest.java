@@ -18,7 +18,7 @@ public class BrowseSearchRequest {
         if(searchTerm == null || searchTerm.isEmpty()) {
             this.compoundName = "";
         } else this.compoundName = searchTerm;
-        if(searchFormula != null || !searchFormula.isEmpty()) {
+        if(searchFormula == null || !searchFormula.isEmpty()) {
             this.formula = "";
         } else this.formula = searchFormula;
         this.databases = databases;

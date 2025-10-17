@@ -3,17 +3,12 @@ package ceu.biolab.cmm.browseSearch.service;
 import ceu.biolab.cmm.browseSearch.dto.BrowseQueryResponse;
 import ceu.biolab.cmm.browseSearch.dto.BrowseSearchRequest;
 import ceu.biolab.cmm.browseSearch.repository.BrowseSearchRepository;
-import ceu.biolab.cmm.shared.domain.Database;
-import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class BrowseSearchService {
@@ -25,9 +20,6 @@ public class BrowseSearchService {
     }
 
     public BrowseQueryResponse search (BrowseSearchRequest request) {
-        String compoundName = request.getCompoundName();
-        String formula = request.getFormula();
-
         if (!hasValidName(request) && !hasValidFormula(request)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide a compound name (min 3 characters) or a formula.");
         }
@@ -44,16 +36,9 @@ public class BrowseSearchService {
 
         // Ejecución principal
         try {
-            System.out.println("Searching for: " + request.getCompoundName() +
-                    " with formula: " + request.getFormula() +
-                    " in databases: " + Arrays.toString(request.getDatabases().toArray()) +
-                    " and metabolite type: " + request.getMetaboliteType().name() +
-                    " with exact name: " + request.isExactName());
             return browseSearchRepository.findMatchingCompounds(request);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error during compound search.");
-            return new BrowseQueryResponse(); // vacío si hay error
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error processing the request.", e);
         }
     }
 

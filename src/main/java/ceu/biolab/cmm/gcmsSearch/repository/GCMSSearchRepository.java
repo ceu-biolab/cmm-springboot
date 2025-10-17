@@ -58,7 +58,7 @@ public class GCMSSearchRepository {
         SINCE THE INFORMATION OBTAINED FROM THE DATABASE CORRESPONDS TO TWO DIFFERENT CLASSES,
         A RowMapper IS USED, AS IT ALLOWS TO STORE THE DATA IN DIFFERENT CLASSES
         */
-        RowMapper<GCMSCompound> gcmsCompoundCustomMapper = (rs, rowNum) -> {
+        RowMapper<GCMSCompound> gcmsCompoundCustomMapper = (rs, _) -> {
             //CREATION OF THE GCMSCompound
             Number compoundTypeDb = (Number) rs.getObject("compound_type");
             Integer compoundTypeRaw = compoundTypeDb == null ? null : compoundTypeDb.intValue();

@@ -6,6 +6,7 @@ import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import lombok.Data;
+import lombok.Builder.Default;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -32,7 +33,8 @@ public class GCMSQueryResponseDTO {
 
     private DerivatizationMethod dertype;
     private ColumnType gcColumn;
-    private List<Spectrum> GCMSSpectrum = null;
+    @Default
+    private List<Spectrum> GCMSSpectrum = new ArrayList<>();
 
     private double RI;
 
