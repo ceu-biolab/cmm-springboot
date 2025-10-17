@@ -45,8 +45,14 @@ public class BatchAdvancedSearchService {
                 Map<Double, Double> compositeSpectrum = compositeSpectrumList.get(i);
 
                 // Validate adducts upfront so invalid inputs fail fast
-                Set<String> canonicalAdducts = adducts.stream()
-                        .map(candidate -> AdductService.requireDefinition(batchAdvancedRequest.getIonizationMode(), candidate).canonical())
+                List<AdductDefinition> orderedDefinitions = AdductService.sortByPriority(
+                        adducts.stream()
+                                .map(candidate -> AdductService.requireDefinition(batchAdvancedRequest.getIonizationMode(), candidate))
+                                .collect(Collectors.toCollection(LinkedHashSet::new)),
+                        batchAdvancedRequest.getIonizationMode());
+
+                Set<String> canonicalAdducts = orderedDefinitions.stream()
+                        .map(AdductDefinition::canonical)
                         .collect(Collectors.toCollection(LinkedHashSet::new));
 
                 String detectedAdduct = AdductService.detectAdduct(

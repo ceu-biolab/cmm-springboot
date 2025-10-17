@@ -110,7 +110,11 @@ public class CompoundRepository {
                 return annotatedMSFeature;
             }
 
-            for (AdductDefinition adductDefinition : adductsToProcess.values()) {
+            List<AdductDefinition> orderedAdducts = AdductService.sortByPriority(
+                    new LinkedHashSet<>(adductsToProcess.values()), ionizationMode);
+            logger.info("ordered adducts: {}", orderedAdducts.stream().map(AdductDefinition::canonical).toList());
+
+            for (AdductDefinition adductDefinition : orderedAdducts) {
                 String adductString = adductDefinition.canonical();
 
                 Set<Compound> compoundsSet = new HashSet<>();

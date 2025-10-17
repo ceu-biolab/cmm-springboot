@@ -20,6 +20,15 @@ import java.util.stream.Collectors;
  * Centralised adduct utilities backed exclusively by the CSV definitions.
  */
 public final class AdductService {
+    private static final Map<IonizationMode, Map<String, Integer>> PRIORITY = Map.of(
+            IonizationMode.POSITIVE, legacyPriority(
+                    "[M+Na]+", "[M+2H]2+", "[M+H]+", "[M+K]+", "[M+NH4]+", "[M+H-H2O]+",
+                    "[M+H+NH4]2+", "[M+H+HCOONa]+", "[M+H-2H2O]+", "[M+C3H9ONa]+", "[M+Li]+"),
+            IonizationMode.NEGATIVE, legacyPriority(
+                    "[M-H]-", "[M+Cl]-", "[M+HCOOH-H]-", "[M-H-H2O]-", "[M+Na-2H]-", "[M+K-2H]-",
+                    "[M+Hac-H]-", "[M+FA-H]-")
+    );
+
     private AdductService() {
     }
 
@@ -101,6 +110,16 @@ public final class AdductService {
         return Optional.empty();
     }
 
+    public static List<AdductDefinition> sortByPriority(Set<AdductDefinition> definitions, IonizationMode mode) {
+        Map<String, Integer> priorities = PRIORITY.getOrDefault(mode, Map.of());
+        Comparator<AdductDefinition> comparator = Comparator
+                .comparingInt((AdductDefinition def) -> priorities.getOrDefault(def.canonical(), Integer.MAX_VALUE))
+                .thenComparing(AdductDefinition::canonical);
+        return definitions.stream()
+                .sorted(comparator)
+                .toList();
+    }
+
     private static Set<AdductDefinition> normalisedDefinitions(IonizationMode mode, Set<String> adducts) {
         if (adducts == null || adducts.isEmpty()) {
             return Set.of();
@@ -114,5 +133,13 @@ public final class AdductService {
 
     public static Map<String, AdductDefinition> definitionMap(IonizationMode ionizationMode) {
         return new LinkedHashMap<>(AdductCatalog.definitionsFor(ionizationMode));
+    }
+
+    private static Map<String, Integer> legacyPriority(String... canonicalOrder) {
+        Map<String, Integer> priorities = new LinkedHashMap<>();
+        for (int i = 0; i < canonicalOrder.length; i++) {
+            priorities.put(canonicalOrder[i], i);
+        }
+        return priorities;
     }
 }
