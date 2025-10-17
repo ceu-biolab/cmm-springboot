@@ -22,8 +22,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,7 +56,7 @@ public class MSMSSearchRepository {
 
         // Load window search SQL
         Resource windowResource = resourceLoader.getResource("classpath:sql/MSMS/WindowSearch.sql");
-        String windowSql = new String(Files.readAllBytes(Paths.get(windowResource.getURI())));
+        String windowSql = loadSql(windowResource);
 
         List<AdductDefinition> adductDefinitions = queryData.getAdducts().stream()
                 .map(adduct -> AdductService.requireDefinition(queryData.getIonizationMode(), adduct))
@@ -133,7 +133,7 @@ public class MSMSSearchRepository {
     public Set<MSMSAnnotation> getMsmsForCompound(Compound compound, IonizationMode ionMode,
                                                  CIDEnergy voltage, AdductDefinition adduct, Double queryMz) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql");
-        String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
+        String sql = loadSql(rsrc);
         sql = sql.replace("(:compound_id)", String.valueOf(compound.getCompoundId()));
 
         int mode = switch (ionMode) {
@@ -178,7 +178,7 @@ public class MSMSSearchRepository {
 
     public Spectrum getPeaksForMsms(int msmsId, Double precursorMz) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/PeakSearch.sql");
-        String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
+        String sql = loadSql(rsrc);
         sql = sql.replace("(:msmsId)", String.valueOf(msmsId));
 
         List<MSPeak> peaks = new ArrayList<>();
@@ -256,5 +256,11 @@ public class MSMSSearchRepository {
     }
 
     private static final Pattern BRACKET_CODE_PATTERN = Pattern.compile(".*\\[(.+?)\\].*");
+
+    private String loadSql(Resource resource) throws IOException {
+        try (InputStream inputStream = resource.getInputStream()) {
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
 
 }

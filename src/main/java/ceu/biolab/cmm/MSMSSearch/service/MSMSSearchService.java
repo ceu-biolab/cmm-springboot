@@ -36,6 +36,12 @@ public class MSMSSearchService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CID energy is required.");
         }
 
+        if (request.getFragmentsMZsIntensities() == null
+                || request.getFragmentsMZsIntensities().getPeaks() == null
+                || request.getFragmentsMZsIntensities().getPeaks().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fragment peaks are required.");
+        }
+
         // Execute search
         try {
             return msmsSearchRepository.findMatchingCompoundsAndSpectra(request);
