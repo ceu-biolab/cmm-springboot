@@ -4,6 +4,7 @@ package ceu.biolab.cmm.lcmsSearch.controller;
 import ceu.biolab.cmm.lcmsSearch.dto.BatchAdvancedSearchRequestDTO;
 import ceu.biolab.cmm.lcmsSearch.service.BatchAdvancedSearchService;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class BatchAdvancedSearchController {
     }
 
     @PostMapping("/batch-advanced-search")
-    public ResponseEntity<List<AnnotatedFeature>> scoreAnnotatedMSFeature(@RequestBody BatchAdvancedSearchRequestDTO request) {
+    public ResponseEntity<List<AnnotatedFeature>> scoreAnnotatedMSFeature(@Valid @RequestBody BatchAdvancedSearchRequestDTO request) {
         List<AnnotatedFeature> annotatedScoredFeatures = batchAdvancedSearchService.annotateAndScoreCmpoundsByMz(request);
         return ResponseEntity.ok(annotatedScoredFeatures);
     }

@@ -5,23 +5,63 @@ import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 public class BatchAdvancedSearchRequestDTO {
+    @NotEmpty
     private List<Double> mzs;
+    @NotNull
     private MzToleranceMode mzToleranceMode;
+    @NotNull
+    @PositiveOrZero
     private Double tolerance;
+    @NotNull
     private IonizationMode ionizationMode;
+    @NotNull
     private Optional<String> detectedAdduct;
+    @NotEmpty
     private Set<String> adductsString;
+    @NotEmpty
     private Set<Database> databases;
+    @NotNull
     private MetaboliteType metaboliteType;
+    @NotEmpty
     private List<Double> retentionTimes;
+    @NotEmpty
     private List<Map<Double, Double>> compositeSpectrum;
+    @NotNull
     private FormulaType formulaType;
     private boolean deuterium;
+    @NotNull
+    @NotBlank
     private String modifiersType;
+
+    public BatchAdvancedSearchRequestDTO() {
+        this.mzs = new ArrayList<>();
+        this.mzToleranceMode = MzToleranceMode.PPM;
+        this.tolerance = 0.0;
+        this.ionizationMode = IonizationMode.POSITIVE;
+        this.detectedAdduct = Optional.empty();
+        this.adductsString = new LinkedHashSet<>();
+        this.databases = new LinkedHashSet<>();
+        this.metaboliteType = MetaboliteType.ALL;
+        this.retentionTimes = new ArrayList<>();
+        this.compositeSpectrum = new ArrayList<>();
+        this.formulaType = FormulaType.CHNOPS;
+        this.deuterium = false;
+        this.modifiersType = "";
+    }
 
     public BatchAdvancedSearchRequestDTO(List<Double> mzs, MzToleranceMode mzToleranceMode, Double tolerance,
                                          IonizationMode ionizationMode, Optional<String> detectedAdduct, Set<String> adductsString,
@@ -31,7 +71,7 @@ public class BatchAdvancedSearchRequestDTO {
         this.mzToleranceMode = mzToleranceMode;
         this.tolerance = tolerance;
         this.ionizationMode = ionizationMode;
-        this.detectedAdduct = detectedAdduct;
+        this.detectedAdduct = detectedAdduct == null ? Optional.empty() : detectedAdduct;
         this.adductsString = adductsString;
         this.databases = databases;
         this.metaboliteType = metaboliteType;
@@ -79,7 +119,7 @@ public class BatchAdvancedSearchRequestDTO {
     }
 
     public void setDetectedAdduct(Optional<String> detectedAdduct) {
-        this.detectedAdduct = detectedAdduct;
+        this.detectedAdduct = detectedAdduct == null ? Optional.empty() : detectedAdduct;
     }
 
     public FormulaType getFormulaType() {
