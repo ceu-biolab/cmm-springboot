@@ -3,7 +3,12 @@ import ceu.biolab.cmm.msSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.service.CompoundService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/compounds")
@@ -18,17 +23,14 @@ public class CompoundController {
     }
 
     @PostMapping("/simple-search")
-    public RTSearchResponseDTO annotateMSFeature(@RequestBody CompoundSimpleSearchRequestDTO request) {
-        if (request.getMz() == null) {
-            return new RTSearchResponseDTO();
-        }
+    public RTSearchResponseDTO annotateMSFeature(@Valid @RequestBody CompoundSimpleSearchRequestDTO request) {
         return compoundService.findCompoundsByMz(request);
     }
 
     @PostMapping("/batch-search")
-    public RTSearchResponseDTO annotateMSFeatures(@RequestBody CompoundBatchSearchRequestDTO request) {
-        if (request.getMzValues() == null || request.getMzValues().isEmpty()) {
-            return new RTSearchResponseDTO();
+    public RTSearchResponseDTO annotateMSFeatures(@Valid @RequestBody CompoundBatchSearchRequestDTO request) {
+        if (request.getMzValues().stream().anyMatch(Objects::isNull)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mzValues must not contain null entries.");
         }
 
         RTSearchResponseDTO response = new RTSearchResponseDTO();
@@ -54,4 +56,3 @@ public class CompoundController {
     }
 
 }
-

@@ -20,9 +20,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -31,9 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.nio.charset.StandardCharsets;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -73,7 +75,16 @@ public class CompoundRepository {
         CompoundType compoundType = null;
 
         if (mz == null || tolerance == null || mzToleranceMode == null || ionizationMode == null) {
-            return annotatedMSFeature;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz, tolerance, mzToleranceMode, and ionizationMode are required.");
+        }
+        if (tolerance < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be non-negative.");
+        }
+        if (adductsString == null || adductsString.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided.");
+        }
+        if (databases == null || databases.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one database must be provided.");
         }
 
         if (metaboliteType == MetaboliteType.ONLYLIPIDS) {
@@ -94,19 +105,20 @@ public class CompoundRepository {
             logger.info("detected adduct: {}", detectedAdduct);
             logger.info(" adductS: {}", adductsString);
 
-            if (detectedAdduct != null && detectedAdduct.isPresent() && !detectedAdduct.isEmpty() && StringUtils.isNotBlank(detectedAdduct.get())) {
+            detectedAdduct = detectedAdduct == null ? Optional.empty() : detectedAdduct;
+
+            if (detectedAdduct.isPresent() && StringUtils.isNotBlank(detectedAdduct.get())) {
                 AdductDefinition detectedDefinition = AdductService.requireDefinition(ionizationMode, detectedAdduct.get().trim());
                 adductsToProcess.putIfAbsent(detectedDefinition.canonical(), detectedDefinition);
-            } else {
-                for (String adduct : adductsString) {
-                    AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct);
-                    adductsToProcess.putIfAbsent(definition.canonical(), definition);
-                }
+            }
+            for (String adduct : adductsString) {
+                AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct);
+                adductsToProcess.putIfAbsent(definition.canonical(), definition);
             }
 
             logger.info(" adductS process: {}", adductsToProcess);
-            if (adductsToProcess == null || adductsToProcess.isEmpty()) {
-                return annotatedMSFeature;
+            if (adductsToProcess.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No valid adducts supplied for the selected ionization mode.");
             }
 
             List<AdductDefinition> orderedAdducts = AdductService.sortByPriority(
@@ -192,8 +204,12 @@ public class CompoundRepository {
                 annotationsByAdduct.setAnnotations(annotations);
             }
             annotatedMSFeature.add(annotatedFeature);
-        }catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to annotate MS feature", e);
         }
         return annotatedMSFeature;
     }

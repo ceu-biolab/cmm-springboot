@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.msSearch.dto;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -9,18 +10,43 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 
 public class CompoundSimpleSearchRequestDTO {
+    @NotNull
     private Double mz;
+    @NotNull
     private MzToleranceMode mzToleranceMode;
+    @NotNull
+    @PositiveOrZero
     private Double tolerance;
+    @NotNull
     private IonizationMode ionizationMode;
+    @NotNull
     private Optional<String> detectedAdduct;
+    @NotNull
     private Optional<FormulaType> formulaType;
+    @NotEmpty
     private Set<String> adductsString;
+    @NotEmpty
     private Set<Database> databases;
+    @NotNull
     private MetaboliteType metaboliteType;
+
+    public CompoundSimpleSearchRequestDTO() {
+        this.mz = 0.0;
+        this.mzToleranceMode = MzToleranceMode.PPM;
+        this.tolerance = 0.0;
+        this.ionizationMode = IonizationMode.POSITIVE;
+        this.detectedAdduct = Optional.empty();
+        this.formulaType = Optional.empty();
+        this.adductsString = new LinkedHashSet<>();
+        this.databases = new LinkedHashSet<>();
+        this.metaboliteType = MetaboliteType.ALL;
+    }
 
     public CompoundSimpleSearchRequestDTO(Double mz, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,
                                           Set<String> adductsString, Optional<String> detectedAdduct, Optional<FormulaType> formulaType, Set<Database> databases, MetaboliteType metaboliteType) {
@@ -32,10 +58,10 @@ public class CompoundSimpleSearchRequestDTO {
             this.tolerance = tolerance;
         }
         this.ionizationMode = ionizationMode;
-        this.adductsString = adductsString;
-        this.detectedAdduct = detectedAdduct;
-        this.formulaType = formulaType;
-        this.databases = databases;
+        this.adductsString = adductsString == null ? new LinkedHashSet<>() : adductsString;
+        this.detectedAdduct = detectedAdduct == null ? Optional.empty() : detectedAdduct;
+        this.formulaType = formulaType == null ? Optional.empty() : formulaType;
+        this.databases = databases == null ? new LinkedHashSet<>() : databases;
         this.metaboliteType = metaboliteType;
     }
 
@@ -76,7 +102,7 @@ public class CompoundSimpleSearchRequestDTO {
     }
 
     public void setAdductsString(Set<String> adductsString) {
-        this.adductsString = adductsString;
+        this.adductsString = adductsString == null ? new LinkedHashSet<>() : adductsString;
     }
 
     public Optional<String> getDetectedAdduct() {
@@ -84,7 +110,7 @@ public class CompoundSimpleSearchRequestDTO {
     }
 
     public void setDetectedAdduct(Optional<String> detectedAdduct) {
-        this.detectedAdduct = detectedAdduct;
+        this.detectedAdduct = detectedAdduct == null ? Optional.empty() : detectedAdduct;
     }
 
     public Optional<FormulaType> getFormulaType() {
@@ -92,7 +118,7 @@ public class CompoundSimpleSearchRequestDTO {
     }
 
     public void setFormulaType(Optional<FormulaType> formulaType) {
-        this.formulaType = formulaType;
+        this.formulaType = formulaType == null ? Optional.empty() : formulaType;
     }
 
     public Set<Database> getDatabases() {
@@ -100,7 +126,7 @@ public class CompoundSimpleSearchRequestDTO {
     }
 
     public void setDatabases(Set<Database> databases) {
-        this.databases = databases;
+        this.databases = databases == null ? new LinkedHashSet<>() : databases;
     }
 
     public MetaboliteType getMetaboliteType() {
@@ -141,5 +167,4 @@ public class CompoundSimpleSearchRequestDTO {
                 '}';
     }
 }
-
 
