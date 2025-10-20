@@ -26,6 +26,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 class Cems1MarkerServiceTest {
@@ -62,8 +63,7 @@ class Cems1MarkerServiceTest {
         sampleRequest.setCapillaryVoltage(30);
         sampleRequest.setChemicalAlphabet("CHNOPS");
         sampleRequest.setIonMode("positive");
-        sampleRequest.setMassMode("mz");
-        sampleRequest.setAdducts(List.of("M+H", "M+Na"));
+        sampleRequest.setAdducts(List.of("[M+H]+", "[M+Na]+"));
     }
 
     @Test
@@ -108,6 +108,6 @@ class Cems1MarkerServiceTest {
         when(markersRepository.findMarkerMobility(any(), any(), anyDouble(), any(CePolarity.class)))
                 .thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> service.search(sampleRequest));
+        assertThrows(ResponseStatusException.class, () -> service.search(sampleRequest));
     }
 }

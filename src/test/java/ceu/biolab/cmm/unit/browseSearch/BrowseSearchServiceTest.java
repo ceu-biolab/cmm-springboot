@@ -12,7 +12,6 @@ import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
@@ -91,5 +90,19 @@ class BrowseSearchServiceTest {
 
         assertThrows(ResponseStatusException.class, () -> service.search(request));
         verifyNoInteractions(repository);
+    }
+
+    @Test
+    void constructorKeepsProvidedFormulaAndName() {
+        BrowseSearchRequest request = new BrowseSearchRequest(
+                "Glucose",
+                "C6H12O6",
+                Set.of(Database.ALL),
+                MetaboliteType.ALL,
+                false
+        );
+
+        assertEquals("Glucose", request.getCompoundName());
+        assertEquals("C6H12O6", request.getFormula());
     }
 }

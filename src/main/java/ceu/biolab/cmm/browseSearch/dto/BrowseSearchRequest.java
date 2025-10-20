@@ -15,12 +15,8 @@ public class BrowseSearchRequest {
     private boolean exactName;
 
     public BrowseSearchRequest(String searchTerm, String searchFormula, Set<Database> databases, MetaboliteType metaboliteType, boolean exactName) {
-        if(searchTerm == null || searchTerm.isEmpty()) {
-            this.compoundName = "";
-        } else this.compoundName = searchTerm;
-        if(searchFormula != null || !searchFormula.isEmpty()) {
-            this.formula = "";
-        } else this.formula = searchFormula;
+        this.compoundName = (searchTerm == null || searchTerm.isEmpty()) ? "" : searchTerm;
+        this.formula = (searchFormula == null || searchFormula.isEmpty()) ? "" : searchFormula;
         this.databases = databases;
         this.metaboliteType = metaboliteType;
         this.exactName = exactName;

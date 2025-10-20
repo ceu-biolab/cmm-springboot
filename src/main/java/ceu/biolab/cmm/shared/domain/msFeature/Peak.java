@@ -2,8 +2,6 @@ package ceu.biolab.cmm.shared.domain.msFeature;
 
 import lombok.Data;
 
-import java.util.Optional;
-import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 @Data

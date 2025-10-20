@@ -15,7 +15,9 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
@@ -34,7 +36,8 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 
 @Service
 public class CemsSearchService {
@@ -49,18 +52,18 @@ public class CemsSearchService {
 
     public CemsSearchResponseDTO search(CemsSearchRequestDTO request) {
         if (request == null) {
-            throw new IllegalArgumentException("Request payload cannot be null");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request payload cannot be null");
         }
         validateRequest(request);
 
         String bufferCode = normalizeBufferCode(request.getBufferCode());
         if (bufferCode == null) {
-            throw new IllegalArgumentException("buffer_code is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "buffer_code is required");
         }
 
         Double temperatureValue = request.getTemperature();
         if (temperatureValue == null) {
-            throw new IllegalArgumentException("temperature is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature is required");
         }
         long temperature = Math.round(temperatureValue);
 
@@ -69,8 +72,6 @@ public class CemsSearchService {
 
         IonizationMode ionizationMode = request.getIonizationMode();
         int ionizationModeId = CeIonizationModeMapper.toDatabaseValue(ionizationMode);
-
-        Map<String, String> adductMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
 
         CemsSearchResponseDTO response = new CemsSearchResponseDTO();
 
@@ -92,22 +93,8 @@ public class CemsSearchService {
             featureAnnotations.setFeature(featureDTO);
 
             for (String adduct : request.getAdducts()) {
-                String trimmedAdduct = adduct.trim();
-                String adductValueRaw = adductMap.get(trimmedAdduct);
-                if (adductValueRaw == null) {
-                    LOGGER.warn("Skipping adduct '{}' because it is not supported for ionization mode {}", trimmedAdduct, ionizationMode);
-                    continue;
-                }
-
-                double adductValue;
-                try {
-                    adductValue = Double.parseDouble(adductValueRaw);
-                } catch (NumberFormatException ex) {
-                    LOGGER.warn("Unable to parse adduct mass difference '{}' for adduct '{}'", adductValueRaw, trimmedAdduct, ex);
-                    continue;
-                }
-
-                double neutralMass = AdductProcessing.getMassToSearch(mz, trimmedAdduct, adductValue);
+                AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                double neutralMass = AdductService.neutralMassFromMz(mz, definition);
                 double massWindow = computeMassWindow(request.getMzToleranceMode(), request.getMzTolerance(), neutralMass);
                 double mobilityWindow = computeMobilityWindow(
                         effMob,
@@ -133,7 +120,7 @@ public class CemsSearchService {
                 }
                 candidates = deduplicateCandidates(candidates, neutralMass, effMob);
 
-                CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(trimmedAdduct);
+                CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(definition.canonical());
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
                     Compound compound = toCompound(candidate);
@@ -142,7 +129,7 @@ public class CemsSearchService {
                     }
 
                     Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), neutralMass);
-                    Double mzCalc = computeTheoreticalMz(candidate.getMass(), trimmedAdduct, ionizationMode);
+                    Double mzCalc = computeTheoreticalMz(candidate.getMass(), definition);
                     Double mobilityErrorPct = computeMobilityErrorPct(candidate.getExperimentalEffMob(), effMob);
 
                     CeAnnotationDTO annotation = CeAnnotationDTO.builder()
@@ -177,16 +164,16 @@ public class CemsSearchService {
 
     private void validateRequest(CemsSearchRequestDTO request) {
         if (request.getMzValues() == null || request.getEffectiveMobilities() == null) {
-            throw new IllegalArgumentException("Both mz_values and effective_mobilities are required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Both mz_values and effective_mobilities are required");
         }
         if (request.getMzValues().isEmpty()) {
-            throw new IllegalArgumentException("At least one mz value must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one mz value must be provided");
         }
         if (request.getMzValues().size() != request.getEffectiveMobilities().size()) {
-            throw new IllegalArgumentException("Number of mz values and effective mobilities must match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of mz values and effective mobilities must match");
         }
         if (request.getAdducts() == null || request.getAdducts().isEmpty()) {
-            throw new IllegalArgumentException("At least one adduct must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
         }
     }
 
@@ -196,7 +183,7 @@ public class CemsSearchService {
         } else if (toleranceMode == MzToleranceMode.MDA) {
             return tolerance * 0.001;
         }
-        throw new IllegalArgumentException("Unsupported m/z tolerance mode: " + toleranceMode);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode);
     }
 
     private double computeMobilityWindow(double effectiveMobility,
@@ -225,14 +212,14 @@ public class CemsSearchService {
         return (candidateMass - targetMass) / targetMass * 1e6;
     }
 
-    private Double computeTheoreticalMz(Double neutralMass, String adduct, IonizationMode ionizationMode) {
+    private Double computeTheoreticalMz(Double neutralMass, AdductDefinition definition) {
         if (neutralMass == null) {
             return null;
         }
         try {
-            return AdductProcessing.getMassOfAdductFromMonoWeight(neutralMass, adduct, ionizationMode);
+            return AdductService.mzFromNeutralMass(neutralMass, definition);
         } catch (RuntimeException ex) {
-            LOGGER.warn("Unable to compute theoretical m/z for adduct '{}'", adduct, ex);
+            LOGGER.warn("Unable to compute theoretical m/z for adduct '{}'", definition.canonical(), ex);
             return null;
         }
     }

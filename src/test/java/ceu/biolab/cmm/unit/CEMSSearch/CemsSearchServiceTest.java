@@ -11,10 +11,11 @@ import ceu.biolab.cmm.CEMSSearch.service.CemsSearchService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ class CemsSearchServiceTest {
         request.setPolarity("Reverse");
         request.setIonizationMode("Negative");
         request.setChemicalAlphabet("ALL");
-        request.setAdducts(List.of("M-H"));
+        request.setAdducts(List.of("[M-H]-"));
         request.setMzValues(List.of(100.0));
         request.setEffectiveMobilities(List.of(1500.0));
         request.setMzToleranceMode("ppm");
@@ -74,7 +75,7 @@ class CemsSearchServiceTest {
         CemsSearchRequestDTO request = baseRequest();
         request.setBufferCode(" ");
 
-        assertThrows(IllegalArgumentException.class, () -> service.search(request));
+        assertThrows(ResponseStatusException.class, () -> service.search(request));
     }
 
     @Test
@@ -82,7 +83,7 @@ class CemsSearchServiceTest {
         CemsSearchRequestDTO request = baseRequest();
         request.setEffectiveMobilities(List.of(1500.0, 1600.0));
 
-        assertThrows(IllegalArgumentException.class, () -> service.search(request));
+        assertThrows(ResponseStatusException.class, () -> service.search(request));
     }
 
     @Test
@@ -90,7 +91,7 @@ class CemsSearchServiceTest {
         CemsSearchRequestDTO request = baseRequest();
         request.setTemperature(null);
 
-        assertThrows(IllegalArgumentException.class, () -> service.search(request));
+        assertThrows(ResponseStatusException.class, () -> service.search(request));
     }
 
     @Test

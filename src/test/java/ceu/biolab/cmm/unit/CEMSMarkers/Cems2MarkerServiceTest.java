@@ -26,6 +26,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 class Cems2MarkerServiceTest {
@@ -62,17 +63,14 @@ class Cems2MarkerServiceTest {
         sampleRequest.setMarker2Time(25.29);
         sampleRequest.setChemicalAlphabet("CHNOPS");
         sampleRequest.setIonMode("positive");
-        sampleRequest.setMassMode("mz");
-        sampleRequest.setAdducts(List.of("M+H", "M+Na"));
+        sampleRequest.setAdducts(List.of("[M+H]+", "[M+Na]+"));
     }
 
     @Test
     void searchComputesMobilitiesAndDelegatesToCemsSearch() {
         when(markersRepository.findMarkerMobility(any(), any(), anyDouble(), any(CePolarity.class)))
-                .thenReturn(
-                        Optional.of(new MarkerMobility(774.7394, "FORMIC_ACID_1M", CePolarity.DIRECT)),
-                        Optional.of(new MarkerMobility(-43.8585522259217, "FORMIC_ACID_1M", CePolarity.DIRECT))
-                );
+                .thenReturn(Optional.of(new MarkerMobility(774.7394, "FORMIC_ACID_1M", CePolarity.DIRECT)))
+                .thenReturn(Optional.of(new MarkerMobility(-43.8585522259217, "FORMIC_ACID_1M", CePolarity.DIRECT)));
         CemsSearchResponseDTO expectedResponse = new CemsSearchResponseDTO();
         when(cemsSearchService.search(any(CemsSearchRequestDTO.class))).thenReturn(expectedResponse);
 
@@ -111,6 +109,6 @@ class Cems2MarkerServiceTest {
         when(markersRepository.findMarkerMobility(any(), any(), anyDouble(), any(CePolarity.class)))
                 .thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> service.search(sampleRequest));
+        assertThrows(ResponseStatusException.class, () -> service.search(sampleRequest));
     }
 }

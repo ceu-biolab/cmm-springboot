@@ -12,7 +12,9 @@ import ceu.biolab.cmm.shared.domain.msFeature.Peak;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import ceu.biolab.cmm.shared.service.SpectrumScorer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +42,8 @@ public class GCMSSearchService {
         double RI = request.getRetentionIndex();
         double RITolerance = request.getRetentionIndexTolerance(); //%
         if (RITolerance < 0 || RITolerance > 100) {
-            throw new IllegalArgumentException("Retention index tolerance must be between 0 and 100%: " + request.getRetentionIndexTolerance());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Retention index tolerance must be between 0 and 100%: " + request.getRetentionIndexTolerance());
         }
         double RIToleranceFinal = RITolerance * 0.01;
 
@@ -106,7 +109,7 @@ public class GCMSSearchService {
             response.addGcmsFeatures(gcmsFeature);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to execute GC-MS search", e);
         }
 
         return response;

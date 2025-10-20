@@ -13,8 +13,8 @@ import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.shared.service.SpectrumScorer;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
-import ceu.biolab.cmm.shared.service.adduct.AdductTransformer;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -22,8 +22,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,24 +54,20 @@ public class MSMSSearchRepository {
         Set<MSMSAnnotation> matchedSpectra = new HashSet<>();
         MSMSSearchResponseDTO responseDTO = new MSMSSearchResponseDTO(new ArrayList<>());
 
-        // Determine adduct map based on ionization mode
-        Map<String, String> adductMap = AdductProcessing.getAdductMapByIonizationMode(queryData.getIonizationMode());
-
         // Load window search SQL
         Resource windowResource = resourceLoader.getResource("classpath:sql/MSMS/WindowSearch.sql");
-        String windowSql = new String(Files.readAllBytes(Paths.get(windowResource.getURI())));
+        String windowSql = loadSql(windowResource);
+
+        List<AdductDefinition> adductDefinitions = queryData.getAdducts().stream()
+                .map(adduct -> AdductService.requireDefinition(queryData.getIonizationMode(), adduct))
+                .toList();
 
         // Iterate over each adduct
-        for (String adduct : queryData.getAdducts()) {
+        for (AdductDefinition adductDefinition : adductDefinitions) {
             Set<Compound> compoundsSet = new HashSet<>();
-            if (!adductMap.containsKey(adduct)) {
-                throw new IllegalArgumentException("Adduct not found: " + adduct);
-            }
 
             // Compute neutral mass and tolerance window
-            double neutralMass = AdductTransformer.getMonoisotopicMassFromMZ(
-                    queryData.getPrecursorIonMZ(), adduct, queryData.getIonizationMode()
-            );
+            double neutralMass = AdductService.neutralMassFromMz(queryData.getPrecursorIonMZ(), adductDefinition);
             double delta;
             if (queryData.getToleranceModePrecursorIon() == MzToleranceMode.PPM) {
                 // ppm to Da at neutral mass
@@ -102,7 +98,7 @@ public class MSMSSearchRepository {
 
             Set<MSMSAnnotation> libSpectra= new HashSet<>();
             for (Compound compound : compoundsSet) {
-                libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), adduct, querySpectrum.getPrecursorMz()));
+                libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), adductDefinition, querySpectrum.getPrecursorMz()));
             }
             matchedSpectra.addAll(
                     getMSMSWithScores(
@@ -122,7 +118,7 @@ public class MSMSSearchRepository {
     }
 
     public List<MSMSAnnotation> getSpectraForCompounds(Compound compound, IonizationMode ionizationMode,
-                                                      CIDEnergy voltageEnergy, String adduct, Double queryMz) throws IOException {
+                                                      CIDEnergy voltageEnergy, AdductDefinition adduct, Double queryMz) throws IOException {
         Set<MSMSAnnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy, adduct, queryMz);
         List<MSMSAnnotation> spectra = new ArrayList<>();
         for (MSMSAnnotation msms : msmsSet) {
@@ -135,9 +131,9 @@ public class MSMSSearchRepository {
     }
 
     public Set<MSMSAnnotation> getMsmsForCompound(Compound compound, IonizationMode ionMode,
-                                                 CIDEnergy voltage, String adduct, Double queryMz) throws IOException {
+                                                 CIDEnergy voltage, AdductDefinition adduct, Double queryMz) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql");
-        String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
+        String sql = loadSql(rsrc);
         sql = sql.replace("(:compound_id)", String.valueOf(compound.getCompoundId()));
 
         int mode = switch (ionMode) {
@@ -149,7 +145,7 @@ public class MSMSSearchRepository {
                 .replace("(:voltage_level)", voltage.toString());
 
         Set<MSMSAnnotation> msmsSet = new HashSet<>();
-        jdbcTemplate.query(sql, (rs, rowNum) -> {
+        jdbcTemplate.query(sql, (rs, _) -> {
             MSMSAnnotation msms = new MSMSAnnotation();
             msms.setCompound(compound);
             msms.setMsmsId(rs.getInt("msms_id"));
@@ -163,8 +159,7 @@ public class MSMSSearchRepository {
             }
 
             // Compute theoretical precursor m/z for this compound with the requested adduct
-            String formattedAdduct = AdductProcessing.formatAdductString(adduct, ionMode);
-            Double libPrecursorMz = AdductTransformer.getMassOfAdductFromMonoMass(compound.getMass(), formattedAdduct, ionMode);
+            Double libPrecursorMz = AdductService.mzFromNeutralMass(compound.getMass(), adduct);
             Spectrum spectrum = new Spectrum(libPrecursorMz, new ArrayList<>());
             msms.setSpectrum(spectrum);
 
@@ -173,7 +168,7 @@ public class MSMSSearchRepository {
             msms.setDeltaPpmPrecursorIon(deltaPPM);
 
             // Set adduct used
-            msms.setAdduct(adduct);
+            msms.setAdduct(adduct.canonical());
 
             msmsSet.add(msms);
             return null;
@@ -183,7 +178,7 @@ public class MSMSSearchRepository {
 
     public Spectrum getPeaksForMsms(int msmsId, Double precursorMz) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/PeakSearch.sql");
-        String sql = new String(Files.readAllBytes(Paths.get(rsrc.getURI())));
+        String sql = loadSql(rsrc);
         sql = sql.replace("(:msmsId)", String.valueOf(msmsId));
 
         List<MSPeak> peaks = new ArrayList<>();
@@ -223,7 +218,7 @@ public class MSMSSearchRepository {
     public static Set<MSMSAnnotation> selectBestPerCompound(List<MSMSAnnotation> allSpectra) {
         Map<String, MSMSAnnotation> best = new HashMap<>();
         for (MSMSAnnotation sp : allSpectra) {
-            best.compute(String.valueOf(sp.getCompound().getCompoundId()), (id, currentBest) -> {
+            best.compute(String.valueOf(sp.getCompound().getCompoundId()), (_, currentBest) -> {
                 if (currentBest == null || sp.getMsmsCosineScore() > currentBest.getMsmsCosineScore()) {
                     return sp;
                 } else {
@@ -261,5 +256,11 @@ public class MSMSSearchRepository {
     }
 
     private static final Pattern BRACKET_CODE_PATTERN = Pattern.compile(".*\\[(.+?)\\].*");
+
+    private String loadSql(Resource resource) throws IOException {
+        try (InputStream inputStream = resource.getInputStream()) {
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
 
 }

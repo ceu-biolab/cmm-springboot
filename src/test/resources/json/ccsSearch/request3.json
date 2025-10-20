@@ -1,0 +1,18 @@
+{
+    "mzValues": [
+        244.99745215046784,
+        260.9923713884678
+    ],
+    "ccsValues": [
+        148.816,
+        151.681
+    ],
+    "mzToleranceMode": "MDA",
+    "mzTolerance": 4,
+    "ccsToleranceMode": "PERCENTAGE",
+    "ccsTolerance": 1,
+    "ionizationMode": "NEGATIVE",
+    "bufferGas": "N2",
+    "adducts": ["[M-H]-"],
+    "formulaType": "CHNOPS"
+}

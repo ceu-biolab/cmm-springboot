@@ -1,10 +1,5 @@
 package ceu.biolab.cmm.ccsSearch.domain;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import lombok.Data;
@@ -16,8 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class IMMSCompound extends Compound {
     private double dbCcs;
-    // TODO pathways should be on the shared domain
-    private Set<Pathway> pathways;
 
     public IMMSCompound(Compound compound, double ccsValue) {
         super(compound.getCompoundId(), compound.getCasId(), compound.getCompoundName(), compound.getFormula(),
@@ -28,15 +21,15 @@ public class IMMSCompound extends Compound {
               compound.getDoubleBonds(), compound.getBiologicalActivity(), compound.getMeshNomenclature(),
               compound.getIupacClassification(), compound.getMol2(), compound.getPathways());
         this.dbCcs = ccsValue;
-        this.pathways = new HashSet<>();
     }
 
     public void addPathway(Pathway pathway) {
-        if (this.pathways == null) {
-            this.pathways = new HashSet<>();
+        if (pathway == null || pathway.getPathwayId() == -1) {
+            return;
         }
-        if (pathway != null && pathway.getPathwayId() != -1) {
-            this.pathways.add(pathway);
+        if (getPathways() == null) {
+            setPathways(new java.util.LinkedHashSet<>());
         }
+        getPathways().add(pathway);
     }
 }

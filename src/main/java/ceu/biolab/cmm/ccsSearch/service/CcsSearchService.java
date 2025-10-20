@@ -9,6 +9,7 @@ import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
 import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
+import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
@@ -16,6 +17,10 @@ import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +28,15 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class CcsSearchService {
+
+    private static final String DEFAULT_POSITIVE_ADDUCT = "[M+H]+";
+    private static final String DEFAULT_NEGATIVE_ADDUCT = "[M-H]-";
 
     @Autowired
     private CcsSearchRepository ccsSearchRepository;
@@ -38,15 +49,28 @@ public class CcsSearchService {
         MzToleranceMode mzToleranceMode = request.getMzToleranceMode();
         CcsToleranceMode ccsToleranceMode = request.getCcsToleranceMode();
         BufferGas bufferGas = request.getBufferGas();
+        IonizationMode ionizationMode = request.getIonizationMode();
 
-        double absoluteCcsTolerance;
-        if (ccsToleranceMode == CcsToleranceMode.PERCENTAGE) {
-            absoluteCcsTolerance = request.getCcsTolerance() * 0.01;
-        } else if (ccsToleranceMode == CcsToleranceMode.ABSOLUTE) {
-            absoluteCcsTolerance = request.getCcsTolerance();
-        } else {
-            throw new IllegalArgumentException("Invalid tolerance mode: " + request.getCcsToleranceMode());
+        List<String> requestedAdducts = request.getAdducts();
+        Set<String> normalizedAdducts = new LinkedHashSet<>();
+        if (requestedAdducts != null) {
+            requestedAdducts.stream()
+                    .filter(adduct -> adduct != null && !adduct.isBlank())
+                    .map(String::trim)
+                    .forEach(normalizedAdducts::add);
         }
+        if (normalizedAdducts.isEmpty()) {
+            normalizedAdducts.add(ionizationMode == IonizationMode.NEGATIVE ? DEFAULT_NEGATIVE_ADDUCT : DEFAULT_POSITIVE_ADDUCT);
+        }
+
+        List<AdductDefinition> effectiveAdducts = normalizedAdducts.stream()
+                .map(adduct -> AdductService.requireDefinition(ionizationMode, adduct))
+                .toList();
+
+        if (effectiveAdducts.isEmpty()) {
+            throw new IllegalArgumentException("No valid adducts provided for ionization mode " + ionizationMode);
+        }
+
 
         CcsSearchResponseDTO response = new CcsSearchResponseDTO();
         for (int i = 0; i < nFeatures; i++) 
@@ -56,30 +80,32 @@ public class CcsSearchService {
             IMFeature feature = new IMFeature(mz, ccs);
             AnnotatedFeature imAnnotatedFeature = new AnnotatedFeature(feature);
 
-            // TODO: Dummy adduct. Replace with actual adducts from request. Also add IonMode check?
-            ArrayList<String> adducts = new ArrayList<>(java.util.Arrays.asList("M+H"));
-            ArrayList<Double> adductIonMassDifferences = new ArrayList<>(java.util.Arrays.asList(1.007276));
-            for (int j = 0; j < adducts.size(); j++) {
-                String adduct = adducts.get(j);
-                double ionMassDifference = adductIonMassDifferences.get(j);
+            for (AdductDefinition adduct : effectiveAdducts) {
+                double neutralMass = AdductService.neutralMassFromMz(mz, adduct);
 
-                double ccsDifference = ccs * absoluteCcsTolerance;
-                double ccsLower = ccs - ccsDifference;
-                double ccsUpper = ccs + ccsDifference;
-
-                double neutralMass = mz - ionMassDifference;
                 double mzDifference;
                 if (mzToleranceMode == MzToleranceMode.PPM) {
-                    mzDifference = mz * request.getMzTolerance() * 0.000001;
+                    mzDifference = neutralMass * request.getMzTolerance() * 0.000001;
                 } else if (mzToleranceMode == MzToleranceMode.MDA) {
                     mzDifference = request.getMzTolerance() * 0.001;
                 } else {
-                    throw new IllegalArgumentException("Invalid tolerance mode: " + request.getMzToleranceMode());
+                    throw new IllegalArgumentException("Invalid mz tolerance mode: " + request.getMzToleranceMode());
                 }
                 double massLower = neutralMass - mzDifference;
                 double massUpper = neutralMass + mzDifference;
 
-                CcsFeatureQueryDTO queryData = new CcsFeatureQueryDTO(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct);
+                double ccsDifference;
+                if (ccsToleranceMode == CcsToleranceMode.PERCENTAGE) {
+                    ccsDifference = ccs * (request.getCcsTolerance() / 100.0);
+                } else if (ccsToleranceMode == CcsToleranceMode.ABSOLUTE) {
+                    ccsDifference = request.getCcsTolerance();
+                } else {
+                    throw new IllegalArgumentException("Invalid CCS tolerance mode: " + request.getCcsToleranceMode());
+                }
+                double ccsLower = ccs - ccsDifference;
+                double ccsUpper = ccs + ccsDifference;
+
+                CcsFeatureQueryDTO queryData = new CcsFeatureQueryDTO(ccsLower, ccsUpper, massLower, massUpper, bufferGas.toString(), adduct.legacyKey());
                 try {
                     List<CcsQueryResponseDTO> queryResults = ccsSearchRepository.findMatchingCompounds(queryData);
                     // QueryResults may have duplicate results where the same compound is found with different pathways.
@@ -91,7 +117,6 @@ public class CcsSearchService {
                         boolean found = false;
                         for (Annotation annotation : annotations) {
                             Compound compound = annotation.getCompound();
-                            // TODO remove mutation after refactoring Compound
                             if (compound instanceof IMMSCompound imCompound) {
                                 if (imCompound.getCompoundId() == queryResult.getCompoundId()) {
                                     imCompound.addPathway(pathway);
@@ -106,27 +131,64 @@ public class CcsSearchService {
                                 compoundType = CompoundType.NON_LIPID;
                             }
 
-                            IMMSCompound imCompound = IMMSCompound.builder()
+                            String formula = queryResult.getFormula();
+                            FormulaType formulaType = FormulaType.inferFromFormula(formula).orElse(null);
+                            if (formulaType == null && queryResult.getFormulaTypeInt() != null) {
+                                try {
+                                    formulaType = FormulaType.getFormulaTypefromInt(queryResult.getFormulaTypeInt());
+                                } catch (IllegalArgumentException e) {
+                                    // Ignore and leave formulaType as null
+                                }
+                            }
+
+                            int chargeType = queryResult.getChargeType() != null ? queryResult.getChargeType() : 0;
+                            int chargeNumber = queryResult.getChargeNumber() != null ? queryResult.getChargeNumber() : 0;
+
+                            IMMSCompound.IMMSCompoundBuilder<?, ?> builder = IMMSCompound.builder()
                                     .compoundId(queryResult.getCompoundId())
+                                    .casId(queryResult.getCasId())
                                     .compoundName(queryResult.getCompoundName())
+                                    .formula(formula)
+                                    .formulaType(formulaType)
                                     .mass(queryResult.getMonoisotopicMass())
-                                    .dbCcs(queryResult.getDbCcs())
-                                    .formula(queryResult.getFormula())
-                                    // TODO formula type in compound shouldnt be a int
-                                    //.formulaType(queryResult.getFormulaType())
+                                    .chargeType(chargeType)
+                                    .chargeNumber(chargeNumber)
                                     .compoundType(compoundType)
                                     .logP(queryResult.getLogP())
-                                    .build();
+                                    .rtPred(queryResult.getRtPred())
+                                    .inchi(queryResult.getInchi())
+                                    .inchiKey(queryResult.getInchiKey())
+                                    .smiles(queryResult.getSmiles())
+                                    .lipidType(queryResult.getLipidType())
+                                    .numChains(queryResult.getNumChains())
+                                    .numCarbons(queryResult.getNumberCarbons())
+                                    .doubleBonds(queryResult.getDoubleBonds())
+                                    .biologicalActivity(queryResult.getBiologicalActivity())
+                                    .meshNomenclature(queryResult.getMeshNomenclature())
+                                    .iupacClassification(queryResult.getIupacClassification())
+                                    .dbCcs(queryResult.getDbCcs());
+
+                            if (queryResult.getCategory() != null || queryResult.getMainClass() != null
+                                    || queryResult.getSubClass() != null || queryResult.getClassLevel4() != null) {
+                                Set<LipidMapsClassification> lipidClasses = new HashSet<>();
+                                lipidClasses.add(new LipidMapsClassification(
+                                        queryResult.getCategory(),
+                                        queryResult.getMainClass(),
+                                        queryResult.getSubClass(),
+                                        queryResult.getClassLevel4()));
+                                builder = builder.lipidMapsClassifications(lipidClasses);
+                            }
+
+                            IMMSCompound imCompound = builder.build();
                             imCompound.addPathway(pathway);
                             Annotation annotation = new Annotation(imCompound);
                             annotations.add(annotation);
                         }
                     }
-                    //AnnotationsByAdduct annotations = new AnnotationsByAdduct(adduct, annotations);
-                    AnnotationsByAdduct annotationsByAdduct = new AnnotationsByAdduct(adduct, annotations);
+                    AnnotationsByAdduct annotationsByAdduct = new AnnotationsByAdduct(adduct.canonical(), annotations);
                     imAnnotatedFeature.addAnnotationByAdduct(annotationsByAdduct);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new IllegalStateException("Failed to execute CCS search query", e);
                 }
             }
 

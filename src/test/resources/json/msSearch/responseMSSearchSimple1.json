@@ -7,11 +7,11 @@
             },
             "annotationsByAdducts": [
                 {
-                    "adduct": "M+Na",
+                    "adduct": "[M+Na]+",
                     "annotations": []
                 },
                 {
-                    "adduct": "M+H",
+                    "adduct": "[M+H]+",
                     "annotations": [
                         {
                             "compound": {
@@ -709,7 +709,7 @@
                     ]
                 },
                 {
-                    "adduct": "M+K",
+                    "adduct": "[M+K]+",
                     "annotations": [
                         {
                             "compound": {
@@ -763,11 +763,11 @@
                     ]
                 },
                 {
-                    "adduct": "M+NH4",
+                    "adduct": "[M+NH4]+",
                     "annotations": []
                 },
                 {
-                    "adduct": "M+H-H2O",
+                    "adduct": "[M+H-H2O]+",
                     "annotations": [
                         {
                             "compound": {

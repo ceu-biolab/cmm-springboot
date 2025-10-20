@@ -48,12 +48,12 @@
                 ],
                 "pathways": []
             },
-            "adduct": "M+H",
-            "deltaPpmPrecursorIon": -3.279643144683768,
+            "adduct": "[M+H]+",
+            "deltaPpmPrecursorIon": -3.2780672110277,
             "msmsCosineScore": 0.9999999999999998,
             "collisionEnergy": 25.0,
             "spectrum": {
-                "precursorMz": 287.23694203466783,
+                "precursorMz": 287.236941582,
                 "peaks": [
                     {
                         "mz": 55.301,

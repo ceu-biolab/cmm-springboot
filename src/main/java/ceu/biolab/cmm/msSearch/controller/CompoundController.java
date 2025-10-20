@@ -3,10 +3,12 @@ import ceu.biolab.cmm.msSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.service.CompoundService;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import org.slf4j.Logger;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/compounds")
@@ -14,24 +16,21 @@ import org.slf4j.Logger;
 
 public class CompoundController {
     private final CompoundService compoundService;
-    private static final Logger logger = LoggerFactory.getLogger(CompoundController.class);
+    // private static final Logger logger = LoggerFactory.getLogger(CompoundController.class);
 
     public CompoundController(CompoundService compoundService) {
         this.compoundService = compoundService;
     }
 
     @PostMapping("/simple-search")
-    public RTSearchResponseDTO annotateMSFeature(@RequestBody CompoundSimpleSearchRequestDTO request) {
-        if (request.getMz() == null) {
-            return new RTSearchResponseDTO();
-        }
+    public RTSearchResponseDTO annotateMSFeature(@Valid @RequestBody CompoundSimpleSearchRequestDTO request) {
         return compoundService.findCompoundsByMz(request);
     }
 
     @PostMapping("/batch-search")
-    public RTSearchResponseDTO annotateMSFeatures(@RequestBody CompoundBatchSearchRequestDTO request) {
-        if (request.getMzValues() == null || request.getMzValues().isEmpty()) {
-            return new RTSearchResponseDTO();
+    public RTSearchResponseDTO annotateMSFeatures(@Valid @RequestBody CompoundBatchSearchRequestDTO request) {
+        if (request.getMzValues().stream().anyMatch(Objects::isNull)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mzValues must not contain null entries.");
         }
 
         RTSearchResponseDTO response = new RTSearchResponseDTO();
@@ -57,4 +56,3 @@ public class CompoundController {
     }
 
 }
-

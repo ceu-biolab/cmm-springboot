@@ -1,35 +1,93 @@
 package ceu.biolab.cmm.ccsSearch.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class CcsSearchRequestDTO {
-    private List<Double> mzValues;
+    @NotEmpty
+    private List<Double> mzValues = new ArrayList<>();
+
+    @Positive
     private double mzTolerance;
+
+    @NotNull
     private MzToleranceMode mzToleranceMode;
-    private List<Double> ccsValues;
+
+    @NotEmpty
+    private List<Double> ccsValues = new ArrayList<>();
+
+    @Positive
     private double ccsTolerance;
+
+    @NotNull
     private CcsToleranceMode ccsToleranceMode;
+
+    @NotNull
     private IonizationMode ionizationMode;
+
+    @NotNull
     private BufferGas bufferGas;
 
-    public CcsSearchRequestDTO(List<Double> mzValues, double mzTolerance, MzToleranceMode mzToleranceMode,
-                           List<Double> ccsValues, double ccsTolerance, CcsToleranceMode ccsToleranceMode,
-                           IonizationMode ionizationMode) {
-        this.mzValues = mzValues != null ? mzValues : new ArrayList<>();
+    @NotEmpty
+    private List<String> adducts = new ArrayList<>();
+
+    public CcsSearchRequestDTO(List<Double> mzValues,
+                               double mzTolerance,
+                               MzToleranceMode mzToleranceMode,
+                               List<Double> ccsValues,
+                               double ccsTolerance,
+                               CcsToleranceMode ccsToleranceMode,
+                               IonizationMode ionizationMode,
+                               BufferGas bufferGas,
+                               List<String> adducts) {
+        this.mzValues = mzValues != null ? new ArrayList<>(mzValues) : new ArrayList<>();
         this.mzTolerance = mzTolerance;
-        this.mzToleranceMode = mzToleranceMode != null ? mzToleranceMode : MzToleranceMode.PPM;
-        this.ccsValues = ccsValues != null ? ccsValues : new ArrayList<>();
+        this.mzToleranceMode = mzToleranceMode;
+        this.ccsValues = ccsValues != null ? new ArrayList<>(ccsValues) : new ArrayList<>();
         this.ccsTolerance = ccsTolerance;
-        this.ccsToleranceMode = ccsToleranceMode != null ? ccsToleranceMode : CcsToleranceMode.PERCENTAGE;
-        this.ionizationMode = ionizationMode != null ? ionizationMode : IonizationMode.POSITIVE;
-        this.bufferGas = bufferGas != null ? bufferGas : BufferGas.N2;
+        this.ccsToleranceMode = ccsToleranceMode;
+        this.ionizationMode = ionizationMode;
+        this.bufferGas = bufferGas;
+        this.adducts = adducts != null ? new ArrayList<>(adducts) : new ArrayList<>();
+    }
+
+    public void setMzValues(List<Double> mzValues) {
+        this.mzValues = mzValues != null ? new ArrayList<>(mzValues) : null;
+    }
+
+    public void setMzToleranceMode(MzToleranceMode mzToleranceMode) {
+        this.mzToleranceMode = mzToleranceMode;
+    }
+
+    public void setCcsValues(List<Double> ccsValues) {
+        this.ccsValues = ccsValues != null ? new ArrayList<>(ccsValues) : null;
+    }
+
+    public void setCcsToleranceMode(CcsToleranceMode ccsToleranceMode) {
+        this.ccsToleranceMode = ccsToleranceMode;
+    }
+
+    public void setIonizationMode(IonizationMode ionizationMode) {
+        this.ionizationMode = ionizationMode;
+    }
+
+    public void setBufferGas(BufferGas bufferGas) {
+        this.bufferGas = bufferGas;
+    }
+
+    public void setAdducts(List<String> adducts) {
+        this.adducts = adducts != null ? new ArrayList<>(adducts) : null;
     }
 }

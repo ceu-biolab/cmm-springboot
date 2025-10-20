@@ -43,7 +43,7 @@ public class MSMSSearchServiceTest {
                 50.0,
                 MzToleranceMode.MDA,
                 IonizationMode.POSITIVE,
-                List.of("M+H"),
+                List.of("[M+H]+"),
                 spectrum,
                 ScoreType.COSINE
         );

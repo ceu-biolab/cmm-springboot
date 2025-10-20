@@ -3,10 +3,11 @@ package ceu.biolab.cmm.msSearch.service;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.repository.CompoundRepository;
-
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,15 +27,25 @@ public class CompoundService {
         RTSearchResponseDTO response = new RTSearchResponseDTO();
 
         try {
-            List<AnnotatedFeature> results = compoundRepository.annotateMSFeature(request.getMz(), request.getMzToleranceMode(), request.getTolerance(),
-                    request.getIonizationMode(), request.getDetectedAdduct(), request.getFormulaType(), request.getAdductsString(), request.getDatabases(), request.getMetaboliteType());
+            List<AnnotatedFeature> results = compoundRepository.annotateMSFeature(
+                    request.getMz(),
+                    request.getMzToleranceMode(),
+                    request.getTolerance(),
+                    request.getIonizationMode(),
+                    request.getDetectedAdduct(),
+                    request.getFormulaType(),
+                    request.getAdductsString(),
+                    request.getDatabases(),
+                    request.getMetaboliteType());
+
             for (AnnotatedFeature feature : results) {
                 response.addImFeature(feature);
             }
             return response;
+        } catch (ResponseStatusException ex) {
+            throw ex;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error annotating MS features", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error annotating MS features", e);
         }
     }
 

@@ -19,8 +19,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class GCMSSearchRepository {
      */
     private List<GCMSCompound> getCompoundInformation(GCMSFeatureQueryDTO queryData) throws IOException {
         Resource resource1 = resourceLoader.getResource("classpath:sql/gcms_compound_information.sql");
-        String sql1 = new String(Files.readAllBytes(Paths.get(resource1.getURI())));
+        String sql1 = loadSql(resource1);
 
         MapSqlParameterSource params1 = new MapSqlParameterSource();
         params1.addValue("RILower", queryData.getMinRI());
@@ -58,7 +58,7 @@ public class GCMSSearchRepository {
         SINCE THE INFORMATION OBTAINED FROM THE DATABASE CORRESPONDS TO TWO DIFFERENT CLASSES,
         A RowMapper IS USED, AS IT ALLOWS TO STORE THE DATA IN DIFFERENT CLASSES
         */
-        RowMapper<GCMSCompound> gcmsCompoundCustomMapper = (rs, rowNum) -> {
+        RowMapper<GCMSCompound> gcmsCompoundCustomMapper = (rs, _) -> {
             //CREATION OF THE GCMSCompound
             Number compoundTypeDb = (Number) rs.getObject("compound_type");
             Integer compoundTypeRaw = compoundTypeDb == null ? null : compoundTypeDb.intValue();
@@ -164,7 +164,7 @@ public class GCMSSearchRepository {
      */
     private Spectrum spectrumWithPeaksFromDB(int spectrumId) throws IOException {
         Resource resource2 = resourceLoader.getResource("classpath:sql/gcms_spectrum_information.sql");
-        String sql2 = new String(Files.readAllBytes(Paths.get(resource2.getURI())));
+        String sql2 = loadSql(resource2);
 
         MapSqlParameterSource params2 = new MapSqlParameterSource();
         params2.addValue("SpectrumId", spectrumId);
@@ -288,6 +288,12 @@ public class GCMSSearchRepository {
         infoAllRelevantCompounds = creationGCMSQueryResponseDTOFromgcmsCompoundList(gcmsCompoundList);
 
         return infoAllRelevantCompounds;
+    }
+
+    private String loadSql(Resource resource) throws IOException {
+        try (InputStream inputStream = resource.getInputStream()) {
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 
 }

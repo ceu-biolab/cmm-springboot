@@ -17,7 +17,8 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
-import ceu.biolab.cmm.shared.service.adduct.AdductProcessing;
+import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +33,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CemsRmtSearchService {
@@ -47,17 +50,17 @@ public class CemsRmtSearchService {
 
     public CemsSearchResponseDTO search(CemsRmtSearchRequestDTO request) {
         if (request == null) {
-            throw new IllegalArgumentException("Request payload cannot be null");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request payload cannot be null");
         }
         validateRequest(request);
 
         String bufferCode = normalizeBufferCode(request.getBufferCode());
         if (bufferCode == null) {
-            throw new IllegalArgumentException("buffer is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "buffer is required");
         }
 
         if (request.getTemperature() == null) {
-            throw new IllegalArgumentException("temperature is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature is required");
         }
         long temperature = Math.round(request.getTemperature());
 
@@ -69,11 +72,9 @@ public class CemsRmtSearchService {
 
         OptionalLong referenceIdOptional = repository.findReferenceCompoundId(request.getRmtReference());
         if (referenceIdOptional.isEmpty()) {
-            throw new IllegalArgumentException("Unknown rmt_reference: " + request.getRmtReference());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown rmt_reference: " + request.getRmtReference());
         }
         long referenceCompoundId = referenceIdOptional.getAsLong();
-
-        Map<String, String> adductMap = AdductProcessing.getAdductMapByIonizationMode(ionizationMode);
 
         CemsSearchResponseDTO response = new CemsSearchResponseDTO();
 
@@ -95,22 +96,8 @@ public class CemsRmtSearchService {
             featureAnnotations.setFeature(featureDTO);
 
             for (String adduct : request.getAdducts()) {
-                String trimmedAdduct = adduct.trim();
-                String adductValueRaw = adductMap.get(trimmedAdduct);
-                if (adductValueRaw == null) {
-                    LOGGER.warn("Skipping adduct '{}' because it is not supported for ionization mode {}", trimmedAdduct, ionizationMode);
-                    continue;
-                }
-
-                double adductValue;
-                try {
-                    adductValue = Double.parseDouble(adductValueRaw);
-                } catch (NumberFormatException ex) {
-                    LOGGER.warn("Unable to parse adduct mass difference '{}' for adduct '{}'", adductValueRaw, trimmedAdduct, ex);
-                    continue;
-                }
-
-                double neutralMass = AdductProcessing.getMassToSearch(mz, trimmedAdduct, adductValue);
+                AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                double neutralMass = AdductService.neutralMassFromMz(mz, definition);
                 double massWindow = computeMassWindow(request.getToleranceMode(), request.getTolerance(), neutralMass);
                 double rmtWindow = computeRmtWindow(request.getRmtToleranceMode(), request.getRmtTolerance(), rmt);
 
@@ -137,7 +124,7 @@ public class CemsRmtSearchService {
                 double targetRmt = rmt;
                 candidates = deduplicateCandidates(candidates, targetMass, targetRmt);
 
-                CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(trimmedAdduct);
+                CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(definition.canonical());
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
                     Compound compound = toCompound(candidate);
@@ -146,7 +133,7 @@ public class CemsRmtSearchService {
                     }
 
                     Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), targetMass);
-                    Double mzCalc = computeTheoreticalMz(candidate.getMass(), trimmedAdduct, ionizationMode);
+                    Double mzCalc = computeTheoreticalMz(candidate.getMass(), definition);
                     Double rmtErrorPct = computeRmtErrorPct(candidate.getRelativeMt(), targetRmt);
 
                     CeAnnotationDTO annotation = CeAnnotationDTO.builder()
@@ -176,19 +163,19 @@ public class CemsRmtSearchService {
 
     private void validateRequest(CemsRmtSearchRequestDTO request) {
         if (request.getMasses() == null || request.getMasses().isEmpty()) {
-            throw new IllegalArgumentException("masses must contain at least one value");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "masses must contain at least one value");
         }
         if (request.getRelativeMigrationTimes() == null || request.getRelativeMigrationTimes().isEmpty()) {
-            throw new IllegalArgumentException("rmt must contain at least one value");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt must contain at least one value");
         }
         if (request.getMasses().size() != request.getRelativeMigrationTimes().size()) {
-            throw new IllegalArgumentException("Number of masses and rmt values must match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of masses and rmt values must match");
         }
         if (request.getAdducts() == null || request.getAdducts().isEmpty()) {
-            throw new IllegalArgumentException("At least one adduct must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
         }
         if (request.getRmtReference() == null || request.getRmtReference().isBlank()) {
-            throw new IllegalArgumentException("rmt_reference is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_reference is required");
         }
     }
 
@@ -198,7 +185,7 @@ public class CemsRmtSearchService {
         } else if (toleranceMode == MzToleranceMode.MDA) {
             return tolerance * 0.001;
         }
-        throw new IllegalArgumentException("Unsupported m/z tolerance mode: " + toleranceMode);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode);
     }
 
     private double computeRmtWindow(RmtToleranceMode toleranceMode, double tolerance, double baseRmt) {
@@ -246,14 +233,14 @@ public class CemsRmtSearchService {
         return (candidateMass - targetMass) / targetMass * 1e6;
     }
 
-    private Double computeTheoreticalMz(Double neutralMass, String adduct, IonizationMode ionizationMode) {
+    private Double computeTheoreticalMz(Double neutralMass, AdductDefinition definition) {
         if (neutralMass == null) {
             return null;
         }
         try {
-            return AdductProcessing.getMassOfAdductFromMonoWeight(neutralMass, adduct, ionizationMode);
+            return AdductService.mzFromNeutralMass(neutralMass, definition);
         } catch (RuntimeException ex) {
-            LOGGER.warn("Unable to compute theoretical m/z for adduct '{}'", adduct, ex);
+            LOGGER.warn("Unable to compute theoretical m/z for adduct '{}'", definition.canonical(), ex);
             return null;
         }
     }

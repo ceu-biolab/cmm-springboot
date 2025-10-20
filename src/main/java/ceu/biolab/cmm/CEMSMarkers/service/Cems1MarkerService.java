@@ -1,6 +1,5 @@
 package ceu.biolab.cmm.CEMSMarkers.service;
 
-import ceu.biolab.cmm.CEMSMarkers.domain.MassMode;
 import ceu.biolab.cmm.CEMSMarkers.domain.MarkerMobility;
 import ceu.biolab.cmm.CEMSMarkers.dto.CemsMarkersRequestDTO;
 import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
@@ -10,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class Cems1MarkerService extends AbstractCemsMarkerService {
@@ -27,9 +28,13 @@ public class Cems1MarkerService extends AbstractCemsMarkerService {
 
         MarkerMobility markerMobility = markersRepository
                 .findMarkerMobility(request.getMarker(), request.getBuffer(), request.getTemperature(), request.getPolarity())
-                .orElseThrow(() -> new IllegalArgumentException("Marker mobility not found for marker=" + request.getMarker()
-                        + ", buffer=" + request.getBuffer() + ", polarity=" + request.getPolarity().getLabel()
-                        + ", temperature=" + request.getTemperature()));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Marker mobility not found for marker=" + request.getMarker()
+                                + ", buffer=" + request.getBuffer()
+                                + ", polarity=" + request.getPolarity().getLabel()
+                                + ", temperature=" + request.getTemperature()
+                ));
 
         double markerEffectiveMobility = markerMobility.effectiveMobility();
         double markerTime = request.getMarkerTime();
@@ -69,7 +74,7 @@ public class Cems1MarkerService extends AbstractCemsMarkerService {
                                               double markerTime,
                                               double migrationTime) {
         if (migrationTime <= 0) {
-            throw new IllegalArgumentException("Migration time must be positive");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Migration time must be positive");
         }
         double mobility = markerMobility + lengthOverField * ((1d / migrationTime) - (1d / markerTime));
         if (LOGGER.isDebugEnabled()) {
@@ -80,37 +85,34 @@ public class Cems1MarkerService extends AbstractCemsMarkerService {
 
     private void validateRequest(CemsMarkersRequestDTO request) {
         if (request == null) {
-            throw new IllegalArgumentException("Request payload cannot be null");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request payload cannot be null");
         }
 
         validateMassesAndMigration(request.getMasses(), request.getMigrationTimes(), request.getAdducts());
 
         if (request.getBuffer() == null || request.getBuffer().isBlank()) {
-            throw new IllegalArgumentException("Buffer must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buffer must be provided");
         }
         if (request.getMarker() == null || request.getMarker().isBlank()) {
-            throw new IllegalArgumentException("Marker must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Marker must be provided");
         }
         if (request.getMarkerTime() <= 0d) {
-            throw new IllegalArgumentException("Marker migration time must be positive");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Marker migration time must be positive");
         }
         if (request.getCapillaryLength() <= 0d) {
-            throw new IllegalArgumentException("Capillary length must be positive");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Capillary length must be positive");
         }
         if (request.getCapillaryVoltage() <= 0d) {
-            throw new IllegalArgumentException("Capillary voltage must be positive");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Capillary voltage must be positive");
         }
         if (request.getTemperature() == null) {
-            throw new IllegalArgumentException("Temperature must be provided");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Temperature must be provided");
         }
         if (request.getTolerance() < 0d) {
-            throw new IllegalArgumentException("Tolerance must be non-negative");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be non-negative");
         }
         if (request.getChemicalAlphabet() == null) {
             request.setChemicalAlphabet("ALL");
-        }
-        if (request.getMassMode() == null) {
-            request.setMassMode(MassMode.MZ);
         }
     }
 }
