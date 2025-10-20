@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 import ceu.biolab.cmm.scoreAnnotations.dto.ScoreLipidRequest;
 import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
 import ceu.biolab.cmm.shared.domain.ExperimentParameters;
@@ -19,7 +21,7 @@ import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 public class ScoreAnnotationsController {
     
     @PostMapping("/lipids")
-    public ResponseEntity<List<AnnotatedFeature>> scoreLipidAnnotations(@RequestBody ScoreLipidRequest request) {
+    public ResponseEntity<List<AnnotatedFeature>> scoreLipidAnnotations(@Valid @RequestBody ScoreLipidRequest request) {
         List<AnnotatedFeature> features = request.getFeatures();
         Optional<ExperimentParameters> experimentParameters = Optional.ofNullable(request.getExperimentParameters());
         

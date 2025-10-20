@@ -1,11 +1,14 @@
 package ceu.biolab.cmm.scoreAnnotations.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import ceu.biolab.cmm.scoreAnnotations.domain.EvaluatedLipid;
 import ceu.biolab.cmm.scoreAnnotations.domain.Lipid;
@@ -21,22 +24,25 @@ public class ScoreLipids {
     public static void scoreLipidAnnotations(List<AnnotatedFeature> msFeatures, Optional<ExperimentParameters> experimentParameters){//}, Optional<Double> retentionTimes) {
         KieSession kieSession = null;
         try {
+            if (msFeatures == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Feature list is required for lipid scoring.");
+            }
+            if (msFeatures.stream().anyMatch(Objects::isNull)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Feature list must not contain null entries.");
+            }
             // Create a KieSession - using the simpler approach
             KieServices kieServices = KieServices.Factory.get();
             KieContainer kieContainer = kieServices.newKieClasspathContainer();
-            
+
             // Load the session by name from kmodule.xml
             try {
                 kieSession = kieContainer.newKieSession("lipidKSession");
             } catch (Exception e) {
-                System.err.println("Error creating KieSession: " + e.getMessage());
-                e.printStackTrace();
-                return;
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to create lipid scoring session", e);
             }
-            
+
             if (kieSession == null) {
-                System.err.println("Failed to create KieSession: lipidKSession not found");
-                return;
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to create lipid scoring session");
             }
 
             // Process the features and insert facts into the session
@@ -84,6 +90,10 @@ public class ScoreLipids {
 
             // Fire all rules and let them operate on the inserted facts
             kieSession.fireAllRules();
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to score lipid annotations", e);
         } finally {
             // Ensure the session is properly disposed, only if it was created
             if (kieSession != null) {
