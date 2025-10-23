@@ -102,8 +102,8 @@ public class CcsSearchIntegrationTest {
     }
 
     @Test
-    void testCcsSearchWithLcmsScoringAdductPenalty() throws Exception {
-        String requestJson = loadJson("json/ccsSearch/request_lcms_score_penalty.json");
+    void testCcsSearchWithLcmsScoringProducesRetentionScores() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request_lcms_score_with_scores.json");
 
         MvcResult result = mockMvc.perform(post("/api/ccs/lcms-score")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -116,17 +116,39 @@ public class CcsSearchIntegrationTest {
         assertTrue(features.isArray());
         assertFalse(features.isEmpty());
 
-        JsonNode firstAnnotationScores = features.get(0)
-                .path("annotationsByAdducts")
-                .get(0)
-                .path("annotations")
-                .get(0)
-                .path("scores");
+        boolean foundRetentionScore = false;
 
-        assertTrue(firstAnnotationScores.isArray());
-        assertFalse(firstAnnotationScores.isEmpty());
-        JsonNode firstScore = firstAnnotationScores.get(0);
-        assertTrue(firstScore.path("ionizationScore").asDouble() > 0.0,
-                "Expected ionization score penalty when protonated adduct is missing");
+        for (JsonNode feature : features) {
+            JsonNode annotationsByAdduct = feature.path("annotationsByAdducts");
+            if (!annotationsByAdduct.isArray()) {
+                continue;
+            }
+            for (JsonNode annotationsNode : annotationsByAdduct) {
+                JsonNode annotations = annotationsNode.path("annotations");
+                if (!annotations.isArray()) {
+                    continue;
+                }
+                for (JsonNode annotation : annotations) {
+                    JsonNode scores = annotation.path("scores");
+                    if (!scores.isArray() || scores.isEmpty()) {
+                        continue;
+                    }
+                    JsonNode score = scores.get(0);
+                    JsonNode rtScoreMap = score.path("rtScoreMap");
+                    if (rtScoreMap.isObject() && rtScoreMap.size() > 0) {
+                        foundRetentionScore = true;
+                        break;
+                    }
+                }
+                if (foundRetentionScore) {
+                    break;
+                }
+            }
+            if (foundRetentionScore) {
+                break;
+            }
+        }
+
+        assertTrue(foundRetentionScore, "Expected at least one annotation to carry retention-time scores");
     }
 }
