@@ -76,7 +76,7 @@ public class CcsSearchIntegrationTest {
 
     @Test
     void testCcsSearchWithLcmsScoring() throws Exception {
-        String requestJson = loadJson("json/ccsSearch/request_lcms_score.json");
+        String requestJson = loadJson("json/ccsSearch/request_lcimms_score.json");
 
         MvcResult result = mockMvc.perform(post("/api/ccs/lcms-score")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +103,7 @@ public class CcsSearchIntegrationTest {
 
     @Test
     void testCcsSearchWithLcmsScoringProducesRetentionScores() throws Exception {
-        String requestJson = loadJson("json/ccsSearch/request_lcms_score_with_scores.json");
+        String requestJson = loadJson("json/ccsSearch/request_lcimms_score_with_scores.json");
 
         MvcResult result = mockMvc.perform(post("/api/ccs/lcms-score")
                         .contentType(MediaType.APPLICATION_JSON)
