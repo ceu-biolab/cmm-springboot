@@ -1,6 +1,6 @@
 # CEU Mass Mediator – Backend
 
-This repository contains the production-ready backend for **CEU Mass Mediator (CMM)**, a computational metabolomics platform that provides compound matching, annotation, and scoring utilities. The service exposes a number of REST endpoints that accept JSON payloads, validate them, interact with the database and the Drools rules engine, and return curated annotations.
+This repository contains the development-phase backend for **CEU Mass Mediator (CMM)**, a computational metabolomics platform that provides compound matching, annotation, and scoring utilities. The service exposes a number of REST endpoints that accept JSON payloads, validate them, interact with the database and the Drools rules engine, and return curated annotations.
 
 ---
 
