@@ -2,6 +2,7 @@ package ceu.biolab.cmm.ccsSearch.controller;
 
 import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequestDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsSearchResponseDTO;
+import ceu.biolab.cmm.ccsSearch.dto.CcsScoringRequestDTO;
 import ceu.biolab.cmm.ccsSearch.service.CcsSearchService;
 
 import jakarta.validation.Valid;
@@ -21,5 +22,10 @@ public class CompoundCcsController {
     @PostMapping("/ccs")
     public CcsSearchResponseDTO getCompoundsByCcsTolerance(@Valid @RequestBody CcsSearchRequestDTO request) {
         return compoundCcsService.search(request);
+    }
+
+    @PostMapping("/ccs/lcms-score")
+    public CcsSearchResponseDTO scoreCompoundsWithRetentionTime(@Valid @RequestBody CcsScoringRequestDTO request) {
+        return compoundCcsService.searchWithLcmsScoring(request);
     }
 }

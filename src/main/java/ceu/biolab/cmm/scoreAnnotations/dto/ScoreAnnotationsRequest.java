@@ -10,16 +10,16 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class ScoreLipidRequest {
+public class ScoreAnnotationsRequest {
     @NotEmpty
     private List<@Valid AnnotatedFeature> features;
     private ExperimentParameters experimentParameters;
 
-    public ScoreLipidRequest() {
+    public ScoreAnnotationsRequest() {
         this.features = new ArrayList<>();
     }
 
-    public ScoreLipidRequest(List<AnnotatedFeature> features, ExperimentParameters experimentParameters) {
+    public ScoreAnnotationsRequest(List<AnnotatedFeature> features, ExperimentParameters experimentParameters) {
         this.features = features;
         this.experimentParameters = experimentParameters;
     }

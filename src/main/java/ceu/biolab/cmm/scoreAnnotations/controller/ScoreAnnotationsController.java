@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
-import ceu.biolab.cmm.scoreAnnotations.dto.ScoreLipidRequest;
-import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
+import ceu.biolab.cmm.scoreAnnotations.dto.ScoreAnnotationsRequest;
+import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;
 import ceu.biolab.cmm.shared.domain.ExperimentParameters;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 
 @RestController
-@RequestMapping("/api/score")
+@RequestMapping("/api")
 public class ScoreAnnotationsController {
     
-    @PostMapping("/lipids")
-    public ResponseEntity<List<AnnotatedFeature>> scoreLipidAnnotations(@Valid @RequestBody ScoreLipidRequest request) {
+    @PostMapping("/score-annotations")
+    public ResponseEntity<List<AnnotatedFeature>> scoreAnnotations(@Valid @RequestBody ScoreAnnotationsRequest request) {
         List<AnnotatedFeature> features = request.getFeatures();
         Optional<ExperimentParameters> experimentParameters = Optional.ofNullable(request.getExperimentParameters());
         
         // Apply scoring to the features
-        ScoreLipids.scoreLipidAnnotations(features, experimentParameters);
+        ScoreAnnotationsService.scoreAnnotations(features, experimentParameters);
         
         // Return the same features, now with scores
         return ResponseEntity.ok(features);

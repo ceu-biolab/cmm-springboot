@@ -3,6 +3,7 @@ package ceu.biolab.cmm.scoreAnnotations.domain;
 import java.util.Optional;
 
 import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -21,10 +22,13 @@ public class Lipid extends Compound {
 
     public Lipid(Compound compound) {
         super(compound);
+        if (compound.getCompoundType() != CompoundType.LIPID) {
+            throw new IllegalArgumentException("Lipid wrapper expects a lipid compound, but found: " + compound.getCompoundType());
+        }
         this.lipidType = compound.getLipidType();
-        this.numberChains = compound.getNumChains();
-        this.numberCarbons = compound.getNumCarbons();
-        this.numberDoubleBonds = compound.getDoubleBonds();
+        this.numberChains = Optional.ofNullable(compound.getNumChains()).orElse(0);
+        this.numberCarbons = Optional.ofNullable(compound.getNumCarbons()).orElse(0);
+        this.numberDoubleBonds = Optional.ofNullable(compound.getDoubleBonds()).orElse(0);
         this.classificationCode = compound.getLipidMapsClassifications().stream()
             .findFirst()
             .map(lmc -> {

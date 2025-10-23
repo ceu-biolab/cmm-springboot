@@ -1,8 +1,12 @@
 package ceu.biolab.cmm.unit.scoreAnnotations.service;
 
+import ceu.biolab.cmm.scoreAnnotations.domain.CompoundScores;
 import ceu.biolab.cmm.scoreAnnotations.domain.Lipid;
 import ceu.biolab.cmm.scoreAnnotations.domain.LipidScores;
-import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
+import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;
+import ceu.biolab.cmm.shared.domain.FormulaType;
+import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
@@ -19,7 +23,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ScoreLipidsServiceTest {
+public class ScoreAnnotationsServiceTest {
     
     @BeforeEach
     void setUp() {
@@ -29,7 +33,7 @@ public class ScoreLipidsServiceTest {
     void testScoreEmptyInput() {
         // Test handling of empty input list
         List<AnnotatedFeature> features = new ArrayList<>();
-        ScoreLipids.scoreLipidAnnotations(features, Optional.empty());
+        ScoreAnnotationsService.scoreAnnotations(features, Optional.empty());
         
         assertTrue(features.isEmpty(), "Result should be empty");
     }
@@ -41,7 +45,7 @@ public class ScoreLipidsServiceTest {
         addRTLipidToAnnotations(feature, "PC", 36, 2);
         List<AnnotatedFeature> features = List.of(feature);
         
-        ScoreLipids.scoreLipidAnnotations(features, Optional.empty());
+        ScoreAnnotationsService.scoreAnnotations(features, Optional.empty());
         
         assertEquals(1, features.size(), "Should return one feature");
         assertEquals(1, features.get(0).getAnnotationsByAdducts().size(), "Should return one adduct");
@@ -73,7 +77,7 @@ public class ScoreLipidsServiceTest {
         addRTLipidToAnnotations(feature2, "PC", 36, 4);
         List<AnnotatedFeature> features = List.of(feature1, feature2);
 
-        ScoreLipids.scoreLipidAnnotations(features, Optional.empty());
+        ScoreAnnotationsService.scoreAnnotations(features, Optional.empty());
 
         // Only 2 features and 2 compounds
         assertEquals(2, features.size(), "Should return two scored features");
@@ -152,7 +156,7 @@ public class ScoreLipidsServiceTest {
         
         List<AnnotatedFeature> features = List.of(feature1, feature2, feature3);
         
-        ScoreLipids.scoreLipidAnnotations(features, Optional.empty());
+        ScoreAnnotationsService.scoreAnnotations(features, Optional.empty());
 
         // Verify PC 36:1 scores
         Optional<Annotation> pc36_1 = findLipidAnnotation(features, "PC", 36, 1, 800.5, 7.0);
@@ -201,7 +205,7 @@ public class ScoreLipidsServiceTest {
         addAdductLipidToAnnotations(feature2, 1, "[M+H]+");
         List<AnnotatedFeature> features = List.of(feature1, feature2);
 
-        ScoreLipids.scoreLipidAnnotations(features, Optional.empty());
+        ScoreAnnotationsService.scoreAnnotations(features, Optional.empty());
         
         // Verify both lipids received expected scores (ionization=1.0, adductRelation=1.0)
         assertEquals(2, extractAnnotations(features).size(), "Should have two annotations");
@@ -229,6 +233,35 @@ public class ScoreLipidsServiceTest {
             
             // RT score map should be empty as this test focuses on adduct relations
             assertTrue(lipidScores.getRtScoreMap().isEmpty(), "RT score map should be empty");
+        }
+    }
+
+    @Test
+    void testGeneralCompoundReceivesCompoundScores() {
+        AnnotatedFeature feature1 = createEmptyAnnotatedFeature(500.2, 1.25);
+        AnnotatedFeature feature2 = createEmptyAnnotatedFeature(500.2, 1.26);
+
+        Compound compound = createNonLipidCompound(2001);
+        addAdductCompoundToAnnotations(feature1, compound, "[M+Na]+");
+        addAdductCompoundToAnnotations(feature2, compound, "[M+H]+");
+
+        List<AnnotatedFeature> features = List.of(feature1, feature2);
+
+        ScoreAnnotationsService.scoreAnnotations(features, Optional.empty());
+
+        List<Annotation> annotations = extractAnnotations(features);
+        assertEquals(2, annotations.size(), "Non-lipid annotations should be returned");
+
+        for (Annotation annotation : annotations) {
+            assertFalse(annotation.getScores().isEmpty(), "Annotation should have scores attached");
+            assertTrue(annotation.getScores().get(0) instanceof CompoundScores, "Scores should be CompoundScores for non-lipids");
+
+            CompoundScores compoundScores = (CompoundScores) annotation.getScores().get(0);
+            assertTrue(compoundScores.getIonizationScore().isPresent(), "Ionization score should be set");
+            assertEquals(1.0, compoundScores.getIonizationScore().get(), 1e-6);
+
+            assertTrue(compoundScores.getAdductRelationScore().isPresent(), "Adduct relation score should be set");
+            assertEquals(1.0, compoundScores.getAdductRelationScore().get(), 1e-6);
         }
     }
 
@@ -340,6 +373,24 @@ public class ScoreLipidsServiceTest {
             .compoundId(compoundId)
             .build();
         feature.addCompoundForAdduct(adduct, lipid);
+    }
+
+    private void addAdductCompoundToAnnotations(AnnotatedFeature feature, Compound compound, String adduct) {
+        feature.addCompoundForAdduct(adduct, compound);
+    }
+
+    private Compound createNonLipidCompound(int compoundId) {
+        return Compound.builder()
+            .compoundId(compoundId)
+            .casId("")
+            .compoundName("Compound " + compoundId)
+            .formula("C2H4")
+            .mass(100.0)
+            .chargeType(0)
+            .chargeNumber(0)
+            .formulaType(FormulaType.CHNOPS)
+            .compoundType(CompoundType.NON_LIPID)
+            .build();
     }
     
     private Optional<Annotation> findLipidAnnotation(List<AnnotatedFeature> features, String lipidType, int carbons, int doubleBonds, double mz, double rt) {

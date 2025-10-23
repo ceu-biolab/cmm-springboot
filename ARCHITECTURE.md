@@ -25,8 +25,9 @@ To create a new endpoint from scratch you should follow the steps:
 
 ### Controller
 - Entry point for incoming HTTP requests. Processes JSON POST requests and returns the output also in JSON format.
+- Controllers must annotate request bodies with `@Valid` so DTO validation happens before the service layer.
 - Located in `controller` folders.
-- See [`ccsSearch.controller`](/src/main/java/ceu/biolab/cmm/ccsSearch/controller/CompoundCcsController.java) for reference.
+- See [`ccsSearch.controller`](/src/main/java/ceu/biolab/cmm/ccsSearch/controller/CompoundCcsController.java) or [`msSearch.controller`](/src/main/java/ceu/biolab/cmm/msSearch/controller/CompoundController.java) for reference.
 
 ### Service
 - All core logic of your endpoint. Anything that isn't database queries, domain data structures, or request handling goes here.
@@ -42,14 +43,15 @@ To create a new endpoint from scratch you should follow the steps:
 
 ### DTO (Data Transfer Objects)
 - Data structures with many fields sometimes used to transfer information between functions, particularily between packages, and specially for requests.
+- Apply Jakarta Bean Validation annotations (`@NotNull`, `@NotEmpty`, `@PositiveOrZero`, …) to enforce input requirements. DTOs are typically deserialized by controllers and validated with `@Valid`.
 - These can be considered those data structures that don't fit a clear concept but are meant to contain many fields of data.
 
 ### > Example of Request Handling Flow
 
-1. **Controller** receives JSON POST request.
+1. **Controller** receives JSON POST request and triggers bean validation.
 2. **DTO** maps the request body.
 3. **Service** performs processing using domain models and shared logic.
-4. **Repository** retrieves or persists data as needed.
+4. **Repository** retrieves or persists data as needed, surfacing unexpected failures via `ResponseStatusException`.
 5. **Response DTO** is returned via the controller.
 
 ---
@@ -113,4 +115,3 @@ ceu.biolab.cmm
 - **Springboot configuration**: Managed via `application.yml`.
 - **Security**: TLS configuration via `mykeystore.jks`.
 - **SQL Scripts**: Custom queries stored under `resources/sql/`.
-

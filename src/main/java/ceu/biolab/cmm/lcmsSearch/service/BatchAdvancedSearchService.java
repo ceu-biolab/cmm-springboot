@@ -4,7 +4,7 @@ import ceu.biolab.cmm.lcmsSearch.dto.BatchAdvancedSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.service.CompoundService;
-import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
+import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.ExperimentParameters;
 import ceu.biolab.cmm.shared.domain.ModifierType;
@@ -93,7 +93,7 @@ public class BatchAdvancedSearchService {
             }
             experimentParameters.setModifierType(Optional.of(modifierType));
 
-            ScoreLipids.scoreLipidAnnotations(annotatedFeatures, Optional.of(experimentParameters));
+            ScoreAnnotationsService.scoreAnnotations(annotatedFeatures, Optional.of(experimentParameters));
             allAnnotatedFeatures.addAll(annotatedFeatures);
         }
 

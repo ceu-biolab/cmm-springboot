@@ -45,7 +45,7 @@ class ScoreAnnotationsIntegrationTest {
         String requestJson = loadJson("json/scoreAnnotations/request_simple.json");
         String expectedResponse = loadJson("json/scoreAnnotations/response_simple.json");
 
-        mockMvc.perform(post("/api/score/lipids")
+        mockMvc.perform(post("/api/score-annotations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk())
@@ -56,7 +56,7 @@ class ScoreAnnotationsIntegrationTest {
     void scoreLipidsWithoutSupportingAdductAppliesPenalty() throws Exception {
         String requestJson = loadJson("json/scoreAnnotations/request_lack_adduct.json");
 
-        MvcResult result = mockMvc.perform(post("/api/score/lipids")
+        MvcResult result = mockMvc.perform(post("/api/score-annotations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk())
@@ -81,7 +81,7 @@ class ScoreAnnotationsIntegrationTest {
     void scoreLipidsCapturesRetentionTimeViolations() throws Exception {
         String requestJson = loadJson("json/scoreAnnotations/request_rt_inconsistent.json");
 
-        MvcResult result = mockMvc.perform(post("/api/score/lipids")
+        MvcResult result = mockMvc.perform(post("/api/score-annotations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk())
