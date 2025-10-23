@@ -61,6 +61,7 @@ All endpoints live under the `/api` prefix. Most request DTOs use Jakarta Bean V
 | `POST /api/batch-advanced-search` | LC-MS workflow that detects adducts, searches, and scores features. |
 | `POST /api/gcms` | GC-MS search that matches spectra to our spectral libraries. |
 | `POST /api/ccs` | Collisional cross-section search. |
+| `POST /api/ccs/lcms-score` | CCS search enriched with LC retention data and lipid scoring. |
 | `POST /api/score/lipids` | Score pre-annotated lipid features via Drools rules. |
 
 When something goes wrong, services raise `ResponseStatusException`, ensuring clients receive a precise HTTP status code and message.

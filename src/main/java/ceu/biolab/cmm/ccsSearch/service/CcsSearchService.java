@@ -4,11 +4,13 @@ import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQueryDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponseDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequestDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsSearchResponseDTO;
+import ceu.biolab.cmm.ccsSearch.dto.CcsScoringRequestDTO;
 import ceu.biolab.cmm.ccsSearch.repository.CcsSearchRepository;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
 import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
+import ceu.biolab.cmm.ccsSearch.domain.IMLCMSFeature;
 import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
@@ -21,9 +23,12 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +36,14 @@ import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class CcsSearchService {
 
     private static final String DEFAULT_POSITIVE_ADDUCT = "[M+H]+";
     private static final String DEFAULT_NEGATIVE_ADDUCT = "[M-H]-";
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(CcsSearchService.class);
 
     @Autowired
     private CcsSearchRepository ccsSearchRepository;
@@ -196,5 +203,51 @@ public class CcsSearchService {
         }
 
         return response;
+    }
+
+    public CcsSearchResponseDTO searchWithLcmsScoring(CcsScoringRequestDTO request) {
+        if (request.getRtValues() == null || request.getRtValues().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Retention-time values are required for LC scoring.");
+        }
+        if (request.getRtValues().size() != request.getMzValues().size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of RT values must match the number of m/z values.");
+        }
+
+        final CcsSearchResponseDTO response;
+        try {
+            response = search(request);
+        } catch (IllegalArgumentException ex) {
+            LOGGER.debug("Validation error during CCS search with LC scoring", ex);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+        }
+
+        List<AnnotatedFeature> features = response.getImFeatures();
+        if (features.size() != request.getRtValues().size()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected mismatch between features and RT values");
+        }
+
+        for (int i = 0; i < features.size(); i++) {
+            AnnotatedFeature annotatedFeature = features.get(i);
+            if (!(annotatedFeature.getFeature() instanceof IMFeature imFeature)) {
+                continue;
+            }
+            double rtValue = request.getRtValues().get(i);
+            IMLCMSFeature lcmsFeature = new IMLCMSFeature(imFeature.getMzValue(), imFeature.getCcsValue(), rtValue);
+            lcmsFeature.setIntensity(imFeature.getIntensity());
+            annotatedFeature.setFeature(lcmsFeature);
+        }
+
+        try {
+            ScoreLipids.scoreLipidAnnotations(features, Optional.ofNullable(request.getExperimentParameters()));
+        } catch (ResponseStatusException ex) {
+            LOGGER.error("Failed to score CCS features with LC data", ex);
+            throw ex;
+        }
+        try {
+            return response;
+        } catch (ResponseStatusException ex) {
+            LOGGER.error("Failed to score CCS features with LC data", ex);
+            throw ex;
+        }
     }
 }
