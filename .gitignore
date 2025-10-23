@@ -6,3 +6,4 @@ target/
 *.~lock.*
 application-local.yml
 mykeystore.jks
+.venv/

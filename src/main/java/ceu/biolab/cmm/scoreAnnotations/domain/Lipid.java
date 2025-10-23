@@ -25,19 +25,10 @@ public class Lipid extends Compound {
         if (compound.getCompoundType() != CompoundType.LIPID) {
             throw new IllegalArgumentException("Lipid wrapper expects a lipid compound, but found: " + compound.getCompoundType());
         }
-        if (compound.getNumChains() == null) {
-            throw new IllegalArgumentException("Lipid compound must have number of chains defined. Compound ID: " + compound.getCompoundId());
-        }
-        if (compound.getNumCarbons() == null) {
-            throw new IllegalArgumentException("Lipid compound must have number of carbons defined. Compound ID: " + compound.getCompoundId());
-        }
-        if (compound.getDoubleBonds() == null) {
-            throw new IllegalArgumentException("Lipid compound must have number of double bonds defined. Compound ID: " + compound.getCompoundId());
-        }
         this.lipidType = compound.getLipidType();
-        this.numberChains = compound.getNumChains();
-        this.numberCarbons = compound.getNumCarbons();
-        this.numberDoubleBonds = compound.getDoubleBonds();
+        this.numberChains = Optional.ofNullable(compound.getNumChains()).orElse(0);
+        this.numberCarbons = Optional.ofNullable(compound.getNumCarbons()).orElse(0);
+        this.numberDoubleBonds = Optional.ofNullable(compound.getDoubleBonds()).orElse(0);
         this.classificationCode = compound.getLipidMapsClassifications().stream()
             .findFirst()
             .map(lmc -> {

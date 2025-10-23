@@ -100,4 +100,33 @@ public class CcsSearchIntegrationTest {
         JsonNode firstScore = scores.get(0);
         assertTrue(firstScore.isObject());
     }
+
+    @Test
+    void testCcsSearchWithLcmsScoringAdductPenalty() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request_lcms_score_penalty.json");
+
+        MvcResult result = mockMvc.perform(post("/api/ccs/lcms-score")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        JsonNode root = objectMapper.readTree(result.getResponse().getContentAsString());
+        JsonNode features = root.path("imFeatures");
+        assertTrue(features.isArray());
+        assertFalse(features.isEmpty());
+
+        JsonNode firstAnnotationScores = features.get(0)
+                .path("annotationsByAdducts")
+                .get(0)
+                .path("annotations")
+                .get(0)
+                .path("scores");
+
+        assertTrue(firstAnnotationScores.isArray());
+        assertFalse(firstAnnotationScores.isEmpty());
+        JsonNode firstScore = firstAnnotationScores.get(0);
+        assertTrue(firstScore.path("ionizationScore").asDouble() > 0.0,
+                "Expected ionization score penalty when protonated adduct is missing");
+    }
 }

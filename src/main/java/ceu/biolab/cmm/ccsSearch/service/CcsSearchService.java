@@ -23,7 +23,7 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
-import ceu.biolab.cmm.scoreAnnotations.service.ScoreLipids;
+import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -238,7 +238,7 @@ public class CcsSearchService {
         }
 
         try {
-            ScoreLipids.scoreLipidAnnotations(features, Optional.ofNullable(request.getExperimentParameters()));
+            ScoreAnnotationsService.scoreAnnotations(features, Optional.ofNullable(request.getExperimentParameters()));
         } catch (ResponseStatusException ex) {
             LOGGER.error("Failed to score CCS features with LC data", ex);
             throw ex;

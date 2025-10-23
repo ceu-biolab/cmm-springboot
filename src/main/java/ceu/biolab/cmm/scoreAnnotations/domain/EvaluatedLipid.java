@@ -1,61 +1,30 @@
 package ceu.biolab.cmm.scoreAnnotations.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
-public class EvaluatedLipid {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class EvaluatedLipid extends EvaluatedCompound {
     private Lipid lipid;
-    private String featureKey;
-    private double featureMz;
-    private double featureRtValue;
-    private String adduct;
-    private LipidScores scores;
-    private boolean isSignificative;
 
     public EvaluatedLipid(Lipid lipid, double featureMz, double featureRtValue, String adduct, LipidScores scores, boolean isSignificative) {
+        super(lipid, featureMz, featureRtValue, adduct, scores, isSignificative);
         this.lipid = lipid;
-        this.featureMz = featureMz;
-        this.featureRtValue = featureRtValue;
-        this.adduct = adduct;
-        this.scores = scores;
-        this.isSignificative = isSignificative;
-
-        this.featureKey = LipidScores.calculateFeatureKey(featureMz, featureRtValue);
     }
 
     public EvaluatedLipid(Lipid lipid, double featureMz, double featureRtValue, String adduct, LipidScores scores) {
+        super(lipid, featureMz, featureRtValue, adduct, scores);
         this.lipid = lipid;
-        this.featureMz = featureMz;
-        this.featureRtValue = featureRtValue;
-        this.adduct = adduct;
-        this.scores = scores;
-        this.isSignificative = true;
-        
-        this.featureKey = LipidScores.calculateFeatureKey(featureMz, featureRtValue);
     }
 
-    public void setAdductRelationScore(double value) {
-        scores.setAdductRelationScore(value);
-    }
-
-    public double getAdductRelationScore() {
-        return scores.getAdductRelationScore().orElse(0.0);
-    }
-
-    public void setIonizationScore(double value) {
-        scores.setIonizationScore(value);
-    }
-
-    public double getFeatureRtValue() {
-        return featureRtValue;
-    }
-    
-    public int getCompoundId() {
-        return lipid.getCompoundId();
+    @Override
+    public LipidScores getScores() {
+        return (LipidScores) super.getScores();
     }
 
     public int getNumberCarbons() {
@@ -70,19 +39,31 @@ public class EvaluatedLipid {
         return lipid.getLipidType();
     }
 
-    public void addRtScore(boolean value, String featKey) {
-        scores.addRtScore(value, featKey);
-    }
-
     public String getCategory() {
-        return lipid.getCategory().orElse("");
+        return extractCodeFromBracket(lipid.getCategory().orElse(""));
     }
 
     public String getMainClass() {
-        return lipid.getMainClass().orElse("");
+        return extractCodeFromBracket(lipid.getMainClass().orElse(""));
     }
 
     public String getSubClass() {
-        return lipid.getSubClass().orElse("");
+        // Sometimes the attribute subclass is formatted with full code and needs to be extracted
+        return extractCodeFromBracket(lipid.getSubClass().orElse(""));
+    }
+
+    /**
+     * If the provided text contains a code in square brackets at the end (or anywhere), extract and return it.
+     * Otherwise return the original text (or empty string).
+     *   E.g. subclass: "C5 isoprenoids (hemiterpenes) [PR0101]" --> "PR0101"
+     */
+    private String extractCodeFromBracket(String text) {
+        if (text == null || text.isEmpty()) return "";
+        int startIdx = text.indexOf('[');
+        int endIdx = text.indexOf(']');
+        if (startIdx >= 0 && endIdx > startIdx) {
+            return text.substring(startIdx + 1, endIdx).trim();
+        }
+        return text;
     }
 }
