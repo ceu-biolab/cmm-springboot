@@ -111,9 +111,9 @@ public class MSMSSearchRepository {
             );
         }
 
-        matchedSpectra=selectBestPerCompound(new ArrayList<>(matchedSpectra));
+        matchedSpectra = selectBestPerCompound(new ArrayList<>(matchedSpectra));
         responseDTO.setMsmsList(new ArrayList<>(matchedSpectra));
-
+        responseDTO.setExperimentalSpectrum(copySpectrum(queryData.getFragmentsMZsIntensities()));
         return responseDTO;
     }
 
@@ -261,6 +261,19 @@ public class MSMSSearchRepository {
         try (InputStream inputStream = resource.getInputStream()) {
             return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         }
+    }
+
+    private Spectrum copySpectrum(Spectrum source) {
+        if (source == null) {
+            return null;
+        }
+        List<MSPeak> copiedPeaks = new ArrayList<>();
+        if (source.getPeaks() != null) {
+            for (MSPeak peak : source.getPeaks()) {
+                copiedPeaks.add(new MSPeak(peak.getMz(), peak.getIntensity()));
+            }
+        }
+        return new Spectrum(source.getPrecursorMz(), copiedPeaks);
     }
 
 }
