@@ -69,6 +69,24 @@ public class GCMSSearchRepository {
 
             FormulaType inferredFormulaType = FormulaType.inferFromFormula(rs.getString("formula")).orElse(null);
 
+            Object pcIdObj = rs.getObject("pc_id");
+            Integer pcId = pcIdObj == null ? null : ((Number) pcIdObj).intValue();
+
+            Object chebiIdObj = rs.getObject("chebi_id");
+            Integer chebiId = chebiIdObj == null ? null : ((Number) chebiIdObj).intValue();
+
+            Object aspergillusIdObj = rs.getObject("aspergillus_id");
+            Integer aspergillusId = aspergillusIdObj == null ? null : ((Number) aspergillusIdObj).intValue();
+
+            Object npatlasIdObj = rs.getObject("npatlas_id");
+            Integer npatlasId = npatlasIdObj == null ? null : ((Number) npatlasIdObj).intValue();
+
+            Object fahfaIdObj = rs.getObject("fahfa_id");
+            Integer fahfaId = fahfaIdObj == null ? null : ((Number) fahfaIdObj).intValue();
+
+            Object ohPositionIdObj = rs.getObject("oh_position_id");
+            Integer ohPositionId = ohPositionIdObj == null ? null : ((Number) ohPositionIdObj).intValue();
+
             GCMSCompound compound = GCMSCompound.builder()
                     .compoundId(rs.getInt("compound_id"))
                     .compoundName(rs.getString("compound_name"))
@@ -83,6 +101,19 @@ public class GCMSSearchRepository {
                     .inchi(rs.getString("inchi"))
                     .inchiKey(rs.getString("inchi_key"))
                     .smiles(rs.getString("smiles"))
+                    .keggID(rs.getString("kegg_id"))
+                    .lmID(rs.getString("lm_id"))
+                    .hmdbID(rs.getString("hmdb_id"))
+                    .agilentID(rs.getString("agilent_id"))
+                    .pcID(pcId)
+                    .chebiID(chebiId)
+                    .inHouseID(rs.getString("in_house_id"))
+                    .aspergillusID(aspergillusId)
+                    .knapsackID(rs.getString("knapsack_id"))
+                    .npatlasID(npatlasId)
+                    .fahfaID(fahfaId)
+                    .ohPositionID(ohPositionId)
+                    .aspergillusWebName(rs.getString("aspergillus_web_name"))
                     .dbRI(rs.getDouble("RI"))
                     .derivatizationMethod(queryData.getDerivatizationMethod())
                     .gcColumn(queryData.getColumnType())
@@ -231,6 +262,19 @@ public class GCMSSearchRepository {
             String inchi = gcmsCompoundList.get(i).getInchi();
             String inchiKey = gcmsCompoundList.get(i).getInchiKey();
             String smiles = gcmsCompoundList.get(i).getSmiles();
+            String keggID = gcmsCompoundList.get(i).getKeggID();
+            String lmID = gcmsCompoundList.get(i).getLmID();
+            String hmdbID = gcmsCompoundList.get(i).getHmdbID();
+            String agilentID = gcmsCompoundList.get(i).getAgilentID();
+            Integer pcID = gcmsCompoundList.get(i).getPcID();
+            Integer chebiID = gcmsCompoundList.get(i).getChebiID();
+            String inHouseID = gcmsCompoundList.get(i).getInHouseID();
+            Integer aspergillusID = gcmsCompoundList.get(i).getAspergillusID();
+            String knapsackID = gcmsCompoundList.get(i).getKnapsackID();
+            Integer npatlasID = gcmsCompoundList.get(i).getNpatlasID();
+            Integer fahfaID = gcmsCompoundList.get(i).getFahfaID();
+            Integer ohPositionID = gcmsCompoundList.get(i).getOhPositionID();
+            String aspergillusWebName = gcmsCompoundList.get(i).getAspergillusWebName();
 
             DerivatizationMethod derivatizationMethod = gcmsCompoundList.get(i).getDerivatizationMethod();
             ColumnType gcColumn = gcmsCompoundList.get(i).getGcColumn();
@@ -264,6 +308,10 @@ public class GCMSSearchRepository {
                     .formula(compoundFormula).formulaType(formulaType).logP(logP).casId(casId)
                     .charge_type(chargeType).charge_number(chargeNumber).compound_type(compoundType)
                     .inchi(inchi).inchiKey(inchiKey).smiles(smiles)
+                    .keggID(keggID).lmID(lmID).hmdbID(hmdbID).agilentID(agilentID)
+                    .pcID(pcID).chebiID(chebiID).inHouseID(inHouseID).aspergillusID(aspergillusID)
+                    .knapsackID(knapsackID).npatlasID(npatlasID).fahfaID(fahfaID).ohPositionID(ohPositionID)
+                    .aspergillusWebName(aspergillusWebName)
                     .dertype(derivatizationMethod).gcColumn(gcColumn)
                     .RI(RI).GCMSSpectrum(spectrumListCopy)
                     .build();
