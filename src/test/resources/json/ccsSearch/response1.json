@@ -61,7 +61,8 @@
                                 ],
                                 "dbCcs": 202.881
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.6670953851203896
                         },
                         {
                             "compound": {
@@ -98,7 +99,8 @@
                                 "pathways": [],
                                 "dbCcs": 204.082
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.6670953851203896
                         },
                         {
                             "compound": {
@@ -135,7 +137,8 @@
                                 "pathways": [],
                                 "dbCcs": 202.147
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.6670953851203896
                         }
                     ]
                 }
@@ -186,7 +189,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.115
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -223,7 +227,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.628
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -260,7 +265,8 @@
                                 "pathways": [],
                                 "dbCcs": 174.981
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -297,7 +303,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.042
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5138445898389319
                         },
                         {
                             "compound": {
@@ -334,7 +341,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.928
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -371,7 +379,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.723
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -408,7 +417,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.691
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -445,7 +455,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.202
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -482,7 +493,8 @@
                                 "pathways": [],
                                 "dbCcs": 178.626
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -519,7 +531,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.353
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -556,7 +569,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.62
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -599,7 +613,8 @@
                                 ],
                                 "dbCcs": 176.29
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -636,7 +651,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.5
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -699,7 +715,8 @@
                                 ],
                                 "dbCcs": 178.546
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -736,7 +753,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.662
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -773,7 +791,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.718
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -810,7 +829,8 @@
                                 "pathways": [],
                                 "dbCcs": 178.462
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -847,7 +867,8 @@
                                 "pathways": [],
                                 "dbCcs": 178.691
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128811312802706
                         },
                         {
                             "compound": {
@@ -884,7 +905,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.632
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -921,7 +943,8 @@
                                 "pathways": [],
                                 "dbCcs": 178.114
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -958,7 +981,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.424
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -995,7 +1019,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.692
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1032,7 +1057,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.391
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1069,7 +1095,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.5
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1106,7 +1133,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.876
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1143,7 +1171,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.816
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1180,7 +1209,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.928
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1217,7 +1247,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.831
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1254,7 +1285,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.409
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1291,7 +1323,8 @@
                                 "pathways": [],
                                 "dbCcs": 178.077
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -1328,7 +1361,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.366
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1365,7 +1399,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.364
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1402,7 +1437,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.716
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1439,7 +1475,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.255
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1476,7 +1513,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.53
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1513,7 +1551,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.131
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1550,7 +1589,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.326
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1587,7 +1627,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.138
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1624,7 +1665,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.792
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1661,7 +1703,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.388
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1698,7 +1741,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.462
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1735,7 +1779,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.89
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1772,7 +1817,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.662
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1809,7 +1855,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.449
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1846,7 +1893,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.312
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1883,7 +1931,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.525
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1920,7 +1969,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.172
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1957,7 +2007,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.921
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -1994,7 +2045,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.136
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2031,7 +2083,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.223
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2068,7 +2121,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.488
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2105,7 +2159,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.225
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2142,7 +2197,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.754
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2179,7 +2235,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.034
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128811312802706
                         },
                         {
                             "compound": {
@@ -2216,7 +2273,8 @@
                                 "pathways": [],
                                 "dbCcs": 178.301
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2253,7 +2311,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.011
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2290,7 +2349,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.027
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2327,7 +2387,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.533
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2364,7 +2425,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.983
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2401,7 +2463,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.835
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2438,7 +2501,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.069
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2475,7 +2539,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.089
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2512,7 +2577,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.656
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2549,7 +2615,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.318
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -2586,7 +2653,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.523
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2623,7 +2691,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.353
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2660,7 +2729,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.34
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2697,7 +2767,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.805
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -2734,7 +2805,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.632
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5138445898389319
                         },
                         {
                             "compound": {
@@ -2771,7 +2843,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.831
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5138445898389319
                         },
                         {
                             "compound": {
@@ -2808,7 +2881,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.011
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5138445898389319
                         },
                         {
                             "compound": {
@@ -2845,7 +2919,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.933
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5138445898389319
                         },
                         {
                             "compound": {
@@ -2882,7 +2957,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.844
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5138445898389319
                         },
                         {
                             "compound": {
@@ -2919,7 +2995,8 @@
                                 "pathways": [],
                                 "dbCcs": 178.162
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128811312802706
                         },
                         {
                             "compound": {
@@ -2956,7 +3033,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.674
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -2993,7 +3071,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.41
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5138445898389319
                         },
                         {
                             "compound": {
@@ -3030,7 +3109,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.052
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3067,7 +3147,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.867
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3104,7 +3185,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.853
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3141,7 +3223,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.522
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3178,7 +3261,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.438
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3215,7 +3299,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.349
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3252,7 +3337,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.591
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3289,7 +3375,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.438
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3326,7 +3413,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.0
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3363,7 +3451,8 @@
                                 "pathways": [],
                                 "dbCcs": 175.829
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5102762246415772
                         },
                         {
                             "compound": {
@@ -3393,7 +3482,8 @@
                                 "pathways": [],
                                 "dbCcs": 177.111
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         },
                         {
                             "compound": {
@@ -3423,7 +3513,8 @@
                                 "pathways": [],
                                 "dbCcs": 176.317
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.5128882679352094
                         }
                     ]
                 }

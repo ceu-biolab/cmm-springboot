@@ -18,7 +18,9 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -132,7 +134,7 @@ public class CemsRmtSearchService {
                         continue;
                     }
 
-                    Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), targetMass);
+                    Double massErrorPpm = MassErrorTools.computePpm(candidate.getMass(), targetMass);
                     Double mzCalc = computeTheoreticalMz(candidate.getMass(), definition);
                     Double rmtErrorPct = computeRmtErrorPct(candidate.getRelativeMt(), targetRmt);
 
@@ -146,7 +148,6 @@ public class CemsRmtSearchService {
                             .rmtErrorPct(rmtErrorPct)
                             .relativeMt(candidate.getRelativeMt())
                             .absoluteMt(candidate.getAbsoluteMt())
-                            .score(null)
                             .build();
 
                     annotationsByAdduct.addAnnotation(annotation);
@@ -224,13 +225,6 @@ public class CemsRmtSearchService {
                 ? Math.abs(candidate.getRelativeMt() - targetRmt)
                 : 1e9;
         return massDelta + rmtDelta;
-    }
-
-    private Double computeMassErrorPpm(Double candidateMass, double targetMass) {
-        if (candidateMass == null || targetMass == 0d) {
-            return null;
-        }
-        return (candidateMass - targetMass) / targetMass * 1e6;
     }
 
     private Double computeTheoreticalMz(Double neutralMass, AdductDefinition definition) {

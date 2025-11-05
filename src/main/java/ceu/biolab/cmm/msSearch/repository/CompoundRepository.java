@@ -8,12 +8,14 @@ import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.msFeature.*;
+
 import com.apicatalog.jsonld.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -199,7 +201,13 @@ public class CompoundRepository {
 
                 List<Annotation> annotations = new ArrayList<>();
                 for (Compound compound : filteredCompounds) {
-                    annotations.add(new Annotation(compound));
+                    Annotation annotation = new Annotation(compound);
+                    Double compoundMass = compound.getMass();
+                    Double targetMass = monoIsotopicMassFromMZAndAdduct;
+                    Double massErrorPpm = MassErrorTools.computePpm(compoundMass, targetMass);
+                    annotation.setMassErrorPpm(massErrorPpm);
+                    logger.debug("Mass error ppm for compound {} (adduct {}): {}", compound.getCompoundId(), adductString, massErrorPpm);
+                    annotations.add(annotation);
                 }
                 annotationsByAdduct.setAnnotations(annotations);
             }

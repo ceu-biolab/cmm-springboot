@@ -22,6 +22,7 @@ import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;
 
@@ -189,6 +190,8 @@ public class CcsSearchService {
                             IMMSCompound imCompound = builder.build();
                             imCompound.addPathway(pathway);
                             Annotation annotation = new Annotation(imCompound);
+                            Double massErrorPpm = MassErrorTools.computePpm(imCompound.getMass(), neutralMass);
+                            annotation.setMassErrorPpm(massErrorPpm);
                             annotations.add(annotation);
                         }
                     }

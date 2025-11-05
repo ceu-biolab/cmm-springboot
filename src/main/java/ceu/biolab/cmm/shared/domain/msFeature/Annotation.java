@@ -10,6 +10,7 @@ import lombok.Data;
 public class Annotation {
     private Compound compound;
     private List<IScore> scores;
+    private Double massErrorPpm;
 
     // no-arg constructor for Jackson
     public Annotation() {

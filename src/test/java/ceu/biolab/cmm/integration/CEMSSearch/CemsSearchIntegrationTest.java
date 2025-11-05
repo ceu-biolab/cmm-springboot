@@ -17,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.FileCopyUtils;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,7 +45,7 @@ class CemsSearchIntegrationTest {
         JsonNode actualNode = objectMapper.readTree(result.getResponse().getContentAsString());
         JsonNode expectedNode = objectMapper.readTree(expectedJson);
 
-        org.junit.jupiter.api.Assertions.assertEquals(expectedNode, actualNode, "Response payload must match expected snapshot");
+        JSONAssert.assertEquals(expectedNode.toString(), actualNode.toString(), JSONCompareMode.STRICT);
     }
 
     private String readResource(String path) throws IOException {

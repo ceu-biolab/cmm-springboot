@@ -13,12 +13,91 @@
                         {
                             "compound": {
                                 "compoundId": 1,
+                                "casId": "358-72-5",
                                 "compoundName": "Dimethylallyl pyrophosphate",
                                 "formula": "C5H12O7P2",
                                 "mass": 246.005825762,
+                                "chargeType": 0,
+                                "chargeNumber": 0,
+                                "formulaType": "CHNOPS",
+                                "compoundType": "LIPID",
+                                "logP": null,
+                                "rtPred": -0.5006383405640973,
+                                "inchi": "InChI=1S/C5H12O7P2/c1-5(2)3-4-11-14(9,10)12-13(6,7)8/h3H,4H2,1-2H3,(H,9,10)(H2,6,7,8)",
+                                "inchiKey": "CBIDRCWHNCKSTO-UHFFFAOYSA-N",
+                                "smiles": "CC(C)=CCOP(O)(=O)OP(O)(O)=O",
+                                "lipidType": null,
+                                "numChains": null,
+                                "numCarbons": null,
+                                "doubleBonds": null,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "Prenol Lipids [PR]",
+                                        "mainClass": "Isoprenoids [PR01]",
+                                        "subClass": "C5 isoprenoids (hemiterpenes) [PR0101]",
+                                        "classLevel4": null
+                                    }
+                                ],
+                                "biologicalActivity": null,
+                                "meshNomenclature": null,
+                                "iupacClassification": null,
+                                "mol2": null,
+                                "pathways": [
+                                    {
+                                        "pathwayId": 92,
+                                        "pathwayName": "Biosynthesis of terpenoids and steroids",
+                                        "pathwayMap": "map01062"
+                                    },
+                                    {
+                                        "pathwayId": 88,
+                                        "pathwayName": "Terpenoid backbone biosynthesis",
+                                        "pathwayMap": "map00900"
+                                    },
+                                    {
+                                        "pathwayId": 90,
+                                        "pathwayName": "Biosynthesis of plant secondary metabolites",
+                                        "pathwayMap": "map01060"
+                                    },
+                                    {
+                                        "pathwayId": 156,
+                                        "pathwayName": "Zeatin biosynthesis",
+                                        "pathwayMap": "map00908"
+                                    },
+                                    {
+                                        "pathwayId": 97,
+                                        "pathwayName": "Biosynthesis of plant hormones",
+                                        "pathwayMap": "map01070"
+                                    },
+                                    {
+                                        "pathwayId": 98,
+                                        "pathwayName": "Biosynthesis of antibiotics",
+                                        "pathwayMap": "map01130"
+                                    },
+                                    {
+                                        "pathwayId": 4,
+                                        "pathwayName": "Steroid Biosynthesis",
+                                        "pathwayMap": "map00100"
+                                    },
+                                    {
+                                        "pathwayId": 65,
+                                        "pathwayName": "Biosynthesis of secondary metabolites",
+                                        "pathwayMap": "map01110"
+                                    },
+                                    {
+                                        "pathwayId": 60,
+                                        "pathwayName": "Metabolic pathways",
+                                        "pathwayMap": "map01100"
+                                    },
+                                    {
+                                        "pathwayId": 45,
+                                        "pathwayName": "Riboflavin Metabolism",
+                                        "pathwayMap": "map00740"
+                                    }
+                                ],
                                 "dbCcs": 156.117
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.0018400695082626461
                         }
                     ]
                 },
@@ -45,12 +124,91 @@
                         {
                             "compound": {
                                 "compoundId": 1,
+                                "casId": "358-72-5",
                                 "compoundName": "Dimethylallyl pyrophosphate",
                                 "formula": "C5H12O7P2",
                                 "mass": 246.005825762,
+                                "chargeType": 0,
+                                "chargeNumber": 0,
+                                "formulaType": "CHNOPS",
+                                "compoundType": "LIPID",
+                                "logP": null,
+                                "rtPred": -0.5006383405640973,
+                                "inchi": "InChI=1S/C5H12O7P2/c1-5(2)3-4-11-14(9,10)12-13(6,7)8/h3H,4H2,1-2H3,(H,9,10)(H2,6,7,8)",
+                                "inchiKey": "CBIDRCWHNCKSTO-UHFFFAOYSA-N",
+                                "smiles": "CC(C)=CCOP(O)(=O)OP(O)(O)=O",
+                                "lipidType": null,
+                                "numChains": null,
+                                "numCarbons": null,
+                                "doubleBonds": null,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "Prenol Lipids [PR]",
+                                        "mainClass": "Isoprenoids [PR01]",
+                                        "subClass": "C5 isoprenoids (hemiterpenes) [PR0101]",
+                                        "classLevel4": null
+                                    }
+                                ],
+                                "biologicalActivity": null,
+                                "meshNomenclature": null,
+                                "iupacClassification": null,
+                                "mol2": null,
+                                "pathways": [
+                                    {
+                                        "pathwayId": 92,
+                                        "pathwayName": "Biosynthesis of terpenoids and steroids",
+                                        "pathwayMap": "map01062"
+                                    },
+                                    {
+                                        "pathwayId": 88,
+                                        "pathwayName": "Terpenoid backbone biosynthesis",
+                                        "pathwayMap": "map00900"
+                                    },
+                                    {
+                                        "pathwayId": 90,
+                                        "pathwayName": "Biosynthesis of plant secondary metabolites",
+                                        "pathwayMap": "map01060"
+                                    },
+                                    {
+                                        "pathwayId": 156,
+                                        "pathwayName": "Zeatin biosynthesis",
+                                        "pathwayMap": "map00908"
+                                    },
+                                    {
+                                        "pathwayId": 97,
+                                        "pathwayName": "Biosynthesis of plant hormones",
+                                        "pathwayMap": "map01070"
+                                    },
+                                    {
+                                        "pathwayId": 98,
+                                        "pathwayName": "Biosynthesis of antibiotics",
+                                        "pathwayMap": "map01130"
+                                    },
+                                    {
+                                        "pathwayId": 4,
+                                        "pathwayName": "Steroid Biosynthesis",
+                                        "pathwayMap": "map00100"
+                                    },
+                                    {
+                                        "pathwayId": 65,
+                                        "pathwayName": "Biosynthesis of secondary metabolites",
+                                        "pathwayMap": "map01110"
+                                    },
+                                    {
+                                        "pathwayId": 60,
+                                        "pathwayName": "Metabolic pathways",
+                                        "pathwayMap": "map01100"
+                                    },
+                                    {
+                                        "pathwayId": 45,
+                                        "pathwayName": "Riboflavin Metabolism",
+                                        "pathwayMap": "map00740"
+                                    }
+                                ],
                                 "dbCcs": 156.233
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -0.01097765787105365
                         }
                     ]
                 }
