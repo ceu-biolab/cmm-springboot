@@ -8,7 +8,6 @@ import lombok.Value;
 @Builder
 public class CeAnnotationDTO {
     Compound compound;
-    Double score;
     Integer rank;
     Double massErrorPpm;
     Double mzCalc;

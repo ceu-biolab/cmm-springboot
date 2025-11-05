@@ -37,6 +37,7 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 
 @Service
@@ -128,7 +129,7 @@ public class CemsSearchService {
                         continue;
                     }
 
-                    Double massErrorPpm = computeMassErrorPpm(candidate.getMass(), neutralMass);
+                    Double massErrorPpm = MassErrorTools.computePpm(candidate.getMass(), neutralMass);
                     Double mzCalc = computeTheoreticalMz(candidate.getMass(), definition);
                     Double mobilityErrorPct = computeMobilityErrorPct(candidate.getExperimentalEffMob(), effMob);
 
@@ -139,7 +140,6 @@ public class CemsSearchService {
                             .mzCalc(mzCalc)
                             .neutralMassCalc(candidate.getMass())
                             .mobilityErrorPct(mobilityErrorPct)
-                            .score(null)
                             .build();
 
                     annotationsByAdduct.addAnnotation(annotation);
@@ -203,13 +203,6 @@ public class CemsSearchService {
                 ? Math.abs(candidate.getExperimentalEffMob() - targetMobility)
                 : 1e9;
         return massDelta + mobilityDelta;
-    }
-
-    private Double computeMassErrorPpm(Double candidateMass, double targetMass) {
-        if (candidateMass == null || targetMass == 0d) {
-            return null;
-        }
-        return (candidateMass - targetMass) / targetMass * 1e6;
     }
 
     private Double computeTheoreticalMz(Double neutralMass, AdductDefinition definition) {

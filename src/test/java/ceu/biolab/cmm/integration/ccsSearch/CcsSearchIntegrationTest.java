@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
-import org.springframework.test.json.JsonCompareMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.StreamUtils;
@@ -17,8 +16,10 @@ import org.springframework.util.StreamUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,11 +44,13 @@ public class CcsSearchIntegrationTest {
         String requestJson = loadJson("json/ccsSearch/request1.json");
         String expectedResponse = loadJson("json/ccsSearch/response1.json");
 
-        mockMvc.perform(post("/api/ccs")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
+        MvcResult result = mockMvc.perform(post("/api/ccs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
+                .andReturn();
+        String actual = result.getResponse().getContentAsString();
+        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.STRICT);
     }
 
     @Test
@@ -55,11 +58,13 @@ public class CcsSearchIntegrationTest {
         String requestJson = loadJson("json/ccsSearch/request2.json");
         String expectedResponse = loadJson("json/ccsSearch/response2.json");
 
-        mockMvc.perform(post("/api/ccs")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
+        MvcResult result = mockMvc.perform(post("/api/ccs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+                .andReturn();
+        String actual = result.getResponse().getContentAsString();
+        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.LENIENT);
     }
 
     @Test
@@ -67,11 +72,13 @@ public class CcsSearchIntegrationTest {
         String requestJson = loadJson("json/ccsSearch/request3.json");
         String expectedResponse = loadJson("json/ccsSearch/response3.json");
 
-        mockMvc.perform(post("/api/ccs")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
+        MvcResult result = mockMvc.perform(post("/api/ccs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+                .andReturn();
+        String actual = result.getResponse().getContentAsString();
+        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.LENIENT);
     }
 
     @Test

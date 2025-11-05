@@ -42,7 +42,6 @@ class Cems1MarkerIntegrationTest {
                 .andReturn();
 
         JsonNode actual = objectMapper.readTree(mvcResult.getResponse().getContentAsString());
-
         org.junit.jupiter.api.Assertions.assertEquals(expected, actual);
     }
 }

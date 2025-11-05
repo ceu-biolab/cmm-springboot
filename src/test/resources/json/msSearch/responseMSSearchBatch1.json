@@ -37,10 +37,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010859",
                                 "hmdbID": "HMDB0115104",
@@ -53,18 +62,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -86,10 +87,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0115277",
@@ -102,11 +105,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -128,10 +130,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010766",
                                 "hmdbID": "HMDB0115301",
@@ -144,18 +155,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -177,10 +180,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010319",
                                 "hmdbID": "HMDB0114889",
@@ -193,18 +205,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -226,10 +230,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010575",
                                 "hmdbID": "HMDB0115543",
@@ -242,18 +255,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -275,10 +280,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010736",
                                 "hmdbID": null,
@@ -291,18 +305,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.893472690504606
                         },
                         {
                             "compound": {
@@ -324,10 +330,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114938",
@@ -340,11 +348,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -366,10 +373,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010709",
                                 "hmdbID": "HMDB0115248",
@@ -382,18 +398,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -415,10 +423,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0115276",
@@ -431,11 +441,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -457,10 +466,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010360",
                                 "hmdbID": "HMDB0114964",
@@ -473,18 +491,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -506,10 +516,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0115459",
@@ -522,11 +534,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -548,10 +559,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114872",
@@ -564,11 +577,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -590,10 +602,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010335",
                                 "hmdbID": null,
@@ -606,18 +627,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.893472690504606
                         },
                         {
                             "compound": {
@@ -639,10 +652,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP10",
+                                        "subClass": "GP1001",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP10010949",
                                 "hmdbID": "HMDB0115528",
@@ -655,18 +677,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP10",
-                                        "subClass": "GP1001",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         },
                         {
                             "compound": {
@@ -688,10 +702,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114913",
@@ -704,11 +720,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.890255494354276
                         }
                     ]
                 },
@@ -735,10 +750,19 @@
                                 "numChains": 2,
                                 "numCarbons": 35,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "SP",
+                                        "mainClass": "SP03",
+                                        "subClass": "SP0301",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMSP03010046",
                                 "hmdbID": null,
@@ -751,18 +775,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "SP",
-                                        "mainClass": "SP03",
-                                        "subClass": "SP0301",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -6.493149180621805
                         }
                     ]
                 },
@@ -793,10 +809,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 1,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP04",
+                                        "subClass": "GP0403",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP04030065",
                                 "hmdbID": null,
@@ -809,18 +834,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP04",
-                                        "subClass": "GP0403",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.7783298835787
                         },
                         {
                             "compound": {
@@ -842,10 +859,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 2,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP04",
+                                        "subClass": "GP0402",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP04020050",
                                 "hmdbID": null,
@@ -858,18 +884,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP04",
-                                        "subClass": "GP0402",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.7783298835787
                         },
                         {
                             "compound": {
@@ -891,10 +909,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 1,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP04",
+                                        "subClass": "GP0403",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP04030045",
                                 "hmdbID": null,
@@ -907,18 +934,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP04",
-                                        "subClass": "GP0403",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": 9.7783298835787
                         }
                     ]
                 }
@@ -953,10 +972,12 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": null,
@@ -969,11 +990,10 @@
                                 "npatlasID": 12835,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.630121052216453
                         },
                         {
                             "compound": {
@@ -995,10 +1015,19 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "SP",
+                                        "mainClass": "SP05",
+                                        "subClass": "SP0501",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMSP05010134",
                                 "hmdbID": null,
@@ -1011,18 +1040,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "SP",
-                                        "mainClass": "SP05",
-                                        "subClass": "SP0501",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.65135310924505
                         },
                         {
                             "compound": {
@@ -1044,10 +1065,19 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "SP",
+                                        "mainClass": "SP05",
+                                        "subClass": "SP0501",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMSP05010117",
                                 "hmdbID": null,
@@ -1060,18 +1090,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "SP",
-                                        "mainClass": "SP05",
-                                        "subClass": "SP0501",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.65135310924505
                         },
                         {
                             "compound": {
@@ -1093,10 +1115,12 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": null,
@@ -1109,11 +1133,10 @@
                                 "npatlasID": 3980,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.630121052216453
                         },
                         {
                             "compound": {
@@ -1135,10 +1158,19 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "SP",
+                                        "mainClass": "SP05",
+                                        "subClass": "SP0501",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMSP05010092",
                                 "hmdbID": null,
@@ -1151,18 +1183,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "SP",
-                                        "mainClass": "SP05",
-                                        "subClass": "SP0501",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.65135310924505
                         },
                         {
                             "compound": {
@@ -1184,10 +1208,19 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "SP",
+                                        "mainClass": "SP05",
+                                        "subClass": "SP0501",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMSP05010156",
                                 "hmdbID": null,
@@ -1200,18 +1233,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "SP",
-                                        "mainClass": "SP05",
-                                        "subClass": "SP0501",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.65135310924505
                         },
                         {
                             "compound": {
@@ -1233,10 +1258,19 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "SP",
+                                        "mainClass": "SP05",
+                                        "subClass": "SP0501",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMSP0501AC24",
                                 "hmdbID": null,
@@ -1249,18 +1283,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "SP",
-                                        "mainClass": "SP05",
-                                        "subClass": "SP0501",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.65135310924505
                         },
                         {
                             "compound": {
@@ -1282,10 +1308,19 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "SP",
+                                        "mainClass": "SP05",
+                                        "subClass": "SP0501",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMSP0501AA82",
                                 "hmdbID": null,
@@ -1298,18 +1333,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "SP",
-                                        "mainClass": "SP05",
-                                        "subClass": "SP0501",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.65135310924505
                         },
                         {
                             "compound": {
@@ -1331,10 +1358,12 @@
                                 "numChains": 0,
                                 "numCarbons": 0,
                                 "doubleBonds": 0,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": null,
@@ -1347,11 +1376,10 @@
                                 "npatlasID": 14054,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -2.630121052216453
                         }
                     ]
                 },
@@ -1394,10 +1422,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011515",
                                 "hmdbID": null,
@@ -1410,18 +1447,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -1443,10 +1472,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011772",
                                 "hmdbID": null,
@@ -1459,18 +1497,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -1492,10 +1522,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114248",
@@ -1508,11 +1540,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -1534,10 +1565,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009618",
@@ -1550,11 +1583,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -1576,10 +1608,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011905",
                                 "hmdbID": null,
@@ -1592,18 +1633,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -1625,10 +1658,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010765",
                                 "hmdbID": null,
@@ -1641,18 +1683,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -1674,10 +1708,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010893",
                                 "hmdbID": "HMDB0009299",
@@ -1690,18 +1733,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -1723,10 +1758,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114137",
@@ -1739,11 +1776,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -1765,10 +1801,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009586",
@@ -1781,11 +1819,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -1807,10 +1844,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009651",
@@ -1823,11 +1862,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -1849,10 +1887,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010652",
                                 "hmdbID": "HMDB0009075",
@@ -1865,18 +1912,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -1898,10 +1937,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114276",
@@ -1914,11 +1955,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -1940,10 +1980,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114499",
@@ -1956,11 +1998,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -1982,10 +2023,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011543",
                                 "hmdbID": null,
@@ -1998,18 +2048,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -2031,10 +2073,12 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0008691",
@@ -2047,11 +2091,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -2073,10 +2116,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009330",
@@ -2089,11 +2134,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -2115,10 +2159,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114330",
@@ -2131,11 +2177,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2157,10 +2202,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011934",
                                 "hmdbID": null,
@@ -2173,18 +2227,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -2206,10 +2252,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010923",
                                 "hmdbID": "HMDB0009363",
@@ -2222,18 +2277,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -2255,10 +2302,12 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0008658",
@@ -2271,11 +2320,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -2297,10 +2345,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009298",
@@ -2313,11 +2363,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -2339,10 +2388,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114053",
@@ -2355,11 +2406,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2381,10 +2431,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02011056",
                                 "hmdbID": null,
@@ -2397,18 +2456,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -2430,10 +2481,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01012071",
                                 "hmdbID": null,
@@ -2446,18 +2506,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -2479,10 +2531,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009011",
@@ -2495,11 +2549,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -2521,10 +2574,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0113957",
@@ -2537,11 +2592,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2563,10 +2617,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009205",
@@ -2579,11 +2635,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -2605,10 +2660,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114552",
@@ -2621,11 +2678,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2647,10 +2703,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114001",
@@ -2663,11 +2721,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2689,10 +2746,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114359",
@@ -2705,11 +2764,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2731,10 +2789,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114358",
@@ -2747,11 +2807,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2773,10 +2832,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011572",
                                 "hmdbID": null,
@@ -2789,18 +2857,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -2822,10 +2882,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114081",
@@ -2838,11 +2900,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2864,10 +2925,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0113958",
@@ -2880,11 +2943,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2906,10 +2968,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010952",
                                 "hmdbID": "HMDB0009395",
@@ -2922,18 +2993,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -2955,10 +3018,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114386",
@@ -2971,11 +3036,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -2997,10 +3061,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114221",
@@ -3013,11 +3079,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -3039,10 +3104,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02011085",
                                 "hmdbID": "HMDB0009556",
@@ -3055,18 +3129,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3088,10 +3154,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02011086",
                                 "hmdbID": "HMDB0009557",
@@ -3104,18 +3179,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3137,10 +3204,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011460",
                                 "hmdbID": null,
@@ -3153,18 +3229,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -3186,10 +3254,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011718",
                                 "hmdbID": null,
@@ -3202,18 +3279,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -3235,10 +3304,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114027",
@@ -3251,11 +3322,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -3277,10 +3347,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010707",
                                 "hmdbID": "HMDB0009140",
@@ -3293,18 +3372,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3326,10 +3397,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009010",
@@ -3342,11 +3415,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3368,10 +3440,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010836",
                                 "hmdbID": "HMDB0009236",
@@ -3384,18 +3465,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3417,10 +3490,12 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0007957",
@@ -3433,11 +3508,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3459,10 +3533,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009268",
@@ -3475,11 +3551,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3501,10 +3576,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009428",
@@ -3517,11 +3594,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3543,10 +3619,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114304",
@@ -3559,11 +3637,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -3585,10 +3662,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010980",
                                 "hmdbID": "HMDB0009460",
@@ -3601,18 +3687,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3634,10 +3712,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114331",
@@ -3650,11 +3730,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -3676,10 +3755,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009042",
@@ -3692,11 +3773,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3718,10 +3798,12 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0009525",
@@ -3734,11 +3816,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3760,10 +3841,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114026",
@@ -3776,11 +3859,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -3802,10 +3884,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114054",
@@ -3818,11 +3902,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -3844,10 +3927,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02011114",
                                 "hmdbID": "HMDB0009587",
@@ -3860,18 +3952,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3893,10 +3977,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114080",
@@ -3909,11 +3995,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -3935,10 +4020,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010735",
                                 "hmdbID": "HMDB0009173",
@@ -3951,18 +4045,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -3984,10 +4070,19 @@
                                 "numChains": 2,
                                 "numCarbons": 40,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP02",
+                                        "subClass": "GP0201",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP02010863",
                                 "hmdbID": "HMDB0009267",
@@ -4000,18 +4095,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP02",
-                                        "subClass": "GP0201",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -4033,10 +4120,19 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [
+                                    {
+                                        "category": "GP",
+                                        "mainClass": "GP01",
+                                        "subClass": "GP0101",
+                                        "classLevel4": ""
+                                    }
+                                ],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": "LMGP01011876",
                                 "hmdbID": null,
@@ -4049,18 +4145,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [
-                                    {
-                                        "category": "GP",
-                                        "mainClass": "GP01",
-                                        "subClass": "GP0101",
-                                        "classLevel4": ""
-                                    }
-                                ],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.755914381338638
                         },
                         {
                             "compound": {
@@ -4082,10 +4170,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0116717",
@@ -4098,11 +4188,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -4124,10 +4213,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0113979",
@@ -4140,11 +4231,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -4166,10 +4256,12 @@
                                 "numChains": 2,
                                 "numCarbons": 37,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0007956",
@@ -4182,11 +4274,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.759627979831333
                         },
                         {
                             "compound": {
@@ -4208,10 +4299,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114108",
@@ -4224,11 +4317,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -4250,10 +4342,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114249",
@@ -4266,11 +4360,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         },
                         {
                             "compound": {
@@ -4292,10 +4385,12 @@
                                 "numChains": 2,
                                 "numCarbons": 38,
                                 "doubleBonds": 5,
+                                "lipidMapsClassifications": [],
                                 "biologicalActivity": null,
                                 "meshNomenclature": null,
                                 "iupacClassification": null,
                                 "mol2": null,
+                                "pathways": [],
                                 "keggID": null,
                                 "lmID": null,
                                 "hmdbID": "HMDB0114165",
@@ -4308,11 +4403,10 @@
                                 "npatlasID": 0,
                                 "fahfaID": 0,
                                 "ohPositionID": 0,
-                                "aspergillusWebName": null,
-                                "lipidMapsClassifications": [],
-                                "pathways": []
+                                "aspergillusWebName": null
                             },
-                            "scores": []
+                            "scores": [],
+                            "massErrorPpm": -9.75901681755459
                         }
                     ]
                 }
