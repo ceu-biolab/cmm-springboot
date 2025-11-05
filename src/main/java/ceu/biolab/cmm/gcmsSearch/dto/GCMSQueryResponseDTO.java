@@ -31,6 +31,20 @@ public class GCMSQueryResponseDTO {
     private String inchiKey;
     private String smiles;
 
+    private String keggID;
+    private String lmID;
+    private String hmdbID;
+    private String agilentID;
+    private Integer pcID;
+    private Integer chebiID;
+    private String inHouseID;
+    private Integer aspergillusID;
+    private String knapsackID;
+    private Integer npatlasID;
+    private Integer fahfaID;
+    private Integer ohPositionID;
+    private String aspergillusWebName;
+
     private DerivatizationMethod dertype;
     private ColumnType gcColumn;
     @Default
@@ -49,6 +63,19 @@ public class GCMSQueryResponseDTO {
         this.gcColumn = gcColumn;
         this.GCMSSpectrum = GCMSSpectrum != null ? GCMSSpectrum : new ArrayList<>();
         this.RI = RI;
+        this.keggID = null;
+        this.lmID = null;
+        this.hmdbID = null;
+        this.agilentID = null;
+        this.pcID = null;
+        this.chebiID = null;
+        this.inHouseID = null;
+        this.aspergillusID = null;
+        this.knapsackID = null;
+        this.npatlasID = null;
+        this.fahfaID = null;
+        this.ohPositionID = null;
+        this.aspergillusWebName = null;
     }
 
     public GCMSQueryResponseDTO() {
@@ -67,6 +94,19 @@ public class GCMSQueryResponseDTO {
         this.inchi = "";
         this.inchiKey = "";
         this.smiles = "";
+        this.keggID = "";
+        this.lmID = "";
+        this.hmdbID = "";
+        this.agilentID = "";
+        this.pcID = null;
+        this.chebiID = null;
+        this.inHouseID = "";
+        this.aspergillusID = null;
+        this.knapsackID = "";
+        this.npatlasID = null;
+        this.fahfaID = null;
+        this.ohPositionID = null;
+        this.aspergillusWebName = "";
 
         this.dertype = DerivatizationMethod.METHYL_CHLOROFORMATE;
         this.gcColumn = ColumnType.STANDARD_NON_POLAR;

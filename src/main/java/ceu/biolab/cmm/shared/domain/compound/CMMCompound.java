@@ -3,7 +3,9 @@ package ceu.biolab.cmm.shared.domain.compound;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 
 import java.util.Set;
+import lombok.experimental.SuperBuilder;
 
+@SuperBuilder
 public class CMMCompound extends Compound implements Comparable<CMMCompound> {
 
     private final String keggID;
@@ -44,7 +46,7 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound> {
         this.aspergillusWebName = aspergillusWebName;
     }
 
-    public String getkeggID() {
+    public String getKeggID() {
         return keggID;
     }
 
