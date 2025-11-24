@@ -15,28 +15,61 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-/**
- * Loads the canonical adduct definitions from CSV resources and exposes them for lookup.
+
+/* Catalog that loads canonical adduct definitions from CSV resources and exposes them.
+ * Each adduct is indexed by its canonical notation (e.g. "[M+H]+").
+ *
+ * The catalog provides:
+ *   - Lookup by ionization mode: POSITIVE, NEGATIVE, NEUTRAL
+ *   - Parsing and validation of canonical adduct notation
+ *   - Mapping of canonical string → AdductDefinition
  */
+ 
 public final class AdductCatalog {
+
+    /**
+     * Pattern to extract:
+     *   [body]charge
+     *
+     * Example: "[2M+Na]2+", "[M-H]-"
+     */
     private static final Pattern CANONICAL_PATTERN =
             Pattern.compile("^\\[(?<body>[^]]+)](?:(?<chargeDigits>\\d+)?(?<sign>[+-]))$");
+    
+    /**
+     * Pattern to extract multimer and descriptor inside the body.
+     * Example body: "2M+Na" → multimer=2, descriptor="+Na"
+     */
     private static final Pattern BODY_PATTERN =
             Pattern.compile("^(?<multimer>\\d*)M(?<descriptor>.*)$");
 
+    
+    /**
+     * Preloaded catalog:
+     *   IonizationMode → Map( canonicalNotation → AdductDefinition )
+     */
     private static final Map<IonizationMode, Map<String, AdductDefinition>> DEFINITIONS;
 
     static {
-        Map<IonizationMode, Map<String, AdductDefinition>> byMode = new EnumMap<>(IonizationMode.class);
+        Map<IonizationMode, Map<String, AdductDefinition>> byMode = 
+                new EnumMap<>(IonizationMode.class);
+
         byMode.put(IonizationMode.POSITIVE, load("/adducts/adducts_positive_mode.csv", IonizationMode.POSITIVE));
         byMode.put(IonizationMode.NEGATIVE, load("/adducts/adducts_negative_mode.csv", IonizationMode.NEGATIVE));
+        // Neutral mode has no adducts defined
         byMode.put(IonizationMode.NEUTRAL, Collections.emptyMap());
+
         DEFINITIONS = Collections.unmodifiableMap(byMode);
     }
 
+    /** Prevent instantiation */
     private AdductCatalog() {
     }
 
+    /**
+     * Returns the set of adduct definitions for the given ionization mode.
+     * Always returns a map, possibly empty.
+     */
     public static Map<String, AdductDefinition> definitionsFor(IonizationMode ionizationMode) {
         Map<String, AdductDefinition> definitions = DEFINITIONS.get(ionizationMode);
         if (definitions == null) {
@@ -45,6 +78,10 @@ public final class AdductCatalog {
         return definitions;
     }
 
+
+    /**
+     * Loads a CSV file of adduct definitions and returns a map keyed by canonical notation.
+     */
     private static Map<String, AdductDefinition> load(String resourcePath, IonizationMode ionizationMode) {
         try (InputStream stream = AdductCatalog.class.getResourceAsStream(resourcePath)) {
             if (stream == null) {
@@ -110,6 +147,9 @@ public final class AdductCatalog {
                 offset);
     }
 
+    /**
+     * Validates that the charge sign matches the ionization mode.
+     */
     private static void validateChargeAgainstMode(String canonical,
                                                   IonizationMode ionizationMode,
                                                   int charge) {
@@ -121,8 +161,14 @@ public final class AdductCatalog {
         }
     }
 
+
+     /**
+     * Splits the CSV line into two fields:
+     *   canonical, offset
+     *
+     * CSV is simple (no escaped commas), so a lightweight split is sufficient.
+     */
     private static String[] splitCsvLine(String csvLine) {
-        // CSV is simple (no escaped commas), so a lightweight split is sufficient.
         int commaIndex = csvLine.indexOf(',');
         if (commaIndex < 0) {
             return new String[]{csvLine};
