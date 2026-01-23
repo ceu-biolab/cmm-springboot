@@ -1,2008 +1,2008 @@
 {
-  "gcmsFeatures": [
-    {
-      "gcmsSpectrumExperimental": {
-        "spectrum": [
-          {
-            "mzValue": 115.0376,
-            "intensity": 100.0
-          },
-          {
-            "mzValue": 55.0177,
-            "intensity": 40.31255
-          },
-          {
-            "mzValue": 59.0128,
-            "intensity": 18.103279999999998
-          },
-          {
-            "mzValue": 87.0427,
-            "intensity": 15.904760000000001
-          },
-          {
-            "mzValue": 71.0855,
-            "intensity": 6.213241000000001
-          },
-          {
-            "mzValue": 57.0698,
-            "intensity": 5.426879
-          },
-          {
-            "mzValue": 116.0395,
-            "intensity": 5.407668
-          },
-          {
-            "mzValue": 43.0292,
-            "intensity": 5.190646999999999
-          },
-          {
-            "mzValue": 85.1014,
-            "intensity": 3.522497
-          },
-          {
-            "mzValue": 43.0541,
-            "intensity": 3.2214859999999996
-          },
-          {
-            "mzValue": 143.0325,
-            "intensity": 2.812858
-          },
-          {
-            "mzValue": 113.1323,
-            "intensity": 2.04844
-          },
-          {
-            "mzValue": 56.0257,
-            "intensity": 2.012552
-          },
-          {
-            "mzValue": 84.0934,
-            "intensity": 1.6977140000000002
-          },
-          {
-            "mzValue": 121.9918,
-            "intensity": 1.1016940000000002
-          },
-          {
-            "mzValue": 326.9567,
-            "intensity": 1.095998
-          },
-          {
-            "mzValue": 127.1478,
-            "intensity": 1.063178
-          },
-          {
-            "mzValue": 151.9783,
-            "intensity": 1.049012
-          },
-          {
-            "mzValue": 107.5385,
-            "intensity": 1.0477180000000001
-          }
-        ],
-        "spectrumId": -1
-      },
-      "gcmsAnnotations": [
+    "gcmsFeatures": [
         {
-          "gcmsCompound": {
-            "compoundId": 129369695,
-            "casId": null,
-            "compoundName": "(s) Alpha-ketoglutaric acid, O-methoxycarbonyl, dimethyl ester",
-            "formula": "C9H12O7",
-            "mass": 232.0583,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": 0.0,
-            "rtPred": null,
-            "inchi": "InChI=1S/C9H12O7/c1-13-7(10)5-4-6(8(11)14-2)16-9(12)15-3/h4H,5H2,1-3H3/b6-4-",
-            "inchiKey": "QDJJDGQLEUBTRH-XQRVVYSFSA-N",
-            "smiles": "O=C(OC)C/C=C(OC(OC)=O)/C(OC)=O",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": null,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1500.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
+            "gcmsSpectrumExperimental": {
                 "spectrum": [
-                  {
-                    "mzValue": 115.0376,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 55.0177,
-                    "intensity": 40.31255
-                  },
-                  {
-                    "mzValue": 59.0128,
-                    "intensity": 18.103279999999998
-                  },
-                  {
-                    "mzValue": 87.0427,
-                    "intensity": 15.904760000000001
-                  },
-                  {
-                    "mzValue": 71.0855,
-                    "intensity": 6.213241000000001
-                  },
-                  {
-                    "mzValue": 57.0698,
-                    "intensity": 5.426879
-                  },
-                  {
-                    "mzValue": 116.0395,
-                    "intensity": 5.407668
-                  },
-                  {
-                    "mzValue": 43.0292,
-                    "intensity": 5.190646999999999
-                  },
-                  {
-                    "mzValue": 85.1014,
-                    "intensity": 3.522497
-                  },
-                  {
-                    "mzValue": 43.0541,
-                    "intensity": 3.2214859999999996
-                  },
-                  {
-                    "mzValue": 143.0325,
-                    "intensity": 2.812858
-                  },
-                  {
-                    "mzValue": 113.1323,
-                    "intensity": 2.04844
-                  },
-                  {
-                    "mzValue": 56.0257,
-                    "intensity": 2.012552
-                  },
-                  {
-                    "mzValue": 84.0934,
-                    "intensity": 1.6977140000000002
-                  },
-                  {
-                    "mzValue": 121.9918,
-                    "intensity": 1.1016940000000002
-                  },
-                  {
-                    "mzValue": 326.9567,
-                    "intensity": 1.095998
-                  },
-                  {
-                    "mzValue": 127.1478,
-                    "intensity": 1.063178
-                  },
-                  {
-                    "mzValue": 151.9783,
-                    "intensity": 1.049012
-                  },
-                  {
-                    "mzValue": 107.5385,
-                    "intensity": 1.0477180000000001
-                  }
+                    {
+                        "mzValue": 115.0376,
+                        "intensity": 100.0
+                    },
+                    {
+                        "mzValue": 55.0177,
+                        "intensity": 40.31255
+                    },
+                    {
+                        "mzValue": 59.0128,
+                        "intensity": 18.103279999999998
+                    },
+                    {
+                        "mzValue": 87.0427,
+                        "intensity": 15.904760000000001
+                    },
+                    {
+                        "mzValue": 71.0855,
+                        "intensity": 6.213241000000001
+                    },
+                    {
+                        "mzValue": 57.0698,
+                        "intensity": 5.426879
+                    },
+                    {
+                        "mzValue": 116.0395,
+                        "intensity": 5.407668
+                    },
+                    {
+                        "mzValue": 43.0292,
+                        "intensity": 5.190646999999999
+                    },
+                    {
+                        "mzValue": 85.1014,
+                        "intensity": 3.522497
+                    },
+                    {
+                        "mzValue": 43.0541,
+                        "intensity": 3.2214859999999996
+                    },
+                    {
+                        "mzValue": 143.0325,
+                        "intensity": 2.812858
+                    },
+                    {
+                        "mzValue": 113.1323,
+                        "intensity": 2.04844
+                    },
+                    {
+                        "mzValue": 56.0257,
+                        "intensity": 2.012552
+                    },
+                    {
+                        "mzValue": 84.0934,
+                        "intensity": 1.6977140000000002
+                    },
+                    {
+                        "mzValue": 121.9918,
+                        "intensity": 1.1016940000000002
+                    },
+                    {
+                        "mzValue": 326.9567,
+                        "intensity": 1.095998
+                    },
+                    {
+                        "mzValue": 127.1478,
+                        "intensity": 1.063178
+                    },
+                    {
+                        "mzValue": 151.9783,
+                        "intensity": 1.049012
+                    },
+                    {
+                        "mzValue": 107.5385,
+                        "intensity": 1.0477180000000001
+                    }
                 ],
-                "spectrumId": 208
-              }
-            ]
-          },
-          "gcmsCosineScore": 1.0,
-          "experimentalRI": 1500.0,
-          "deltaRI": 0.0
-        },
-        {
-          "gcmsCompound": {
-            "compoundId": 129369653,
-            "casId": null,
-            "compoundName": "methyl 3-hydroxy-2-(methoxycarbonylamino)butanoate",
-            "formula": "C7H13NO5",
-            "mass": 191.07937252,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": -0.4,
-            "rtPred": null,
-            "inchi": "InChI=1S/C7H13NO5/c1-4(9)5(6(10)12-2)8-7(11)13-3/h4-5,9H,1-3H3,(H,8,11)",
-            "inchiKey": "PWTOUDIHPVPRGF-UHFFFAOYSA-N",
-            "smiles": "CC(C(C(=O)OC)NC(=O)OC)O",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": 85678633,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1354.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
-                "spectrum": [
-                  {
-                    "mzValue": 115.0264,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 100.038,
-                    "intensity": 16.771929999999998
-                  },
-                  {
-                    "mzValue": 83.0002,
-                    "intensity": 13.571739999999998
-                  },
-                  {
-                    "mzValue": 56.0494,
-                    "intensity": 13.042679999999999
-                  },
-                  {
-                    "mzValue": 147.0526,
-                    "intensity": 9.962544
-                  },
-                  {
-                    "mzValue": 87.0315,
-                    "intensity": 8.740274000000001
-                  },
-                  {
-                    "mzValue": 88.038,
-                    "intensity": 6.359527999999999
-                  },
-                  {
-                    "mzValue": 59.0127,
-                    "intensity": 5.599145
-                  },
-                  {
-                    "mzValue": 59.0366,
-                    "intensity": 4.559446
-                  },
-                  {
-                    "mzValue": 132.0642,
-                    "intensity": 4.159327
-                  },
-                  {
-                    "mzValue": 45.0335,
-                    "intensity": 3.198328
-                  },
-                  {
-                    "mzValue": 116.0293,
-                    "intensity": 3.182248
-                  },
-                  {
-                    "mzValue": 42.0338,
-                    "intensity": 2.571047
-                  },
-                  {
-                    "mzValue": 60.0206,
-                    "intensity": 2.156764
-                  },
-                  {
-                    "mzValue": 44.0495,
-                    "intensity": 1.613415
-                  },
-                  {
-                    "mzValue": 43.0179,
-                    "intensity": 1.525756
-                  },
-                  {
-                    "mzValue": 114.0536,
-                    "intensity": 1.358382
-                  },
-                  {
-                    "mzValue": 44.9971,
-                    "intensity": 1.354321
-                  },
-                  {
-                    "mzValue": 60.0443,
-                    "intensity": 1.321638
-                  },
-                  {
-                    "mzValue": 86.0223,
-                    "intensity": 1.2581449999999998
-                  },
-                  {
-                    "mzValue": 54.0338,
-                    "intensity": 1.191445
-                  },
-                  {
-                    "mzValue": 57.0333,
-                    "intensity": 1.014071
-                  }
-                ],
-                "spectrumId": 137
-              }
-            ]
-          },
-          "gcmsCosineScore": 0.885160068832626,
-          "experimentalRI": 1500.0,
-          "deltaRI": 146.0
-        },
-        {
-          "gcmsCompound": {
-            "compoundId": 129369633,
-            "casId": null,
-            "compoundName": "trimethyl 1-hydroxypropane-1,2,3-tricarboxylate",
-            "formula": "C9H14O7",
-            "mass": 234.07395278,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": -0.8,
-            "rtPred": null,
-            "inchi": "InChI=1S/C9H14O7/c1-14-6(10)4-5(8(12)15-2)7(11)9(13)16-3/h5,7,11H,4H2,1-3H3",
-            "inchiKey": "HRMWDPSXPUUMOQ-UHFFFAOYSA-N",
-            "smiles": "COC(=O)CC(C(C(=O)OC)O)C(=O)OC",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": 523522,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1497.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
-                "spectrum": [
-                  {
-                    "mzValue": 115.0376,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 83.0114,
-                    "intensity": 49.656530000000004
-                  },
-                  {
-                    "mzValue": 143.0325,
-                    "intensity": 29.34127
-                  },
-                  {
-                    "mzValue": 55.0178,
-                    "intensity": 25.467859999999998
-                  },
-                  {
-                    "mzValue": 59.0127,
-                    "intensity": 7.021713
-                  },
-                  {
-                    "mzValue": 99.0427,
-                    "intensity": 5.552388
-                  },
-                  {
-                    "mzValue": 116.0395,
-                    "intensity": 4.678921
-                  },
-                  {
-                    "mzValue": 87.0427,
-                    "intensity": 3.131736
-                  },
-                  {
-                    "mzValue": 111.0063,
-                    "intensity": 2.4394590000000003
-                  },
-                  {
-                    "mzValue": 84.0127,
-                    "intensity": 1.9188789999999998
-                  },
-                  {
-                    "mzValue": 144.0347,
-                    "intensity": 1.364536
-                  },
-                  {
-                    "mzValue": 85.0271,
-                    "intensity": 1.153955
-                  },
-                  {
-                    "mzValue": 113.022,
-                    "intensity": 1.1485219999999998
-                  },
-                  {
-                    "mzValue": 41.0386,
-                    "intensity": 1.133564
-                  }
-                ],
-                "spectrumId": 115
-              }
-            ]
-          },
-          "gcmsCosineScore": 0.8570648392507059,
-          "experimentalRI": 1500.0,
-          "deltaRI": 3.0
-        },
-        {
-          "gcmsCompound": {
-            "compoundId": 129369678,
-            "casId": null,
-            "compoundName": "(s) Isoleucine, N2,N2-bis(methoxycarbonyl), methyl ester, cycled",
-            "formula": "C10H17NO5",
-            "mass": 231.1107,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": 0.0,
-            "rtPred": null,
-            "inchi": "InChI=1S/C10H17NO5/c1-5-6(2)7-8(14-3)16-10(13)11(7)9(12)15-4/h6-8H,5H2,1-4H3",
-            "inchiKey": "YEZRMJMCKFKHKO-UHFFFAOYSA-N",
-            "smiles": "O=C(OC)N(C(OC1OC)=O)C1C(C)CC",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": null,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1459.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
-                "spectrum": [
-                  {
-                    "mzValue": 115.0264,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 159.0162,
-                    "intensity": 45.66265
-                  },
-                  {
-                    "mzValue": 83.0002,
-                    "intensity": 42.12629
-                  },
-                  {
-                    "mzValue": 87.0315,
-                    "intensity": 31.17727
-                  },
-                  {
-                    "mzValue": 41.0385,
-                    "intensity": 21.209840000000003
-                  },
-                  {
-                    "mzValue": 59.0366,
-                    "intensity": 18.11297
-                  },
-                  {
-                    "mzValue": 57.0699,
-                    "intensity": 17.18026
-                  },
-                  {
-                    "mzValue": 59.0127,
-                    "intensity": 15.65348
-                  },
-                  {
-                    "mzValue": 163.0376,
-                    "intensity": 9.06671
-                  },
-                  {
-                    "mzValue": 43.9893,
-                    "intensity": 7.185608
-                  },
-                  {
-                    "mzValue": 42.0338,
-                    "intensity": 7.087643000000001
-                  },
-                  {
-                    "mzValue": 70.0289,
-                    "intensity": 6.978498
-                  },
-                  {
-                    "mzValue": 128.0693,
-                    "intensity": 6.326092
-                  },
-                  {
-                    "mzValue": 60.0199,
-                    "intensity": 5.578214999999999
-                  },
-                  {
-                    "mzValue": 55.0053,
-                    "intensity": 4.360634
-                  },
-                  {
-                    "mzValue": 116.0293,
-                    "intensity": 4.140524
-                  },
-                  {
-                    "mzValue": 69.0698,
-                    "intensity": 3.959734
-                  },
-                  {
-                    "mzValue": 39.023,
-                    "intensity": 3.353772
-                  },
-                  {
-                    "mzValue": 55.0541,
-                    "intensity": 3.228031
-                  },
-                  {
-                    "mzValue": 115.0628,
-                    "intensity": 2.982224
-                  },
-                  {
-                    "mzValue": 96.043,
-                    "intensity": 2.750131
-                  },
-                  {
-                    "mzValue": 56.0127,
-                    "intensity": 2.6312569999999997
-                  },
-                  {
-                    "mzValue": 69.0209,
-                    "intensity": 2.50223
-                  },
-                  {
-                    "mzValue": 102.0172,
-                    "intensity": 2.4154229999999997
-                  },
-                  {
-                    "mzValue": 160.0193,
-                    "intensity": 2.3220750000000003
-                  },
-                  {
-                    "mzValue": 143.0941,
-                    "intensity": 2.286748
-                  },
-                  {
-                    "mzValue": 44.9971,
-                    "intensity": 2.270282
-                  },
-                  {
-                    "mzValue": 100.038,
-                    "intensity": 1.9462689999999998
-                  },
-                  {
-                    "mzValue": 177.0915,
-                    "intensity": 1.907795
-                  },
-                  {
-                    "mzValue": 69.9926,
-                    "intensity": 1.81824
-                  },
-                  {
-                    "mzValue": 67.0542,
-                    "intensity": 1.698899
-                  },
-                  {
-                    "mzValue": 56.0495,
-                    "intensity": 1.650194
-                  },
-                  {
-                    "mzValue": 86.0223,
-                    "intensity": 1.6445580000000002
-                  },
-                  {
-                    "mzValue": 51.0228,
-                    "intensity": 1.6196720000000002
-                  },
-                  {
-                    "mzValue": 41.026,
-                    "intensity": 1.6015929999999998
-                  },
-                  {
-                    "mzValue": 56.0621,
-                    "intensity": 1.4983080000000002
-                  },
-                  {
-                    "mzValue": 99.0427,
-                    "intensity": 1.438134
-                  },
-                  {
-                    "mzValue": 68.0621,
-                    "intensity": 1.431088
-                  },
-                  {
-                    "mzValue": 78.0337,
-                    "intensity": 1.4201110000000001
-                  },
-                  {
-                    "mzValue": 100.0024,
-                    "intensity": 1.3495529999999998
-                  },
-                  {
-                    "mzValue": 68.0491,
-                    "intensity": 1.3337240000000001
-                  },
-                  {
-                    "mzValue": 54.034,
-                    "intensity": 1.293049
-                  },
-                  {
-                    "mzValue": 58.0286,
-                    "intensity": 1.278287
-                  },
-                  {
-                    "mzValue": 85.0634,
-                    "intensity": 1.220314
-                  },
-                  {
-                    "mzValue": 117.0308,
-                    "intensity": 1.219001
-                  },
-                  {
-                    "mzValue": 43.0288,
-                    "intensity": 1.156049
-                  },
-                  {
-                    "mzValue": 83.0853,
-                    "intensity": 1.14062
-                  },
-                  {
-                    "mzValue": 114.0536,
-                    "intensity": 1.134079
-                  },
-                  {
-                    "mzValue": 160.0591,
-                    "intensity": 1.13287
-                  },
-                  {
-                    "mzValue": 77.0385,
-                    "intensity": 1.0643049999999998
-                  },
-                  {
-                    "mzValue": 84.0029,
-                    "intensity": 1.059448
-                  },
-                  {
-                    "mzValue": 76.0308,
-                    "intensity": 1.0533000000000001
-                  },
-                  {
-                    "mzValue": 82.0274,
-                    "intensity": 1.023231
-                  },
-                  {
-                    "mzValue": 53.0379,
-                    "intensity": 1.0226240000000002
-                  }
-                ],
-                "spectrumId": 191
-              }
-            ]
-          },
-          "gcmsCosineScore": 0.7834849574878773,
-          "experimentalRI": 1500.0,
-          "deltaRI": 41.0
-        },
-        {
-          "gcmsCompound": {
-            "compoundId": 129369690,
-            "casId": null,
-            "compoundName": "(s) Isocitric acid,  trimethyl ester, cycled",
-            "formula": "C8H12O6",
-            "mass": 204.0634,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": 0.0,
-            "rtPred": null,
-            "inchi": "InChI=1S/C8H12O6/c1-12-5(9)3-4-6(10)8(13-2)14-7(4)11/h4,6,8,10H,3H2,1-2H3",
-            "inchiKey": "MEBBKLHFDFJNNS-UHFFFAOYSA-N",
-            "smiles": "O=C1OC(OC)C(O)C1CC(OC)=O",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": null,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1418.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
-                "spectrum": [
-                  {
-                    "mzValue": 115.0376,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 83.0114,
-                    "intensity": 72.05412
-                  },
-                  {
-                    "mzValue": 98.0362,
-                    "intensity": 66.99802
-                  },
-                  {
-                    "mzValue": 55.0178,
-                    "intensity": 59.357229999999994
-                  },
-                  {
-                    "mzValue": 99.0427,
-                    "intensity": 33.74936
-                  },
-                  {
-                    "mzValue": 59.0128,
-                    "intensity": 29.695240000000002
-                  },
-                  {
-                    "mzValue": 68.0257,
-                    "intensity": 15.42308
-                  },
-                  {
-                    "mzValue": 71.0493,
-                    "intensity": 15.215919999999999
-                  },
-                  {
-                    "mzValue": 126.0303,
-                    "intensity": 14.19493
-                  },
-                  {
-                    "mzValue": 69.0335,
-                    "intensity": 13.351840000000001
-                  },
-                  {
-                    "mzValue": 87.0427,
-                    "intensity": 12.302079999999998
-                  },
-                  {
-                    "mzValue": 85.0271,
-                    "intensity": 10.386980000000001
-                  },
-                  {
-                    "mzValue": 114.0311,
-                    "intensity": 9.759453
-                  },
-                  {
-                    "mzValue": 55.0542,
-                    "intensity": 8.665802
-                  },
-                  {
-                    "mzValue": 41.0386,
-                    "intensity": 8.30742
-                  },
-                  {
-                    "mzValue": 95.0138,
-                    "intensity": 6.205821
-                  },
-                  {
-                    "mzValue": 43.0178,
-                    "intensity": 4.395229
-                  },
-                  {
-                    "mzValue": 84.0127,
-                    "intensity": 4.102949000000001
-                  },
-                  {
-                    "mzValue": 143.0325,
-                    "intensity": 3.87957
-                  },
-                  {
-                    "mzValue": 116.0395,
-                    "intensity": 3.8314130000000004
-                  },
-                  {
-                    "mzValue": 42.01,
-                    "intensity": 3.802486
-                  },
-                  {
-                    "mzValue": 39.0229,
-                    "intensity": 3.5857669999999993
-                  },
-                  {
-                    "mzValue": 111.0063,
-                    "intensity": 3.1415849999999996
-                  },
-                  {
-                    "mzValue": 127.0376,
-                    "intensity": 2.860072
-                  },
-                  {
-                    "mzValue": 84.0206,
-                    "intensity": 2.7584400000000002
-                  },
-                  {
-                    "mzValue": 53.0018,
-                    "intensity": 2.665569
-                  },
-                  {
-                    "mzValue": 59.0492,
-                    "intensity": 2.53554
-                  },
-                  {
-                    "mzValue": 57.0698,
-                    "intensity": 2.4395010000000004
-                  },
-                  {
-                    "mzValue": 99.0063,
-                    "intensity": 2.333891
-                  },
-                  {
-                    "mzValue": 142.0261,
-                    "intensity": 2.129839
-                  },
-                  {
-                    "mzValue": 79.0417,
-                    "intensity": 2.055805
-                  },
-                  {
-                    "mzValue": 100.0446,
-                    "intensity": 1.9137269999999997
-                  },
-                  {
-                    "mzValue": 45.0337,
-                    "intensity": 1.828943
-                  },
-                  {
-                    "mzValue": 68.9967,
-                    "intensity": 1.817994
-                  },
-                  {
-                    "mzValue": 43.0292,
-                    "intensity": 1.764383
-                  },
-                  {
-                    "mzValue": 69.0699,
-                    "intensity": 1.760392
-                  },
-                  {
-                    "mzValue": 56.0212,
-                    "intensity": 1.677656
-                  },
-                  {
-                    "mzValue": 58.0413,
-                    "intensity": 1.5288439999999999
-                  },
-                  {
-                    "mzValue": 97.1009,
-                    "intensity": 1.457326
-                  },
-                  {
-                    "mzValue": 70.0777,
-                    "intensity": 1.427872
-                  },
-                  {
-                    "mzValue": 54.0464,
-                    "intensity": 1.381484
-                  },
-                  {
-                    "mzValue": 57.0333,
-                    "intensity": 1.373833
-                  },
-                  {
-                    "mzValue": 56.0257,
-                    "intensity": 1.3404190000000002
-                  },
-                  {
-                    "mzValue": 49.007,
-                    "intensity": 1.321347
-                  },
-                  {
-                    "mzValue": 40.0308,
-                    "intensity": 1.245485
-                  },
-                  {
-                    "mzValue": 54.01,
-                    "intensity": 1.232866
-                  },
-                  {
-                    "mzValue": 68.0621,
-                    "intensity": 1.154827
-                  },
-                  {
-                    "mzValue": 83.0502,
-                    "intensity": 1.130444
-                  },
-                  {
-                    "mzValue": 82.0049,
-                    "intensity": 1.123184
-                  },
-                  {
-                    "mzValue": 85.1005,
-                    "intensity": 1.073628
-                  },
-                  {
-                    "mzValue": 46.9684,
-                    "intensity": 1.0237880000000001
-                  }
-                ],
-                "spectrumId": 203
-              }
-            ]
-          },
-          "gcmsCosineScore": 0.7339531525830106,
-          "experimentalRI": 1500.0,
-          "deltaRI": 82.0
-        },
-        {
-          "gcmsCompound": {
-            "compoundId": 129369673,
-            "casId": null,
-            "compoundName": "(s) Valine, N2,N2-bis(methoxycarbonyl), methyl ester, cycled",
-            "formula": "C9H15NO5",
-            "mass": 217.095,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": 0.0,
-            "rtPred": null,
-            "inchi": "InChI=1S/C9H15NO5/c1-5(2)6-7(13-3)15-9(12)10(6)8(11)14-4/h5-7H,1-4H3",
-            "inchiKey": "HWKDVRXYZSKSLV-UHFFFAOYSA-N",
-            "smiles": "CC(C)C1N(C(OC1OC)=O)C(OC)=O",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": null,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1367.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
-                "spectrum": [
-                  {
-                    "mzValue": 115.0264,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 159.0162,
-                    "intensity": 65.51899
-                  },
-                  {
-                    "mzValue": 83.0002,
-                    "intensity": 54.03452
-                  },
-                  {
-                    "mzValue": 87.0315,
-                    "intensity": 32.00573
-                  },
-                  {
-                    "mzValue": 43.0539,
-                    "intensity": 22.15877
-                  },
-                  {
-                    "mzValue": 59.0125,
-                    "intensity": 20.645669999999996
-                  },
-                  {
-                    "mzValue": 41.0382,
-                    "intensity": 14.739280000000003
-                  },
-                  {
-                    "mzValue": 59.0366,
-                    "intensity": 14.731269999999999
-                  },
-                  {
-                    "mzValue": 114.0536,
-                    "intensity": 9.839611000000001
-                  },
-                  {
-                    "mzValue": 42.0333,
-                    "intensity": 8.21115
-                  },
-                  {
-                    "mzValue": 55.0539,
-                    "intensity": 7.457617999999999
-                  },
-                  {
-                    "mzValue": 129.0784,
-                    "intensity": 7.398807000000001
-                  },
-                  {
-                    "mzValue": 60.0206,
-                    "intensity": 6.127709
-                  },
-                  {
-                    "mzValue": 44.9967,
-                    "intensity": 4.244162
-                  },
-                  {
-                    "mzValue": 116.0293,
-                    "intensity": 4.099988000000001
-                  },
-                  {
-                    "mzValue": 55.0053,
-                    "intensity": 4.0397870000000005
-                  },
-                  {
-                    "mzValue": 56.0127,
-                    "intensity": 3.8756690000000003
-                  },
-                  {
-                    "mzValue": 71.0851,
-                    "intensity": 3.8603059999999996
-                  },
-                  {
-                    "mzValue": 98.0587,
-                    "intensity": 3.7585089999999997
-                  },
-                  {
-                    "mzValue": 82.9445,
-                    "intensity": 3.6209569999999998
-                  },
-                  {
-                    "mzValue": 70.0645,
-                    "intensity": 3.4723359999999994
-                  },
-                  {
-                    "mzValue": 57.0695,
-                    "intensity": 3.301785
-                  },
-                  {
-                    "mzValue": 69.9919,
-                    "intensity": 3.106748
-                  },
-                  {
-                    "mzValue": 39.0227,
-                    "intensity": 2.9734290000000003
-                  },
-                  {
-                    "mzValue": 160.0193,
-                    "intensity": 2.66084
-                  },
-                  {
-                    "mzValue": 85.1007,
-                    "intensity": 2.637168
-                  },
-                  {
-                    "mzValue": 54.0334,
-                    "intensity": 2.4534190000000002
-                  },
-                  {
-                    "mzValue": 100.002,
-                    "intensity": 2.003473
-                  },
-                  {
-                    "mzValue": 69.0209,
-                    "intensity": 1.9971659999999998
-                  },
-                  {
-                    "mzValue": 82.0274,
-                    "intensity": 1.993499
-                  },
-                  {
-                    "mzValue": 68.0488,
-                    "intensity": 1.78993
-                  },
-                  {
-                    "mzValue": 84.0029,
-                    "intensity": 1.7093
-                  },
-                  {
-                    "mzValue": 43.029,
-                    "intensity": 1.707026
-                  },
-                  {
-                    "mzValue": 43.0177,
-                    "intensity": 1.7042039999999998
-                  },
-                  {
-                    "mzValue": 85.0271,
-                    "intensity": 1.64491
-                  },
-                  {
-                    "mzValue": 47.9761,
-                    "intensity": 1.456521
-                  },
-                  {
-                    "mzValue": 70.0274,
-                    "intensity": 1.4385869999999998
-                  },
-                  {
-                    "mzValue": 97.0522,
-                    "intensity": 1.3897119999999998
-                  },
-                  {
-                    "mzValue": 88.0343,
-                    "intensity": 1.3735540000000002
-                  },
-                  {
-                    "mzValue": 102.0172,
-                    "intensity": 1.237477
-                  },
-                  {
-                    "mzValue": 42.0464,
-                    "intensity": 1.172715
-                  },
-                  {
-                    "mzValue": 132.8821,
-                    "intensity": 1.094058
-                  },
-                  {
-                    "mzValue": 70.0777,
-                    "intensity": 1.05276
-                  },
-                  {
-                    "mzValue": 73.0464,
-                    "intensity": 1.018813
-                  },
-                  {
-                    "mzValue": 83.0366,
-                    "intensity": 1.0008839999999999
-                  }
-                ],
-                "spectrumId": 186
-              }
-            ]
-          },
-          "gcmsCosineScore": 0.7266232517327166,
-          "experimentalRI": 1500.0,
-          "deltaRI": 133.0
-        },
-        {
-          "gcmsCompound": {
-            "compoundId": 129369685,
-            "casId": null,
-            "compoundName": "(s) Tartaric acid, O-methoxycarbonyl, dimethyl ester (loss of hydroxyl group)",
-            "formula": "C8H10O7",
-            "mass": 218.0427,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": 0.0,
-            "rtPred": null,
-            "inchi": "InChI=1S/C8H10O7/c1-12-6(9)4-5(7(10)13-2)15-8(11)14-3/h4H,1-3H3/b5-4-",
-            "inchiKey": "UAFWQYNPTUFJOT-PLNGDYQASA-N",
-            "smiles": "O=C(OC)/C=C(OC(OC)=O)/C(OC)=O",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": null,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1389.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
-                "spectrum": [
-                  {
-                    "mzValue": 115.0376,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 68.9971,
-                    "intensity": 83.82916
-                  },
-                  {
-                    "mzValue": 59.0127,
-                    "intensity": 31.967059999999996
-                  },
-                  {
-                    "mzValue": 143.0325,
-                    "intensity": 19.01838
-                  },
-                  {
-                    "mzValue": 47.0491,
-                    "intensity": 16.57104
-                  },
-                  {
-                    "mzValue": 159.0275,
-                    "intensity": 9.419833
-                  },
-                  {
-                    "mzValue": 53.002,
-                    "intensity": 7.027482999999999
-                  },
-                  {
-                    "mzValue": 101.022,
-                    "intensity": 6.5605269999999996
-                  },
-                  {
-                    "mzValue": 116.0395,
-                    "intensity": 5.132244
-                  },
-                  {
-                    "mzValue": 127.0012,
-                    "intensity": 4.963922
-                  },
-                  {
-                    "mzValue": 109.9998,
-                    "intensity": 4.893276
-                  },
-                  {
-                    "mzValue": 45.0334,
-                    "intensity": 3.107442
-                  },
-                  {
-                    "mzValue": 113.022,
-                    "intensity": 2.615392
-                  },
-                  {
-                    "mzValue": 41.0019,
-                    "intensity": 2.526498
-                  },
-                  {
-                    "mzValue": 70.0008,
-                    "intensity": 2.314017
-                  },
-                  {
-                    "mzValue": 43.029,
-                    "intensity": 1.948411
-                  },
-                  {
-                    "mzValue": 85.0271,
-                    "intensity": 1.9097529999999998
-                  },
-                  {
-                    "mzValue": 82.0049,
-                    "intensity": 1.90183
-                  },
-                  {
-                    "mzValue": 99.0427,
-                    "intensity": 1.7906760000000002
-                  },
-                  {
-                    "mzValue": 187.0224,
-                    "intensity": 1.766085
-                  },
-                  {
-                    "mzValue": 74.0362,
-                    "intensity": 1.7264439999999999
-                  },
-                  {
-                    "mzValue": 91.0376,
-                    "intensity": 1.528216
-                  },
-                  {
-                    "mzValue": 100.0155,
-                    "intensity": 1.4692239999999999
-                  },
-                  {
-                    "mzValue": 55.0177,
-                    "intensity": 1.181986
-                  },
-                  {
-                    "mzValue": 87.0427,
-                    "intensity": 1.1797499999999999
-                  },
-                  {
-                    "mzValue": 75.0427,
-                    "intensity": 1.134268
-                  },
-                  {
-                    "mzValue": 83.0131,
-                    "intensity": 1.0971350000000002
-                  },
-                  {
-                    "mzValue": 144.0347,
-                    "intensity": 1.063712
-                  },
-                  {
-                    "mzValue": 54.01,
-                    "intensity": 1.001141
-                  }
-                ],
-                "spectrumId": 198
-              }
-            ]
-          },
-          "gcmsCosineScore": 0.7008047807434655,
-          "experimentalRI": 1500.0,
-          "deltaRI": 111.0
-        },
-        {
-          "gcmsCompound": {
-            "compoundId": 129369647,
-            "casId": null,
-            "compoundName": "trimethyl 2-methoxycarbonyloxypropane-1,2,3-tricarboxylate",
-            "formula": "C11H16O9",
-            "mass": 292.07943208,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": -0.1,
-            "rtPred": null,
-            "inchi": "InChI=1S/C11H16O9/c1-16-7(12)5-11(9(14)18-3,6-8(13)17-2)20-10(15)19-4/h5-6H2,1-4H3",
-            "inchiKey": "XVEIEHLXOBZJCS-UHFFFAOYSA-N",
-            "smiles": "COC(=O)CC(CC(=O)OC)(C(=O)OC)OC(=O)OC",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": 87385791,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1650.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
-                "spectrum": [
-                  {
-                    "mzValue": 115.0376,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 153.0169,
-                    "intensity": 44.24036
-                  },
-                  {
-                    "mzValue": 125.026,
-                    "intensity": 40.695409999999995
-                  },
-                  {
-                    "mzValue": 157.0482,
-                    "intensity": 39.82208
-                  },
-                  {
-                    "mzValue": 189.0744,
-                    "intensity": 38.40334
-                  },
-                  {
-                    "mzValue": 185.0431,
-                    "intensity": 21.69975
-                  },
-                  {
-                    "mzValue": 59.0127,
-                    "intensity": 21.617570000000004
-                  },
-                  {
-                    "mzValue": 99.0427,
-                    "intensity": 15.65547
-                  },
-                  {
-                    "mzValue": 156.0417,
-                    "intensity": 14.06019
-                  },
-                  {
-                    "mzValue": 113.0584,
-                    "intensity": 10.02774
-                  },
-                  {
-                    "mzValue": 184.0358,
-                    "intensity": 9.883135999999999
-                  },
-                  {
-                    "mzValue": 69.0336,
-                    "intensity": 9.469197
-                  },
-                  {
-                    "mzValue": 101.022,
-                    "intensity": 8.833043
-                  },
-                  {
-                    "mzValue": 127.0376,
-                    "intensity": 8.804849
-                  },
-                  {
-                    "mzValue": 57.0321,
-                    "intensity": 7.074759
-                  },
-                  {
-                    "mzValue": 89.0584,
-                    "intensity": 6.513315
-                  },
-                  {
-                    "mzValue": 126.0291,
-                    "intensity": 6.4071240000000005
-                  },
-                  {
-                    "mzValue": 43.0181,
-                    "intensity": 6.406038
-                  },
-                  {
-                    "mzValue": 175.0588,
-                    "intensity": 5.783722999999999
-                  },
-                  {
-                    "mzValue": 98.0356,
-                    "intensity": 5.555211
-                  },
-                  {
-                    "mzValue": 116.0395,
-                    "intensity": 4.983387
-                  },
-                  {
-                    "mzValue": 173.0795,
-                    "intensity": 4.946761
-                  },
-                  {
-                    "mzValue": 68.9972,
-                    "intensity": 4.792201
-                  },
-                  {
-                    "mzValue": 190.0769,
-                    "intensity": 4.665227000000001
-                  },
-                  {
-                    "mzValue": 75.0427,
-                    "intensity": 4.371283
-                  },
-                  {
-                    "mzValue": 101.0584,
-                    "intensity": 3.9001460000000003
-                  },
-                  {
-                    "mzValue": 129.0573,
-                    "intensity": 3.439498
-                  },
-                  {
-                    "mzValue": 55.0177,
-                    "intensity": 3.3525969999999994
-                  },
-                  {
-                    "mzValue": 39.0228,
-                    "intensity": 3.303115
-                  },
-                  {
-                    "mzValue": 158.0506,
-                    "intensity": 3.0237089999999998
-                  },
-                  {
-                    "mzValue": 47.0493,
-                    "intensity": 2.9992810000000003
-                  },
-                  {
-                    "mzValue": 68.0257,
-                    "intensity": 2.7892840000000003
-                  },
-                  {
-                    "mzValue": 84.9421,
-                    "intensity": 2.706206
-                  },
-                  {
-                    "mzValue": 43.0291,
-                    "intensity": 2.618105
-                  },
-                  {
-                    "mzValue": 186.0456,
-                    "intensity": 2.5738229999999995
-                  },
-                  {
-                    "mzValue": 67.0165,
-                    "intensity": 2.559314
-                  },
-                  {
-                    "mzValue": 143.0325,
-                    "intensity": 2.4920349999999996
-                  },
-                  {
-                    "mzValue": 41.0385,
-                    "intensity": 2.409066
-                  },
-                  {
-                    "mzValue": 88.0519,
-                    "intensity": 2.2734750000000004
-                  },
-                  {
-                    "mzValue": 91.0376,
-                    "intensity": 2.2016899999999997
-                  },
-                  {
-                    "mzValue": 105.0533,
-                    "intensity": 2.0390930000000003
-                  },
-                  {
-                    "mzValue": 154.0192,
-                    "intensity": 1.932412
-                  },
-                  {
-                    "mzValue": 141.0187,
-                    "intensity": 1.7126989999999997
-                  },
-                  {
-                    "mzValue": 71.0497,
-                    "intensity": 1.6094680000000001
-                  },
-                  {
-                    "mzValue": 100.0446,
-                    "intensity": 1.5770620000000002
-                  },
-                  {
-                    "mzValue": 159.0638,
-                    "intensity": 1.5498589999999999
-                  },
-                  {
-                    "mzValue": 201.042,
-                    "intensity": 1.441553
-                  },
-                  {
-                    "mzValue": 57.0698,
-                    "intensity": 1.441542
-                  },
-                  {
-                    "mzValue": 73.0468,
-                    "intensity": 1.414823
-                  },
-                  {
-                    "mzValue": 53.0387,
-                    "intensity": 1.318716
-                  },
-                  {
-                    "mzValue": 112.0519,
-                    "intensity": 1.260523
-                  },
-                  {
-                    "mzValue": 131.073,
-                    "intensity": 1.179551
-                  },
-                  {
-                    "mzValue": 193.0517,
-                    "intensity": 1.176848
-                  },
-                  {
-                    "mzValue": 133.0482,
-                    "intensity": 1.0726330000000002
-                  },
-                  {
-                    "mzValue": 46.9682,
-                    "intensity": 1.062706
-                  },
-                  {
-                    "mzValue": 85.0271,
-                    "intensity": 1.040501
-                  },
-                  {
-                    "mzValue": 549.1706,
-                    "intensity": 1.037335
-                  },
-                  {
-                    "mzValue": 40.0308,
-                    "intensity": 1.0293379999999999
-                  }
-                ],
-                "spectrumId": 130
-              }
-            ]
-          },
-          "gcmsCosineScore": 0.6962914850343468,
-          "experimentalRI": 1500.0,
-          "deltaRI": 150.0
-        },
-        {
-          "gcmsCompound": {
-            "compoundId": 129369656,
-            "casId": null,
-            "compoundName": "methyl 2-(methoxycarbonylamino)-4-methylsulfanylbutanoate",
-            "formula": "C8H15NO4S",
-            "mass": 221.07217913,
-            "chargeType": 0,
-            "chargeNumber": 0,
-            "formulaType": "CHNOPS",
-            "compoundType": "NON_LIPID",
-            "logP": 0.9,
-            "rtPred": null,
-            "inchi": "InChI=1S/C8H15NO4S/c1-12-7(10)6(4-5-14-3)9-8(11)13-2/h6H,4-5H2,1-3H3,(H,9,11)",
-            "inchiKey": "ABBJRFNQYCQGQL-UHFFFAOYSA-N",
-            "smiles": "COC(=O)C(CCSC)NC(=O)OC",
-            "lipidType": null,
-            "numChains": null,
-            "numCarbons": null,
-            "doubleBonds": null,
-            "lipidMapsClassifications": [],
-            "biologicalActivity": null,
-            "meshNomenclature": null,
-            "iupacClassification": null,
-            "mol2": null,
-            "pathways": [],
-            "keggID": null,
-            "lmID": null,
-            "hmdbID": null,
-            "agilentID": null,
-            "pcID": 6420947,
-            "chebiID": null,
-            "inHouseID": null,
-            "aspergillusID": null,
-            "knapsackID": null,
-            "npatlasID": null,
-            "fahfaID": null,
-            "ohPositionID": null,
-            "aspergillusWebName": null,
-            "dbRI": 1594.0,
-            "derivatizationMethod": "METHYL_CHLOROFORMATE",
-            "gcColumn": "STANDARD_NON_POLAR",
-            "gcmsspectrum": [
-              {
-                "spectrum": [
-                  {
-                    "mzValue": 115.0264,
-                    "intensity": 100.0
-                  },
-                  {
-                    "mzValue": 61.0102,
-                    "intensity": 87.04317
-                  },
-                  {
-                    "mzValue": 147.0526,
-                    "intensity": 79.04087
-                  },
-                  {
-                    "mzValue": 128.0329,
-                    "intensity": 33.94451
-                  },
-                  {
-                    "mzValue": 114.0536,
-                    "intensity": 33.091739999999994
-                  },
-                  {
-                    "mzValue": 143.0577,
-                    "intensity": 23.732899999999997
-                  },
-                  {
-                    "mzValue": 141.042,
-                    "intensity": 15.10861
-                  },
-                  {
-                    "mzValue": 75.0259,
-                    "intensity": 14.14233
-                  },
-                  {
-                    "mzValue": 162.057,
-                    "intensity": 13.65779
-                  },
-                  {
-                    "mzValue": 100.038,
-                    "intensity": 11.59689
-                  },
-                  {
-                    "mzValue": 160.0591,
-                    "intensity": 9.879418000000001
-                  },
-                  {
-                    "mzValue": 83.0002,
-                    "intensity": 8.755080999999999
-                  },
-                  {
-                    "mzValue": 189.0454,
-                    "intensity": 8.748425
-                  },
-                  {
-                    "mzValue": 221.0716,
-                    "intensity": 7.922533
-                  },
-                  {
-                    "mzValue": 59.0123,
-                    "intensity": 7.158098
-                  },
-                  {
-                    "mzValue": 87.0315,
-                    "intensity": 6.599899000000001
-                  },
-                  {
-                    "mzValue": 56.0491,
-                    "intensity": 6.231538
-                  },
-                  {
-                    "mzValue": 82.0274,
-                    "intensity": 6.226013
-                  },
-                  {
-                    "mzValue": 54.0335,
-                    "intensity": 5.949114
-                  },
-                  {
-                    "mzValue": 46.9947,
-                    "intensity": 5.718151
-                  },
-                  {
-                    "mzValue": 109.0158,
-                    "intensity": 5.200589
-                  },
-                  {
-                    "mzValue": 116.0293,
-                    "intensity": 4.941606
-                  },
-                  {
-                    "mzValue": 148.0557,
-                    "intensity": 4.595516
-                  },
-                  {
-                    "mzValue": 84.043,
-                    "intensity": 4.043912000000001
-                  },
-                  {
-                    "mzValue": 126.0311,
-                    "intensity": 4.00023
-                  },
-                  {
-                    "mzValue": 42.0335,
-                    "intensity": 3.8695549999999996
-                  },
-                  {
-                    "mzValue": 63.006,
-                    "intensity": 3.780755
-                  },
-                  {
-                    "mzValue": 88.038,
-                    "intensity": 3.7318160000000002
-                  },
-                  {
-                    "mzValue": 113.0471,
-                    "intensity": 3.69456
-                  },
-                  {
-                    "mzValue": 44.979,
-                    "intensity": 3.6663470000000005
-                  },
-                  {
-                    "mzValue": 174.0206,
-                    "intensity": 3.3719289999999997
-                  },
-                  {
-                    "mzValue": 41.0383,
-                    "intensity": 3.3140250000000004
-                  },
-                  {
-                    "mzValue": 114.0134,
-                    "intensity": 3.200939
-                  },
-                  {
-                    "mzValue": 146.0257,
-                    "intensity": 3.0140279999999997
-                  },
-                  {
-                    "mzValue": 62.0166,
-                    "intensity": 2.679101
-                  },
-                  {
-                    "mzValue": 58.9946,
-                    "intensity": 2.652624
-                  },
-                  {
-                    "mzValue": 59.0366,
-                    "intensity": 2.619091
-                  },
-                  {
-                    "mzValue": 142.0451,
-                    "intensity": 2.138671
-                  },
-                  {
-                    "mzValue": 98.9886,
-                    "intensity": 1.977598
-                  },
-                  {
-                    "mzValue": 68.0126,
-                    "intensity": 1.943199
-                  },
-                  {
-                    "mzValue": 146.0434,
-                    "intensity": 1.8772669999999998
-                  },
-                  {
-                    "mzValue": 129.0344,
-                    "intensity": 1.817038
-                  },
-                  {
-                    "mzValue": 45.9872,
-                    "intensity": 1.7920410000000002
-                  },
-                  {
-                    "mzValue": 102.0416,
-                    "intensity": 1.6384760000000003
-                  },
-                  {
-                    "mzValue": 68.049,
-                    "intensity": 1.60662
-                  },
-                  {
-                    "mzValue": 157.0192,
-                    "intensity": 1.528529
-                  },
-                  {
-                    "mzValue": 144.0608,
-                    "intensity": 1.441157
-                  },
-                  {
-                    "mzValue": 96.0062,
-                    "intensity": 1.4011900000000002
-                  },
-                  {
-                    "mzValue": 70.0647,
-                    "intensity": 1.396728
-                  },
-                  {
-                    "mzValue": 85.0101,
-                    "intensity": 1.39499
-                  },
-                  {
-                    "mzValue": 173.0683,
-                    "intensity": 1.3666139999999998
-                  },
-                  {
-                    "mzValue": 76.0387,
-                    "intensity": 1.348567
-                  },
-                  {
-                    "mzValue": 71.0478,
-                    "intensity": 1.3397170000000003
-                  },
-                  {
-                    "mzValue": 174.0747,
-                    "intensity": 1.3250060000000001
-                  },
-                  {
-                    "mzValue": 103.0376,
-                    "intensity": 1.318557
-                  },
-                  {
-                    "mzValue": 86.0185,
-                    "intensity": 1.293753
-                  },
-                  {
-                    "mzValue": 55.0538,
-                    "intensity": 1.217519
-                  },
-                  {
-                    "mzValue": 74.0185,
-                    "intensity": 1.197053
-                  },
-                  {
-                    "mzValue": 130.0368,
-                    "intensity": 1.167666
-                  },
-                  {
-                    "mzValue": 83.0366,
-                    "intensity": 1.0960670000000001
-                  },
-                  {
-                    "mzValue": 113.9995,
-                    "intensity": 1.091377
-                  },
-                  {
-                    "mzValue": 141.9947,
-                    "intensity": 1.052072
-                  },
-                  {
-                    "mzValue": 83.085,
-                    "intensity": 1.030243
-                  },
-                  {
-                    "mzValue": 69.0694,
-                    "intensity": 1.0212350000000001
-                  },
-                  {
-                    "mzValue": 60.0206,
-                    "intensity": 1.020073
-                  },
-                  {
-                    "mzValue": 55.0165,
-                    "intensity": 1.010736
-                  }
-                ],
-                "spectrumId": 140
-              }
-            ]
-          },
-          "gcmsCosineScore": 0.5578351061081648,
-          "experimentalRI": 1500.0,
-          "deltaRI": 94.0
+                "spectrumId": -1
+            },
+            "gcmsAnnotations": [
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369695,
+                        "casId": null,
+                        "compoundName": "(s) Alpha-ketoglutaric acid, O-methoxycarbonyl, dimethyl ester",
+                        "formula": "C9H12O7",
+                        "mass": 232.0583,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": null,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C9H12O7/c1-13-7(10)5-4-6(8(11)14-2)16-9(12)15-3/h4H,5H2,1-3H3/b6-4-",
+                        "inchiKey": "QDJJDGQLEUBTRH-XQRVVYSFSA-N",
+                        "smiles": "O=C(OC)C/C=C(OC(OC)=O)/C(OC)=O",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": null,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1500.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0376,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 55.0177,
+                                        "intensity": 40.31255
+                                    },
+                                    {
+                                        "mzValue": 59.0128,
+                                        "intensity": 18.103279999999998
+                                    },
+                                    {
+                                        "mzValue": 87.0427,
+                                        "intensity": 15.904760000000001
+                                    },
+                                    {
+                                        "mzValue": 71.0855,
+                                        "intensity": 6.213241000000001
+                                    },
+                                    {
+                                        "mzValue": 57.0698,
+                                        "intensity": 5.426879
+                                    },
+                                    {
+                                        "mzValue": 116.0395,
+                                        "intensity": 5.407668
+                                    },
+                                    {
+                                        "mzValue": 43.0292,
+                                        "intensity": 5.190646999999999
+                                    },
+                                    {
+                                        "mzValue": 85.1014,
+                                        "intensity": 3.522497
+                                    },
+                                    {
+                                        "mzValue": 43.0541,
+                                        "intensity": 3.2214859999999996
+                                    },
+                                    {
+                                        "mzValue": 143.0325,
+                                        "intensity": 2.812858
+                                    },
+                                    {
+                                        "mzValue": 113.1323,
+                                        "intensity": 2.04844
+                                    },
+                                    {
+                                        "mzValue": 56.0257,
+                                        "intensity": 2.012552
+                                    },
+                                    {
+                                        "mzValue": 84.0934,
+                                        "intensity": 1.6977140000000002
+                                    },
+                                    {
+                                        "mzValue": 121.9918,
+                                        "intensity": 1.1016940000000002
+                                    },
+                                    {
+                                        "mzValue": 326.9567,
+                                        "intensity": 1.095998
+                                    },
+                                    {
+                                        "mzValue": 127.1478,
+                                        "intensity": 1.063178
+                                    },
+                                    {
+                                        "mzValue": 151.9783,
+                                        "intensity": 1.049012
+                                    },
+                                    {
+                                        "mzValue": 107.5385,
+                                        "intensity": 1.0477180000000001
+                                    }
+                                ],
+                                "spectrumId": 208
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 1.0,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 0.0
+                },
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369653,
+                        "casId": null,
+                        "compoundName": "methyl 3-hydroxy-2-(methoxycarbonylamino)butanoate",
+                        "formula": "C7H13NO5",
+                        "mass": 191.07937252,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": -0.4,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C7H13NO5/c1-4(9)5(6(10)12-2)8-7(11)13-3/h4-5,9H,1-3H3,(H,8,11)",
+                        "inchiKey": "PWTOUDIHPVPRGF-UHFFFAOYSA-N",
+                        "smiles": "CC(C(C(=O)OC)NC(=O)OC)O",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": 85678633,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1354.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0264,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 100.038,
+                                        "intensity": 16.771929999999998
+                                    },
+                                    {
+                                        "mzValue": 83.0002,
+                                        "intensity": 13.571739999999998
+                                    },
+                                    {
+                                        "mzValue": 56.0494,
+                                        "intensity": 13.042679999999999
+                                    },
+                                    {
+                                        "mzValue": 147.0526,
+                                        "intensity": 9.962544
+                                    },
+                                    {
+                                        "mzValue": 87.0315,
+                                        "intensity": 8.740274000000001
+                                    },
+                                    {
+                                        "mzValue": 88.038,
+                                        "intensity": 6.359527999999999
+                                    },
+                                    {
+                                        "mzValue": 59.0127,
+                                        "intensity": 5.599145
+                                    },
+                                    {
+                                        "mzValue": 59.0366,
+                                        "intensity": 4.559446
+                                    },
+                                    {
+                                        "mzValue": 132.0642,
+                                        "intensity": 4.159327
+                                    },
+                                    {
+                                        "mzValue": 45.0335,
+                                        "intensity": 3.198328
+                                    },
+                                    {
+                                        "mzValue": 116.0293,
+                                        "intensity": 3.182248
+                                    },
+                                    {
+                                        "mzValue": 42.0338,
+                                        "intensity": 2.571047
+                                    },
+                                    {
+                                        "mzValue": 60.0206,
+                                        "intensity": 2.156764
+                                    },
+                                    {
+                                        "mzValue": 44.0495,
+                                        "intensity": 1.613415
+                                    },
+                                    {
+                                        "mzValue": 43.0179,
+                                        "intensity": 1.525756
+                                    },
+                                    {
+                                        "mzValue": 114.0536,
+                                        "intensity": 1.358382
+                                    },
+                                    {
+                                        "mzValue": 44.9971,
+                                        "intensity": 1.354321
+                                    },
+                                    {
+                                        "mzValue": 60.0443,
+                                        "intensity": 1.321638
+                                    },
+                                    {
+                                        "mzValue": 86.0223,
+                                        "intensity": 1.2581449999999998
+                                    },
+                                    {
+                                        "mzValue": 54.0338,
+                                        "intensity": 1.191445
+                                    },
+                                    {
+                                        "mzValue": 57.0333,
+                                        "intensity": 1.014071
+                                    }
+                                ],
+                                "spectrumId": 137
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 0.885160068832626,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 146.0
+                },
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369633,
+                        "casId": null,
+                        "compoundName": "trimethyl 1-hydroxypropane-1,2,3-tricarboxylate",
+                        "formula": "C9H14O7",
+                        "mass": 234.07395278,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": -0.8,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C9H14O7/c1-14-6(10)4-5(8(12)15-2)7(11)9(13)16-3/h5,7,11H,4H2,1-3H3",
+                        "inchiKey": "HRMWDPSXPUUMOQ-UHFFFAOYSA-N",
+                        "smiles": "COC(=O)CC(C(C(=O)OC)O)C(=O)OC",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": 523522,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1497.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0376,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 83.0114,
+                                        "intensity": 49.656530000000004
+                                    },
+                                    {
+                                        "mzValue": 143.0325,
+                                        "intensity": 29.34127
+                                    },
+                                    {
+                                        "mzValue": 55.0178,
+                                        "intensity": 25.467859999999998
+                                    },
+                                    {
+                                        "mzValue": 59.0127,
+                                        "intensity": 7.021713
+                                    },
+                                    {
+                                        "mzValue": 99.0427,
+                                        "intensity": 5.552388
+                                    },
+                                    {
+                                        "mzValue": 116.0395,
+                                        "intensity": 4.678921
+                                    },
+                                    {
+                                        "mzValue": 87.0427,
+                                        "intensity": 3.131736
+                                    },
+                                    {
+                                        "mzValue": 111.0063,
+                                        "intensity": 2.4394590000000003
+                                    },
+                                    {
+                                        "mzValue": 84.0127,
+                                        "intensity": 1.9188789999999998
+                                    },
+                                    {
+                                        "mzValue": 144.0347,
+                                        "intensity": 1.364536
+                                    },
+                                    {
+                                        "mzValue": 85.0271,
+                                        "intensity": 1.153955
+                                    },
+                                    {
+                                        "mzValue": 113.022,
+                                        "intensity": 1.1485219999999998
+                                    },
+                                    {
+                                        "mzValue": 41.0386,
+                                        "intensity": 1.133564
+                                    }
+                                ],
+                                "spectrumId": 115
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 0.8570648392507059,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 3.0
+                },
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369678,
+                        "casId": null,
+                        "compoundName": "(s) Isoleucine, N2,N2-bis(methoxycarbonyl), methyl ester, cycled",
+                        "formula": "C10H17NO5",
+                        "mass": 231.1107,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": null,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C10H17NO5/c1-5-6(2)7-8(14-3)16-10(13)11(7)9(12)15-4/h6-8H,5H2,1-4H3",
+                        "inchiKey": "YEZRMJMCKFKHKO-UHFFFAOYSA-N",
+                        "smiles": "O=C(OC)N(C(OC1OC)=O)C1C(C)CC",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": null,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1459.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0264,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 159.0162,
+                                        "intensity": 45.66265
+                                    },
+                                    {
+                                        "mzValue": 83.0002,
+                                        "intensity": 42.12629
+                                    },
+                                    {
+                                        "mzValue": 87.0315,
+                                        "intensity": 31.17727
+                                    },
+                                    {
+                                        "mzValue": 41.0385,
+                                        "intensity": 21.209840000000003
+                                    },
+                                    {
+                                        "mzValue": 59.0366,
+                                        "intensity": 18.11297
+                                    },
+                                    {
+                                        "mzValue": 57.0699,
+                                        "intensity": 17.18026
+                                    },
+                                    {
+                                        "mzValue": 59.0127,
+                                        "intensity": 15.65348
+                                    },
+                                    {
+                                        "mzValue": 163.0376,
+                                        "intensity": 9.06671
+                                    },
+                                    {
+                                        "mzValue": 43.9893,
+                                        "intensity": 7.185608
+                                    },
+                                    {
+                                        "mzValue": 42.0338,
+                                        "intensity": 7.087643000000001
+                                    },
+                                    {
+                                        "mzValue": 70.0289,
+                                        "intensity": 6.978498
+                                    },
+                                    {
+                                        "mzValue": 128.0693,
+                                        "intensity": 6.326092
+                                    },
+                                    {
+                                        "mzValue": 60.0199,
+                                        "intensity": 5.578214999999999
+                                    },
+                                    {
+                                        "mzValue": 55.0053,
+                                        "intensity": 4.360634
+                                    },
+                                    {
+                                        "mzValue": 116.0293,
+                                        "intensity": 4.140524
+                                    },
+                                    {
+                                        "mzValue": 69.0698,
+                                        "intensity": 3.959734
+                                    },
+                                    {
+                                        "mzValue": 39.023,
+                                        "intensity": 3.353772
+                                    },
+                                    {
+                                        "mzValue": 55.0541,
+                                        "intensity": 3.228031
+                                    },
+                                    {
+                                        "mzValue": 115.0628,
+                                        "intensity": 2.982224
+                                    },
+                                    {
+                                        "mzValue": 96.043,
+                                        "intensity": 2.750131
+                                    },
+                                    {
+                                        "mzValue": 56.0127,
+                                        "intensity": 2.6312569999999997
+                                    },
+                                    {
+                                        "mzValue": 69.0209,
+                                        "intensity": 2.50223
+                                    },
+                                    {
+                                        "mzValue": 102.0172,
+                                        "intensity": 2.4154229999999997
+                                    },
+                                    {
+                                        "mzValue": 160.0193,
+                                        "intensity": 2.3220750000000003
+                                    },
+                                    {
+                                        "mzValue": 143.0941,
+                                        "intensity": 2.286748
+                                    },
+                                    {
+                                        "mzValue": 44.9971,
+                                        "intensity": 2.270282
+                                    },
+                                    {
+                                        "mzValue": 100.038,
+                                        "intensity": 1.9462689999999998
+                                    },
+                                    {
+                                        "mzValue": 177.0915,
+                                        "intensity": 1.907795
+                                    },
+                                    {
+                                        "mzValue": 69.9926,
+                                        "intensity": 1.81824
+                                    },
+                                    {
+                                        "mzValue": 67.0542,
+                                        "intensity": 1.698899
+                                    },
+                                    {
+                                        "mzValue": 56.0495,
+                                        "intensity": 1.650194
+                                    },
+                                    {
+                                        "mzValue": 86.0223,
+                                        "intensity": 1.6445580000000002
+                                    },
+                                    {
+                                        "mzValue": 51.0228,
+                                        "intensity": 1.6196720000000002
+                                    },
+                                    {
+                                        "mzValue": 41.026,
+                                        "intensity": 1.6015929999999998
+                                    },
+                                    {
+                                        "mzValue": 56.0621,
+                                        "intensity": 1.4983080000000002
+                                    },
+                                    {
+                                        "mzValue": 99.0427,
+                                        "intensity": 1.438134
+                                    },
+                                    {
+                                        "mzValue": 68.0621,
+                                        "intensity": 1.431088
+                                    },
+                                    {
+                                        "mzValue": 78.0337,
+                                        "intensity": 1.4201110000000001
+                                    },
+                                    {
+                                        "mzValue": 100.0024,
+                                        "intensity": 1.3495529999999998
+                                    },
+                                    {
+                                        "mzValue": 68.0491,
+                                        "intensity": 1.3337240000000001
+                                    },
+                                    {
+                                        "mzValue": 54.034,
+                                        "intensity": 1.293049
+                                    },
+                                    {
+                                        "mzValue": 58.0286,
+                                        "intensity": 1.278287
+                                    },
+                                    {
+                                        "mzValue": 85.0634,
+                                        "intensity": 1.220314
+                                    },
+                                    {
+                                        "mzValue": 117.0308,
+                                        "intensity": 1.219001
+                                    },
+                                    {
+                                        "mzValue": 43.0288,
+                                        "intensity": 1.156049
+                                    },
+                                    {
+                                        "mzValue": 83.0853,
+                                        "intensity": 1.14062
+                                    },
+                                    {
+                                        "mzValue": 114.0536,
+                                        "intensity": 1.134079
+                                    },
+                                    {
+                                        "mzValue": 160.0591,
+                                        "intensity": 1.13287
+                                    },
+                                    {
+                                        "mzValue": 77.0385,
+                                        "intensity": 1.0643049999999998
+                                    },
+                                    {
+                                        "mzValue": 84.0029,
+                                        "intensity": 1.059448
+                                    },
+                                    {
+                                        "mzValue": 76.0308,
+                                        "intensity": 1.0533000000000001
+                                    },
+                                    {
+                                        "mzValue": 82.0274,
+                                        "intensity": 1.023231
+                                    },
+                                    {
+                                        "mzValue": 53.0379,
+                                        "intensity": 1.0226240000000002
+                                    }
+                                ],
+                                "spectrumId": 191
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 0.7834849574878773,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 41.0
+                },
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369690,
+                        "casId": null,
+                        "compoundName": "(s) Isocitric acid,  trimethyl ester, cycled",
+                        "formula": "C8H12O6",
+                        "mass": 204.0634,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": null,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C8H12O6/c1-12-5(9)3-4-6(10)8(13-2)14-7(4)11/h4,6,8,10H,3H2,1-2H3",
+                        "inchiKey": "MEBBKLHFDFJNNS-UHFFFAOYSA-N",
+                        "smiles": "O=C1OC(OC)C(O)C1CC(OC)=O",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": null,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1418.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0376,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 83.0114,
+                                        "intensity": 72.05412
+                                    },
+                                    {
+                                        "mzValue": 98.0362,
+                                        "intensity": 66.99802
+                                    },
+                                    {
+                                        "mzValue": 55.0178,
+                                        "intensity": 59.357229999999994
+                                    },
+                                    {
+                                        "mzValue": 99.0427,
+                                        "intensity": 33.74936
+                                    },
+                                    {
+                                        "mzValue": 59.0128,
+                                        "intensity": 29.695240000000002
+                                    },
+                                    {
+                                        "mzValue": 68.0257,
+                                        "intensity": 15.42308
+                                    },
+                                    {
+                                        "mzValue": 71.0493,
+                                        "intensity": 15.215919999999999
+                                    },
+                                    {
+                                        "mzValue": 126.0303,
+                                        "intensity": 14.19493
+                                    },
+                                    {
+                                        "mzValue": 69.0335,
+                                        "intensity": 13.351840000000001
+                                    },
+                                    {
+                                        "mzValue": 87.0427,
+                                        "intensity": 12.302079999999998
+                                    },
+                                    {
+                                        "mzValue": 85.0271,
+                                        "intensity": 10.386980000000001
+                                    },
+                                    {
+                                        "mzValue": 114.0311,
+                                        "intensity": 9.759453
+                                    },
+                                    {
+                                        "mzValue": 55.0542,
+                                        "intensity": 8.665802
+                                    },
+                                    {
+                                        "mzValue": 41.0386,
+                                        "intensity": 8.30742
+                                    },
+                                    {
+                                        "mzValue": 95.0138,
+                                        "intensity": 6.205821
+                                    },
+                                    {
+                                        "mzValue": 43.0178,
+                                        "intensity": 4.395229
+                                    },
+                                    {
+                                        "mzValue": 84.0127,
+                                        "intensity": 4.102949000000001
+                                    },
+                                    {
+                                        "mzValue": 143.0325,
+                                        "intensity": 3.87957
+                                    },
+                                    {
+                                        "mzValue": 116.0395,
+                                        "intensity": 3.8314130000000004
+                                    },
+                                    {
+                                        "mzValue": 42.01,
+                                        "intensity": 3.802486
+                                    },
+                                    {
+                                        "mzValue": 39.0229,
+                                        "intensity": 3.5857669999999993
+                                    },
+                                    {
+                                        "mzValue": 111.0063,
+                                        "intensity": 3.1415849999999996
+                                    },
+                                    {
+                                        "mzValue": 127.0376,
+                                        "intensity": 2.860072
+                                    },
+                                    {
+                                        "mzValue": 84.0206,
+                                        "intensity": 2.7584400000000002
+                                    },
+                                    {
+                                        "mzValue": 53.0018,
+                                        "intensity": 2.665569
+                                    },
+                                    {
+                                        "mzValue": 59.0492,
+                                        "intensity": 2.53554
+                                    },
+                                    {
+                                        "mzValue": 57.0698,
+                                        "intensity": 2.4395010000000004
+                                    },
+                                    {
+                                        "mzValue": 99.0063,
+                                        "intensity": 2.333891
+                                    },
+                                    {
+                                        "mzValue": 142.0261,
+                                        "intensity": 2.129839
+                                    },
+                                    {
+                                        "mzValue": 79.0417,
+                                        "intensity": 2.055805
+                                    },
+                                    {
+                                        "mzValue": 100.0446,
+                                        "intensity": 1.9137269999999997
+                                    },
+                                    {
+                                        "mzValue": 45.0337,
+                                        "intensity": 1.828943
+                                    },
+                                    {
+                                        "mzValue": 68.9967,
+                                        "intensity": 1.817994
+                                    },
+                                    {
+                                        "mzValue": 43.0292,
+                                        "intensity": 1.764383
+                                    },
+                                    {
+                                        "mzValue": 69.0699,
+                                        "intensity": 1.760392
+                                    },
+                                    {
+                                        "mzValue": 56.0212,
+                                        "intensity": 1.677656
+                                    },
+                                    {
+                                        "mzValue": 58.0413,
+                                        "intensity": 1.5288439999999999
+                                    },
+                                    {
+                                        "mzValue": 97.1009,
+                                        "intensity": 1.457326
+                                    },
+                                    {
+                                        "mzValue": 70.0777,
+                                        "intensity": 1.427872
+                                    },
+                                    {
+                                        "mzValue": 54.0464,
+                                        "intensity": 1.381484
+                                    },
+                                    {
+                                        "mzValue": 57.0333,
+                                        "intensity": 1.373833
+                                    },
+                                    {
+                                        "mzValue": 56.0257,
+                                        "intensity": 1.3404190000000002
+                                    },
+                                    {
+                                        "mzValue": 49.007,
+                                        "intensity": 1.321347
+                                    },
+                                    {
+                                        "mzValue": 40.0308,
+                                        "intensity": 1.245485
+                                    },
+                                    {
+                                        "mzValue": 54.01,
+                                        "intensity": 1.232866
+                                    },
+                                    {
+                                        "mzValue": 68.0621,
+                                        "intensity": 1.154827
+                                    },
+                                    {
+                                        "mzValue": 83.0502,
+                                        "intensity": 1.130444
+                                    },
+                                    {
+                                        "mzValue": 82.0049,
+                                        "intensity": 1.123184
+                                    },
+                                    {
+                                        "mzValue": 85.1005,
+                                        "intensity": 1.073628
+                                    },
+                                    {
+                                        "mzValue": 46.9684,
+                                        "intensity": 1.0237880000000001
+                                    }
+                                ],
+                                "spectrumId": 203
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 0.7339531525830106,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 82.0
+                },
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369673,
+                        "casId": null,
+                        "compoundName": "(s) Valine, N2,N2-bis(methoxycarbonyl), methyl ester, cycled",
+                        "formula": "C9H15NO5",
+                        "mass": 217.095,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": null,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C9H15NO5/c1-5(2)6-7(13-3)15-9(12)10(6)8(11)14-4/h5-7H,1-4H3",
+                        "inchiKey": "HWKDVRXYZSKSLV-UHFFFAOYSA-N",
+                        "smiles": "CC(C)C1N(C(OC1OC)=O)C(OC)=O",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": null,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1367.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0264,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 159.0162,
+                                        "intensity": 65.51899
+                                    },
+                                    {
+                                        "mzValue": 83.0002,
+                                        "intensity": 54.03452
+                                    },
+                                    {
+                                        "mzValue": 87.0315,
+                                        "intensity": 32.00573
+                                    },
+                                    {
+                                        "mzValue": 43.0539,
+                                        "intensity": 22.15877
+                                    },
+                                    {
+                                        "mzValue": 59.0125,
+                                        "intensity": 20.645669999999996
+                                    },
+                                    {
+                                        "mzValue": 41.0382,
+                                        "intensity": 14.739280000000003
+                                    },
+                                    {
+                                        "mzValue": 59.0366,
+                                        "intensity": 14.731269999999999
+                                    },
+                                    {
+                                        "mzValue": 114.0536,
+                                        "intensity": 9.839611000000001
+                                    },
+                                    {
+                                        "mzValue": 42.0333,
+                                        "intensity": 8.21115
+                                    },
+                                    {
+                                        "mzValue": 55.0539,
+                                        "intensity": 7.457617999999999
+                                    },
+                                    {
+                                        "mzValue": 129.0784,
+                                        "intensity": 7.398807000000001
+                                    },
+                                    {
+                                        "mzValue": 60.0206,
+                                        "intensity": 6.127709
+                                    },
+                                    {
+                                        "mzValue": 44.9967,
+                                        "intensity": 4.244162
+                                    },
+                                    {
+                                        "mzValue": 116.0293,
+                                        "intensity": 4.099988000000001
+                                    },
+                                    {
+                                        "mzValue": 55.0053,
+                                        "intensity": 4.0397870000000005
+                                    },
+                                    {
+                                        "mzValue": 56.0127,
+                                        "intensity": 3.8756690000000003
+                                    },
+                                    {
+                                        "mzValue": 71.0851,
+                                        "intensity": 3.8603059999999996
+                                    },
+                                    {
+                                        "mzValue": 98.0587,
+                                        "intensity": 3.7585089999999997
+                                    },
+                                    {
+                                        "mzValue": 82.9445,
+                                        "intensity": 3.6209569999999998
+                                    },
+                                    {
+                                        "mzValue": 70.0645,
+                                        "intensity": 3.4723359999999994
+                                    },
+                                    {
+                                        "mzValue": 57.0695,
+                                        "intensity": 3.301785
+                                    },
+                                    {
+                                        "mzValue": 69.9919,
+                                        "intensity": 3.106748
+                                    },
+                                    {
+                                        "mzValue": 39.0227,
+                                        "intensity": 2.9734290000000003
+                                    },
+                                    {
+                                        "mzValue": 160.0193,
+                                        "intensity": 2.66084
+                                    },
+                                    {
+                                        "mzValue": 85.1007,
+                                        "intensity": 2.637168
+                                    },
+                                    {
+                                        "mzValue": 54.0334,
+                                        "intensity": 2.4534190000000002
+                                    },
+                                    {
+                                        "mzValue": 100.002,
+                                        "intensity": 2.003473
+                                    },
+                                    {
+                                        "mzValue": 69.0209,
+                                        "intensity": 1.9971659999999998
+                                    },
+                                    {
+                                        "mzValue": 82.0274,
+                                        "intensity": 1.993499
+                                    },
+                                    {
+                                        "mzValue": 68.0488,
+                                        "intensity": 1.78993
+                                    },
+                                    {
+                                        "mzValue": 84.0029,
+                                        "intensity": 1.7093
+                                    },
+                                    {
+                                        "mzValue": 43.029,
+                                        "intensity": 1.707026
+                                    },
+                                    {
+                                        "mzValue": 43.0177,
+                                        "intensity": 1.7042039999999998
+                                    },
+                                    {
+                                        "mzValue": 85.0271,
+                                        "intensity": 1.64491
+                                    },
+                                    {
+                                        "mzValue": 47.9761,
+                                        "intensity": 1.456521
+                                    },
+                                    {
+                                        "mzValue": 70.0274,
+                                        "intensity": 1.4385869999999998
+                                    },
+                                    {
+                                        "mzValue": 97.0522,
+                                        "intensity": 1.3897119999999998
+                                    },
+                                    {
+                                        "mzValue": 88.0343,
+                                        "intensity": 1.3735540000000002
+                                    },
+                                    {
+                                        "mzValue": 102.0172,
+                                        "intensity": 1.237477
+                                    },
+                                    {
+                                        "mzValue": 42.0464,
+                                        "intensity": 1.172715
+                                    },
+                                    {
+                                        "mzValue": 132.8821,
+                                        "intensity": 1.094058
+                                    },
+                                    {
+                                        "mzValue": 70.0777,
+                                        "intensity": 1.05276
+                                    },
+                                    {
+                                        "mzValue": 73.0464,
+                                        "intensity": 1.018813
+                                    },
+                                    {
+                                        "mzValue": 83.0366,
+                                        "intensity": 1.0008839999999999
+                                    }
+                                ],
+                                "spectrumId": 186
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 0.7266232517327166,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 133.0
+                },
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369685,
+                        "casId": null,
+                        "compoundName": "(s) Tartaric acid, O-methoxycarbonyl, dimethyl ester (loss of hydroxyl group)",
+                        "formula": "C8H10O7",
+                        "mass": 218.0427,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": null,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C8H10O7/c1-12-6(9)4-5(7(10)13-2)15-8(11)14-3/h4H,1-3H3/b5-4-",
+                        "inchiKey": "UAFWQYNPTUFJOT-PLNGDYQASA-N",
+                        "smiles": "O=C(OC)/C=C(OC(OC)=O)/C(OC)=O",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": null,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1389.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0376,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 68.9971,
+                                        "intensity": 83.82916
+                                    },
+                                    {
+                                        "mzValue": 59.0127,
+                                        "intensity": 31.967059999999996
+                                    },
+                                    {
+                                        "mzValue": 143.0325,
+                                        "intensity": 19.01838
+                                    },
+                                    {
+                                        "mzValue": 47.0491,
+                                        "intensity": 16.57104
+                                    },
+                                    {
+                                        "mzValue": 159.0275,
+                                        "intensity": 9.419833
+                                    },
+                                    {
+                                        "mzValue": 53.002,
+                                        "intensity": 7.027482999999999
+                                    },
+                                    {
+                                        "mzValue": 101.022,
+                                        "intensity": 6.5605269999999996
+                                    },
+                                    {
+                                        "mzValue": 116.0395,
+                                        "intensity": 5.132244
+                                    },
+                                    {
+                                        "mzValue": 127.0012,
+                                        "intensity": 4.963922
+                                    },
+                                    {
+                                        "mzValue": 109.9998,
+                                        "intensity": 4.893276
+                                    },
+                                    {
+                                        "mzValue": 45.0334,
+                                        "intensity": 3.107442
+                                    },
+                                    {
+                                        "mzValue": 113.022,
+                                        "intensity": 2.615392
+                                    },
+                                    {
+                                        "mzValue": 41.0019,
+                                        "intensity": 2.526498
+                                    },
+                                    {
+                                        "mzValue": 70.0008,
+                                        "intensity": 2.314017
+                                    },
+                                    {
+                                        "mzValue": 43.029,
+                                        "intensity": 1.948411
+                                    },
+                                    {
+                                        "mzValue": 85.0271,
+                                        "intensity": 1.9097529999999998
+                                    },
+                                    {
+                                        "mzValue": 82.0049,
+                                        "intensity": 1.90183
+                                    },
+                                    {
+                                        "mzValue": 99.0427,
+                                        "intensity": 1.7906760000000002
+                                    },
+                                    {
+                                        "mzValue": 187.0224,
+                                        "intensity": 1.766085
+                                    },
+                                    {
+                                        "mzValue": 74.0362,
+                                        "intensity": 1.7264439999999999
+                                    },
+                                    {
+                                        "mzValue": 91.0376,
+                                        "intensity": 1.528216
+                                    },
+                                    {
+                                        "mzValue": 100.0155,
+                                        "intensity": 1.4692239999999999
+                                    },
+                                    {
+                                        "mzValue": 55.0177,
+                                        "intensity": 1.181986
+                                    },
+                                    {
+                                        "mzValue": 87.0427,
+                                        "intensity": 1.1797499999999999
+                                    },
+                                    {
+                                        "mzValue": 75.0427,
+                                        "intensity": 1.134268
+                                    },
+                                    {
+                                        "mzValue": 83.0131,
+                                        "intensity": 1.0971350000000002
+                                    },
+                                    {
+                                        "mzValue": 144.0347,
+                                        "intensity": 1.063712
+                                    },
+                                    {
+                                        "mzValue": 54.01,
+                                        "intensity": 1.001141
+                                    }
+                                ],
+                                "spectrumId": 198
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 0.7008047807434655,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 111.0
+                },
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369647,
+                        "casId": null,
+                        "compoundName": "trimethyl 2-methoxycarbonyloxypropane-1,2,3-tricarboxylate",
+                        "formula": "C11H16O9",
+                        "mass": 292.07943208,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": -0.1,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C11H16O9/c1-16-7(12)5-11(9(14)18-3,6-8(13)17-2)20-10(15)19-4/h5-6H2,1-4H3",
+                        "inchiKey": "XVEIEHLXOBZJCS-UHFFFAOYSA-N",
+                        "smiles": "COC(=O)CC(CC(=O)OC)(C(=O)OC)OC(=O)OC",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": 87385791,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1650.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0376,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 153.0169,
+                                        "intensity": 44.24036
+                                    },
+                                    {
+                                        "mzValue": 125.026,
+                                        "intensity": 40.695409999999995
+                                    },
+                                    {
+                                        "mzValue": 157.0482,
+                                        "intensity": 39.82208
+                                    },
+                                    {
+                                        "mzValue": 189.0744,
+                                        "intensity": 38.40334
+                                    },
+                                    {
+                                        "mzValue": 185.0431,
+                                        "intensity": 21.69975
+                                    },
+                                    {
+                                        "mzValue": 59.0127,
+                                        "intensity": 21.617570000000004
+                                    },
+                                    {
+                                        "mzValue": 99.0427,
+                                        "intensity": 15.65547
+                                    },
+                                    {
+                                        "mzValue": 156.0417,
+                                        "intensity": 14.06019
+                                    },
+                                    {
+                                        "mzValue": 113.0584,
+                                        "intensity": 10.02774
+                                    },
+                                    {
+                                        "mzValue": 184.0358,
+                                        "intensity": 9.883135999999999
+                                    },
+                                    {
+                                        "mzValue": 69.0336,
+                                        "intensity": 9.469197
+                                    },
+                                    {
+                                        "mzValue": 101.022,
+                                        "intensity": 8.833043
+                                    },
+                                    {
+                                        "mzValue": 127.0376,
+                                        "intensity": 8.804849
+                                    },
+                                    {
+                                        "mzValue": 57.0321,
+                                        "intensity": 7.074759
+                                    },
+                                    {
+                                        "mzValue": 89.0584,
+                                        "intensity": 6.513315
+                                    },
+                                    {
+                                        "mzValue": 126.0291,
+                                        "intensity": 6.4071240000000005
+                                    },
+                                    {
+                                        "mzValue": 43.0181,
+                                        "intensity": 6.406038
+                                    },
+                                    {
+                                        "mzValue": 175.0588,
+                                        "intensity": 5.783722999999999
+                                    },
+                                    {
+                                        "mzValue": 98.0356,
+                                        "intensity": 5.555211
+                                    },
+                                    {
+                                        "mzValue": 116.0395,
+                                        "intensity": 4.983387
+                                    },
+                                    {
+                                        "mzValue": 173.0795,
+                                        "intensity": 4.946761
+                                    },
+                                    {
+                                        "mzValue": 68.9972,
+                                        "intensity": 4.792201
+                                    },
+                                    {
+                                        "mzValue": 190.0769,
+                                        "intensity": 4.665227000000001
+                                    },
+                                    {
+                                        "mzValue": 75.0427,
+                                        "intensity": 4.371283
+                                    },
+                                    {
+                                        "mzValue": 101.0584,
+                                        "intensity": 3.9001460000000003
+                                    },
+                                    {
+                                        "mzValue": 129.0573,
+                                        "intensity": 3.439498
+                                    },
+                                    {
+                                        "mzValue": 55.0177,
+                                        "intensity": 3.3525969999999994
+                                    },
+                                    {
+                                        "mzValue": 39.0228,
+                                        "intensity": 3.303115
+                                    },
+                                    {
+                                        "mzValue": 158.0506,
+                                        "intensity": 3.0237089999999998
+                                    },
+                                    {
+                                        "mzValue": 47.0493,
+                                        "intensity": 2.9992810000000003
+                                    },
+                                    {
+                                        "mzValue": 68.0257,
+                                        "intensity": 2.7892840000000003
+                                    },
+                                    {
+                                        "mzValue": 84.9421,
+                                        "intensity": 2.706206
+                                    },
+                                    {
+                                        "mzValue": 43.0291,
+                                        "intensity": 2.618105
+                                    },
+                                    {
+                                        "mzValue": 186.0456,
+                                        "intensity": 2.5738229999999995
+                                    },
+                                    {
+                                        "mzValue": 67.0165,
+                                        "intensity": 2.559314
+                                    },
+                                    {
+                                        "mzValue": 143.0325,
+                                        "intensity": 2.4920349999999996
+                                    },
+                                    {
+                                        "mzValue": 41.0385,
+                                        "intensity": 2.409066
+                                    },
+                                    {
+                                        "mzValue": 88.0519,
+                                        "intensity": 2.2734750000000004
+                                    },
+                                    {
+                                        "mzValue": 91.0376,
+                                        "intensity": 2.2016899999999997
+                                    },
+                                    {
+                                        "mzValue": 105.0533,
+                                        "intensity": 2.0390930000000003
+                                    },
+                                    {
+                                        "mzValue": 154.0192,
+                                        "intensity": 1.932412
+                                    },
+                                    {
+                                        "mzValue": 141.0187,
+                                        "intensity": 1.7126989999999997
+                                    },
+                                    {
+                                        "mzValue": 71.0497,
+                                        "intensity": 1.6094680000000001
+                                    },
+                                    {
+                                        "mzValue": 100.0446,
+                                        "intensity": 1.5770620000000002
+                                    },
+                                    {
+                                        "mzValue": 159.0638,
+                                        "intensity": 1.5498589999999999
+                                    },
+                                    {
+                                        "mzValue": 201.042,
+                                        "intensity": 1.441553
+                                    },
+                                    {
+                                        "mzValue": 57.0698,
+                                        "intensity": 1.441542
+                                    },
+                                    {
+                                        "mzValue": 73.0468,
+                                        "intensity": 1.414823
+                                    },
+                                    {
+                                        "mzValue": 53.0387,
+                                        "intensity": 1.318716
+                                    },
+                                    {
+                                        "mzValue": 112.0519,
+                                        "intensity": 1.260523
+                                    },
+                                    {
+                                        "mzValue": 131.073,
+                                        "intensity": 1.179551
+                                    },
+                                    {
+                                        "mzValue": 193.0517,
+                                        "intensity": 1.176848
+                                    },
+                                    {
+                                        "mzValue": 133.0482,
+                                        "intensity": 1.0726330000000002
+                                    },
+                                    {
+                                        "mzValue": 46.9682,
+                                        "intensity": 1.062706
+                                    },
+                                    {
+                                        "mzValue": 85.0271,
+                                        "intensity": 1.040501
+                                    },
+                                    {
+                                        "mzValue": 549.1706,
+                                        "intensity": 1.037335
+                                    },
+                                    {
+                                        "mzValue": 40.0308,
+                                        "intensity": 1.0293379999999999
+                                    }
+                                ],
+                                "spectrumId": 130
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 0.6962914850343468,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 150.0
+                },
+                {
+                    "gcmsCompound": {
+                        "compoundId": 129369656,
+                        "casId": null,
+                        "compoundName": "methyl 2-(methoxycarbonylamino)-4-methylsulfanylbutanoate",
+                        "formula": "C8H15NO4S",
+                        "mass": 221.07217913,
+                        "chargeType": 0,
+                        "chargeNumber": 0,
+                        "formulaType": "CHNOPS",
+                        "compoundType": "NON_LIPID",
+                        "logP": 0.9,
+                        "rtPred": null,
+                        "inchi": "InChI=1S/C8H15NO4S/c1-12-7(10)6(4-5-14-3)9-8(11)13-2/h6H,4-5H2,1-3H3,(H,9,11)",
+                        "inchiKey": "ABBJRFNQYCQGQL-UHFFFAOYSA-N",
+                        "smiles": "COC(=O)C(CCSC)NC(=O)OC",
+                        "lipidType": null,
+                        "numChains": null,
+                        "numCarbons": null,
+                        "doubleBonds": null,
+                        "lipidMapsClassifications": [],
+                        "biologicalActivity": null,
+                        "meshNomenclature": null,
+                        "iupacClassification": null,
+                        "mol2": null,
+                        "pathways": [],
+                        "keggID": null,
+                        "lmID": null,
+                        "hmdbID": null,
+                        "agilentID": null,
+                        "pcID": 6420947,
+                        "chebiID": null,
+                        "inHouseID": null,
+                        "aspergillusID": null,
+                        "knapsackID": null,
+                        "npatlasID": null,
+                        "fahfaID": null,
+                        "ohPositionID": null,
+                        "aspergillusWebName": null,
+                        "dbRI": 1594.0,
+                        "derivatizationMethod": "METHYL_CHLOROFORMATE",
+                        "gcColumn": "STANDARD_NON_POLAR",
+                        "gcmsspectrum": [
+                            {
+                                "spectrum": [
+                                    {
+                                        "mzValue": 115.0264,
+                                        "intensity": 100.0
+                                    },
+                                    {
+                                        "mzValue": 61.0102,
+                                        "intensity": 87.04317
+                                    },
+                                    {
+                                        "mzValue": 147.0526,
+                                        "intensity": 79.04087
+                                    },
+                                    {
+                                        "mzValue": 128.0329,
+                                        "intensity": 33.94451
+                                    },
+                                    {
+                                        "mzValue": 114.0536,
+                                        "intensity": 33.091739999999994
+                                    },
+                                    {
+                                        "mzValue": 143.0577,
+                                        "intensity": 23.732899999999997
+                                    },
+                                    {
+                                        "mzValue": 141.042,
+                                        "intensity": 15.10861
+                                    },
+                                    {
+                                        "mzValue": 75.0259,
+                                        "intensity": 14.14233
+                                    },
+                                    {
+                                        "mzValue": 162.057,
+                                        "intensity": 13.65779
+                                    },
+                                    {
+                                        "mzValue": 100.038,
+                                        "intensity": 11.59689
+                                    },
+                                    {
+                                        "mzValue": 160.0591,
+                                        "intensity": 9.879418000000001
+                                    },
+                                    {
+                                        "mzValue": 83.0002,
+                                        "intensity": 8.755080999999999
+                                    },
+                                    {
+                                        "mzValue": 189.0454,
+                                        "intensity": 8.748425
+                                    },
+                                    {
+                                        "mzValue": 221.0716,
+                                        "intensity": 7.922533
+                                    },
+                                    {
+                                        "mzValue": 59.0123,
+                                        "intensity": 7.158098
+                                    },
+                                    {
+                                        "mzValue": 87.0315,
+                                        "intensity": 6.599899000000001
+                                    },
+                                    {
+                                        "mzValue": 56.0491,
+                                        "intensity": 6.231538
+                                    },
+                                    {
+                                        "mzValue": 82.0274,
+                                        "intensity": 6.226013
+                                    },
+                                    {
+                                        "mzValue": 54.0335,
+                                        "intensity": 5.949114
+                                    },
+                                    {
+                                        "mzValue": 46.9947,
+                                        "intensity": 5.718151
+                                    },
+                                    {
+                                        "mzValue": 109.0158,
+                                        "intensity": 5.200589
+                                    },
+                                    {
+                                        "mzValue": 116.0293,
+                                        "intensity": 4.941606
+                                    },
+                                    {
+                                        "mzValue": 148.0557,
+                                        "intensity": 4.595516
+                                    },
+                                    {
+                                        "mzValue": 84.043,
+                                        "intensity": 4.043912000000001
+                                    },
+                                    {
+                                        "mzValue": 126.0311,
+                                        "intensity": 4.00023
+                                    },
+                                    {
+                                        "mzValue": 42.0335,
+                                        "intensity": 3.8695549999999996
+                                    },
+                                    {
+                                        "mzValue": 63.006,
+                                        "intensity": 3.780755
+                                    },
+                                    {
+                                        "mzValue": 88.038,
+                                        "intensity": 3.7318160000000002
+                                    },
+                                    {
+                                        "mzValue": 113.0471,
+                                        "intensity": 3.69456
+                                    },
+                                    {
+                                        "mzValue": 44.979,
+                                        "intensity": 3.6663470000000005
+                                    },
+                                    {
+                                        "mzValue": 174.0206,
+                                        "intensity": 3.3719289999999997
+                                    },
+                                    {
+                                        "mzValue": 41.0383,
+                                        "intensity": 3.3140250000000004
+                                    },
+                                    {
+                                        "mzValue": 114.0134,
+                                        "intensity": 3.200939
+                                    },
+                                    {
+                                        "mzValue": 146.0257,
+                                        "intensity": 3.0140279999999997
+                                    },
+                                    {
+                                        "mzValue": 62.0166,
+                                        "intensity": 2.679101
+                                    },
+                                    {
+                                        "mzValue": 58.9946,
+                                        "intensity": 2.652624
+                                    },
+                                    {
+                                        "mzValue": 59.0366,
+                                        "intensity": 2.619091
+                                    },
+                                    {
+                                        "mzValue": 142.0451,
+                                        "intensity": 2.138671
+                                    },
+                                    {
+                                        "mzValue": 98.9886,
+                                        "intensity": 1.977598
+                                    },
+                                    {
+                                        "mzValue": 68.0126,
+                                        "intensity": 1.943199
+                                    },
+                                    {
+                                        "mzValue": 146.0434,
+                                        "intensity": 1.8772669999999998
+                                    },
+                                    {
+                                        "mzValue": 129.0344,
+                                        "intensity": 1.817038
+                                    },
+                                    {
+                                        "mzValue": 45.9872,
+                                        "intensity": 1.7920410000000002
+                                    },
+                                    {
+                                        "mzValue": 102.0416,
+                                        "intensity": 1.6384760000000003
+                                    },
+                                    {
+                                        "mzValue": 68.049,
+                                        "intensity": 1.60662
+                                    },
+                                    {
+                                        "mzValue": 157.0192,
+                                        "intensity": 1.528529
+                                    },
+                                    {
+                                        "mzValue": 144.0608,
+                                        "intensity": 1.441157
+                                    },
+                                    {
+                                        "mzValue": 96.0062,
+                                        "intensity": 1.4011900000000002
+                                    },
+                                    {
+                                        "mzValue": 70.0647,
+                                        "intensity": 1.396728
+                                    },
+                                    {
+                                        "mzValue": 85.0101,
+                                        "intensity": 1.39499
+                                    },
+                                    {
+                                        "mzValue": 173.0683,
+                                        "intensity": 1.3666139999999998
+                                    },
+                                    {
+                                        "mzValue": 76.0387,
+                                        "intensity": 1.348567
+                                    },
+                                    {
+                                        "mzValue": 71.0478,
+                                        "intensity": 1.3397170000000003
+                                    },
+                                    {
+                                        "mzValue": 174.0747,
+                                        "intensity": 1.3250060000000001
+                                    },
+                                    {
+                                        "mzValue": 103.0376,
+                                        "intensity": 1.318557
+                                    },
+                                    {
+                                        "mzValue": 86.0185,
+                                        "intensity": 1.293753
+                                    },
+                                    {
+                                        "mzValue": 55.0538,
+                                        "intensity": 1.217519
+                                    },
+                                    {
+                                        "mzValue": 74.0185,
+                                        "intensity": 1.197053
+                                    },
+                                    {
+                                        "mzValue": 130.0368,
+                                        "intensity": 1.167666
+                                    },
+                                    {
+                                        "mzValue": 83.0366,
+                                        "intensity": 1.0960670000000001
+                                    },
+                                    {
+                                        "mzValue": 113.9995,
+                                        "intensity": 1.091377
+                                    },
+                                    {
+                                        "mzValue": 141.9947,
+                                        "intensity": 1.052072
+                                    },
+                                    {
+                                        "mzValue": 83.085,
+                                        "intensity": 1.030243
+                                    },
+                                    {
+                                        "mzValue": 69.0694,
+                                        "intensity": 1.0212350000000001
+                                    },
+                                    {
+                                        "mzValue": 60.0206,
+                                        "intensity": 1.020073
+                                    },
+                                    {
+                                        "mzValue": 55.0165,
+                                        "intensity": 1.010736
+                                    }
+                                ],
+                                "spectrumId": 140
+                            }
+                        ]
+                    },
+                    "gcmsCosineScore": 0.5578351061081648,
+                    "experimentalRI": 1500.0,
+                    "deltaRI": 94.0
+                }
+            ],
+            "riexperimental": 1500.0
         }
-      ],
-      "riexperimental": 1500.0
-    }
-  ]
+    ]
 }

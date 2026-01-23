@@ -115,15 +115,15 @@ public class CompoundDTO {
         CompoundType parsedCompoundType = CompoundType.fromDbValue(compoundTypeValue);
         this.compoundType = parsedCompoundType != null ? parsedCompoundType : CompoundType.NON_LIPID;
         this.formulaType = FormulaType.inferFromFormula(this.formula).orElse(null);
-        this.logP = rs.getDouble("logP");
-        this.rtPred = rs.getDouble("rt_pred");
+        this.logP = getNullableDouble(rs, "logP");
+        this.rtPred = getNullableDouble(rs, "rt_pred");
         this.inchi = rs.getString("inchi");
         this.inchiKey = rs.getString("inchi_key");
         this.smiles = rs.getString("smiles");
         this.lipidType = rs.getString("lipid_type");
-        this.numChains = rs.getInt("num_chains");
-        this.numberCarbons = rs.getInt("number_carbons");
-        this.doubleBonds = rs.getInt("double_bonds");
+        this.numChains = getNullableInteger(rs, "num_chains");
+        this.numberCarbons = getNullableInteger(rs, "number_carbons");
+        this.doubleBonds = getNullableInteger(rs, "double_bonds");
         this.biologicalActivity = rs.getString("biological_activity");
         this.meshNomenclature = rs.getString("mesh_nomenclature");
         this.iupacClassification = rs.getString("iupac_classification");
@@ -131,14 +131,14 @@ public class CompoundDTO {
         this.hmdbID = rs.getString("hmdb_id");
         this.lmID = rs.getString("lm_id");
         this.agilentID = rs.getString("agilent_id");
-        this.pcID = rs.getInt("pc_id");
-        this.chebiID = rs.getInt("chebi_id");
+        this.pcID = getNullableInteger(rs, "pc_id");
+        this.chebiID = getNullableInteger(rs, "chebi_id");
         this.inHouseID = rs.getString("in_house_id");
-        this.aspergillusID = rs.getInt("aspergillus_id");
+        this.aspergillusID = getNullableInteger(rs, "aspergillus_id");
         this.knapsackID = rs.getString("knapsack_id");
-        this.npatlasID = rs.getInt("npatlas_id");
-        this.fahfaID = rs.getInt("fahfa_id");
-        this.ohPositionID = rs.getInt("oh_position");
+        this.npatlasID = getNullableInteger(rs, "npatlas_id");
+        this.fahfaID = getNullableInteger(rs, "fahfa_id");
+        this.ohPositionID = getNullableInteger(rs, "oh_position");
         this.aspergillusWebName = rs.getString("aspergillus_web_name");
         String category = rs.getString("category");
         String mainClass = rs.getString("main_class");
@@ -148,6 +148,28 @@ public class CompoundDTO {
         this.getLipidMapsClassifications().add(lipidMapsClassification);
         this.mol2 = rs.getString("mol2");
         this.pathways = new HashSet<>();
+    }
+
+    private static Integer getNullableInteger(ResultSet rs, String column) throws SQLException {
+        Object value = rs.getObject(column);
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number number) {
+            return number.intValue();
+        }
+        return Integer.valueOf(value.toString());
+    }
+
+    private static Double getNullableDouble(ResultSet rs, String column) throws SQLException {
+        Object value = rs.getObject(column);
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number number) {
+            return number.doubleValue();
+        }
+        return Double.valueOf(value.toString());
     }
 
     public Set<LipidMapsClassification> getLipidMapsClassifications() {
