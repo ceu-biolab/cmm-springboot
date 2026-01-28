@@ -9,6 +9,9 @@ spring:
     url: jdbc:postgresql://<database connection>/<database name>
     # Add your database username and password
     # It should have the necessary permissions to access the database
+    # You can also supply these via environment variables:
+    #   CMM_DB_USERNAME and CMM_DB_PASSWORD
+    # If unset, defaults in application-local.yml are used.
     username: <your database username>
     password: <your database password>
     driver-class-name: org.postgresql.Driver

@@ -12,8 +12,6 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/compounds")
-@CrossOrigin(origins = {"http://localhost:3000", "https://localhost:3000"}) // Allow frontend requests
-
 public class CompoundController {
     private final CompoundService compoundService;
     // private static final Logger logger = LoggerFactory.getLogger(CompoundController.class);
