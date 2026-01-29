@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 import lombok.experimental.SuperBuilder;
@@ -7,12 +9,14 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class Peak {
+    @Positive
     private double mzValue;
+    @PositiveOrZero
     private double intensity;
 
     public Peak(){
-        this.mzValue = -1;
-        this.intensity = -1;
+        this.mzValue = 0.0;
+        this.intensity = 0.0;
     }
 
     public Peak(double mzValue, double intensity) {

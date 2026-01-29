@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
@@ -17,9 +18,8 @@ public class MSMSSearchController {
     private MSMSSearchService msmsSearchService;
 
     @PostMapping("/MSMSSearch")
-    public MSMSSearchResponseDTO search(@RequestBody MSMSSearchRequestDTO request) {
+    public MSMSSearchResponseDTO search(@Valid @RequestBody MSMSSearchRequestDTO request) {
         return msmsSearchService.search(request);
     }
 }
-
 

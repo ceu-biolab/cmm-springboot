@@ -42,6 +42,12 @@ abstract class AbstractCemsMarkerService {
         if (adducts == null || adducts.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
         }
+        if (masses.stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "masses must contain positive numbers only");
+        }
+        if (migrationTimes.stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mt values must contain positive numbers only");
+        }
     }
 
     protected String ensureChemicalAlphabet(String chemicalAlphabet) {

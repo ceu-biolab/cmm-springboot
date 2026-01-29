@@ -8,6 +8,7 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.util.ArrayList;
@@ -20,26 +21,26 @@ import java.util.Set;
 
 public class BatchAdvancedSearchRequestDTO {
     @NotEmpty
-    private List<Double> mzs;
+    private List<@NotNull @Positive Double> mzs;
     @NotNull
     private MzToleranceMode mzToleranceMode;
     @NotNull
-    @PositiveOrZero
+    @Positive
     private Double tolerance;
     @NotNull
     private IonizationMode ionizationMode;
     @NotNull
     private Optional<String> detectedAdduct;
     @NotEmpty
-    private Set<String> adductsString;
+    private Set<@NotBlank String> adductsString;
     @NotEmpty
-    private Set<Database> databases;
+    private Set<@NotNull Database> databases;
     @NotNull
     private MetaboliteType metaboliteType;
     @NotEmpty
-    private List<Double> retentionTimes;
+    private List<@NotNull Double> retentionTimes;
     @NotEmpty
-    private List<Map<Double, Double>> compositeSpectrum;
+    private List<@NotEmpty Map<@NotNull @Positive Double, @NotNull @PositiveOrZero Double>> compositeSpectrum;
     @NotNull
     private FormulaType formulaType;
     private boolean deuterium;

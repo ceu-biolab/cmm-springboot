@@ -7,13 +7,14 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CcsScoringRequestDTO extends CcsSearchRequestDTO {
     @NotEmpty
-    private List<Double> rtValues = new ArrayList<>();
+    private List<@NotNull Double> rtValues = new ArrayList<>();
 
     @Valid
     private ExperimentParameters experimentParameters;

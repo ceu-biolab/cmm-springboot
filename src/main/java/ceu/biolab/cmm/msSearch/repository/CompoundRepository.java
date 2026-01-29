@@ -79,8 +79,11 @@ public class CompoundRepository {
         if (mz == null || tolerance == null || mzToleranceMode == null || ionizationMode == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz, tolerance, mzToleranceMode, and ionizationMode are required.");
         }
-        if (tolerance < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be non-negative.");
+        if (mz <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz must be greater than zero.");
+        }
+        if (tolerance <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero.");
         }
         if (adductsString == null || adductsString.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided.");

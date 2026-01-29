@@ -66,6 +66,9 @@ public class CemsSearchService {
         if (temperatureValue == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature is required");
         }
+        if (temperatureValue <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature must be greater than zero");
+        }
         long temperature = Math.round(temperatureValue);
 
         CePolarity polarity = request.getPolarity();
@@ -94,7 +97,12 @@ public class CemsSearchService {
             featureAnnotations.setFeature(featureDTO);
 
             for (String adduct : request.getAdducts()) {
-                AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                AdductDefinition definition;
+                try {
+                    definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                } catch (IllegalArgumentException ex) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+                }
                 double neutralMass = AdductService.neutralMassFromMz(mz, definition);
                 double massWindow = computeMassWindow(request.getMzToleranceMode(), request.getMzTolerance(), neutralMass);
                 double mobilityWindow = computeMobilityWindow(
@@ -174,6 +182,18 @@ public class CemsSearchService {
         }
         if (request.getAdducts() == null || request.getAdducts().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
+        }
+        if (request.getMzValues().stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz_values must contain positive numbers only");
+        }
+        if (request.getEffectiveMobilities().stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "effective_mobilities must contain positive numbers only");
+        }
+        if (request.getMzTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz_tolerance must be greater than zero");
+        }
+        if (request.getEffectiveMobilityTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eff_mob_tolerance must be greater than zero");
         }
     }
 

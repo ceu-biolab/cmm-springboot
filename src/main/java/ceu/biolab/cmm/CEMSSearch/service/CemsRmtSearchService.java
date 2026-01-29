@@ -64,6 +64,9 @@ public class CemsRmtSearchService {
         if (request.getTemperature() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature is required");
         }
+        if (request.getTemperature() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature must be greater than zero");
+        }
         long temperature = Math.round(request.getTemperature());
 
         CePolarity polarity = request.getPolarity();
@@ -98,7 +101,12 @@ public class CemsRmtSearchService {
             featureAnnotations.setFeature(featureDTO);
 
             for (String adduct : request.getAdducts()) {
-                AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                AdductDefinition definition;
+                try {
+                    definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                } catch (IllegalArgumentException ex) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+                }
                 double neutralMass = AdductService.neutralMassFromMz(mz, definition);
                 double massWindow = computeMassWindow(request.getToleranceMode(), request.getTolerance(), neutralMass);
                 double rmtWindow = computeRmtWindow(request.getRmtToleranceMode(), request.getRmtTolerance(), rmt);
@@ -177,6 +185,18 @@ public class CemsRmtSearchService {
         }
         if (request.getRmtReference() == null || request.getRmtReference().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_reference is required");
+        }
+        if (request.getMasses().stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "masses must contain positive numbers only");
+        }
+        if (request.getRelativeMigrationTimes().stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt must contain positive numbers only");
+        }
+        if (request.getTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tolerance must be greater than zero");
+        }
+        if (request.getRmtTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_tolerance must be greater than zero");
         }
     }
 

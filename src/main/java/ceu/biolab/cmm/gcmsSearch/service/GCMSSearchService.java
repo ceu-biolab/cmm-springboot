@@ -41,7 +41,10 @@ public class GCMSSearchService {
         DerivatizationMethod derivatizationMethod = request.getDerivatizationMethod();
         double RI = request.getRetentionIndex();
         double RITolerance = request.getRetentionIndexTolerance(); //%
-        if (RITolerance < 0 || RITolerance > 100) {
+        if (RI <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Retention index must be greater than zero.");
+        }
+        if (RITolerance <= 0 || RITolerance > 100) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Retention index tolerance must be between 0 and 100%: " + request.getRetentionIndexTolerance());
         }

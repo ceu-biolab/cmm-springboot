@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -19,7 +20,7 @@ public class CemsRmtSearchController {
     }
 
     @PostMapping("/CEMSRMTSearch")
-    public CemsSearchResponseDTO search(@RequestBody CemsRmtSearchRequestDTO request) {
+    public CemsSearchResponseDTO search(@Valid @RequestBody CemsRmtSearchRequestDTO request) {
         return service.search(request);
     }
 }

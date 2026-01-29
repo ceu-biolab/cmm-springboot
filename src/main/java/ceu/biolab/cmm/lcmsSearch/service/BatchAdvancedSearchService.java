@@ -107,6 +107,9 @@ public class BatchAdvancedSearchService {
         if (request.getMz().contains(null)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "m/z values must not contain null entries.");
         }
+        if (request.getMz().stream().anyMatch(mz -> mz <= 0)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "m/z values must be greater than zero.");
+        }
         if (request.getRetentionTimes() == null || request.getRetentionTimes().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Retention times are required.");
         }
@@ -131,8 +134,8 @@ public class BatchAdvancedSearchService {
         if (request.getMzToleranceMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mzToleranceMode is required.");
         }
-        if (request.getTolerance() == null || request.getTolerance() < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be non-negative.");
+        if (request.getTolerance() == null || request.getTolerance() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero.");
         }
         if (request.getIonizationMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required.");

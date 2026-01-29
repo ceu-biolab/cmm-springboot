@@ -126,8 +126,14 @@ public class Cems2MarkerService extends AbstractCemsMarkerService {
         if (request.getTemperature() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Temperature must be provided");
         }
-        if (request.getTolerance() < 0d) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be non-negative");
+        if (request.getTemperature() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Temperature must be positive");
+        }
+        if (request.getTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero");
+        }
+        if (request.getMigrationTimeTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Migration time tolerance must be greater than zero");
         }
         if (request.getChemicalAlphabet() == null) {
             request.setChemicalAlphabet("ALL");

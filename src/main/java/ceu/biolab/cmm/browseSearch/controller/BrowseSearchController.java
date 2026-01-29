@@ -5,6 +5,7 @@ import ceu.biolab.cmm.browseSearch.dto.BrowseSearchRequest;
 import ceu.biolab.cmm.browseSearch.service.BrowseSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -13,8 +14,7 @@ public class BrowseSearchController {
     private BrowseSearchService browseSearchService;
 
     @PostMapping("/browseSearch")
-    public BrowseQueryResponse search(@RequestBody BrowseSearchRequest request) {
+    public BrowseQueryResponse search(@Valid @RequestBody BrowseSearchRequest request) {
         return browseSearchService.search(request);
     }
 }
-

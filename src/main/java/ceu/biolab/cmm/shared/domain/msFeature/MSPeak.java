@@ -1,9 +1,13 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.Objects;
 
 public class MSPeak {
+    @Positive
     private final double mz;
+    @PositiveOrZero
     private double intensity;
 
     public MSPeak(double mz, double intensity) {

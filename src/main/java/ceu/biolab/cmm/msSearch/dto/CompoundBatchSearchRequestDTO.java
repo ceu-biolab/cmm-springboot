@@ -13,18 +13,19 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Positive;
 
 public class CompoundBatchSearchRequestDTO {
 
     @NotEmpty
-    private List<Double> mzValues;
+    private List<@NotNull @Positive Double> mzValues;
     @NotNull
     private MzToleranceMode mzToleranceMode;
     @NotNull
-    @PositiveOrZero
+    @Positive
     private Double tolerance;
     @NotNull
     private IonizationMode ionizationMode;
@@ -33,9 +34,9 @@ public class CompoundBatchSearchRequestDTO {
     @NotNull
     private Optional<FormulaType> formulaType;
     @NotEmpty
-    private Set<String> adductsString;
+    private Set<@NotBlank String> adductsString;
     @NotEmpty
-    private Set<Database> databases;
+    private Set<@NotNull Database> databases;
 
     @NotNull
     private MetaboliteType metaboliteType;
@@ -56,8 +57,8 @@ public class CompoundBatchSearchRequestDTO {
                                          Set<String> adductsString, Optional<String> detectedAdduct, Optional<FormulaType> formulaType, Set<Database> databases, MetaboliteType metaboliteType) {
         this.mzValues = mzValues;
         this.mzToleranceMode = mzToleranceMode;
-        if (tolerance < 0) {
-            throw new IllegalArgumentException("mzTolerance must be non-negative");
+        if (tolerance <= 0) {
+            throw new IllegalArgumentException("mzTolerance must be greater than zero");
         }else {
             this.tolerance = tolerance;
         }
