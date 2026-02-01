@@ -1,5 +1,8 @@
 package ceu.biolab.cmm.adapters.simpleSearchAdapter.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,23 +13,29 @@ import org.springframework.web.server.ResponseStatusException;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
+import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
+import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
+import ceu.biolab.cmm.shared.domain.Constants;
+
 import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyDatabase;
 import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyMassesMode;
 import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyMetaboliteType;
-
 import ceu.biolab.cmm.adapters.simpleSearchAdapter.dto.SimpleSearchAdapterRequestDTO;
 import ceu.biolab.cmm.adapters.simpleSearchAdapter.dto.SimpleSearchAdapterResponseDTO;
 
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
-import ceu.biolab.cmm.msSearch.service.CompoundService;
+import ceu.biolab.cmm.msSearch.controller.CompoundController;
+
 
 
 /*
  *  Simple Search Adapter Service
  *   
- *  Provides search functionality for single-compound queries. Adapts requests to the new internal search engine.
+ *  Provides search functionality for single-compound queries. Adapts requests to the new internal search engine. (V2/V3 - V4)
  *  
  *  Uses:
  *   - SimpleSearchAdapterRequestDTO for input
@@ -38,11 +47,17 @@ import ceu.biolab.cmm.msSearch.service.CompoundService;
 @Service
 public class SimpleSearchAdapterService {
 
-    private final CompoundService compoundService; 
+    //We do not use rules in simple search, so we set them to a default value (-2).
+    public static final int SCORE_VALUE = -2;
 
-    public SimpleSearchAdapterService(CompoundService compoundService) {
-        this.compoundService = compoundService;
+
+    private final CompoundController existingEndpoint;
+    
+    public SimpleSearchAdapterService(CompoundController existingEndpoint) {
+        this.existingEndpoint = existingEndpoint;
     }
+
+    
 
 
     /**
@@ -58,7 +73,7 @@ public class SimpleSearchAdapterService {
         validateRequest(request);
 
         CompoundSimpleSearchRequestDTO adaptedRequest = transformRequest(request);
-        RTSearchResponseDTO adaptedResult = compoundService.findCompoundsByMz(adaptedRequest);
+        RTSearchResponseDTO adaptedResult = existingEndpoint.annotateMSFeature(adaptedRequest);
         SimpleSearchAdapterResponseDTO response = transformResult(adaptedResult);
 
         return response;
@@ -94,13 +109,9 @@ public class SimpleSearchAdapterService {
 
         //These databases are no longer supported, becouse of that, the option to select all, must also thrown an error
         for(LegacyDatabase db : request.getDatabases()){
-            if(db == LegacyDatabase.ALL || db == LegacyDatabase.MINE || db == LegacyDatabase.METLIN || db == LegacyDatabase.ALL_EXCEPT_MINE){
+            if(db == LegacyDatabase.MINE || db == LegacyDatabase.METLIN){
                 throw new ResponseStatusException(HttpStatus.GONE, "Database "+ db.getValue() + " is no longer supported");
             }
-        }
-
-        if(request.getMetaboliteTypes() == LegacyMetaboliteType.ALL_INCLUDING_PEPTIDES){
-            throw new ResponseStatusException(HttpStatus.GONE, "Peptide search is not supported anymore");
         }
     }
 
@@ -127,10 +138,10 @@ public class SimpleSearchAdapterService {
 
             switch(request.getIonMode()){
                 case POSITIVE:
-                    mass += 1.007276;
+                    mass += Constants.PROTON_WEIGTH;
                     break;
                 case NEGATIVE:
-                    mass -= 1.007276;
+                    mass -= Constants.PROTON_WEIGTH;
                     break;
                 case NEUTRAL:
                     break;
@@ -147,7 +158,7 @@ public class SimpleSearchAdapterService {
             Optional.empty(),                     // formulaType (ignored)
             databases,                            // databases
             metaboliteType                        // metaboliteType
-    );
+        );
     }
 
 
@@ -158,12 +169,10 @@ public class SimpleSearchAdapterService {
      */
     public MetaboliteType correspondingMetaboliteType(LegacyMetaboliteType legacyMetaboliteType){
         
-        if(legacyMetaboliteType == LegacyMetaboliteType.ALL_EXCEPT_PEPTIDES){
-            return MetaboliteType.ALL;
-        } else if(legacyMetaboliteType == LegacyMetaboliteType.ONLY_LIPIDS){
+        if(legacyMetaboliteType == LegacyMetaboliteType.ONLY_LIPIDS){
             return MetaboliteType.ONLYLIPIDS;
         } else {
-            throw new ResponseStatusException(HttpStatus.GONE, "Peptide search is not supported anymore");
+            return MetaboliteType.ALL;
         }
     }
 
@@ -187,7 +196,6 @@ public class SimpleSearchAdapterService {
             throw new ResponseStatusException(HttpStatus.GONE, "One or more selected databases are no longer supported");
         }
         
-
         return databases;
     }
 
@@ -199,38 +207,74 @@ public class SimpleSearchAdapterService {
      */
     public SimpleSearchAdapterResponseDTO transformResult(RTSearchResponseDTO adaptedResult) {
 
-        //Becouse we search for a single compound, we only return the first result.
-
+        //From the result, we get the annotated feature
         AnnotatedFeature result = adaptedResult.getMSFeatures().get(0);
 
+        //From the AnnotatedFeature we can access the IMSFeature that contains the EM
+        double EM = result.getFeature().getMzValue();
+
+
+        // From that we take the anotations by adduct and we get the first adduct
+        List<AnnotationsByAdduct> annotationsByAdducts = result.getAnnotationsByAdducts();
+
+        Set<String> adducts = new HashSet<String>();
+
+        for(AnnotationsByAdduct annotationsByAdduct : annotationsByAdducts){
+            adducts.add(annotationsByAdduct.getAdduct());
+        }
+
+        //From there the list of anotations, and we take the first one
+        List<Annotation> annotations = annotationsByAdducts.get(0).getAnnotations();
+        Annotation annotation = annotations.get(0);
+        
+        //We extract the needed information from the annotation and compound
+        int errorPpm =  annotation.getMassErrorPpm().intValue();
+        Compound compound = annotation.getCompound();
+
+        //We get information from the compound
+        int identifier = compound.getCompoundId();
+        String casId = compound.getCasId();
+        String compoundName = compound.getCompoundName();
+        String formula = compound.getFormula();
+        double mass = compound.getMass();
+        String inchiKey = compound.getInchiKey();
+        List<String> pathways = getStringPathways(compound.getPathways());
+
+        
 
         SimpleSearchAdapterResponseDTO response =  new SimpleSearchAdapterResponseDTO();
 
-        response.setIdentifier(0);
-        response.setEM(0.0);
-        response.setName(null);
-        response.setFormula(null);
-        response.setAdduct(null);
-        response.setAdducts(null);
-        response.setMolecularWeight(0.0);
-        response.setErrorPpm(null);
-        response.setIonizationScore(null);
-        response.setFinalScore(null);
-        response.setCas(null);
+
+        response.setIdentifier(identifier); //Compound
+        response.setEM(EM); //IMSFeature
+        response.setName(compoundName); //Compound
+        response.setFormula(formula); //Compound
+
+        response.setAdducts(adducts);
+
+        response.setErrorPpm(errorPpm); //Annotations
+        response.setMolecularWeight(mass); //Compound
+        response.setCas(casId); //Compound
+
+        response.setPathways(pathways); //Compound
+        response.setInChiKey(inchiKey); //Compound
 
         //Database related fields
         response.setKeggCompound(null);
-        response.setKeggUri(null);
+        response.setKeggUri("https://www.kegg.jp/entry/");
+
         response.setHmdbCompound(null);
-        response.setHmdbUri(null);
+        response.setHmdbUri("https://hmdb.ca/metabolites/");    
+
         response.setLipidmapsCompound(null);
-        response.setLipidmapsUri(null);
+        response.setLipidmapsUri("https://www.lipidmaps.org/databases/lmissd/");
+        
         response.setPubchemCompound(null);
-        response.setPubchemUri(null);
+        response.setPubchemUri("https://pubchem.ncbi.nlm.nih.gov/compound/");
 
-        response.setPathways(null);
-        response.setInChiKey(null);
 
+        response.setIonizationScore(SCORE_VALUE); //Default 
+        response.setFinalScore(SCORE_VALUE); //Default 
 
         //not supported anymore
         response.setMetlinCompound(null);
@@ -238,5 +282,17 @@ public class SimpleSearchAdapterService {
 
 
         return response;
+    }
+
+
+    private List<String> getStringPathways(Set<Pathway> pathways){
+
+        List<String> pathwayList = new ArrayList<>();
+
+        for(Pathway path :pathways){
+            pathwayList.add(path.toString());
+        }
+
+        return pathwayList;
     }
 }

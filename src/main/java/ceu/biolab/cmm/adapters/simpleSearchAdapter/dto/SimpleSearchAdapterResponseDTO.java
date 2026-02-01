@@ -18,9 +18,8 @@ public class SimpleSearchAdapterResponseDTO {
 
     private String formula;
 
-    private String adduct;
-
-   private Set<String> adducts;
+    @JsonProperty("adduct")
+    private Set<String> adducts;
 
     @JsonProperty("molecular_weight")
     private double molecularWeight;
@@ -28,8 +27,8 @@ public class SimpleSearchAdapterResponseDTO {
     @JsonProperty("error_ppm")
     private Integer errorPpm;
 
-    private Integer ionizationScore;   // -2..2
-    private Integer finalScore;        // -2..2
+    private Integer ionizationScore;   // Must be -2 for simple search
+    private Integer finalScore;     // Must be -2 for simple search
 
     private String cas;
 

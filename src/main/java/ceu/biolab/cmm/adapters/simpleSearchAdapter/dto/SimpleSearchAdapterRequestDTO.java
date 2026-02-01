@@ -19,9 +19,9 @@ import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyMetaboliteType;
 /**
  * Data Transfer Object for Simple Search Adapter requests.
  * Contains a single compound to search for.
- * All fields have defaults.
- * 
+ * All fields have defaults defined.
  */
+
 
 @Data
 public class SimpleSearchAdapterRequestDTO {

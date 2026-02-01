@@ -3,7 +3,7 @@ package ceu.biolab.cmm.adapters.simpleSearchAdapter.domain;
 public enum LegacyDatabase {
     
     ALL("all"), 
-    ALL_EXCEPT_MINE("all-except-mine"),
+    ALL_EXCEPT_MINE("all"), // In the new system we don't have MINE so ALL and ALL_EXCEPT_MINE are equivalent. 
     HMDB("HMDB"), 
     LIPIDSMAPS("LipidMaps"),
     METLIN("Metlin"), 
