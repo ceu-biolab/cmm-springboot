@@ -15,6 +15,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -92,6 +93,15 @@ class CemsSearchServiceTest {
         request.setTemperature(null);
 
         assertThrows(ResponseStatusException.class, () -> service.search(request));
+    }
+
+    @Test
+    void searchRejectsNeutralIonizationMode() {
+        CemsSearchRequestDTO request = baseRequest();
+        request.setIonizationMode("neutral");
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(request));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     }
 
     @Test

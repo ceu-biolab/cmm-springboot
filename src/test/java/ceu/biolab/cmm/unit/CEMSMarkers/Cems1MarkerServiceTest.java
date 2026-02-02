@@ -110,4 +110,12 @@ class Cems1MarkerServiceTest {
 
         assertThrows(ResponseStatusException.class, () -> service.search(sampleRequest));
     }
+
+    @Test
+    void searchRejectsNeutralIonizationMode() {
+        sampleRequest.setIonMode("neutral");
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(sampleRequest));
+        assertEquals(org.springframework.http.HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
 }

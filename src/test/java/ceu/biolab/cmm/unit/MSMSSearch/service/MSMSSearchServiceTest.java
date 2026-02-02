@@ -74,6 +74,14 @@ public class MSMSSearchServiceTest {
     }
 
     @Test
+    void search_throwsWhenIonModeNeutral() {
+        MSMSSearchRequestDTO req = validRequest();
+        req.setIonizationMode(IonizationMode.NEUTRAL);
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
     void search_throwsWhenCIDEnergyNull() {
         MSMSSearchRequestDTO req = validRequest();
         req.setCIDEnergy(null);

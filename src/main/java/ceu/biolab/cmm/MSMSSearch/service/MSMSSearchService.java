@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.MSMSSearch.repository.MSMSSearchRepository;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 
 @Service
 public class MSMSSearchService {
@@ -30,6 +31,9 @@ public class MSMSSearchService {
 
         if (request.getIonizationMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required.");
+        }
+        if (request.getIonizationMode() == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
         }
 
         if (request.getCIDEnergy() == null) {
