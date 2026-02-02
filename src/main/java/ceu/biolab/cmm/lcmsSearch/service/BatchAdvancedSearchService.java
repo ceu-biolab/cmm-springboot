@@ -37,18 +37,35 @@ public class BatchAdvancedSearchService {
         List<Map<Double, Double>> compositeSpectrumList = request.getCompositeSpectrum();
         Set<String> adducts = request.getAdductsString();
 
+        List<AdductDefinition> orderedDefinitions = resolveAdductDefinitions(request.getIonizationMode(), adducts);
+        Set<String> canonicalAdducts = orderedDefinitions.stream()
+                .map(AdductDefinition::canonical)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        FormulaType formulaType;
+        try {
+            formulaType = FormulaType.resolveFormulaType(String.valueOf(request.getFormulaType()), request.isDeuterium());
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+        }
+        Optional<FormulaType> formulaTypeOptional = Optional.of(formulaType);
+
+        ExperimentParameters experimentParameters = new ExperimentParameters();
+        experimentParameters.setIonMode(Optional.of(request.getIonizationMode()));
+        ModifierType modifierType;
+        try {
+            modifierType = ModifierType.fromName(request.getModifiersType());
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown modifiers type: " + request.getModifiersType(), ex);
+        }
+        experimentParameters.setModifierType(Optional.of(modifierType));
+
         List<AnnotatedFeature> allAnnotatedFeatures = new ArrayList<>();
 
         for (int i = 0; i < mzs.size(); i++) {
             double mz = mzs.get(i);
             double rt = retentionTimes.get(i);
             Map<Double, Double> compositeSpectrum = compositeSpectrumList.get(i);
-
-            List<AdductDefinition> orderedDefinitions = resolveAdductDefinitions(request.getIonizationMode(), adducts);
-
-            Set<String> canonicalAdducts = orderedDefinitions.stream()
-                    .map(AdductDefinition::canonical)
-                    .collect(Collectors.toCollection(LinkedHashSet::new));
 
             String detectedAdduct = AdductService.detectAdduct(
                             request.getIonizationMode(),
@@ -58,20 +75,13 @@ public class BatchAdvancedSearchService {
                     .map(AdductDefinition::canonical)
                     .orElse("");
 
-            FormulaType formulaType;
-            try {
-                formulaType = FormulaType.resolveFormulaType(String.valueOf(request.getFormulaType()), request.isDeuterium());
-            } catch (IllegalArgumentException ex) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
-            }
-
             // 2. Simple search with detected Adduct
             logger.info("detected adduct : {}", detectedAdduct);
             logger.info("adducts formatted : {}", request.getAdductsString());
             CompoundSimpleSearchRequestDTO compoundSimpleSearchRequestDTO = new CompoundSimpleSearchRequestDTO(mz,
                     request.getMzToleranceMode(), request.getTolerance(), request.getIonizationMode(),
                     canonicalAdducts, Optional.ofNullable(detectedAdduct).filter(s -> !s.isEmpty()),
-                    Optional.of(formulaType), request.getDatabases(), request.getMetaboliteType());
+                    formulaTypeOptional, request.getDatabases(), request.getMetaboliteType());
 
             RTSearchResponseDTO response = compoundService.findCompoundsByMz(compoundSimpleSearchRequestDTO);
             List<AnnotatedFeature> annotatedFeatures = response.getMSFeatures();
@@ -82,21 +92,12 @@ public class BatchAdvancedSearchService {
                 feature.setFeature(lcmsFeature);
             }
 
-            //3. Score Annotations
-            ExperimentParameters experimentParameters = new ExperimentParameters();
-            experimentParameters.setIonMode(Optional.of(request.getIonizationMode()));
-            ModifierType modifierType;
-            try {
-                modifierType = ModifierType.fromName(request.getModifiersType());
-            } catch (IllegalArgumentException ex) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown modifiers type: " + request.getModifiersType(), ex);
-            }
-            experimentParameters.setModifierType(Optional.of(modifierType));
-
-            ScoreAnnotationsService.scoreAnnotations(annotatedFeatures, Optional.of(experimentParameters));
             allAnnotatedFeatures.addAll(annotatedFeatures);
         }
 
+        if (!allAnnotatedFeatures.isEmpty()) {
+            ScoreAnnotationsService.scoreAnnotations(allAnnotatedFeatures, Optional.of(experimentParameters));
+        }
         return allAnnotatedFeatures;
     }
 
@@ -139,6 +140,9 @@ public class BatchAdvancedSearchService {
         }
         if (request.getIonizationMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required.");
+        }
+        if (request.getIonizationMode() == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
         }
         if (request.getAdductsString() == null || request.getAdductsString().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct is required.");
