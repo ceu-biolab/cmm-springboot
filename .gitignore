@@ -8,3 +8,4 @@ application-local.yml
 mykeystore.jks
 .venv/
 DEPLOYMENT.md
+__temp
