@@ -85,6 +85,9 @@ public class CompoundRepository {
         if (tolerance <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero.");
         }
+        if (ionizationMode == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
+        }
         if (adductsString == null || adductsString.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided.");
         }

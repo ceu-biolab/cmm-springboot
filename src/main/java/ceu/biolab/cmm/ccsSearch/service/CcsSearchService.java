@@ -62,6 +62,9 @@ public class CcsSearchService {
         CcsToleranceMode ccsToleranceMode = request.getCcsToleranceMode();
         BufferGas bufferGas = request.getBufferGas();
         IonizationMode ionizationMode = request.getIonizationMode();
+        if (ionizationMode == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
+        }
 
         List<String> requestedAdducts = request.getAdducts();
         Set<String> normalizedAdducts = new LinkedHashSet<>();
@@ -176,6 +179,19 @@ public class CcsSearchService {
                                     .inchi(queryResult.getInchi())
                                     .inchiKey(queryResult.getInchiKey())
                                     .smiles(queryResult.getSmiles())
+                                    .keggID(queryResult.getKeggId())
+                                    .lmID(queryResult.getLmId())
+                                    .hmdbID(queryResult.getHmdbId())
+                                    .agilentID(queryResult.getAgilentId())
+                                    .pcID(queryResult.getPcId())
+                                    .chebiID(queryResult.getChebiId())
+                                    .inHouseID(queryResult.getInHouseId())
+                                    .aspergillusID(queryResult.getAspergillusId())
+                                    .knapsackID(queryResult.getKnapsackId())
+                                    .npatlasID(queryResult.getNpatlasId())
+                                    .fahfaID(queryResult.getFahfaId())
+                                    .ohPositionID(queryResult.getOhPosition())
+                                    .aspergillusWebName(queryResult.getAspergillusWebName())
                                     .lipidType(queryResult.getLipidType())
                                     .numChains(queryResult.getNumChains())
                                     .numCarbons(queryResult.getNumberCarbons())
