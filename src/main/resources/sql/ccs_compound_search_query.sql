@@ -1,6 +1,6 @@
 SELECT 
   cv.compound_id,
-  cv.cas_id,
+  c.cas_id,
   cv.compound_name,
   cv.formula,
   cv.mass AS monoisotopic_mass,
@@ -42,6 +42,8 @@ SELECT
   p.pathway_name,
   p.pathway_map
 FROM compounds_view AS cv
+INNER JOIN compounds AS c
+  ON c.compound_id = cv.compound_id
 INNER JOIN compound_ccs AS cc
   ON cv.compound_id = cc.compound_id
 INNER JOIN adduct as a

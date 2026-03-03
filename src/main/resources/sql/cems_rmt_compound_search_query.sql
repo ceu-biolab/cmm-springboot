@@ -1,6 +1,6 @@
 SELECT
   cv.compound_id AS compound_id,
-  cv.cas_id AS cas_id,
+  c.cas_id AS cas_id,
   cv.compound_name AS compound_name,
   cv.formula AS formula,
   cv.mass AS mass,
@@ -53,6 +53,8 @@ JOIN ce_buffer_type bt
   ON props.buffer = bt.buffer_id
 JOIN compounds_view cv
   ON meta.compound_id = cv.compound_id
+JOIN compounds c
+  ON c.compound_id = cv.compound_id
 WHERE
   bt.buffer_code = :bufferCode
   AND props.polarity = :polarityId
