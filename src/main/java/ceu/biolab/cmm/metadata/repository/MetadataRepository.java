@@ -1,6 +1,7 @@
 package ceu.biolab.cmm.metadata.repository;
 
 import ceu.biolab.cmm.metadata.dto.CeMsBufferOption;
+import ceu.biolab.cmm.metadata.dto.DatabaseStatsResponse;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -38,6 +39,24 @@ public class MetadataRepository {
                 rs.getInt("buffer_id"),
                 rs.getString("buffer_code"),
                 rs.getString("buffer_description")));
+    }
+
+    public DatabaseStatsResponse fetchDatabaseStats() {
+        String sql = """
+                SELECT
+                    (SELECT COUNT(*) FROM compounds) AS compounds,
+                    (SELECT COUNT(*) FROM gcms_spectrum) AS gcms_spectra,
+                    (SELECT COUNT(*) FROM msms) AS msms_spectra,
+                    (SELECT COUNT(*) FROM compound_ccs) AS ccs_records,
+                    (SELECT COUNT(*) FROM ce_experimental_properties_metadata) AS cems_records
+                """;
+
+        return jdbcTemplate.queryForObject(sql, (rs, _) -> new DatabaseStatsResponse(
+                rs.getLong("compounds"),
+                rs.getLong("gcms_spectra"),
+                rs.getLong("msms_spectra"),
+                rs.getLong("ccs_records"),
+                rs.getLong("cems_records")));
     }
 
     public record CcsAdductRow(long ionizationModeId, String adductType) {

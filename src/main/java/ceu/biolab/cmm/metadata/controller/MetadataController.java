@@ -2,6 +2,7 @@ package ceu.biolab.cmm.metadata.controller;
 
 import ceu.biolab.cmm.metadata.dto.CcsAdductCatalogResponse;
 import ceu.biolab.cmm.metadata.dto.CeMsBufferOption;
+import ceu.biolab.cmm.metadata.dto.DatabaseStatsResponse;
 import ceu.biolab.cmm.metadata.service.MetadataService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,5 +27,10 @@ public class MetadataController {
     @GetMapping("/ce-ms-buffers")
     public List<CeMsBufferOption> getCeMsBuffers() {
         return metadataService.getCeMsBuffers();
+    }
+
+    @GetMapping("/stats")
+    public DatabaseStatsResponse getDatabaseStats() {
+        return metadataService.getDatabaseStats();
     }
 }

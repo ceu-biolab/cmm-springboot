@@ -2,6 +2,7 @@ package ceu.biolab.cmm.metadata.service;
 
 import ceu.biolab.cmm.metadata.dto.CcsAdductCatalogResponse;
 import ceu.biolab.cmm.metadata.dto.CeMsBufferOption;
+import ceu.biolab.cmm.metadata.dto.DatabaseStatsResponse;
 import ceu.biolab.cmm.metadata.repository.MetadataRepository;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
@@ -55,6 +56,10 @@ public class MetadataService {
 
     public List<CeMsBufferOption> getCeMsBuffers() {
         return metadataRepository.findCeMsBuffers();
+    }
+
+    public DatabaseStatsResponse getDatabaseStats() {
+        return metadataRepository.fetchDatabaseStats();
     }
 
     private Optional<AdductDefinition> resolveByLegacyKey(IonizationMode mode, String legacyKey) {

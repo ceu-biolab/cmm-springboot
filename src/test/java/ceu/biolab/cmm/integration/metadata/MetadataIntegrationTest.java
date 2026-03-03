@@ -35,4 +35,16 @@ class MetadataIntegrationTest {
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$[?(@.code == 'FORMIC_ACID_1M')]").isNotEmpty());
     }
+
+    @Test
+    void getDatabaseStatsReturnsCounts() throws Exception {
+        mockMvc.perform(get("/api/get/stats"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.compounds").isNumber())
+                .andExpect(jsonPath("$.compounds").value(org.hamcrest.Matchers.greaterThan(0)))
+                .andExpect(jsonPath("$.gcmsSpectra").isNumber())
+                .andExpect(jsonPath("$.msmsSpectra").isNumber())
+                .andExpect(jsonPath("$.ccsRecords").isNumber())
+                .andExpect(jsonPath("$.cemsRecords").isNumber());
+    }
 }
