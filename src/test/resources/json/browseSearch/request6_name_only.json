@@ -1,0 +1,6 @@
+{
+  "compoundName": "Ochtodane skeleton",
+  "databases": ["ALL"],
+  "metaboliteType": "ALL",
+  "exactName": true
+}

@@ -58,5 +58,5 @@ LEFT JOIN (
 ) lmc ON lmc.compound_id = c.compound_id
 WHERE 1=1
   AND (:compoundNameFilter)
-  AND c.formula LIKE '(:formula)'
+  (:formulaFilter)
   (:databaseFilterCondition);

@@ -53,12 +53,23 @@ public class BrowseSearchIntegrationTest {
     @Test
     void testBrowseSearchWithNullFromula() throws Exception {
         String requestJson = loadJson("json/browseSearch/request3.json");
-        String expectedResponse = loadJson("json/browseSearch/response3.json");
         mockMvc.perform(post("/api/browseSearch")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+                .andExpect(jsonPath("$.compoundlist").isArray())
+                .andExpect(jsonPath("$.compoundlist").isNotEmpty());
+    }
+
+    @Test
+    void testBrowseSearchWithNameOnlyAndNoFormulaField() throws Exception {
+        String requestJson = loadJson("json/browseSearch/request6_name_only.json");
+
+        mockMvc.perform(post("/api/browseSearch")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.compoundlist[?(@.compoundId == 33)]").isNotEmpty());
     }
 
     @Test

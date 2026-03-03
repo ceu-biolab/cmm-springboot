@@ -82,8 +82,12 @@ public class BrowseSearchRepository {
         }
 
         String formula = request.getFormula();
-        params.addValue("formula", (formula == null || formula.isBlank()) ? "%" : formula);
-        sql = sql.replace("'(:formula)'", ":formula");
+        if (formula != null && !formula.isBlank()) {
+            sql = sql.replace("(:formulaFilter)", " AND c.formula LIKE :formula");
+            params.addValue("formula", formula.trim());
+        } else {
+            sql = sql.replace("(:formulaFilter)", "");
+        }
 
         return new QueryParts(sql, params);
     }
