@@ -7284,7 +7284,7 @@
     }, {
       "compound" : {
         "compoundId" : 34070,
-        "casId" : "123-78-4",
+        "casId" : null,
         "compoundName" : "Sphingosine",
         "formula" : "C18H37NO2",
         "mass" : 299.282429433,
@@ -9979,7 +9979,7 @@
     "annotations" : [ {
       "compound" : {
         "compoundId" : 27493,
-        "casId" : "29106-32-9",
+        "casId" : null,
         "compoundName" : "2-Cyclopentene-1S-tridecanoic acid",
         "formula" : "C18H32O2",
         "mass" : 280.24023,
@@ -14693,7 +14693,7 @@
     }, {
       "compound" : {
         "compoundId" : 25805,
-        "casId" : "2420-56-6",
+        "casId" : null,
         "compoundName" : "10E,12Z-octadecadienoic acid",
         "formula" : "C18H32O2",
         "mass" : 280.240230268,
@@ -15667,7 +15667,7 @@
     }, {
       "compound" : {
         "compoundId" : 26112,
-        "casId" : "506-24-1",
+        "casId" : null,
         "compoundName" : "Stearolic acid",
         "formula" : "C18H32O2",
         "mass" : 280.240231,
@@ -17249,7 +17249,7 @@
     }, {
       "compound" : {
         "compoundId" : 27441,
-        "casId" : "503-05-9",
+        "casId" : null,
         "compoundName" : "Malvalic acid",
         "formula" : "C18H32O2",
         "mass" : 280.240230268,
@@ -20318,7 +20318,7 @@
     }, {
       "compound" : {
         "compoundId" : 27831,
-        "casId" : "141-22-0",
+        "casId" : null,
         "compoundName" : "Ricinoleic acid",
         "formula" : "C18H34O3",
         "mass" : 298.250796,
@@ -20436,7 +20436,7 @@
     }, {
       "compound" : {
         "compoundId" : 27973,
-        "casId" : "2443-39-2",
+        "casId" : null,
         "compoundName" : "9,10-epoxystearic acid",
         "formula" : "C18H34O3",
         "mass" : 298.250794954,
