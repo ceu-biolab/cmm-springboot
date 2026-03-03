@@ -16,6 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -70,6 +71,22 @@ public class GlobalExceptionHandler {
         problemDetail.setDetail(ex.getMessage());
         LOGGER.error("Illegal argument for {} {}: {}", request.getMethod(), request.getRequestURI(), ex.getMessage(), ex);
         return ResponseEntity.badRequest().body(problemDetail);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ProblemDetail> handleResponseStatusException(ResponseStatusException ex,
+                                                                       HttpServletRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(ex.getStatusCode());
+        problemDetail.setTitle("Request failed");
+        problemDetail.setDetail(ex.getReason() != null ? ex.getReason() : ex.getMessage());
+        if (ex.getStatusCode().is5xxServerError()) {
+            LOGGER.error("Response status exception for {} {}: {}", request.getMethod(), request.getRequestURI(),
+                    ex.getReason(), ex);
+        } else {
+            LOGGER.error("Response status exception for {} {}: {}", request.getMethod(), request.getRequestURI(),
+                    ex.getReason(), ex);
+        }
+        return ResponseEntity.status(ex.getStatusCode()).body(problemDetail);
     }
 
     @ExceptionHandler(Exception.class)
