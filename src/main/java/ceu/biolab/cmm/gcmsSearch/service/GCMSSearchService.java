@@ -11,7 +11,9 @@ import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.domain.msFeature.Peak;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import ceu.biolab.cmm.shared.service.SpectrumScorer;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,12 +26,20 @@ import java.util.List;
 @Service
 public class GCMSSearchService {
 
-    private static final double GCMS_SCORE_THRESHOLD = 0.3;
-    // TODO: make this configurable, probably in the request
+    @Value("${cmm.gcms.score-threshold:0.3}")
+    private double gcmsScoreThreshold;
+
     private static final double GCMS_MZ_TOLERANCE_MDA = 100.0;
 
     @Autowired
     private GCMSSearchRepository gcmsSearchRepository;
+
+    @PostConstruct
+    void validateConfiguration() {
+        if (gcmsScoreThreshold < 0.0 || gcmsScoreThreshold > 1.0) {
+            throw new IllegalStateException("cmm.gcms.score-threshold must be between 0.0 and 1.0");
+        }
+    }
 
     public GCMSSearchResponseDTO search(GCMSSearchRequestDTO request) {
 
@@ -108,7 +118,7 @@ public class GCMSSearchService {
                         .build();
 
                 double score = gcmsAnnotation.computeCosineScore(experimentalPeaks, spectrumScorer);
-                if (score >= GCMS_SCORE_THRESHOLD) {
+                if (score >= gcmsScoreThreshold) {
                     gcmsAnnotationList.add(gcmsAnnotation);
                 }
 
