@@ -54,6 +54,7 @@ public class CompoundRepository {
     private ResourceLoader resourceLoader;
 
     private String msSearchQueryTemplate;
+    private String compoundByIdQueryTemplate;
 
     /**
      * This method annotates the MS features
@@ -228,6 +229,28 @@ public class CompoundRepository {
         return annotatedMSFeature;
     }
 
+    public Optional<Compound> findCompoundById(int compoundId) {
+        if (compoundId <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "compoundId must be greater than zero.");
+        }
+
+        String sql = loadCompoundByIdQueryTemplate();
+        List<Compound> compounds = jdbcTemplate.query(sql, ps -> ps.setInt(1, compoundId), (rs, _) -> {
+            CompoundDTO dto = CompoundMapper.fromResultSet(rs);
+            Compound compound = CompoundMapper.toCompound(dto);
+            normalizeLipidMapsClassification(compound);
+            return compound;
+        });
+
+        if (compounds.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Compound compound = compounds.get(0);
+        compound.setPathways(fetchPathwaysForCompound(compound.getCompoundId()));
+        return Optional.of(compound);
+    }
+
     private Optional<Set<String>> resolveAllowedElements(Optional<FormulaType> formulaType) {
         if (formulaType == null || formulaType.isEmpty()) {
             return Optional.empty();
@@ -324,5 +347,17 @@ public class CompoundRepository {
             }
         }
         return msSearchQueryTemplate;
+    }
+
+    private String loadCompoundByIdQueryTemplate() {
+        if (compoundByIdQueryTemplate == null) {
+            Resource resource = resourceLoader.getResource("classpath:sql/msSearch/compound_by_id.sql");
+            try (InputStream is = resource.getInputStream()) {
+                compoundByIdQueryTemplate = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw new IllegalStateException("Unable to load compound by id SQL template", e);
+            }
+        }
+        return compoundByIdQueryTemplate;
     }
 }

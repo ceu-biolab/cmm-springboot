@@ -3,8 +3,11 @@ import ceu.biolab.cmm.msSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.service.CompoundService;
+import ceu.biolab.cmm.shared.domain.compound.Compound;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -12,6 +15,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/compounds")
+@Validated
 public class CompoundController {
     private final CompoundService compoundService;
     // private static final Logger logger = LoggerFactory.getLogger(CompoundController.class);
@@ -51,6 +55,11 @@ public class CompoundController {
         }
 
         return response;
+    }
+
+    @GetMapping("/{compoundId}")
+    public Compound getCompoundById(@PathVariable @Positive int compoundId) {
+        return compoundService.getCompoundById(compoundId);
     }
 
 }

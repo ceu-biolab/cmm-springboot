@@ -3,6 +3,7 @@ package ceu.biolab.cmm.msSearch.service;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.repository.CompoundRepository;
+import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,22 @@ public class CompoundService {
             throw ex;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error annotating MS features", e);
+        }
+    }
+
+    public Compound getCompoundById(int compoundId) {
+        if (compoundId <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "compoundId must be greater than zero.");
+        }
+
+        try {
+            return compoundRepository.findCompoundById(compoundId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            "No compound found with id " + compoundId));
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving compound by id", e);
         }
     }
 
