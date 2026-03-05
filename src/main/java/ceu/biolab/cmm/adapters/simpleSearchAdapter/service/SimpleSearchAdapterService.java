@@ -20,11 +20,14 @@ import ceu.biolab.cmm.shared.domain.msFeature.Annotation;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.Constants;
 
-import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyDatabase;
-import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyMassesMode;
-import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyMetaboliteType;
+import ceu.biolab.cmm.adapters.shared.domain.LegacyDatabase;
+import ceu.biolab.cmm.adapters.shared.domain.LegacyMassesMode;
+import ceu.biolab.cmm.adapters.shared.domain.LegacyMetaboliteType;
 import ceu.biolab.cmm.adapters.simpleSearchAdapter.dto.SimpleSearchAdapterRequestDTO;
 import ceu.biolab.cmm.adapters.simpleSearchAdapter.dto.SimpleSearchAdapterResponseDTO;
+import ceu.biolab.cmm.adapters.shared.translators.AdductTranslation;
+import ceu.biolab.cmm.adapters.shared.translators.MetaboliteTypeTranslation;
+import ceu.biolab.cmm.adapters.shared.translators.DatabaseTranslation;
 
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
@@ -47,8 +50,8 @@ import ceu.biolab.cmm.msSearch.controller.CompoundController;
 @Service
 public class SimpleSearchAdapterService {
 
-    //We do not use rules in simple search, so we set them to a default value (-2).
-    public static final int SCORE_VALUE = -2;
+    //We do not use rules in simple search, so we set them to a default value (-2.0).
+    public static final double SCORE_VALUE = -2.0;
 
 
     private final CompoundController existingEndpoint;
@@ -74,6 +77,8 @@ public class SimpleSearchAdapterService {
 
         CompoundSimpleSearchRequestDTO adaptedRequest = transformRequest(request);
         RTSearchResponseDTO adaptedResult = existingEndpoint.annotateMSFeature(adaptedRequest);
+
+        
         SimpleSearchAdapterResponseDTO response = transformResult(adaptedResult);
 
         return response;
@@ -129,9 +134,12 @@ public class SimpleSearchAdapterService {
      */
     public CompoundSimpleSearchRequestDTO transformRequest(SimpleSearchAdapterRequestDTO request) {
 
-        MetaboliteType metaboliteType = correspondingMetaboliteType(request.getMetaboliteTypes());
-        Set<Database> databases = correspondingDatabases(request.getDatabases());
+        MetaboliteType metaboliteType = MetaboliteTypeTranslation.toMetaboliteType(request.getMetaboliteTypes());
+        Set<Database> databases = DatabaseTranslation.toDatabases(request.getDatabases());
         
+        // Transform adducts to canonical [..]+ / [..]- format
+        List<String> transformedAdducts = AdductTranslation.translateAll(request.getAdducts(), request.getIonMode());
+
         double mass = request.getMass();
 
         if(request.getMassesMode() == LegacyMassesMode.NEUTRAL){
@@ -153,50 +161,12 @@ public class SimpleSearchAdapterService {
             request.getToleranceMode(),           // mzToleranceMode
             request.getTolerance(),               // tolerance
             request.getIonMode(),                 // ionizationMode
-            request.getAdducts(),                 // adductsString
+            new HashSet<>(transformedAdducts),    // adductsString
             Optional.empty(),                     // detectedAdduct (ignored)
             Optional.empty(),                     // formulaType (ignored)
             databases,                            // databases
             metaboliteType                        // metaboliteType
         );
-    }
-
-
-    /**
-     * Maps LegacyMetaboliteType to MetaboliteType. It redundantly checks for unsupported types.
-     * @param legacyMetaboliteType LegacyMetaboliteType
-     * @return MetaboliteType
-     */
-    public MetaboliteType correspondingMetaboliteType(LegacyMetaboliteType legacyMetaboliteType){
-        
-        if(legacyMetaboliteType == LegacyMetaboliteType.ONLY_LIPIDS){
-            return MetaboliteType.ONLYLIPIDS;
-        } else {
-            return MetaboliteType.ALL;
-        }
-    }
-
-
-    /**
-     * Maps LegacyDatabase set to Database set. It redundantly checks for unsupported types.
-     * We transform the names to match the enum names in Database. Using upperCase and replacing "-" with "".
-     * @param legacyDatabases Set<LegacyDatabase>
-     * @return Set<Database>
-     */
-    public Set<Database> correspondingDatabases(Set<LegacyDatabase> legacyDatabases){
-        
-        Set<Database> databases = new java.util.HashSet<>();
-
-        try{
-            for(LegacyDatabase db : legacyDatabases){
-
-                databases.add(Database.valueOf(db.getValue().toUpperCase().replace("-", "")));
-            }
-        } catch(IllegalArgumentException e){
-            throw new ResponseStatusException(HttpStatus.GONE, "One or more selected databases are no longer supported");
-        }
-        
-        return databases;
     }
 
 
@@ -207,79 +177,96 @@ public class SimpleSearchAdapterService {
      */
     public SimpleSearchAdapterResponseDTO transformResult(RTSearchResponseDTO adaptedResult) {
 
-        //From the result, we get the annotated feature
-        AnnotatedFeature result = adaptedResult.getMSFeatures().get(0);
+        SimpleSearchAdapterResponseDTO response = new SimpleSearchAdapterResponseDTO();
+        List<SimpleSearchAdapterResponseDTO.Result> results = new ArrayList<>();
+        response.setResults(results);
 
-        //From the AnnotatedFeature we can access the IMSFeature that contains the EM
-        double EM = result.getFeature().getMzValue();
-
-
-        // From that we take the anotations by adduct and we get the first adduct
-        List<AnnotationsByAdduct> annotationsByAdducts = result.getAnnotationsByAdducts();
-
-        Set<String> adducts = new HashSet<String>();
-
-        for(AnnotationsByAdduct annotationsByAdduct : annotationsByAdducts){
-            adducts.add(annotationsByAdduct.getAdduct());
+        if (adaptedResult == null || adaptedResult.getMSFeatures() == null || adaptedResult.getMSFeatures().isEmpty()) {
+            return response;
         }
+        AnnotatedFeature result = adaptedResult.getMSFeatures().get(0);
+        if (result == null || result.getFeature() == null) {
+            return response;
+        }
+        double em = result.getFeature().getMzValue();
 
-        //From there the list of anotations, and we take the first one
-        List<Annotation> annotations = annotationsByAdducts.get(0).getAnnotations();
-        Annotation annotation = annotations.get(0);
-        
-        //We extract the needed information from the annotation and compound
-        int errorPpm =  annotation.getMassErrorPpm().intValue();
-        Compound compound = annotation.getCompound();
+        List<AnnotationsByAdduct> annotationsByAdducts = result.getAnnotationsByAdducts();
+        Set<String> adducts = new HashSet<>();
+        if (annotationsByAdducts != null && !annotationsByAdducts.isEmpty()) {
+            // Collect all adduct labels
+            for (AnnotationsByAdduct group : annotationsByAdducts) {
+                if (group != null && group.getAdduct() != null) {
+                    adducts.add(AdductTranslation.reverse(group.getAdduct()));
+                }
+            }
 
-        //We get information from the compound
-        int identifier = compound.getCompoundId();
-        String casId = compound.getCasId();
-        String compoundName = compound.getCompoundName();
-        String formula = compound.getFormula();
-        double mass = compound.getMass();
-        String inchiKey = compound.getInchiKey();
-        List<String> pathways = getStringPathways(compound.getPathways());
+            // Flatten annotations from all adduct groups
+            for (AnnotationsByAdduct group : annotationsByAdducts) {
+                if (group == null || group.getAnnotations() == null) {
+                    continue;
+                }
 
-        
+                List<Annotation> annotations = group.getAnnotations();
+                if (annotations.isEmpty()) {
+                    continue;
+                }
 
-        SimpleSearchAdapterResponseDTO response =  new SimpleSearchAdapterResponseDTO();
+                for (Annotation annotation : annotations) {
+                    if (annotation == null) {
+                        continue;
+                    }
 
+                    SimpleSearchAdapterResponseDTO.Result dto = new SimpleSearchAdapterResponseDTO.Result();
 
-        response.setIdentifier(identifier); //Compound
-        response.setEM(EM); //IMSFeature
-        response.setName(compoundName); //Compound
-        response.setFormula(formula); //Compound
+                    dto.setEM(em);
+                    dto.setAdducts(adducts);
+                    dto.setIonizationScore(SCORE_VALUE); // Default
+                    dto.setFinalScore(SCORE_VALUE);      // Default
 
-        response.setAdducts(adducts);
+                    if (annotation.getMassErrorPpm() != null) {
+                        dto.setErrorPpm(annotation.getMassErrorPpm().intValue());
+                    }
 
-        response.setErrorPpm(errorPpm); //Annotations
-        response.setMolecularWeight(mass); //Compound
-        response.setCas(casId); //Compound
+                    Compound compound = annotation.getCompound();
+                    if (compound != null) {
+                        dto.setIdentifier(compound.getCompoundId());
+                        dto.setCas(compound.getCasId());
+                        dto.setName(compound.getCompoundName());
+                        dto.setFormula(compound.getFormula());
+                        dto.setMolecularWeight(compound.getMass());
+                        dto.setInChiKey(compound.getInchiKey());
+                        dto.setPathways(getStringPathways(compound.getPathways()));
 
-        response.setPathways(pathways); //Compound
-        response.setInChiKey(inchiKey); //Compound
+                        // Database info -> CMMCompound
+                        if (compound instanceof ceu.biolab.cmm.shared.domain.compound.CMMCompound cmm) {
+                            dto.setKeggCompound(cmm.getKeggID() != null ? cmm.getKeggID() : "");
+                            dto.setKeggUri(cmm.getKeggID() != null ? "https://www.kegg.jp/entry/" + cmm.getKeggID() : "");
+                            dto.setHmdbCompound(cmm.getHmdbID() != null ? cmm.getHmdbID() : "");
+                            dto.setHmdbUri(cmm.getHmdbID() != null ? "https://hmdb.ca/metabolites/" + cmm.getHmdbID() : "");
+                            dto.setLipidmapsCompound(cmm.getLmID() != null ? cmm.getLmID() : "");
+                            dto.setLipidmapsUri(cmm.getLmID() != null ? "https://www.lipidmaps.org/databases/lmissd/" + cmm.getLmID() : "");
+                            dto.setPubchemCompound(cmm.getPcID() != null ? cmm.getPcID().toString() : "");
+                            dto.setPubchemUri(cmm.getPcID() != null ? "https://pubchem.ncbi.nlm.nih.gov/compound/" + cmm.getPcID() : "");
+                        } else {
+                            dto.setKeggCompound("");
+                            dto.setKeggUri("");
+                            dto.setHmdbCompound("");
+                            dto.setHmdbUri("");
+                            dto.setLipidmapsCompound("");
+                            dto.setLipidmapsUri("");
+                            dto.setPubchemCompound("");
+                            dto.setPubchemUri("");
+                        }
+                    }
 
-        //Database related fields
-        response.setKeggCompound(null);
-        response.setKeggUri("https://www.kegg.jp/entry/");
+                    // not supported anymore
+                    dto.setMetlinCompound("");
+                    dto.setMetlinUri("");
 
-        response.setHmdbCompound(null);
-        response.setHmdbUri("https://hmdb.ca/metabolites/");    
-
-        response.setLipidmapsCompound(null);
-        response.setLipidmapsUri("https://www.lipidmaps.org/databases/lmissd/");
-        
-        response.setPubchemCompound(null);
-        response.setPubchemUri("https://pubchem.ncbi.nlm.nih.gov/compound/");
-
-
-        response.setIonizationScore(SCORE_VALUE); //Default 
-        response.setFinalScore(SCORE_VALUE); //Default 
-
-        //not supported anymore
-        response.setMetlinCompound(null);
-        response.setMetlinUri(null);
-
+                    results.add(dto);
+                }
+            }
+        }
 
         return response;
     }

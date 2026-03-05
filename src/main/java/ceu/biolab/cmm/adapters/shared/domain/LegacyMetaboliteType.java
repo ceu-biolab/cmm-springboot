@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.adapters.simpleSearchAdapter.domain;
+package ceu.biolab.cmm.adapters.shared.domain;
 
 public enum LegacyMetaboliteType {
  
