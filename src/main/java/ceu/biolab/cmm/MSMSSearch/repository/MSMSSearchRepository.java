@@ -113,7 +113,7 @@ public class MSMSSearchRepository {
 
         matchedSpectra = selectBestPerCompound(new ArrayList<>(matchedSpectra));
         responseDTO.setMsmsList(new ArrayList<>(matchedSpectra));
-        responseDTO.setExperimentalSpectrum(copySpectrum(queryData.getFragmentsMZsIntensities()));
+        responseDTO.setExperimentalSpectrum(copySpectrum(querySpectrum));
         return responseDTO;
     }
 
@@ -201,7 +201,7 @@ public class MSMSSearchRepository {
         Set<MSMSAnnotation> matched = new HashSet<>();
         for (MSMSAnnotation lib : libraryMsms) {
             Double libPrecursor = lib.getSpectrum() != null ? lib.getSpectrum().getPrecursorMz() : null;
-            Double queryPrecursor = queryMsms.getFragmentsMZsIntensities() != null ? queryMsms.getFragmentsMZsIntensities().getPrecursorMz() : null;
+            Double queryPrecursor = queryMsms.getPrecursorIonMZ();
             double score = comparator.compute(scoreType,
                     lib.getSpectrum().getPeaks(),
                     queryMsms.getFragmentsMZsIntensities().getPeaks(),

@@ -90,6 +90,18 @@ public class MSMSSearchServiceTest {
     }
 
     @Test
+    void search_acceptsMissingFragmentPrecursorMz() throws Exception {
+        MSMSSearchResponseDTO expected = new MSMSSearchResponseDTO();
+        when(repository.findMatchingCompoundsAndSpectra(any())).thenReturn(expected);
+
+        MSMSSearchRequestDTO req = validRequest();
+        req.getFragmentsMZsIntensities().setPrecursorMz(null);
+
+        MSMSSearchResponseDTO resp = service.search(req);
+        assertSame(expected, resp);
+    }
+
+    @Test
     void search_returnsRepositoryResponse() throws Exception {
         MSMSSearchResponseDTO expected = new MSMSSearchResponseDTO();
         when(repository.findMatchingCompoundsAndSpectra(any())).thenReturn(expected);

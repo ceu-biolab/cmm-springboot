@@ -220,7 +220,7 @@
         }
     ],
     "experimentalSpectrum": {
-        "precursorMz": 287.23,
+        "precursorMz": 287.236,
         "peaks": [
             {
                 "mz": 55.301,

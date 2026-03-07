@@ -71,6 +71,7 @@ public class MSMSSearchRepositoryTest {
 
         // Query has a peak matching lib1 only
         MSMSSearchRequestDTO query = new MSMSSearchRequestDTO();
+        query.setPrecursorIonMZ(500.0);
         query.setFragmentsMZsIntensities(new Spectrum(500.0, new ArrayList<>(List.of(new MSPeak(100.0, 1.0)))));
         query.setScoreType(ScoreType.COSINE);
         query.setToleranceModePrecursorIon(MzToleranceMode.MDA);
@@ -95,7 +96,8 @@ public class MSMSSearchRepositoryTest {
         List<MSMSAnnotation> libs = List.of(lib);
 
         MSMSSearchRequestDTO query = new MSMSSearchRequestDTO();
-        query.setFragmentsMZsIntensities(new Spectrum(500.0, new ArrayList<>(List.of(new MSPeak(400.0, 1.0)))));
+        query.setPrecursorIonMZ(500.0);
+        query.setFragmentsMZsIntensities(new Spectrum(null, new ArrayList<>(List.of(new MSPeak(400.0, 1.0)))));
         query.setScoreType(ScoreType.MODIFIED_COSINE);
         query.setToleranceModePrecursorIon(MzToleranceMode.MDA);
         query.setToleranceFragments(500.0); // 0.5 Da
@@ -119,6 +121,7 @@ public class MSMSSearchRepositoryTest {
 
         // Query peak is 100.004 -> 40 ppm at m/z 100
         MSMSSearchRequestDTO query = new MSMSSearchRequestDTO();
+        query.setPrecursorIonMZ(500.0);
         query.setFragmentsMZsIntensities(new Spectrum(500.0, new ArrayList<>(List.of(new MSPeak(100.004, 1.0)))));
         query.setScoreType(ScoreType.COSINE);
 

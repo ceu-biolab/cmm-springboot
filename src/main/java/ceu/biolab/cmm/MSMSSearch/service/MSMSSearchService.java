@@ -60,10 +60,6 @@ public class MSMSSearchService {
                 || request.getFragmentsMZsIntensities().getPeaks().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fragment peaks are required.");
         }
-        if (request.getFragmentsMZsIntensities().getPrecursorMz() == null
-                || request.getFragmentsMZsIntensities().getPrecursorMz() <= 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fragment precursor m/z must be greater than zero.");
-        }
 
         // Execute search
         try {
