@@ -184,90 +184,78 @@ public class SimpleSearchAdapterService {
         if (adaptedResult == null || adaptedResult.getMSFeatures() == null || adaptedResult.getMSFeatures().isEmpty()) {
             return response;
         }
-        AnnotatedFeature result = adaptedResult.getMSFeatures().get(0);
-        if (result == null || result.getFeature() == null) {
-            return response;
-        }
-        double em = result.getFeature().getMzValue();
 
-        List<AnnotationsByAdduct> annotationsByAdducts = result.getAnnotationsByAdducts();
-        Set<String> adducts = new HashSet<>();
-        if (annotationsByAdducts != null && !annotationsByAdducts.isEmpty()) {
-            // Collect all adduct labels
-            for (AnnotationsByAdduct group : annotationsByAdducts) {
-                if (group != null && group.getAdduct() != null) {
-                    adducts.add(AdductTranslation.reverse(group.getAdduct()));
-                }
+        for (AnnotatedFeature feature : adaptedResult.getMSFeatures()) {
+            if (feature == null || feature.getFeature() == null) {
+                continue;
             }
-
-            // Flatten annotations from all adduct groups
-            for (AnnotationsByAdduct group : annotationsByAdducts) {
-                if (group == null || group.getAnnotations() == null) {
-                    continue;
-                }
-
-                List<Annotation> annotations = group.getAnnotations();
-                if (annotations.isEmpty()) {
-                    continue;
-                }
-
-                for (Annotation annotation : annotations) {
-                    if (annotation == null) {
+            double em = feature.getFeature().getMzValue();
+            List<AnnotationsByAdduct> annotationsByAdducts = feature.getAnnotationsByAdducts();
+            if (annotationsByAdducts != null && !annotationsByAdducts.isEmpty()) {
+                for (AnnotationsByAdduct group : annotationsByAdducts) {
+                    if (group == null || group.getAnnotations() == null) {
                         continue;
                     }
-
-                    SimpleSearchAdapterResponseDTO.Result dto = new SimpleSearchAdapterResponseDTO.Result();
-
-                    dto.setEM(em);
-                    dto.setAdducts(adducts);
-                    dto.setIonizationScore(SCORE_VALUE); // Default
-                    dto.setFinalScore(SCORE_VALUE);      // Default
-
-                    if (annotation.getMassErrorPpm() != null) {
-                        dto.setErrorPpm(annotation.getMassErrorPpm().intValue());
+                    List<Annotation> annotations = group.getAnnotations();
+                    if (annotations.isEmpty()) {
+                        continue;
                     }
-
-                    Compound compound = annotation.getCompound();
-                    if (compound != null) {
-                        dto.setIdentifier(compound.getCompoundId());
-                        dto.setCas(compound.getCasId());
-                        dto.setName(compound.getCompoundName());
-                        dto.setFormula(compound.getFormula());
-                        dto.setMolecularWeight(compound.getMass());
-                        dto.setInChiKey(compound.getInchiKey());
-                        dto.setPathways(getStringPathways(compound.getPathways()));
-
-                        // Database info -> CMMCompound
-                        if (compound instanceof ceu.biolab.cmm.shared.domain.compound.CMMCompound cmm) {
-                            dto.setKeggCompound(cmm.getKeggID() != null ? cmm.getKeggID() : "");
-                            dto.setKeggUri(cmm.getKeggID() != null ? "https://www.kegg.jp/entry/" + cmm.getKeggID() : "");
-                            dto.setHmdbCompound(cmm.getHmdbID() != null ? cmm.getHmdbID() : "");
-                            dto.setHmdbUri(cmm.getHmdbID() != null ? "https://hmdb.ca/metabolites/" + cmm.getHmdbID() : "");
-                            dto.setLipidmapsCompound(cmm.getLmID() != null ? cmm.getLmID() : "");
-                            dto.setLipidmapsUri(cmm.getLmID() != null ? "https://www.lipidmaps.org/databases/lmissd/" + cmm.getLmID() : "");
-                            dto.setPubchemCompound(cmm.getPcID() != null ? cmm.getPcID().toString() : "");
-                            dto.setPubchemUri(cmm.getPcID() != null ? "https://pubchem.ncbi.nlm.nih.gov/compound/" + cmm.getPcID() : "");
-                        } else {
-                            dto.setKeggCompound("");
-                            dto.setKeggUri("");
-                            dto.setHmdbCompound("");
-                            dto.setHmdbUri("");
-                            dto.setLipidmapsCompound("");
-                            dto.setLipidmapsUri("");
-                            dto.setPubchemCompound("");
-                            dto.setPubchemUri("");
+                    // Only the adduct(s) for this group
+                    String groupAdducts = "";
+                    if (group.getAdduct() != null) {
+                        groupAdducts = AdductTranslation.reverse(group.getAdduct());
+                    }
+                    for (Annotation annotation : annotations) {
+                        if (annotation == null) {
+                            continue;
                         }
+                        SimpleSearchAdapterResponseDTO.Result dto = new SimpleSearchAdapterResponseDTO.Result();
+                        dto.setEM(em);
+                        dto.setAdduct(groupAdducts);
+                        dto.setIonizationScore(SCORE_VALUE); // Default
+                        dto.setFinalScore(SCORE_VALUE);      // Default
+                        if (annotation.getMassErrorPpm() != null) {
+                            //The values are sign inverted in the new search, so we need to multiply by -1 to keep the same behavior in the adapter
+                            dto.setErrorPpm((-1) * annotation.getMassErrorPpm().intValue());
+                        }
+                        Compound compound = annotation.getCompound();
+                        if (compound != null) {
+                            dto.setIdentifier(compound.getCompoundId());
+                            dto.setCas(compound.getCasId());
+                            dto.setName(compound.getCompoundName());
+                            dto.setFormula(compound.getFormula());
+                            dto.setMolecularWeight(compound.getMass());
+                            dto.setInChiKey(compound.getInchiKey());
+                            dto.setPathways(getStringPathways(compound.getPathways()));
+                            // Database info -> CMMCompound
+                            if (compound instanceof ceu.biolab.cmm.shared.domain.compound.CMMCompound cmm) {
+                                dto.setKeggCompound(cmm.getKeggID() != null ? cmm.getKeggID() : "");
+                                dto.setKeggUri(cmm.getKeggID() != null ? "https://www.kegg.jp/entry/" + cmm.getKeggID() : "");
+                                dto.setHmdbCompound(cmm.getHmdbID() != null ? cmm.getHmdbID() : "");
+                                dto.setHmdbUri(cmm.getHmdbID() != null ? "https://hmdb.ca/metabolites/" + cmm.getHmdbID() : "");
+                                dto.setLipidmapsCompound(cmm.getLmID() != null ? cmm.getLmID() : "");
+                                dto.setLipidmapsUri(cmm.getLmID() != null ? "https://www.lipidmaps.org/databases/lmissd/" + cmm.getLmID() : "");
+                                dto.setPubchemCompound(cmm.getPcID() != null ? cmm.getPcID().toString() : "");
+                                dto.setPubchemUri(cmm.getPcID() != null ? "https://pubchem.ncbi.nlm.nih.gov/compound/" + cmm.getPcID() : "");
+                            } else {
+                                dto.setKeggCompound("");
+                                dto.setKeggUri("");
+                                dto.setHmdbCompound("");
+                                dto.setHmdbUri("");
+                                dto.setLipidmapsCompound("");
+                                dto.setLipidmapsUri("");
+                                dto.setPubchemCompound("");
+                                dto.setPubchemUri("");
+                            }
+                        }
+                        // not supported anymore
+                        dto.setMetlinCompound("");
+                        dto.setMetlinUri("");
+                        results.add(dto);
                     }
-
-                    // not supported anymore
-                    dto.setMetlinCompound("");
-                    dto.setMetlinUri("");
-
-                    results.add(dto);
                 }
             }
         }
-
         return response;
     }
 

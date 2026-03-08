@@ -51,7 +51,7 @@ public class SimpleSearchAdapterResponseDTO {
         private String formula;
 
         @JsonProperty("adduct")
-        private Set<String> adducts;
+        private String adduct;
 
         @JsonProperty("molecular_weight")
         private double molecularWeight;

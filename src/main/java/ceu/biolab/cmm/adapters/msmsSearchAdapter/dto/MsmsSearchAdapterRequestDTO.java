@@ -15,14 +15,12 @@ import ceu.biolab.cmm.adapters.shared.domain.LegacyIonMode;
 import ceu.biolab.cmm.adapters.shared.domain.LegacyIonizationVoltage;
 import ceu.biolab.cmm.adapters.shared.domain.SpectraType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.adapters.shared.domain.LegacyPeak;
 import ceu.biolab.cmm.shared.domain.msFeature.Peak;
 
 /**
  * Adapter-layer DTO for the legacy MS/MS Search request.
  *
- * Mirrors the Table 20 specification (ion_mass, ms_ms_peaks, tolerances,
- * ion_mode, Ionization_voltage, spectra_types) while relying on shared
- * enums where they already exist.
  */
 @Data
 public class MsmsSearchAdapterRequestDTO {
@@ -50,7 +48,7 @@ public class MsmsSearchAdapterRequestDTO {
 	 * In the legacy spec this is "ms_ms_peaks" (array of MS_MS_Peak).
 	 */
 	@JsonProperty("ms_ms_peaks")
-	private List<Peak> msMsPeaks;
+	private List<LegacyPeak> msMsPeaks;
 
 	/**
 	 * Precursor ion tolerance (range [0..100]).
@@ -75,7 +73,7 @@ public class MsmsSearchAdapterRequestDTO {
 	 */
 	@JsonProperty("precursor_mz_tolerance")
 	@PositiveOrZero(message = "precursor_mz_tolerance must be zero or positive")
-	//@Max(value = 100, message = "precursor_mz_tolerance must not exceed 100")
+	@Max(value = 100, message = "precursor_mz_tolerance must not exceed 100")
 	private double precursorMzTolerance;
 
 	/**

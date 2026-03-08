@@ -20,10 +20,15 @@ public class LegacyIonizationVoltageDeserializer extends JsonDeserializer<Legacy
         if (value == null || value.isEmpty()) {
             return LegacyIonizationVoltage.LOW;
         }
+        String norm = value.trim().toLowerCase();
         for (LegacyIonizationVoltage v : LegacyIonizationVoltage.values()) {
             if (v.getValue().equalsIgnoreCase(value) || v.name().equalsIgnoreCase(value)) {
                 return v;
             }
+        }
+        // Accept 'med' as alias for 'medium'
+        if (norm.equals("med")) {
+            return LegacyIonizationVoltage.MEDIUM;
         }
         throw new IOException("Invalid LegacyIonizationVoltage: " + value);
     }

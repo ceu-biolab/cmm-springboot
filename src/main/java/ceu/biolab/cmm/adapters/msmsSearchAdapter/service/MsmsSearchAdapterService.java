@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
 import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
@@ -26,6 +28,7 @@ import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.shared.domain.msFeature.Peak;
+import ceu.biolab.cmm.adapters.shared.domain.LegacyPeak;
 
 /**
  * MS/MS Search Adapter Service.
@@ -52,73 +55,42 @@ public class MsmsSearchAdapterService {
         return adaptResponse(internalResponse);
     }
 
-    /**
-     * First translation: adapter request -> internal MSMSSearchRequestDTO.
-     *
-     * For now this is a hardcoded request matching a known-good
-     * internal payload, ignoring the incoming adapter request.
-     */
     private MSMSSearchRequestDTO adaptRequest(MsmsSearchAdapterRequestDTO request) {
 
-        // Hardcoded peaks from the provided JSON
-        List<MSPeak> peaks = new ArrayList<>();
-        peaks.add(new MSPeak(55.301, 12.753));
-        peaks.add(new MSPeak(67.237, 14.611));
-        peaks.add(new MSPeak(69.204, 39.189));
-        peaks.add(new MSPeak(79.134, 14.527));
-        peaks.add(new MSPeak(81.102, 26.351));
-        peaks.add(new MSPeak(83.17, 13.007));
-        peaks.add(new MSPeak(91.118, 12.331));
-        peaks.add(new MSPeak(93.14, 30.405));
-        peaks.add(new MSPeak(95.091, 50.0));
-        peaks.add(new MSPeak(96.871, 15.034));
-        peaks.add(new MSPeak(105.084, 27.365));
-        peaks.add(new MSPeak(107.052, 25.0));
-        peaks.add(new MSPeak(109.035, 31.757));
-        peaks.add(new MSPeak(111.057, 18.074));
-        peaks.add(new MSPeak(119.012, 20.777));
-        peaks.add(new MSPeak(121.035, 100.0));
-        peaks.add(new MSPeak(121.722, 11.318));
-        peaks.add(new MSPeak(122.549, 15.456));
-        peaks.add(new MSPeak(124.954, 15.203));
-        peaks.add(new MSPeak(130.958, 10.98));
-        peaks.add(new MSPeak(132.972, 31.419));
-        peaks.add(new MSPeak(134.987, 21.199));
-        peaks.add(new MSPeak(137.048, 26.689));
-        peaks.add(new MSPeak(143.036, 9.544));
-        peaks.add(new MSPeak(145.113, 14.949));
-        peaks.add(new MSPeak(146.854, 15.034));
-        peaks.add(new MSPeak(148.939, 11.74));
-        peaks.add(new MSPeak(150.992, 27.027));
-        peaks.add(new MSPeak(157.2, 13.851));
-        peaks.add(new MSPeak(159.066, 16.639));
-        peaks.add(new MSPeak(161.08, 16.639));
-        peaks.add(new MSPeak(163.149, 12.078));
-        peaks.add(new MSPeak(165.094, 8.108));
-        peaks.add(new MSPeak(171.028, 12.331));
-        peaks.add(new MSPeak(173.152, 10.557));
-        peaks.add(new MSPeak(174.916, 12.584));
-        peaks.add(new MSPeak(185.099, 12.5));
-        peaks.add(new MSPeak(199.295, 8.024));
-        peaks.add(new MSPeak(216.966, 12.078));
-        peaks.add(new MSPeak(244.947, 13.936));
+        IonizationMode ionizationMode = mapIonMode(request.getIonMode());
+        CIDEnergy cidEnergy = mapCidEnergyFromLegacy(request.getIonizationVoltage());
+        List<String> adducts = buildDefaultAdducts(ionizationMode);
+        List<Peak> peaks = convertLegacyPeaks(request.getMsMsPeaks());
+        Spectrum spectrum = buildSpectrum(request.getIonMass(), peaks);
 
-        Spectrum spectrum = new Spectrum(287.23, peaks);
-
-        List<String> adducts = new ArrayList<>();
-        adducts.add("[M+H]+");
 
         return new MSMSSearchRequestDTO(
-                CIDEnergy.MED,
-                287.236,
-                10.0,
-                MzToleranceMode.PPM,
-                30.0,
-                MzToleranceMode.PPM,
-                IonizationMode.POSITIVE,
-                adducts,
-                spectrum,
-                ScoreType.COSINE);
+            cidEnergy,
+            request.getIonMass(),
+            request.getPrecursorIonTolerance(),
+            request.getPrecursorIonToleranceMode(),
+            request.getPrecursorMzTolerance(),
+            request.getPrecursorMzToleranceMode(),
+            ionizationMode,
+            adducts,
+            spectrum,
+            ScoreType.COSINE
+        );
+    }
+
+    /**
+     * Converts a list of LegacyPeak to a list of Peak.
+     */
+    public static List<Peak> convertLegacyPeaks(List<LegacyPeak> legacyPeaks) {
+        List<Peak> peaks = new ArrayList<>();
+        if (legacyPeaks != null) {
+            for (LegacyPeak lp : legacyPeaks) {
+                if (lp != null) {
+                    peaks.add(new Peak(lp.getMz(), lp.getIntensity()));
+                }
+            }
+        }
+        return peaks;
     }
 
     /**
@@ -181,22 +153,6 @@ public class MsmsSearchAdapterService {
         }
     }
 
-    private CIDEnergy mapCidEnergy(LegacyIonizationVoltage legacy) {
-        if (legacy == null) {
-            return CIDEnergy.MED;
-        }
-        switch (legacy) {
-            case LOW:
-                return CIDEnergy.LOW;
-            case HIGH:
-                return CIDEnergy.HIGH;
-            case MEDIUM:
-            case ALL: // Map "all" to a medium CID energy
-            default:
-                return CIDEnergy.MED;
-        }
-    }
-
     private List<String> buildDefaultAdducts(IonizationMode ionMode) {
         List<String> adducts = new ArrayList<>();
         if (ionMode == IonizationMode.NEGATIVE) {
@@ -218,6 +174,25 @@ public class MsmsSearchAdapterService {
             }
         }
         return new Spectrum(precursorMz, msPeaks);
+    }
+
+      /**
+     * Converts LegacyIonizationVoltage to CIDEnergy.
+     */
+    private CIDEnergy mapCidEnergyFromLegacy(LegacyIonizationVoltage legacy) {
+        if (legacy == null) return CIDEnergy.MED;
+        switch (legacy) {
+            case LOW:
+                return CIDEnergy.LOW;
+            case HIGH:
+                return CIDEnergy.HIGH;
+            case MEDIUM:
+                return CIDEnergy.MED;
+            case ALL:
+                throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "All ionization voltages not supported in this adapter");
+            default:
+                return CIDEnergy.MED;
+        }
     }
 }
 
