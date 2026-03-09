@@ -2,6 +2,8 @@ package ceu.biolab.cmm.unit.CEMSSearch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CemsCompoundMapper;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsQueryResponseDTO;
@@ -53,5 +55,27 @@ class CemsCompoundMapperTest {
         assertEquals(600, compound.getOhPositionID());
         assertEquals("Asp", compound.getAspergillusWebName());
         assertNull(compound.getMol2());
+    }
+
+    @Test
+    void toCompoundThrowsWhenMassMissing() {
+        CemsQueryResponseDTO dto = new CemsQueryResponseDTO();
+        dto.setCompoundId(42L);
+        dto.setChargeType(1L);
+        dto.setChargeNumber(1L);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> CemsCompoundMapper.toCompound(dto));
+        assertTrue(ex.getMessage().contains("mass"));
+    }
+
+    @Test
+    void toCompoundThrowsWhenChargeTypeMissing() {
+        CemsQueryResponseDTO dto = new CemsQueryResponseDTO();
+        dto.setCompoundId(42L);
+        dto.setMass(28.0313);
+        dto.setChargeNumber(1L);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> CemsCompoundMapper.toCompound(dto));
+        assertTrue(ex.getMessage().contains("chargeType"));
     }
 }

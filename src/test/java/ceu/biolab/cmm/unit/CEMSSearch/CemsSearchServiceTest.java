@@ -188,6 +188,28 @@ class CemsSearchServiceTest {
     }
 
     @Test
+    void searchSkipsCandidatesWithMissingChargeFields() throws Exception {
+        CemsSearchRequestDTO request = baseRequest();
+
+        CemsQueryResponseDTO malformed = candidate(10, "C3H6O3", 90.0, 1500.0);
+        malformed.setChargeType(null);
+        CemsQueryResponseDTO valid = candidate(11, "C4H8O4", 120.0, 1500.0);
+
+        when(repository.findMatchingCompounds(any(CemsFeatureQueryDTO.class)))
+                .thenReturn(List.of(malformed, valid));
+
+        CemsSearchResponseDTO response = service.search(request);
+        List<CeAnnotationDTO> annotations = response.getCeFeatures()
+                .get(0)
+                .getAnnotationsByAdducts()
+                .get(0)
+                .getAnnotations();
+
+        assertEquals(1, annotations.size());
+        assertEquals(11, annotations.get(0).getCompound().getCompoundId());
+    }
+
+    @Test
     void searchRejectsMzToleranceAbove100() {
         CemsSearchRequestDTO request = baseRequest();
         request.setMzToleranceMode("ppm");

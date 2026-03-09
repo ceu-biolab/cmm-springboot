@@ -132,7 +132,14 @@ public class CemsSearchService {
                 CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(definition.canonical());
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
-                    Compound compound = CemsCompoundMapper.toCompound(candidate);
+                    Compound compound;
+                    try {
+                        compound = CemsCompoundMapper.toCompound(candidate);
+                    } catch (IllegalArgumentException ex) {
+                        LOGGER.warn("Skipping CE-MS candidate {} due to invalid numeric fields: {}",
+                                candidate.getCompoundId(), ex.getMessage());
+                        continue;
+                    }
                     if (!matchesAlphabet(compound, allowedElements)) {
                         continue;
                     }

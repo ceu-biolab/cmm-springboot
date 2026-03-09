@@ -168,8 +168,16 @@ public class CcsSearchService {
                                 }
                             }
 
-                            int chargeType = queryResult.getChargeType() != null ? queryResult.getChargeType() : 0;
-                            int chargeNumber = queryResult.getChargeNumber() != null ? queryResult.getChargeNumber() : 0;
+                            Integer chargeTypeValue = queryResult.getChargeType();
+                            Integer chargeNumberValue = queryResult.getChargeNumber();
+                            if (chargeTypeValue == null || chargeNumberValue == null) {
+                                LOGGER.warn("Skipping CCS candidate {} due to missing charge fields (chargeType={}, chargeNumber={})",
+                                        queryResult.getCompoundId(), chargeTypeValue, chargeNumberValue);
+                                continue;
+                            }
+
+                            int chargeType = chargeTypeValue;
+                            int chargeNumber = chargeNumberValue;
 
                             IMMSCompound.IMMSCompoundBuilder<?, ?> builder = IMMSCompound.builder()
                                     .compoundId(queryResult.getCompoundId())
