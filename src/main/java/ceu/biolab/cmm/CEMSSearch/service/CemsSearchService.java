@@ -37,6 +37,7 @@ import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 
 @Service
 public class CemsSearchService {
@@ -189,6 +190,10 @@ public class CemsSearchService {
         }
         if (request.getMzTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz_tolerance must be greater than zero");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getMzTolerance(), request.getMzToleranceMode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("mz_tolerance", request.getMzToleranceMode()));
         }
         if (request.getEffectiveMobilityTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eff_mob_tolerance must be greater than zero");

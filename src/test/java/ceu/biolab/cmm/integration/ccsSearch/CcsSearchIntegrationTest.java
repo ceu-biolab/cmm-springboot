@@ -158,4 +158,15 @@ public class CcsSearchIntegrationTest {
 
         assertTrue(foundRetentionScore, "Expected at least one annotation to carry retention-time scores");
     }
+
+    @Test
+    void testCcsSearchRejectsMzToleranceAbove100() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request1.json")
+                .replace("\"mzTolerance\": 10", "\"mzTolerance\": 101");
+
+        mockMvc.perform(post("/api/ccs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest());
+    }
 }

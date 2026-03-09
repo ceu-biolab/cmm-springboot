@@ -19,6 +19,7 @@ import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -192,6 +193,10 @@ public class CemsRmtSearchService {
         }
         if (request.getTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tolerance must be greater than zero");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getTolerance(), request.getToleranceMode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("tolerance", request.getToleranceMode()));
         }
         if (request.getRmtTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_tolerance must be greater than zero");

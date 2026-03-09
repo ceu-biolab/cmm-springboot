@@ -40,4 +40,15 @@ public class LCMSSearchIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
     }
+
+    @Test
+    void testLcmsSearchRejectsToleranceAbove100() throws Exception {
+        String requestJson = loadJson("json/lcmsSearch/requestLCMSSearch.json")
+                .replace("\"tolerance\": 50", "\"tolerance\": 101");
+
+        mockMvc.perform(post("/api/batch-advanced-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest());
+    }
 }

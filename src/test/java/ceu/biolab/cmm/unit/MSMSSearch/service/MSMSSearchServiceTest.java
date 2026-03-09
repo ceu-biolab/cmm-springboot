@@ -109,4 +109,24 @@ public class MSMSSearchServiceTest {
         MSMSSearchResponseDTO resp = service.search(validRequest());
         assertSame(expected, resp);
     }
+
+    @Test
+    void search_throwsWhenPrecursorToleranceExceedsMaxForPpm() {
+        MSMSSearchRequestDTO req = validRequest();
+        req.setToleranceModePrecursorIon(MzToleranceMode.PPM);
+        req.setTolerancePrecursorIon(101.0);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
+    void search_throwsWhenFragmentToleranceExceedsMaxForMda() {
+        MSMSSearchRequestDTO req = validRequest();
+        req.setToleranceModeFragments(MzToleranceMode.MDA);
+        req.setToleranceFragments(101.0);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
 }

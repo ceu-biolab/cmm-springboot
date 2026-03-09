@@ -6,6 +6,7 @@ import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
 import ceu.biolab.cmm.CEMSSearch.service.CemsSearchService;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -114,6 +115,10 @@ public class Cems1MarkerService extends AbstractCemsMarkerService {
         }
         if (request.getTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getTolerance(), request.getToleranceMode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("tolerance", request.getToleranceMode()));
         }
         if (request.getMigrationTimeTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Migration time tolerance must be greater than zero");

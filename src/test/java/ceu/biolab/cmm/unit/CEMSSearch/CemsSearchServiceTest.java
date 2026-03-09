@@ -185,4 +185,14 @@ class CemsSearchServiceTest {
         assertEquals(1500.0 - 25.0, query.getMobilityLower(), 1e-9);
         assertEquals(1500.0 + 25.0, query.getMobilityUpper(), 1e-9);
     }
+
+    @Test
+    void searchRejectsMzToleranceAbove100() {
+        CemsSearchRequestDTO request = baseRequest();
+        request.setMzToleranceMode("ppm");
+        request.setMzTolerance(101.0);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(request));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
 }

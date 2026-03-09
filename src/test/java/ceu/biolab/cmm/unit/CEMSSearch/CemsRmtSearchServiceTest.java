@@ -136,4 +136,14 @@ class CemsRmtSearchServiceTest {
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(request));
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     }
+
+    @Test
+    void searchRejectsMzToleranceAbove100() {
+        CemsRmtSearchRequestDTO request = baseRequest();
+        request.setToleranceMode("mda");
+        request.setTolerance(101.0);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(request));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
 }

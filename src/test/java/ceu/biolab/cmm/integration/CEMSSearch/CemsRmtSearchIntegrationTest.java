@@ -48,6 +48,17 @@ class CemsRmtSearchIntegrationTest {
         JSONAssert.assertEquals(expectedNode.toString(), actualNode.toString(), JSONCompareMode.STRICT);
     }
 
+    @Test
+    void cemsRmtEndpointRejectsMzToleranceAbove100() throws Exception {
+        String requestJson = readResource("/json/cemsSearch/CEMSRMT_request1.json")
+                .replace("\"tolerance\": 10", "\"tolerance\": 101");
+
+        mockMvc.perform(post("/api/CEMSRMTSearch")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest());
+    }
+
     private String readResource(String path) throws IOException {
         try (InputStream inputStream = getClass().getResourceAsStream(path)) {
             if (inputStream == null) {

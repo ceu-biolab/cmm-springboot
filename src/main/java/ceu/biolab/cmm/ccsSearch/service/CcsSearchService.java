@@ -24,6 +24,7 @@ import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,10 @@ public class CcsSearchService {
         }
         if (request.getCcsTolerance() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ccsTolerance must be greater than zero.");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getMzTolerance(), request.getMzToleranceMode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("mzTolerance", request.getMzToleranceMode()));
         }
         if (request.getCcsValues().size() != request.getMzValues().size()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of CCS values and m/z values must be equal.");

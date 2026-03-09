@@ -40,4 +40,15 @@ public class MSMSSearchIntegrationTest {
                     .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
     }
+
+    @Test
+    void testMSMSSearchRejectsToleranceAbove100() throws Exception {
+        String requestJson = loadJson("json/msmsSearch/request1.json")
+                .replace("\"tolerancePrecursorIon\": 10.0", "\"tolerancePrecursorIon\": 101.0");
+
+        mockMvc.perform(post("/api/MSMSSearch")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest());
+    }
 }

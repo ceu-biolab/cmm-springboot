@@ -13,6 +13,7 @@ import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotatedFeature;
 import ceu.biolab.cmm.shared.domain.msFeature.LCMSFeature;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,6 +138,10 @@ public class BatchAdvancedSearchService {
         }
         if (request.getTolerance() == null || request.getTolerance() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero.");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getTolerance(), request.getMzToleranceMode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("tolerance", request.getMzToleranceMode()));
         }
         if (request.getIonizationMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required.");
