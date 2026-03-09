@@ -9,6 +9,7 @@ import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
+import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,16 +97,36 @@ public class BrowseSearchRepository {
         Set<Compound> compoundsSet = new HashSet<>();
 
         jdbcTemplate.query(queryParts.sql(), queryParts.params(), rs -> {
-            while (rs.next()) {
-                CompoundDTO dto = CompoundMapper.fromResultSet(rs);
-                compoundsSet.add(CompoundMapper.toCompound(dto));
-            }
-            return compoundsSet;
+                while (rs.next()) {
+                    CompoundDTO dto = CompoundMapper.fromResultSet(rs);
+                    Compound compound = CompoundMapper.toCompound(dto);
+                    compound.setPathways(fetchPathwaysForCompound(compound.getCompoundId()));
+                    compoundsSet.add(compound);
+                }
+                return compoundsSet;
         });
 
         LOGGER.info("browseSearch executed; matched {} compounds", compoundsSet.size());
 
         return new ArrayList<>(compoundsSet);
+    }
+
+    private Set<Pathway> fetchPathwaysForCompound(int compoundId) {
+        String sql = """
+                SELECT p.* FROM pathways p
+                INNER JOIN compounds_pathways cp ON cp.pathway_id = p.pathway_id
+                WHERE cp.compound_id = ?
+                """;
+
+        List<Pathway> pathwayList = jdbcTemplate.getJdbcTemplate().query(sql, ps -> ps.setInt(1, compoundId), (rs, _) -> {
+            Pathway pathway = new Pathway();
+            pathway.setPathwayId(rs.getInt("pathway_id"));
+            pathway.setPathwayMap(rs.getString("pathway_map"));
+            pathway.setPathwayName(rs.getString("pathway_name"));
+            return pathway;
+        });
+
+        return new HashSet<>(pathwayList);
     }
 
     private record QueryParts(String sql, MapSqlParameterSource params) {}
