@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 spring:
   profiles:
     active: local
@@ -16,3 +17,16 @@ spring:
       allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
       allowed-headers: "*"
       allow-credentials: true
+=======
+spring:
+  profiles:
+    default: local
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    initialization-mode: always
+>>>>>>> daef9b753d07ae90bd1f19c3f63c53dc048c6126

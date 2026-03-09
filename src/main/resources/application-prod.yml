@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: ${CMM_DB_URL}
+    username: ${CMM_DB_USERNAME}
+    password: ${CMM_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver

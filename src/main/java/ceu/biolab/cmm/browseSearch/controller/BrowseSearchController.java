@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = {"http://localhost:3000", "https://localhost:3000"}) // Allow frontend requests
 public class BrowseSearchController {
     @Autowired
     private BrowseSearchService browseSearchService;
@@ -18,5 +17,4 @@ public class BrowseSearchController {
         return browseSearchService.search(request);
     }
 }
-
 
