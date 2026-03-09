@@ -3,7 +3,8 @@ package ceu.biolab.cmm.MSMSSearch.domain;
 public enum CIDEnergy {
     LOW(10),
     MED(20),
-    HIGH(40);
+    HIGH(40),
+    ALL(-1);
 
     private final int value;
 
@@ -17,17 +18,18 @@ public enum CIDEnergy {
 
     public static CIDEnergy fromValue(int value) {
         for (CIDEnergy e : values()) {
-            if (e.value == value) return e;
+            if (e != ALL && e.value == value) return e;
         }
         throw new IllegalArgumentException("Invalid CIDEnergy: " + value);
     }
 
     @Override
     public String toString() {
-        String str = "";
-        if (this == LOW) str= "low";
-        if (this == MED) str= "med";
-        if (this == HIGH) str= "high";
-        return str;
+        return switch (this) {
+            case LOW -> "low";
+            case MED -> "med";
+            case HIGH -> "high";
+            case ALL -> "all";
+        };
     }
 }

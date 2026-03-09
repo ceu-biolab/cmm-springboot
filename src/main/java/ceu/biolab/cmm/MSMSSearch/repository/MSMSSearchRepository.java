@@ -141,8 +141,11 @@ public class MSMSSearchRepository {
             case NEGATIVE -> 2;
             case NEUTRAL  -> 3;
         };
+        String voltageFilterClause = voltage == CIDEnergy.ALL
+                ? ""
+                : "AND voltage_level = '" + voltage + "'";
         sql = sql.replace("(:ionization_mode)", String.valueOf(mode))
-                .replace("(:voltage_level)", voltage.toString());
+                .replace("(:voltage_filter_clause)", voltageFilterClause);
 
         Set<MSMSAnnotation> msmsSet = new HashSet<>();
         jdbcTemplate.query(sql, (rs, _) -> {

@@ -13,6 +13,7 @@ public class MSMSSearchRequestDTOTest {
         MSMSSearchRequestDTO dto = new MSMSSearchRequestDTO();
         assertNotNull(dto.getAdducts());
         assertNotNull(dto.getFragmentsMZsIntensities());
+        assertNull(dto.getCIDEnergy());
         assertEquals(0.0, dto.getPrecursorIonMZ());
         assertEquals(MzToleranceMode.MDA, dto.getToleranceModePrecursorIon());
         assertEquals(MzToleranceMode.MDA, dto.getToleranceModeFragments());

@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.MSMSSearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Data
 public class MSMSSearchRequestDTO {
+    @JsonProperty("CIDEnergy")
     @NotNull
     private CIDEnergy CIDEnergy;
     @Positive
@@ -54,7 +56,7 @@ public class MSMSSearchRequestDTO {
     }
 
     public MSMSSearchRequestDTO() {
-        this.CIDEnergy = ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy.MED;
+        this.CIDEnergy = null;
         this.precursorIonMZ = 0.0;
         this.tolerancePrecursorIon = 0.0;
         this.toleranceModePrecursorIon= MzToleranceMode.MDA;
