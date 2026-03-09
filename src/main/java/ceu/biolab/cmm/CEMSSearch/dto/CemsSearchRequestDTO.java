@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
 import ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode;
@@ -15,33 +19,45 @@ import lombok.Data;
 public class CemsSearchRequestDTO {
 
     @JsonProperty("buffer_code")
+    @NotBlank
     private String bufferCode;
 
+    @NotNull
     private CePolarity polarity;
 
     @JsonProperty("chemical_alphabet")
     private String chemicalAlphabet;
 
+    @NotNull
     private IonizationMode ionizationMode;
 
-    private List<String> adducts;
+    @NotEmpty
+    private List<@NotBlank String> adducts;
 
     @JsonProperty("mz_values")
-    private List<Double> mzValues;
+    @NotEmpty
+    private List<@NotNull @Positive Double> mzValues;
 
     @JsonProperty("effective_mobilities")
-    private List<Double> effectiveMobilities;
+    @NotEmpty
+    private List<@NotNull @Positive Double> effectiveMobilities;
 
     @JsonProperty("mz_tolerance")
+    @Positive
     private double mzTolerance;
 
+    @NotNull
     private MzToleranceMode mzToleranceMode;
 
     @JsonProperty("eff_mob_tolerance")
+    @Positive
     private double effectiveMobilityTolerance;
 
+    @NotNull
+    @Positive
     private Double temperature;
 
+    @NotNull
     private EffMobToleranceMode effectiveMobilityToleranceMode = EffMobToleranceMode.PERCENTAGE;
 
     public CemsSearchRequestDTO() {

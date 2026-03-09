@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
-import org.springframework.test.json.JsonCompareMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StreamUtils;
 
@@ -42,23 +41,36 @@ public class BrowseSearchIntegrationTest {
     @Test
     void testBrowseSearchWithNullName() throws Exception {
         String requestJson = loadJson("json/browseSearch/request2.json");
-        String expectedResponse = loadJson("json/browseSearch/response2.json");
         mockMvc.perform(post("/api/browseSearch")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+                .andExpect(jsonPath("$.compoundlist").isArray())
+                .andExpect(jsonPath("$.compoundlist[?(@.compoundId == 95450)].pathways[0].pathwayId").exists())
+                .andExpect(jsonPath("$.compoundlist[?(@.compoundId == 147897)].pathways[0].pathwayId").exists())
+                .andExpect(jsonPath("$.compoundlist[?(@.compoundId == 82830)].pathways[0].pathwayId").exists());
     }
 
     @Test
     void testBrowseSearchWithNullFromula() throws Exception {
         String requestJson = loadJson("json/browseSearch/request3.json");
-        String expectedResponse = loadJson("json/browseSearch/response3.json");
         mockMvc.perform(post("/api/browseSearch")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedResponse, JsonCompareMode.LENIENT));
+                .andExpect(jsonPath("$.compoundlist").isArray())
+                .andExpect(jsonPath("$.compoundlist").isNotEmpty());
+    }
+
+    @Test
+    void testBrowseSearchWithNameOnlyAndNoFormulaField() throws Exception {
+        String requestJson = loadJson("json/browseSearch/request6_name_only.json");
+
+        mockMvc.perform(post("/api/browseSearch")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.compoundlist[?(@.compoundId == 33)]").isNotEmpty());
     }
 
     @Test

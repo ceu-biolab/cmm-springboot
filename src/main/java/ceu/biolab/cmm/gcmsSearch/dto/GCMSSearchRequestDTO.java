@@ -3,17 +3,26 @@ package ceu.biolab.cmm.gcmsSearch.dto;
 import ceu.biolab.cmm.gcmsSearch.domain.ColumnType;
 import ceu.biolab.cmm.gcmsSearch.domain.DerivatizationMethod;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
 public class GCMSSearchRequestDTO {
 
+    @NotNull
+    @Valid
     private Spectrum gcmsSpectrumExperimental;
 
+    @Positive
     private double retentionIndex;
+    @Positive
     private double retentionIndexTolerance;
 
+    @NotNull
     private DerivatizationMethod derivatizationMethod;
+    @NotNull
     private ColumnType columnType;
 
     public GCMSSearchRequestDTO() {
@@ -30,9 +39,6 @@ public class GCMSSearchRequestDTO {
     }
 
     public void setRetentionIndexTolerance(double retentionIndexTolerance) {
-        if (retentionIndexTolerance < 0) {
-            throw new IllegalArgumentException("retentionIndexTolerance must be non-negative");
-        }
         this.retentionIndexTolerance = retentionIndexTolerance;
     }
 

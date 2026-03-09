@@ -2,6 +2,8 @@ package ceu.biolab.cmm.browseSearch.dto;
 
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +12,9 @@ import java.util.Set;
 public class BrowseSearchRequest {
     private String compoundName;
     private String formula;
-    private Set<Database> databases;
+    @NotEmpty
+    private Set<@NotNull Database> databases;
+    @NotNull
     private MetaboliteType metaboliteType;
     private boolean exactName;
 

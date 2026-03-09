@@ -42,22 +42,29 @@ import java.util.Optional;
 @Service
 public class CcsSearchService {
 
-    private static final String DEFAULT_POSITIVE_ADDUCT = "[M+H]+";
-    private static final String DEFAULT_NEGATIVE_ADDUCT = "[M-H]-";
     private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(CcsSearchService.class);
 
     @Autowired
     private CcsSearchRepository ccsSearchRepository;
 
     public CcsSearchResponseDTO search(CcsSearchRequestDTO request) {
+        if (request.getMzTolerance() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mzTolerance must be greater than zero.");
+        }
+        if (request.getCcsTolerance() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ccsTolerance must be greater than zero.");
+        }
         if (request.getCcsValues().size() != request.getMzValues().size()) {
-            throw new IllegalArgumentException("Number of CCS values and m/z values must be equal.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of CCS values and m/z values must be equal.");
         }
         int nFeatures = request.getCcsValues().size();
         MzToleranceMode mzToleranceMode = request.getMzToleranceMode();
         CcsToleranceMode ccsToleranceMode = request.getCcsToleranceMode();
         BufferGas bufferGas = request.getBufferGas();
         IonizationMode ionizationMode = request.getIonizationMode();
+        if (ionizationMode == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
+        }
 
         List<String> requestedAdducts = request.getAdducts();
         Set<String> normalizedAdducts = new LinkedHashSet<>();
@@ -68,15 +75,20 @@ public class CcsSearchService {
                     .forEach(normalizedAdducts::add);
         }
         if (normalizedAdducts.isEmpty()) {
-            normalizedAdducts.add(ionizationMode == IonizationMode.NEGATIVE ? DEFAULT_NEGATIVE_ADDUCT : DEFAULT_POSITIVE_ADDUCT);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided.");
         }
 
-        List<AdductDefinition> effectiveAdducts = normalizedAdducts.stream()
-                .map(adduct -> AdductService.requireDefinition(ionizationMode, adduct))
-                .toList();
+        List<AdductDefinition> effectiveAdducts;
+        try {
+            effectiveAdducts = normalizedAdducts.stream()
+                    .map(adduct -> AdductService.requireDefinition(ionizationMode, adduct))
+                    .toList();
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+        }
 
         if (effectiveAdducts.isEmpty()) {
-            throw new IllegalArgumentException("No valid adducts provided for ionization mode " + ionizationMode);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No valid adducts provided for ionization mode " + ionizationMode);
         }
 
 
@@ -97,7 +109,7 @@ public class CcsSearchService {
                 } else if (mzToleranceMode == MzToleranceMode.MDA) {
                     mzDifference = request.getMzTolerance() * 0.001;
                 } else {
-                    throw new IllegalArgumentException("Invalid mz tolerance mode: " + request.getMzToleranceMode());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid mz tolerance mode: " + request.getMzToleranceMode());
                 }
                 double massLower = neutralMass - mzDifference;
                 double massUpper = neutralMass + mzDifference;
@@ -108,7 +120,7 @@ public class CcsSearchService {
                 } else if (ccsToleranceMode == CcsToleranceMode.ABSOLUTE) {
                     ccsDifference = request.getCcsTolerance();
                 } else {
-                    throw new IllegalArgumentException("Invalid CCS tolerance mode: " + request.getCcsToleranceMode());
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid CCS tolerance mode: " + request.getCcsToleranceMode());
                 }
                 double ccsLower = ccs - ccsDifference;
                 double ccsUpper = ccs + ccsDifference;
@@ -167,6 +179,19 @@ public class CcsSearchService {
                                     .inchi(queryResult.getInchi())
                                     .inchiKey(queryResult.getInchiKey())
                                     .smiles(queryResult.getSmiles())
+                                    .keggID(queryResult.getKeggId())
+                                    .lmID(queryResult.getLmId())
+                                    .hmdbID(queryResult.getHmdbId())
+                                    .agilentID(queryResult.getAgilentId())
+                                    .pcID(queryResult.getPcId())
+                                    .chebiID(queryResult.getChebiId())
+                                    .inHouseID(queryResult.getInHouseId())
+                                    .aspergillusID(queryResult.getAspergillusId())
+                                    .knapsackID(queryResult.getKnapsackId())
+                                    .npatlasID(queryResult.getNpatlasId())
+                                    .fahfaID(queryResult.getFahfaId())
+                                    .ohPositionID(queryResult.getOhPosition())
+                                    .aspergillusWebName(queryResult.getAspergillusWebName())
                                     .lipidType(queryResult.getLipidType())
                                     .numChains(queryResult.getNumChains())
                                     .numCarbons(queryResult.getNumberCarbons())
@@ -217,12 +242,7 @@ public class CcsSearchService {
         }
 
         final CcsSearchResponseDTO response;
-        try {
-            response = search(request);
-        } catch (IllegalArgumentException ex) {
-            LOGGER.debug("Validation error during CCS search with LC scoring", ex);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
-        }
+        response = search(request);
 
         List<AnnotatedFeature> features = response.getImFeatures();
         if (features.size() != request.getRtValues().size()) {

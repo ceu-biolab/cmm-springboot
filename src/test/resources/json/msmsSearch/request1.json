@@ -10,7 +10,6 @@
     "[M+H]+"
   ],
   "fragmentsMZsIntensities": {
-    "precursorMz": 287.23,
     "peaks": [
         { "mz": 55.301, "intensity": 12.753 },
         { "mz": 67.237, "intensity": 14.611 },

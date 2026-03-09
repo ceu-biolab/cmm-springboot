@@ -2,6 +2,7 @@ package ceu.biolab.cmm.CEMSSearch.service;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
+import ceu.biolab.cmm.CEMSSearch.domain.CemsCompoundMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.RmtToleranceMode;
 import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationsByAdductDTO;
@@ -12,18 +13,15 @@ import ceu.biolab.cmm.CEMSSearch.dto.CemsRmtFeatureQueryDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsRmtSearchRequestDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
 import ceu.biolab.cmm.CEMSSearch.repository.CemsRmtSearchRepository;
-import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
-import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -64,6 +62,9 @@ public class CemsRmtSearchService {
         if (request.getTemperature() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature is required");
         }
+        if (request.getTemperature() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature must be greater than zero");
+        }
         long temperature = Math.round(request.getTemperature());
 
         CePolarity polarity = request.getPolarity();
@@ -98,7 +99,12 @@ public class CemsRmtSearchService {
             featureAnnotations.setFeature(featureDTO);
 
             for (String adduct : request.getAdducts()) {
-                AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                AdductDefinition definition;
+                try {
+                    definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                } catch (IllegalArgumentException ex) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+                }
                 double neutralMass = AdductService.neutralMassFromMz(mz, definition);
                 double massWindow = computeMassWindow(request.getToleranceMode(), request.getTolerance(), neutralMass);
                 double rmtWindow = computeRmtWindow(request.getRmtToleranceMode(), request.getRmtTolerance(), rmt);
@@ -129,7 +135,7 @@ public class CemsRmtSearchService {
                 CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(definition.canonical());
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
-                    Compound compound = toCompound(candidate);
+                    Compound compound = CemsCompoundMapper.toCompound(candidate);
                     if (!matchesAlphabet(compound, allowedElements)) {
                         continue;
                     }
@@ -177,6 +183,24 @@ public class CemsRmtSearchService {
         }
         if (request.getRmtReference() == null || request.getRmtReference().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_reference is required");
+        }
+        if (request.getMasses().stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "masses must contain positive numbers only");
+        }
+        if (request.getRelativeMigrationTimes().stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt must contain positive numbers only");
+        }
+        if (request.getTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tolerance must be greater than zero");
+        }
+        if (request.getRmtTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_tolerance must be greater than zero");
+        }
+        if (request.getIonMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required");
+        }
+        if (request.getIonMode() == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
         }
     }
 
@@ -280,78 +304,6 @@ public class CemsRmtSearchService {
             return true;
         }
         return allowedElements.get().containsAll(compoundElements.get());
-    }
-
-    private Compound toCompound(CemsQueryResponseDTO candidate) {
-        Compound compound = new Compound();
-        long candidateId = candidate.getCompoundId();
-        try {
-            compound.setCompoundId(Math.toIntExact(candidateId));
-        } catch (ArithmeticException ex) {
-            LOGGER.warn("Compound id {} exceeds integer range, truncating for response", candidateId);
-            compound.setCompoundId((int) candidateId);
-        }
-        compound.setCasId(candidate.getCasId());
-        compound.setCompoundName(candidate.getCompoundName());
-        compound.setFormula(candidate.getFormula());
-        compound.setMass(candidate.getMass() != null ? candidate.getMass() : 0d);
-        compound.setChargeType(safeLongToInt(candidate.getChargeType()));
-        compound.setChargeNumber(safeLongToInt(candidate.getChargeNumber()));
-
-        String formulaTypeValue = candidate.getFormulaType();
-        if (formulaTypeValue != null) {
-            try {
-                compound.setFormulaType(FormulaType.valueOf(formulaTypeValue.toUpperCase(Locale.ROOT)));
-            } catch (IllegalArgumentException ex) {
-                LOGGER.warn("Unknown formula type '{}' for compound {}", formulaTypeValue, candidateId);
-            }
-        }
-
-        Integer compoundTypeRaw = candidate.getCompoundType();
-        CompoundType compoundType = null;
-        if (compoundTypeRaw != null) {
-            try {
-                compoundType = CompoundType.fromDbValue(compoundTypeRaw);
-            } catch (IllegalArgumentException ex) {
-                LOGGER.warn("Unknown compound type {} for compound {}", compoundTypeRaw, candidateId);
-            }
-        }
-        if (compoundType == null) {
-            compoundType = CompoundType.NON_LIPID;
-        }
-        compound.setCompoundType(compoundType);
-        compound.setLogP(candidate.getLogp());
-        compound.setRtPred(candidate.getRtPred());
-        compound.setInchi(candidate.getInchi());
-        compound.setInchiKey(candidate.getInchiKey());
-        compound.setSmiles(candidate.getSmiles());
-        compound.setLipidType(candidate.getLipidType());
-        compound.setNumChains(candidate.getNumChains());
-        compound.setNumCarbons(candidate.getNumberCarbons());
-        compound.setDoubleBonds(candidate.getDoubleBonds());
-        compound.setBiologicalActivity(candidate.getBiologicalActivity());
-        compound.setMeshNomenclature(candidate.getMeshNomenclature());
-        compound.setIupacClassification(candidate.getIupacClassification());
-        compound.setMol2(null);
-        if (compound.getPathways() == null) {
-            compound.setPathways(new HashSet<>());
-        }
-        if (compound.getLipidMapsClassifications() == null) {
-            compound.setLipidMapsClassifications(new HashSet<>());
-        }
-        return compound;
-    }
-
-    private int safeLongToInt(Long value) {
-        if (value == null) {
-            return 0;
-        }
-        try {
-            return Math.toIntExact(value);
-        } catch (ArithmeticException ex) {
-            LOGGER.warn("Value {} exceeds integer range, truncating", value);
-            return value > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-        }
     }
 
     private static final Pattern ELEMENT_PATTERN = Pattern.compile("([A-Z][a-z]?)");

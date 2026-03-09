@@ -3,7 +3,6 @@ package ceu.biolab.cmm.CEMSSearch.service;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -21,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
+import ceu.biolab.cmm.CEMSSearch.domain.CemsCompoundMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode;
 import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CeAnnotationsByAdductDTO;
@@ -31,11 +31,9 @@ import ceu.biolab.cmm.CEMSSearch.dto.CemsQueryResponseDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
 import ceu.biolab.cmm.CEMSSearch.repository.CemsSearchRepository;
-import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
-import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
@@ -66,6 +64,9 @@ public class CemsSearchService {
         if (temperatureValue == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature is required");
         }
+        if (temperatureValue <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "temperature must be greater than zero");
+        }
         long temperature = Math.round(temperatureValue);
 
         CePolarity polarity = request.getPolarity();
@@ -94,7 +95,12 @@ public class CemsSearchService {
             featureAnnotations.setFeature(featureDTO);
 
             for (String adduct : request.getAdducts()) {
-                AdductDefinition definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                AdductDefinition definition;
+                try {
+                    definition = AdductService.requireDefinition(ionizationMode, adduct.trim());
+                } catch (IllegalArgumentException ex) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+                }
                 double neutralMass = AdductService.neutralMassFromMz(mz, definition);
                 double massWindow = computeMassWindow(request.getMzToleranceMode(), request.getMzTolerance(), neutralMass);
                 double mobilityWindow = computeMobilityWindow(
@@ -124,7 +130,7 @@ public class CemsSearchService {
                 CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(definition.canonical());
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
-                    Compound compound = toCompound(candidate);
+                    Compound compound = CemsCompoundMapper.toCompound(candidate);
                     if (!matchesAlphabet(compound, allowedElements)) {
                         continue;
                     }
@@ -174,6 +180,24 @@ public class CemsSearchService {
         }
         if (request.getAdducts() == null || request.getAdducts().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
+        }
+        if (request.getMzValues().stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz_values must contain positive numbers only");
+        }
+        if (request.getEffectiveMobilities().stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "effective_mobilities must contain positive numbers only");
+        }
+        if (request.getMzTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz_tolerance must be greater than zero");
+        }
+        if (request.getEffectiveMobilityTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eff_mob_tolerance must be greater than zero");
+        }
+        if (request.getIonizationMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required");
+        }
+        if (request.getIonizationMode() == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
         }
     }
 
@@ -245,66 +269,6 @@ public class CemsSearchService {
         return deduplicated;
     }
 
-    private Compound toCompound(CemsQueryResponseDTO candidate) {
-        Compound compound = new Compound();
-        long candidateId = candidate.getCompoundId();
-        try {
-            compound.setCompoundId(Math.toIntExact(candidateId));
-        } catch (ArithmeticException ex) {
-            LOGGER.warn("Compound id {} exceeds integer range, truncating for response", candidateId);
-            compound.setCompoundId((int) candidateId);
-        }
-        compound.setCasId(candidate.getCasId());
-        compound.setCompoundName(candidate.getCompoundName());
-        compound.setFormula(candidate.getFormula());
-        compound.setMass(candidate.getMass() != null ? candidate.getMass() : 0d);
-        compound.setChargeType(safeLongToInt(candidate.getChargeType()));
-        compound.setChargeNumber(safeLongToInt(candidate.getChargeNumber()));
-
-        String formulaTypeValue = candidate.getFormulaType();
-        if (formulaTypeValue != null) {
-            try {
-                compound.setFormulaType(FormulaType.valueOf(formulaTypeValue.toUpperCase()));
-            } catch (IllegalArgumentException ex) {
-                LOGGER.warn("Unknown formula type '{}' for compound {}", formulaTypeValue, candidateId);
-            }
-        }
-
-        Integer compoundTypeRaw = candidate.getCompoundType();
-        CompoundType compoundType = null;
-        if (compoundTypeRaw != null) {
-            try {
-                compoundType = CompoundType.fromDbValue(compoundTypeRaw);
-            } catch (IllegalArgumentException ex) {
-                LOGGER.warn("Unknown compound type {} for compound {}", compoundTypeRaw, candidateId);
-            }
-        }
-        if (compoundType == null) {
-            compoundType = CompoundType.NON_LIPID;
-        }
-        compound.setCompoundType(compoundType);
-        compound.setLogP(candidate.getLogp());
-        compound.setRtPred(candidate.getRtPred());
-        compound.setInchi(candidate.getInchi());
-        compound.setInchiKey(candidate.getInchiKey());
-        compound.setSmiles(candidate.getSmiles());
-        compound.setLipidType(candidate.getLipidType());
-        compound.setNumChains(candidate.getNumChains());
-        compound.setNumCarbons(candidate.getNumberCarbons());
-        compound.setDoubleBonds(candidate.getDoubleBonds());
-        compound.setBiologicalActivity(candidate.getBiologicalActivity());
-        compound.setMeshNomenclature(candidate.getMeshNomenclature());
-        compound.setIupacClassification(candidate.getIupacClassification());
-        compound.setMol2(null);
-        if (compound.getPathways() == null) {
-            compound.setPathways(new HashSet<>());
-        }
-        if (compound.getLipidMapsClassifications() == null) {
-            compound.setLipidMapsClassifications(new HashSet<>());
-        }
-        return compound;
-    }
-
     private Optional<Set<String>> parseChemicalAlphabet(String alphabet) {
         if (alphabet == null || alphabet.isBlank()) {
             return Optional.empty();
@@ -331,18 +295,6 @@ public class CemsSearchService {
             return true;
         }
         return allowedElements.get().containsAll(compoundElements.get());
-    }
-
-    private int safeLongToInt(Long value) {
-        if (value == null) {
-            return 0;
-        }
-        try {
-            return Math.toIntExact(value);
-        } catch (ArithmeticException ex) {
-            LOGGER.warn("Value {} exceeds integer range, truncating", value);
-            return value > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-        }
     }
 
     private static final Pattern ELEMENT_PATTERN = Pattern.compile("([A-Z][a-z]?)");

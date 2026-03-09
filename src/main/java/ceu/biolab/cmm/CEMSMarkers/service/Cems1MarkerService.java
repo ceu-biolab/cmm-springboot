@@ -5,6 +5,7 @@ import ceu.biolab.cmm.CEMSMarkers.dto.CemsMarkersRequestDTO;
 import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
 import ceu.biolab.cmm.CEMSSearch.service.CemsSearchService;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -108,8 +109,20 @@ public class Cems1MarkerService extends AbstractCemsMarkerService {
         if (request.getTemperature() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Temperature must be provided");
         }
-        if (request.getTolerance() < 0d) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be non-negative");
+        if (request.getTemperature() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Temperature must be positive");
+        }
+        if (request.getTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero");
+        }
+        if (request.getMigrationTimeTolerance() <= 0d) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Migration time tolerance must be greater than zero");
+        }
+        if (request.getIonMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required");
+        }
+        if (request.getIonMode() == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
         }
         if (request.getChemicalAlphabet() == null) {
             request.setChemicalAlphabet("ALL");

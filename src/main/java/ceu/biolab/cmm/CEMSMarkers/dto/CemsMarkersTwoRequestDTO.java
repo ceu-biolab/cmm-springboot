@@ -1,6 +1,10 @@
 package ceu.biolab.cmm.CEMSMarkers.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -12,44 +16,60 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 @Data
 public class CemsMarkersTwoRequestDTO {
 
-    private List<Double> masses = new ArrayList<>();
+    @NotEmpty
+    private List<@NotNull @Positive Double> masses = new ArrayList<>();
 
+    @Positive
     private double tolerance;
 
+    @NotNull
     private MzToleranceMode toleranceMode = MzToleranceMode.PPM;
 
     @JsonProperty("mt")
-    private List<Double> migrationTimes = new ArrayList<>();
+    @NotEmpty
+    private List<@NotNull @Positive Double> migrationTimes = new ArrayList<>();
 
     @JsonProperty("mt_tolerance")
+    @Positive
     private double migrationTimeTolerance;
 
+    @NotNull
     private MtToleranceMode mtToleranceMode = MtToleranceMode.PERCENTAGE;
 
+    @NotBlank
     private String buffer;
 
+    @NotNull
+    @Positive
     private Double temperature;
 
+    @NotNull
     private CePolarity polarity = CePolarity.DIRECT;
 
     @JsonProperty("marker1")
+    @NotBlank
     private String marker1;
 
     @JsonProperty("marker1_time")
+    @Positive
     private double marker1Time;
 
     @JsonProperty("marker2")
+    @NotBlank
     private String marker2;
 
     @JsonProperty("marker2_time")
+    @Positive
     private double marker2Time;
 
     @JsonProperty("chemical_alphabet")
     private String chemicalAlphabet;
 
+    @NotNull
     private IonizationMode ionMode = IonizationMode.POSITIVE;
 
-    private List<String> adducts = new ArrayList<>();
+    @NotEmpty
+    private List<@NotBlank String> adducts = new ArrayList<>();
 
     @JsonProperty("tolerance_mode")
     public void setToleranceMode(String value) {

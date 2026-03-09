@@ -1,6 +1,6 @@
 SELECT 
   cv.compound_id,
-  cv.cas_id,
+  c.cas_id,
   cv.compound_name,
   cv.formula,
   cv.mass AS monoisotopic_mass,
@@ -16,6 +16,19 @@ SELECT
   cv.inchi,
   cv.inchi_key,
   cv.smiles,
+  cv.kegg_id,
+  cv.lm_id,
+  cv.hmdb_id,
+  cv.agilent_id,
+  cv.pc_id,
+  cv.chebi_id,
+  cv.in_house_id,
+  cv.aspergillus_id,
+  cv.knapsack_id,
+  cv.npatlas_id,
+  cv.fahfa_id,
+  cv.oh_position,
+  cv.aspergillus_web_name,
   cv.lipid_type,
   cv.num_chains,
   cv.number_carbons,
@@ -29,6 +42,8 @@ SELECT
   p.pathway_name,
   p.pathway_map
 FROM compounds_view AS cv
+INNER JOIN compounds AS c
+  ON c.compound_id = cv.compound_id
 INNER JOIN compound_ccs AS cc
   ON cv.compound_id = cc.compound_id
 INNER JOIN adduct as a

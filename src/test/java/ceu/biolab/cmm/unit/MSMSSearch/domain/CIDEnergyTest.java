@@ -17,6 +17,7 @@ public class CIDEnergyTest {
     @Test
     void fromValue_invalidThrows() {
         assertThrows(IllegalArgumentException.class, () -> CIDEnergy.fromValue(15));
+        assertThrows(IllegalArgumentException.class, () -> CIDEnergy.fromValue(-1));
     }
 
     @Test
@@ -24,6 +25,6 @@ public class CIDEnergyTest {
         assertEquals("low", CIDEnergy.LOW.toString());
         assertEquals("med", CIDEnergy.MED.toString());
         assertEquals("high", CIDEnergy.HIGH.toString());
+        assertEquals("all", CIDEnergy.ALL.toString());
     }
 }
-

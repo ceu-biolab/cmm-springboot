@@ -1,24 +1,39 @@
 package ceu.biolab.cmm.unit.MSMSSearch.repository;
 
+import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
 import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.repository.MSMSSearchRepository;
 import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
+import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class MSMSSearchRepositoryTest {
 
@@ -71,6 +86,7 @@ public class MSMSSearchRepositoryTest {
 
         // Query has a peak matching lib1 only
         MSMSSearchRequestDTO query = new MSMSSearchRequestDTO();
+        query.setPrecursorIonMZ(500.0);
         query.setFragmentsMZsIntensities(new Spectrum(500.0, new ArrayList<>(List.of(new MSPeak(100.0, 1.0)))));
         query.setScoreType(ScoreType.COSINE);
         query.setToleranceModePrecursorIon(MzToleranceMode.MDA);
@@ -95,7 +111,8 @@ public class MSMSSearchRepositoryTest {
         List<MSMSAnnotation> libs = List.of(lib);
 
         MSMSSearchRequestDTO query = new MSMSSearchRequestDTO();
-        query.setFragmentsMZsIntensities(new Spectrum(500.0, new ArrayList<>(List.of(new MSPeak(400.0, 1.0)))));
+        query.setPrecursorIonMZ(500.0);
+        query.setFragmentsMZsIntensities(new Spectrum(null, new ArrayList<>(List.of(new MSPeak(400.0, 1.0)))));
         query.setScoreType(ScoreType.MODIFIED_COSINE);
         query.setToleranceModePrecursorIon(MzToleranceMode.MDA);
         query.setToleranceFragments(500.0); // 0.5 Da
@@ -119,6 +136,7 @@ public class MSMSSearchRepositoryTest {
 
         // Query peak is 100.004 -> 40 ppm at m/z 100
         MSMSSearchRequestDTO query = new MSMSSearchRequestDTO();
+        query.setPrecursorIonMZ(500.0);
         query.setFragmentsMZsIntensities(new Spectrum(500.0, new ArrayList<>(List.of(new MSPeak(100.004, 1.0)))));
         query.setScoreType(ScoreType.COSINE);
 
@@ -133,5 +151,63 @@ public class MSMSSearchRepositoryTest {
 
         // Correct behavior: no match because we respect fragment PPM tolerance
         assertEquals(0, out.size());
+    }
+
+    @Test
+    void getMsmsForCompound_skipsVoltageFilterWhenEnergyIsAll() throws Exception {
+        NamedParameterJdbcTemplate jdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+        ResourceLoader resourceLoader = mock(ResourceLoader.class);
+        Resource sqlResource = new ByteArrayResource("""
+                SELECT msms_id, voltage AS ionization_voltage
+                FROM msms
+                WHERE compound_id = (:compound_id)
+                  AND ionization_mode = (:ionization_mode)
+                  (:voltage_filter_clause)
+                """.getBytes(StandardCharsets.UTF_8));
+
+        when(resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql")).thenReturn(sqlResource);
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class))).thenReturn(List.of());
+
+        MSMSSearchRepository repository = new MSMSSearchRepository(jdbcTemplate, resourceLoader);
+        repository.getMsmsForCompound(
+                dummyCompound(42),
+                IonizationMode.POSITIVE,
+                CIDEnergy.ALL,
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+H]+"),
+                100.0
+        );
+
+        ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
+        verify(jdbcTemplate).query(sqlCaptor.capture(), any(RowMapper.class));
+        assertFalse(sqlCaptor.getValue().contains("voltage_level"));
+    }
+
+    @Test
+    void getMsmsForCompound_appliesVoltageFilterWhenEnergyIsSpecific() throws Exception {
+        NamedParameterJdbcTemplate jdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+        ResourceLoader resourceLoader = mock(ResourceLoader.class);
+        Resource sqlResource = new ByteArrayResource("""
+                SELECT msms_id, voltage AS ionization_voltage
+                FROM msms
+                WHERE compound_id = (:compound_id)
+                  AND ionization_mode = (:ionization_mode)
+                  (:voltage_filter_clause)
+                """.getBytes(StandardCharsets.UTF_8));
+
+        when(resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql")).thenReturn(sqlResource);
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class))).thenReturn(List.of());
+
+        MSMSSearchRepository repository = new MSMSSearchRepository(jdbcTemplate, resourceLoader);
+        repository.getMsmsForCompound(
+                dummyCompound(42),
+                IonizationMode.POSITIVE,
+                CIDEnergy.MED,
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+H]+"),
+                100.0
+        );
+
+        ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
+        verify(jdbcTemplate).query(sqlCaptor.capture(), any(RowMapper.class));
+        assertTrue(sqlCaptor.getValue().contains("AND voltage_level = 'med'"));
     }
 }
