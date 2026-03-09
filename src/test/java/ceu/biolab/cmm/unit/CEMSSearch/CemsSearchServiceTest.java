@@ -49,6 +49,7 @@ class CemsSearchServiceTest {
         request.setMzToleranceMode("ppm");
         request.setMzTolerance(10.0);
         request.setEffectiveMobilityTolerance(5.0);
+        request.setEffMobToleranceMode("percentage");
         request.setTemperature(20d);
         return request;
     }

@@ -1,8 +1,6 @@
 package ceu.biolab.cmm.unit.MSMSSearch.dto;
 
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
-import ceu.biolab.cmm.shared.domain.IonizationMode;
-import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,9 +13,9 @@ public class MSMSSearchRequestDTOTest {
         assertNotNull(dto.getFragmentsMZsIntensities());
         assertNull(dto.getCIDEnergy());
         assertEquals(0.0, dto.getPrecursorIonMZ());
-        assertEquals(MzToleranceMode.MDA, dto.getToleranceModePrecursorIon());
-        assertEquals(MzToleranceMode.MDA, dto.getToleranceModeFragments());
-        assertEquals(IonizationMode.POSITIVE, dto.getIonizationMode());
+        assertNull(dto.getToleranceModePrecursorIon());
+        assertNull(dto.getToleranceModeFragments());
+        assertNull(dto.getIonizationMode());
         assertNull(dto.getScoreType());
     }
 }

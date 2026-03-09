@@ -23,7 +23,7 @@ public class CemsRmtSearchRequestDTO {
     private double tolerance;
 
     @NotNull
-    private MzToleranceMode toleranceMode = MzToleranceMode.PPM;
+    private MzToleranceMode toleranceMode;
 
     @JsonProperty("rmt")
     @NotEmpty
@@ -34,7 +34,7 @@ public class CemsRmtSearchRequestDTO {
     private double rmtTolerance;
 
     @NotNull
-    private RmtToleranceMode rmtToleranceMode = RmtToleranceMode.PERCENTAGE;
+    private RmtToleranceMode rmtToleranceMode;
 
     @JsonProperty("buffer")
     @NotBlank
@@ -45,7 +45,7 @@ public class CemsRmtSearchRequestDTO {
     private Double temperature;
 
     @NotNull
-    private CePolarity polarity = CePolarity.DIRECT;
+    private CePolarity polarity;
 
     @JsonProperty("rmt_reference")
     @NotBlank
@@ -55,7 +55,7 @@ public class CemsRmtSearchRequestDTO {
     private String chemicalAlphabet;
 
     @NotNull
-    private IonizationMode ionMode = IonizationMode.POSITIVE;
+    private IonizationMode ionMode;
 
 
     @NotEmpty

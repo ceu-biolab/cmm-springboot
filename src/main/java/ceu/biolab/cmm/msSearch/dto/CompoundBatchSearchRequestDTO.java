@@ -43,14 +43,14 @@ public class CompoundBatchSearchRequestDTO {
 
     public CompoundBatchSearchRequestDTO() {
         this.mzValues = new ArrayList<>();
-        this.mzToleranceMode = MzToleranceMode.PPM;
+        this.mzToleranceMode = null;
         this.tolerance = 0.0;
-        this.ionizationMode = IonizationMode.POSITIVE;
+        this.ionizationMode = null;
         this.detectedAdduct = Optional.empty();
         this.formulaType = Optional.empty();
         this.adductsString = new LinkedHashSet<>();
         this.databases = new LinkedHashSet<>();
-        this.metaboliteType = MetaboliteType.ALL;
+        this.metaboliteType = null;
     }
 
     public CompoundBatchSearchRequestDTO(List<Double> mzValues, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,

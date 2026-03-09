@@ -116,12 +116,21 @@ public class Cems1MarkerService extends AbstractCemsMarkerService {
         if (request.getTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero");
         }
+        if (request.getToleranceMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tolerance_mode is required");
+        }
         if (MzToleranceLimits.exceedsLimit(request.getTolerance(), request.getToleranceMode())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     MzToleranceLimits.violationMessage("tolerance", request.getToleranceMode()));
         }
         if (request.getMigrationTimeTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Migration time tolerance must be greater than zero");
+        }
+        if (request.getMtToleranceMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mt_tolerance_mode is required");
+        }
+        if (request.getPolarity() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "polarity is required");
         }
         if (request.getIonMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required");

@@ -23,7 +23,7 @@ public class CemsMarkersRequestDTO {
     private double tolerance;
 
     @NotNull
-    private MzToleranceMode toleranceMode = MzToleranceMode.PPM;
+    private MzToleranceMode toleranceMode;
 
     @JsonProperty("mt")
     @NotEmpty
@@ -34,7 +34,7 @@ public class CemsMarkersRequestDTO {
     private double migrationTimeTolerance;
 
     @NotNull
-    private MtToleranceMode mtToleranceMode = MtToleranceMode.PERCENTAGE;
+    private MtToleranceMode mtToleranceMode;
 
     @NotBlank
     private String buffer;
@@ -44,7 +44,7 @@ public class CemsMarkersRequestDTO {
     private Double temperature;
 
     @NotNull
-    private CePolarity polarity = CePolarity.DIRECT;
+    private CePolarity polarity;
 
     @NotBlank
     private String marker;
@@ -65,7 +65,7 @@ public class CemsMarkersRequestDTO {
     private String chemicalAlphabet;
 
     @NotNull
-    private IonizationMode ionMode = IonizationMode.POSITIVE;
+    private IonizationMode ionMode;
 
     @NotEmpty
     private List<@NotBlank String> adducts = new ArrayList<>();

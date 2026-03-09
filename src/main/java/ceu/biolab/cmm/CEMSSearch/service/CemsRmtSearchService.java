@@ -195,12 +195,21 @@ public class CemsRmtSearchService {
         if (request.getTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tolerance must be greater than zero");
         }
+        if (request.getToleranceMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tolerance_mode is required");
+        }
         if (MzToleranceLimits.exceedsLimit(request.getTolerance(), request.getToleranceMode())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     MzToleranceLimits.violationMessage("tolerance", request.getToleranceMode()));
         }
         if (request.getRmtTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_tolerance must be greater than zero");
+        }
+        if (request.getRmtToleranceMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_tolerance_mode is required");
+        }
+        if (request.getPolarity() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "polarity is required");
         }
         if (request.getIonMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required");

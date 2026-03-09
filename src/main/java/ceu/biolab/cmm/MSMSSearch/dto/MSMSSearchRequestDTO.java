@@ -59,10 +59,10 @@ public class MSMSSearchRequestDTO {
         this.CIDEnergy = null;
         this.precursorIonMZ = 0.0;
         this.tolerancePrecursorIon = 0.0;
-        this.toleranceModePrecursorIon= MzToleranceMode.MDA;
+        this.toleranceModePrecursorIon = null;
         this.toleranceFragments = 0.0;
-        this.toleranceModeFragments = MzToleranceMode.MDA;
-        this.ionizationMode=IonizationMode.POSITIVE;
+        this.toleranceModeFragments = null;
+        this.ionizationMode = null;
         this.adducts = new ArrayList<>();
         this.fragmentsMZsIntensities = new Spectrum();
         this.scoreType = null;
