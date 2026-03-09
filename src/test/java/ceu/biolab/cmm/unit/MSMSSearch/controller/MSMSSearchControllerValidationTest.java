@@ -39,7 +39,7 @@ class MSMSSearchControllerValidationTest {
     void search_acceptsAllCidEnergy() throws Exception {
         when(msmsSearchService.search(any())).thenReturn(new MSMSSearchResponseDTO(new ArrayList<>()));
 
-        mockMvc.perform(post("/api/MSMSSearch")
+        mockMvc.perform(post("/api/msms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validPayloadWithCidEnergy("ALL")))
                 .andExpect(status().isOk());
@@ -51,7 +51,7 @@ class MSMSSearchControllerValidationTest {
 
     @Test
     void search_rejectsMissingCidEnergy() throws Exception {
-        mockMvc.perform(post("/api/MSMSSearch")
+        mockMvc.perform(post("/api/msms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validPayloadWithoutCidEnergy()))
                 .andExpect(status().isBadRequest());
@@ -61,7 +61,7 @@ class MSMSSearchControllerValidationTest {
 
     @Test
     void search_rejectsUnknownCidEnergy() throws Exception {
-        mockMvc.perform(post("/api/MSMSSearch")
+        mockMvc.perform(post("/api/msms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validPayloadWithCidEnergy("UNKNOWN")))
                 .andExpect(status().isBadRequest());
@@ -71,7 +71,7 @@ class MSMSSearchControllerValidationTest {
 
     @Test
     void search_rejectsLowerCamelCaseCidEnergyField() throws Exception {
-        mockMvc.perform(post("/api/MSMSSearch")
+        mockMvc.perform(post("/api/msms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payloadWithCustomCidEnergyField("cideEnergy", "ALL")))
                 .andExpect(status().isBadRequest());

@@ -19,7 +19,7 @@ class MetadataIntegrationTest {
 
     @Test
     void getCcsAdductsReturnsCatalog() throws Exception {
-        mockMvc.perform(get("/api/get/ccs-adducts"))
+        mockMvc.perform(get("/api/metadata/ccs-adducts"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.positive").isArray())
                 .andExpect(jsonPath("$.negative").isArray())
@@ -29,7 +29,7 @@ class MetadataIntegrationTest {
 
     @Test
     void getCeMsBuffersReturnsList() throws Exception {
-        mockMvc.perform(get("/api/get/ce-ms-buffers"))
+        mockMvc.perform(get("/api/metadata/ce-ms-buffers"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isNotEmpty())
@@ -38,7 +38,7 @@ class MetadataIntegrationTest {
 
     @Test
     void getDatabaseStatsReturnsCounts() throws Exception {
-        mockMvc.perform(get("/api/get/stats"))
+        mockMvc.perform(get("/api/metadata/stats"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.compounds").isNumber())
                 .andExpect(jsonPath("$.compounds").value(org.hamcrest.Matchers.greaterThan(0)))

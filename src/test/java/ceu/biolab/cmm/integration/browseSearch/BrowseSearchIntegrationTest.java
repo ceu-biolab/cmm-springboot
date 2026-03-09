@@ -33,7 +33,7 @@ public class BrowseSearchIntegrationTest {
     void testBrowseSearchWithCompleteExample() throws Exception {
         String requestJson = loadJson("json/browseSearch/request1.json");
 
-        mockMvc.perform(post("/api/browseSearch")
+        mockMvc.perform(post("/api/browse-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                         .andExpect(status().isOk());
@@ -41,7 +41,7 @@ public class BrowseSearchIntegrationTest {
     @Test
     void testBrowseSearchWithNullName() throws Exception {
         String requestJson = loadJson("json/browseSearch/request2.json");
-        mockMvc.perform(post("/api/browseSearch")
+        mockMvc.perform(post("/api/browse-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -54,7 +54,7 @@ public class BrowseSearchIntegrationTest {
     @Test
     void testBrowseSearchWithNullFromula() throws Exception {
         String requestJson = loadJson("json/browseSearch/request3.json");
-        mockMvc.perform(post("/api/browseSearch")
+        mockMvc.perform(post("/api/browse-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -66,7 +66,7 @@ public class BrowseSearchIntegrationTest {
     void testBrowseSearchWithNameOnlyAndNoFormulaField() throws Exception {
         String requestJson = loadJson("json/browseSearch/request6_name_only.json");
 
-        mockMvc.perform(post("/api/browseSearch")
+        mockMvc.perform(post("/api/browse-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -76,7 +76,7 @@ public class BrowseSearchIntegrationTest {
     @Test
     void testBrowseSearchWithNullDatabase() throws Exception {
         String requestJson = loadJson("json/browseSearch/request4.json");
-        mockMvc.perform(post("/api/browseSearch")
+        mockMvc.perform(post("/api/browse-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest());
@@ -85,7 +85,7 @@ public class BrowseSearchIntegrationTest {
     @Test
     void testBrowseSearchWithNullMetabolite() throws Exception {
         String requestJson = loadJson("json/browseSearch/request5.json");
-        mockMvc.perform(post("/api/browseSearch")
+        mockMvc.perform(post("/api/browse-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest());

@@ -19,7 +19,7 @@ public class CemsRmtSearchController {
         this.service = service;
     }
 
-    @PostMapping("/CEMSRMTSearch")
+    @PostMapping({"/cems-rmt-search", "/CEMSRMTSearch"})
     public CemsSearchResponseDTO search(@Valid @RequestBody CemsRmtSearchRequestDTO request) {
         return service.search(request);
     }

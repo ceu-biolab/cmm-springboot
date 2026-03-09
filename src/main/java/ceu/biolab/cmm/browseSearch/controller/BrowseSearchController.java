@@ -13,7 +13,7 @@ public class BrowseSearchController {
     @Autowired
     private BrowseSearchService browseSearchService;
 
-    @PostMapping("/browseSearch")
+    @PostMapping({"/browse-search", "/browseSearch"})
     public BrowseQueryResponse search(@Valid @RequestBody BrowseSearchRequest request) {
         return browseSearchService.search(request);
     }

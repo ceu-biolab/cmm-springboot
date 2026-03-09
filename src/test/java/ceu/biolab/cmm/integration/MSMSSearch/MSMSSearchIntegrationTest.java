@@ -34,7 +34,7 @@ public class MSMSSearchIntegrationTest {
     void testMSMSSearchWithCompleteExample()  throws Exception {
         String requestJson = loadJson("json/msmsSearch/request1.json");
         String expectedResponse = loadJson("json/msmsSearch/response1.json");
-        mockMvc.perform(post("/api/MSMSSearch")
+        mockMvc.perform(post("/api/msms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                     .andExpect(status().isOk())
@@ -46,7 +46,7 @@ public class MSMSSearchIntegrationTest {
         String requestJson = loadJson("json/msmsSearch/request1.json")
                 .replace("\"tolerancePrecursorIon\": 10.0", "\"tolerancePrecursorIon\": 101.0");
 
-        mockMvc.perform(post("/api/MSMSSearch")
+        mockMvc.perform(post("/api/msms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest());

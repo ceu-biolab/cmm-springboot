@@ -35,7 +35,7 @@ class Cems1MarkerIntegrationTest {
         String requestJson = new String(requestResource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         JsonNode expected = objectMapper.readTree(responseResource.getInputStream());
 
-        MvcResult mvcResult = mockMvc.perform(post("/api/CEMS1Marker")
+        MvcResult mvcResult = mockMvc.perform(post("/api/cems-1-marker")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -51,7 +51,7 @@ class Cems1MarkerIntegrationTest {
         String requestJson = new String(requestResource.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
                 .replace("\"tolerance\": 10", "\"tolerance\": 101");
 
-        mockMvc.perform(post("/api/CEMS1Marker")
+        mockMvc.perform(post("/api/cems-1-marker")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest());
