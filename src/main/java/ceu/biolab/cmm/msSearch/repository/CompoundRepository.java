@@ -9,6 +9,7 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 import ceu.biolab.cmm.shared.domain.Database;
@@ -162,15 +163,10 @@ public class CompoundRepository {
 
                 double monoIsotopicMassFromMZAndAdduct = AdductService.neutralMassFromMz(mz, adductDefinition);
 
-                // Calculate tolerance range based on PPM or DA
-                if (mzToleranceMode == MzToleranceMode.MDA) {
-                    lowerBound = monoIsotopicMassFromMZAndAdduct - tolerance/1000;
-                    upperBound = monoIsotopicMassFromMZAndAdduct + tolerance/1000;
-                } else { // PPM (Parts Per Million)
-                    double tolerancePPM = mz * tolerance / 1_000_000.0d;
-                    lowerBound = monoIsotopicMassFromMZAndAdduct - tolerancePPM;
-                    upperBound = monoIsotopicMassFromMZAndAdduct + tolerancePPM;
-                }
+                // Keep historical MS search behavior: ppm reference is the observed m/z.
+                double delta = MzToleranceConverter.toDaltons(mzToleranceMode, tolerance, mz);
+                lowerBound = monoIsotopicMassFromMZAndAdduct - delta;
+                upperBound = monoIsotopicMassFromMZAndAdduct + delta;
 
                 final CompoundType compoundTypeFinal = compoundType;
                 final double lowerBoundFinal = lowerBound;

@@ -36,6 +36,7 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 
@@ -207,12 +208,11 @@ public class CemsSearchService {
     }
 
     private double computeMassWindow(MzToleranceMode toleranceMode, double tolerance, double neutralMass) {
-        if (toleranceMode == MzToleranceMode.PPM) {
-            return Math.abs(neutralMass) * tolerance * 1e-6;
-        } else if (toleranceMode == MzToleranceMode.MDA) {
-            return tolerance * 0.001;
+        try {
+            return MzToleranceConverter.toDaltons(toleranceMode, tolerance, Math.abs(neutralMass));
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode, ex);
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode);
     }
 
     private double computeMobilityWindow(double effectiveMobility,

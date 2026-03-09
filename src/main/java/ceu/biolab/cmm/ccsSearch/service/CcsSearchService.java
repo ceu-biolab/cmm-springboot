@@ -23,6 +23,7 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;
@@ -109,12 +110,13 @@ public class CcsSearchService {
                 double neutralMass = AdductService.neutralMassFromMz(mz, adduct);
 
                 double mzDifference;
-                if (mzToleranceMode == MzToleranceMode.PPM) {
-                    mzDifference = neutralMass * request.getMzTolerance() * 0.000001;
-                } else if (mzToleranceMode == MzToleranceMode.MDA) {
-                    mzDifference = request.getMzTolerance() * 0.001;
-                } else {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid mz tolerance mode: " + request.getMzToleranceMode());
+                try {
+                    mzDifference = MzToleranceConverter.toDaltons(
+                            mzToleranceMode,
+                            request.getMzTolerance(),
+                            Math.abs(neutralMass));
+                } catch (IllegalArgumentException ex) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid mz tolerance mode: " + request.getMzToleranceMode(), ex);
                 }
                 double massLower = neutralMass - mzDifference;
                 double massUpper = neutralMass + mzDifference;
