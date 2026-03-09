@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-target/
-.idea/
-.vscode/
-.smarttomcat/
-*.iml
-*.~lock.*
-application-local.yml
-mykeystore.jks
-.venv/
-=======
 target/
 .idea/
 .vscode/
@@ -19,4 +8,3 @@ application-local.yml
 mykeystore.jks
 .venv/
 DEPLOYMENT.md
->>>>>>> daef9b753d07ae90bd1f19c3f63c53dc048c6126

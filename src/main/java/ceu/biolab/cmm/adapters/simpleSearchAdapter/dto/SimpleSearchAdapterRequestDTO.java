@@ -12,9 +12,9 @@ import java.util.Set;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 
-import ceu.biolab.cmm.adapters.shared.domain.LegacyMassesMode;
-import ceu.biolab.cmm.adapters.shared.domain.LegacyDatabase;
-import ceu.biolab.cmm.adapters.shared.domain.LegacyMetaboliteType;
+import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyMassesMode;
+import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyDatabase;
+import ceu.biolab.cmm.adapters.simpleSearchAdapter.domain.LegacyMetaboliteType;
 
 /**
  * Data Transfer Object for Simple Search Adapter requests.
@@ -33,7 +33,7 @@ public class SimpleSearchAdapterRequestDTO {
     private static final MzToleranceMode DEFAULT_TOLERANCE_MODE = MzToleranceMode.PPM;
     private static final LegacyDatabase DEFAULT_DATABASE = LegacyDatabase.ALL_EXCEPT_MINE; 
     private static final LegacyMetaboliteType DEFAULT_METABOLITE_TYPE = LegacyMetaboliteType.ALL_EXCEPT_PEPTIDES; 
-    private static final LegacyMassesMode DEFAULT_MASSES_MODE = LegacyMassesMode.MZ; 
+    private static final LegacyMassesMode DEFAULT_MASSES_MODE = LegacyMassesMode.MZ; //The service must translate
     private static final IonizationMode DEFAULT_ION_MODE = IonizationMode.POSITIVE; 
 
     
@@ -62,22 +62,17 @@ public class SimpleSearchAdapterRequestDTO {
     private double tolerance;
 
     @JsonProperty("tolerance_mode")
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = ceu.biolab.cmm.shared.domain.MzToleranceModeDeserializer.class)
     private MzToleranceMode toleranceMode;
     
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(contentUsing = ceu.biolab.cmm.adapters.shared.deserializer.LegacyDatabaseDeserializer.class)
     private Set<LegacyDatabase> databases;
     
     @JsonProperty("metabolites_type")
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = ceu.biolab.cmm.adapters.shared.deserializer.LegacyMetaboliteTypeDeserializer.class)
     private LegacyMetaboliteType metaboliteTypes;
     
     @JsonProperty("masses_mode")
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = ceu.biolab.cmm.adapters.shared.deserializer.LegacyMassesModeDeserializer.class)
     private LegacyMassesMode massesMode;
     
     @JsonProperty("ion_mode")
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = ceu.biolab.cmm.shared.domain.IonizationModeDeserializer.class)
     private IonizationMode ionMode;
     
     private Set<String> adducts;

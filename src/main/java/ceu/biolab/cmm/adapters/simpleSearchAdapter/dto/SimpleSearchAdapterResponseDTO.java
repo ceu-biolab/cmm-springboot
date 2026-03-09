@@ -2,7 +2,6 @@ package ceu.biolab.cmm.adapters.simpleSearchAdapter.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 import java.util.List;
@@ -10,95 +9,63 @@ import java.util.Set;
 
 @Data
 public class SimpleSearchAdapterResponseDTO {
+    
+    private int identifier;
 
-    @JsonProperty("results")
-    private List<Result> results;
+    private double EM;
 
-    @Data
-    @JsonPropertyOrder({
-            "identifier",
-            "EM",
-            "name",
-            "formula",
-            "adduct",
-            "molecular_weight",
-            "error_ppm",
-            "ionizationScore",
-            "finalScore",
-            "cas",
-            "kegg_compound",
-            "kegg_uri",
-            "hmdb_compound",
-            "hmdb_uri",
-            "lipidmaps_compound",
-            "lipidmaps_uri",
-            "metlin_compound",
-            "metlin_uri",
-            "pubchem_compound",
-            "pubchem_uri",
-            "inChiKey",
-            "pathways"
-    })
-    public static class Result {
+    private String name;
 
-        private int identifier;
+    private String formula;
 
-        @JsonProperty("EM")
-        private double EM;
+    @JsonProperty("adduct")
+    private Set<String> adducts;
 
-        private String name;
+    @JsonProperty("molecular_weight")
+    private double molecularWeight;
 
-        private String formula;
+    @JsonProperty("error_ppm")
+    private Integer errorPpm;
 
-        @JsonProperty("adduct")
-        private String adduct;
+    private Integer ionizationScore;   // Must be -2 for simple search
+    private Integer finalScore;     // Must be -2 for simple search
 
-        @JsonProperty("molecular_weight")
-        private double molecularWeight;
+    private String cas;
 
-        @JsonProperty("error_ppm")
-        private Integer errorPpm;
+    @JsonProperty("kegg_compound")
+    private String keggCompound;
 
-        private Double ionizationScore;   // Must be -2.0 for simple search
-        private Double finalScore;        // Must be -2.0 for simple search
+    @JsonProperty("kegg_uri")
+    private String keggUri;
 
-        private String cas;
+    @JsonProperty("hmdb_compound")
+    private String hmdbCompound;
 
-        @JsonProperty("kegg_compound")
-        private String keggCompound;
+    @JsonProperty("hmdb_uri")
+    private String hmdbUri;
 
-        @JsonProperty("kegg_uri")
-        private String keggUri;
+    @JsonProperty("lipidmaps_compound")
+    private String lipidmapsCompound;
 
-        @JsonProperty("hmdb_compound")
-        private String hmdbCompound;
+    @JsonProperty("lipidmaps_uri")
+    private String lipidmapsUri;
 
-        @JsonProperty("hmdb_uri")
-        private String hmdbUri;
+    @JsonProperty("metlin_compound")
+    private String metlinCompound;
 
-        @JsonProperty("lipidmaps_compound")
-        private String lipidmapsCompound;
+    @JsonProperty("metlin_uri")
+    private String metlinUri;
 
-        @JsonProperty("lipidmaps_uri")
-        private String lipidmapsUri;
+    @JsonProperty("pubchem_compound")
+    private String pubchemCompound;
 
-        @JsonProperty("metlin_compound")
-        private String metlinCompound;
+    @JsonProperty("pubchem_uri")
+    private String pubchemUri;
 
-        @JsonProperty("metlin_uri")
-        private String metlinUri;
+    private List<String> pathways;
 
-        @JsonProperty("pubchem_compound")
-        private String pubchemCompound;
-
-        @JsonProperty("pubchem_uri")
-        private String pubchemUri;
-
-        private String inChiKey;
-
-        private List<String> pathways;
-    }
+    private String inChiKey;
 }
 
-
+    
 
