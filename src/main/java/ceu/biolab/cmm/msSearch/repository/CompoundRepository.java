@@ -163,8 +163,11 @@ public class CompoundRepository {
 
                 double monoIsotopicMassFromMZAndAdduct = AdductService.neutralMassFromMz(mz, adductDefinition);
 
-                // Keep historical MS search behavior: ppm reference is the observed m/z.
-                double delta = MzToleranceConverter.toDaltons(mzToleranceMode, tolerance, mz);
+                // Keep PPM conversion aligned with the rest of search endpoints: reference is neutral mass.
+                double delta = MzToleranceConverter.toDaltons(
+                        mzToleranceMode,
+                        tolerance,
+                        Math.abs(monoIsotopicMassFromMZAndAdduct));
                 lowerBound = monoIsotopicMassFromMZAndAdduct - delta;
                 upperBound = monoIsotopicMassFromMZAndAdduct + delta;
 
