@@ -34,7 +34,7 @@ public class LCMSSearchIntegrationTest {
         String requestJson = loadJson("json/lcmsSearch/requestLCMSSearch.json");
         String expectedResponse = loadJson("json/lcmsSearch/responseLCMSSearch.json");
 
-        mockMvc.perform(post("/api/batch-advanced-search")
+        mockMvc.perform(post("/api/lcms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -46,7 +46,7 @@ public class LCMSSearchIntegrationTest {
         String requestJson = loadJson("json/lcmsSearch/requestLCMSSearch.json")
                 .replace("\"tolerance\": 50", "\"tolerance\": 101");
 
-        mockMvc.perform(post("/api/batch-advanced-search")
+        mockMvc.perform(post("/api/lcms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest());

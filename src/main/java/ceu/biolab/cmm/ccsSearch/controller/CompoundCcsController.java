@@ -19,12 +19,12 @@ public class CompoundCcsController {
     @Autowired
     private CcsSearchService compoundCcsService;
 
-    @PostMapping("/ccs")
+    @PostMapping({"/imms-search", "/ccs"})
     public CcsSearchResponseDTO getCompoundsByCcsTolerance(@Valid @RequestBody CcsSearchRequestDTO request) {
         return compoundCcsService.search(request);
     }
 
-    @PostMapping("/ccs/lcms-score")
+    @PostMapping({"/lcimms-search", "/ccs/lcms-score"})
     public CcsSearchResponseDTO scoreCompoundsWithRetentionTime(@Valid @RequestBody CcsScoringRequestDTO request) {
         return compoundCcsService.searchWithLcmsScoring(request);
     }
