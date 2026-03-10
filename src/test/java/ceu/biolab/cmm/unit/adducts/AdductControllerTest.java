@@ -1,6 +1,7 @@
 package ceu.biolab.cmm.unit.adducts;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ceu.biolab.cmm.adducts.controller.AdductController;
@@ -19,5 +20,7 @@ class AdductControllerTest {
         assertFalse(response.negative().isEmpty(), "Negative adduct list should not be empty");
         assertTrue(response.positive().contains("[M+H]+"), "Positive adducts should include [M+H]+");
         assertTrue(response.negative().contains("[M-H]-"), "Negative adducts should include [M-H]-");
+        assertEquals("[M+H]+", response.positive().get(0), "Most common positive adduct should be first");
+        assertEquals("[M-H]-", response.negative().get(0), "Most common negative adduct should be first");
     }
 }

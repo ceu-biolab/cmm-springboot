@@ -10,9 +10,9 @@ CEU Mass Mediator (CMM) helps scientists in the field of metabolomics match expe
 
 - **MS search** – simple and batch compound searches by m/z (`/api/compounds/simple-search`, `/api/compounds/batch-search`).
 - **MS/MS search** – tandem mass spectra matching (`/api/msms-search`).
-- **LC-MS batch search** – annotate and score multiple features (`/api/batch-advanced-search`).
-- **GC-MS search** – match GC-MS spectra to reference libraries (`/api/gcms`).
-- **CCS search** – query compounds by collisional cross-section (`/api/ccs`).
+- **LC-MS batch search** – annotate and score multiple features (`/api/lcms-search`).
+- **GC-MS search** – match GC-MS spectra to reference libraries (`/api/gcms-search`).
+- **CCS search** – query compounds by collisional cross-section (`/api/imms-search`).
 - **CE-MS search & markers** – electrophoretic mobility searches and marker-assisted workflows (`/api/cems-search`, `/api/cems-1-marker`, `/api/cems-2-marker`, `/api/cems-rmt-search`).
 - **Browse search** – browse curated databases with flexible filters (`/api/browse-search`).
 - **Score annotations** – score annotations using Drools rules (`/api/score-annotations`).
@@ -61,10 +61,10 @@ All endpoints live under the `/api` prefix. Most request DTOs use Jakarta Bean V
 | --- | --- |
 | `POST /api/compounds/simple-search` | Annotate a single feature by m/z. |
 | `POST /api/compounds/batch-search` | Annotate multiple m/z values sequentially. |
-| `POST /api/batch-advanced-search` | LC-MS workflow that detects adducts, searches, and scores features. |
-| `POST /api/gcms` | GC-MS search that matches spectra to our spectral libraries. |
-| `POST /api/ccs` | Collisional cross-section search. |
-| `POST /api/ccs/lcms-score` | CCS search enriched with LC retention data and lipid scoring. |
+| `POST /api/lcms-search` | LC-MS workflow that detects adducts, searches, and scores features. |
+| `POST /api/gcms-search` | GC-MS search that matches spectra to our spectral libraries. |
+| `POST /api/imms-search` | Collisional cross-section search. |
+| `POST /api/lcimms-search` | CCS search enriched with LC retention data and lipid scoring. |
 | `POST /api/msms-search` | MS/MS search (tandem mass spectra matching). |
 | `POST /api/cems-search` | Capillary electrophoresis search by effective mobility and m/z. |
 | `POST /api/cems-rmt-search` | CE search using relative migration time. |
