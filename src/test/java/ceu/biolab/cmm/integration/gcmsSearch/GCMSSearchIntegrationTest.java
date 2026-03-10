@@ -35,7 +35,7 @@ public class GCMSSearchIntegrationTest {
         String requestJson = loadJson("json/gcmsSearch/requestGCMSSearch.json");
         String expectedResponse = loadJson("json/gcmsSearch/responseGCMSSearch.json");
 
-        mockMvc.perform(post("/api/gcms")
+        mockMvc.perform(post("/api/gcms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())

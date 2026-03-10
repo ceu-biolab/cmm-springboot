@@ -22,11 +22,7 @@ public final class CemsCompoundMapper {
         long candidateId = candidate.getCompoundId();
         int compoundId = safeLongToInt(candidateId, "compoundId", candidateId);
 
-        Double massValue = candidate.getMass();
-        if (massValue == null) {
-            LOGGER.warn("Missing mass for compound {}, defaulting to 0", candidateId);
-            massValue = 0d;
-        }
+        double massValue = requireDouble(candidate.getMass(), "mass", candidateId);
 
         int chargeType = safeLongToInt(candidate.getChargeType(), "chargeType", candidateId);
         int chargeNumber = safeLongToInt(candidate.getChargeNumber(), "chargeNumber", candidateId);
@@ -108,8 +104,7 @@ public final class CemsCompoundMapper {
 
     private static int safeLongToInt(Long value, String field, long candidateId) {
         if (value == null) {
-            LOGGER.warn("Missing {} for compound {}, defaulting to 0", field, candidateId);
-            return 0;
+            throw new IllegalArgumentException("Missing " + field + " for compound " + candidateId);
         }
         try {
             return Math.toIntExact(value);
@@ -126,5 +121,15 @@ public final class CemsCompoundMapper {
             LOGGER.warn("{} {} exceeds integer range, truncating for response", field, value);
             return value > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
         }
+    }
+
+    private static double requireDouble(Double value, String field, long candidateId) {
+        if (value == null) {
+            throw new IllegalArgumentException("Missing " + field + " for compound " + candidateId);
+        }
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("Invalid " + field + " for compound " + candidateId + ": " + value);
+        }
+        return value;
     }
 }

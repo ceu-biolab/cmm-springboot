@@ -63,6 +63,26 @@ public class MSSearchIntegrationTest {
     }
 
     @Test
+    void testMSSearchSimpleRejectsToleranceAbove100() throws Exception {
+        String requestJson = """
+                {
+                  "mz": 757.5667,
+                  "mzToleranceMode": "PPM",
+                  "tolerance": 101,
+                  "ionizationMode": "POSITIVE",
+                  "adductsString": ["[M+H]+"],
+                  "databases": ["ALL"],
+                  "metaboliteType": "ALL"
+                }
+                """;
+
+        mockMvc.perform(post("/api/compounds/simple-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void testGetCompoundByIdEndpoint() throws Exception {
         mockMvc.perform(get("/api/compounds/33"))
                 .andExpect(status().isOk())

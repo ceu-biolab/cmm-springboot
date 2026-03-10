@@ -19,7 +19,7 @@ public class BatchAdvancedSearchController {
         this.batchAdvancedSearchService = batchAdvancedSearchService;
     }
 
-    @PostMapping("/batch-advanced-search")
+    @PostMapping({"/lcms-search", "/batch-advanced-search"})
     public ResponseEntity<List<AnnotatedFeature>> scoreAnnotatedMSFeature(@Valid @RequestBody BatchAdvancedSearchRequestDTO request) {
         List<AnnotatedFeature> annotatedScoredFeatures = batchAdvancedSearchService.annotateAndScoreCmpoundsByMz(request);
         return ResponseEntity.ok(annotatedScoredFeatures);

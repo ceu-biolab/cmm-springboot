@@ -9,7 +9,9 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
@@ -86,6 +88,10 @@ public class CompoundRepository {
         if (tolerance <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero.");
         }
+        if (MzToleranceLimits.exceedsLimit(tolerance, mzToleranceMode)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("tolerance", mzToleranceMode));
+        }
         if (ionizationMode == IonizationMode.NEUTRAL) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
         }
@@ -157,15 +163,13 @@ public class CompoundRepository {
 
                 double monoIsotopicMassFromMZAndAdduct = AdductService.neutralMassFromMz(mz, adductDefinition);
 
-                // Calculate tolerance range based on PPM or DA
-                if (mzToleranceMode == MzToleranceMode.MDA) {
-                    lowerBound = monoIsotopicMassFromMZAndAdduct - tolerance/1000;
-                    upperBound = monoIsotopicMassFromMZAndAdduct + tolerance/1000;
-                } else { // PPM (Parts Per Million)
-                    double tolerancePPM = mz * tolerance / 1_000_000.0d;
-                    lowerBound = monoIsotopicMassFromMZAndAdduct - tolerancePPM;
-                    upperBound = monoIsotopicMassFromMZAndAdduct + tolerancePPM;
-                }
+                // Keep PPM conversion aligned with the rest of search endpoints: reference is neutral mass.
+                double delta = MzToleranceConverter.toDaltons(
+                        mzToleranceMode,
+                        tolerance,
+                        Math.abs(monoIsotopicMassFromMZAndAdduct));
+                lowerBound = monoIsotopicMassFromMZAndAdduct - delta;
+                upperBound = monoIsotopicMassFromMZAndAdduct + delta;
 
                 final CompoundType compoundTypeFinal = compoundType;
                 final double lowerBoundFinal = lowerBound;

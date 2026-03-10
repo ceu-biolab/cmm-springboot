@@ -13,6 +13,7 @@ import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.shared.service.SpectrumScorer;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,14 +69,10 @@ public class MSMSSearchRepository {
 
             // Compute neutral mass and tolerance window
             double neutralMass = AdductService.neutralMassFromMz(queryData.getPrecursorIonMZ(), adductDefinition);
-            double delta;
-            if (queryData.getToleranceModePrecursorIon() == MzToleranceMode.PPM) {
-                // ppm to Da at neutral mass
-                delta = neutralMass * (queryData.getTolerancePrecursorIon() / 1_000_000.0);
-            } else {
-                // mDa to Da
-                delta = queryData.getTolerancePrecursorIon() / 1000.0;
-            }
+            double delta = MzToleranceConverter.toDaltons(
+                    queryData.getToleranceModePrecursorIon(),
+                    queryData.getTolerancePrecursorIon(),
+                    neutralMass);
             double lowerBound = neutralMass - delta ;
             double upperBound = neutralMass + delta ;
 

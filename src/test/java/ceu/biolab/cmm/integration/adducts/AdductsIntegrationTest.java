@@ -27,7 +27,7 @@ class AdductsIntegrationTest {
     void getAdductsReturnsExpectedCatalog() throws Exception {
         String expectedResponse = loadJson("json/adducts/response.json");
 
-        mockMvc.perform(get("/api/get/adducts"))
+        mockMvc.perform(get("/api/adducts"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
     }

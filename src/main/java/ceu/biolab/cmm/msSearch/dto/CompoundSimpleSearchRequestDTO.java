@@ -40,14 +40,14 @@ public class CompoundSimpleSearchRequestDTO {
 
     public CompoundSimpleSearchRequestDTO() {
         this.mz = 0.0;
-        this.mzToleranceMode = MzToleranceMode.PPM;
+        this.mzToleranceMode = null;
         this.tolerance = 0.0;
-        this.ionizationMode = IonizationMode.POSITIVE;
+        this.ionizationMode = null;
         this.detectedAdduct = Optional.empty();
         this.formulaType = Optional.empty();
         this.adductsString = new LinkedHashSet<>();
         this.databases = new LinkedHashSet<>();
-        this.metaboliteType = MetaboliteType.ALL;
+        this.metaboliteType = null;
     }
 
     public CompoundSimpleSearchRequestDTO(Double mz, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,

@@ -44,7 +44,7 @@ public class CcsSearchIntegrationTest {
         String requestJson = loadJson("json/ccsSearch/request1.json");
         String expectedResponse = loadJson("json/ccsSearch/response1.json");
 
-        MvcResult result = mockMvc.perform(post("/api/ccs")
+        MvcResult result = mockMvc.perform(post("/api/imms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -58,7 +58,7 @@ public class CcsSearchIntegrationTest {
         String requestJson = loadJson("json/ccsSearch/request2.json");
         String expectedResponse = loadJson("json/ccsSearch/response2.json");
 
-        MvcResult result = mockMvc.perform(post("/api/ccs")
+        MvcResult result = mockMvc.perform(post("/api/imms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ public class CcsSearchIntegrationTest {
         String requestJson = loadJson("json/ccsSearch/request3.json");
         String expectedResponse = loadJson("json/ccsSearch/response3.json");
 
-        MvcResult result = mockMvc.perform(post("/api/ccs")
+        MvcResult result = mockMvc.perform(post("/api/imms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -85,7 +85,7 @@ public class CcsSearchIntegrationTest {
     void testCcsSearchWithLcmsScoring() throws Exception {
         String requestJson = loadJson("json/ccsSearch/request_lcimms_score.json");
 
-        MvcResult result = mockMvc.perform(post("/api/ccs/lcms-score")
+        MvcResult result = mockMvc.perform(post("/api/lcimms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -112,7 +112,7 @@ public class CcsSearchIntegrationTest {
     void testCcsSearchWithLcmsScoringProducesRetentionScores() throws Exception {
         String requestJson = loadJson("json/ccsSearch/request_lcimms_score_with_scores.json");
 
-        MvcResult result = mockMvc.perform(post("/api/ccs/lcms-score")
+        MvcResult result = mockMvc.perform(post("/api/lcimms-search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -157,5 +157,16 @@ public class CcsSearchIntegrationTest {
         }
 
         assertTrue(foundRetentionScore, "Expected at least one annotation to carry retention-time scores");
+    }
+
+    @Test
+    void testCcsSearchRejectsMzToleranceAbove100() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request1.json")
+                .replace("\"mzTolerance\": 10", "\"mzTolerance\": 101");
+
+        mockMvc.perform(post("/api/imms-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest());
     }
 }

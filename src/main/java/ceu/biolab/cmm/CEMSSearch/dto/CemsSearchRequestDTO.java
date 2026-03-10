@@ -58,15 +58,16 @@ public class CemsSearchRequestDTO {
     private Double temperature;
 
     @NotNull
-    private EffMobToleranceMode effectiveMobilityToleranceMode = EffMobToleranceMode.PERCENTAGE;
+    private EffMobToleranceMode effectiveMobilityToleranceMode;
 
     public CemsSearchRequestDTO() {
         this.adducts = new ArrayList<>();
         this.mzValues = new ArrayList<>();
         this.effectiveMobilities = new ArrayList<>();
-        this.mzToleranceMode = MzToleranceMode.PPM;
-        this.polarity = CePolarity.DIRECT;
-        this.ionizationMode = IonizationMode.POSITIVE;
+        this.mzToleranceMode = null;
+        this.polarity = null;
+        this.ionizationMode = null;
+        this.effectiveMobilityToleranceMode = null;
     }
 
     @JsonProperty("polarity")

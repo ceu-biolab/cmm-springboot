@@ -18,7 +18,9 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -135,7 +137,14 @@ public class CemsRmtSearchService {
                 CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(definition.canonical());
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
-                    Compound compound = CemsCompoundMapper.toCompound(candidate);
+                    Compound compound;
+                    try {
+                        compound = CemsCompoundMapper.toCompound(candidate);
+                    } catch (IllegalArgumentException ex) {
+                        LOGGER.warn("Skipping CE-MS RMT candidate {} due to invalid numeric fields: {}",
+                                candidate.getCompoundId(), ex.getMessage());
+                        continue;
+                    }
                     if (!matchesAlphabet(compound, allowedElements)) {
                         continue;
                     }
@@ -193,8 +202,21 @@ public class CemsRmtSearchService {
         if (request.getTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tolerance must be greater than zero");
         }
+        if (request.getToleranceMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tolerance_mode is required");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getTolerance(), request.getToleranceMode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("tolerance", request.getToleranceMode()));
+        }
         if (request.getRmtTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_tolerance must be greater than zero");
+        }
+        if (request.getRmtToleranceMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt_tolerance_mode is required");
+        }
+        if (request.getPolarity() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "polarity is required");
         }
         if (request.getIonMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required");
@@ -205,12 +227,11 @@ public class CemsRmtSearchService {
     }
 
     private double computeMassWindow(MzToleranceMode toleranceMode, double tolerance, double neutralMass) {
-        if (toleranceMode == MzToleranceMode.PPM) {
-            return Math.abs(neutralMass) * tolerance * 1e-6;
-        } else if (toleranceMode == MzToleranceMode.MDA) {
-            return tolerance * 0.001;
+        try {
+            return MzToleranceConverter.toDaltons(toleranceMode, tolerance, Math.abs(neutralMass));
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode, ex);
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode);
     }
 
     private double computeRmtWindow(RmtToleranceMode toleranceMode, double tolerance, double baseRmt) {

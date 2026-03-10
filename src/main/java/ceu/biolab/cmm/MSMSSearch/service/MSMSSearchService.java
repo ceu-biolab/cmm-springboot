@@ -9,6 +9,7 @@ import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.MSMSSearch.repository.MSMSSearchRepository;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 
 @Service
 public class MSMSSearchService {
@@ -53,6 +54,14 @@ public class MSMSSearchService {
         }
         if (request.getToleranceModeFragments() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fragment tolerance mode is required.");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getTolerancePrecursorIon(), request.getToleranceModePrecursorIon())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("tolerancePrecursorIon", request.getToleranceModePrecursorIon()));
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getToleranceFragments(), request.getToleranceModeFragments())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("toleranceFragments", request.getToleranceModeFragments()));
         }
 
         if (request.getFragmentsMZsIntensities() == null

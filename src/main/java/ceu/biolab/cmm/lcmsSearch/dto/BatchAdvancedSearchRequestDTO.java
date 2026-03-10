@@ -50,18 +50,18 @@ public class BatchAdvancedSearchRequestDTO {
 
     public BatchAdvancedSearchRequestDTO() {
         this.mzs = new ArrayList<>();
-        this.mzToleranceMode = MzToleranceMode.PPM;
+        this.mzToleranceMode = null;
         this.tolerance = 0.0;
-        this.ionizationMode = IonizationMode.POSITIVE;
+        this.ionizationMode = null;
         this.detectedAdduct = Optional.empty();
         this.adductsString = new LinkedHashSet<>();
         this.databases = new LinkedHashSet<>();
-        this.metaboliteType = MetaboliteType.ALL;
+        this.metaboliteType = null;
         this.retentionTimes = new ArrayList<>();
         this.compositeSpectrum = new ArrayList<>();
-        this.formulaType = FormulaType.CHNOPS;
+        this.formulaType = null;
         this.deuterium = false;
-        this.modifiersType = "";
+        this.modifiersType = null;
     }
 
     public BatchAdvancedSearchRequestDTO(List<Double> mzs, MzToleranceMode mzToleranceMode, Double tolerance,

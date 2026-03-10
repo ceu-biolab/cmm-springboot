@@ -36,7 +36,9 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 
 @Service
 public class CemsSearchService {
@@ -130,7 +132,14 @@ public class CemsSearchService {
                 CeAnnotationsByAdductDTO annotationsByAdduct = new CeAnnotationsByAdductDTO(definition.canonical());
                 int rank = 1;
                 for (CemsQueryResponseDTO candidate : candidates) {
-                    Compound compound = CemsCompoundMapper.toCompound(candidate);
+                    Compound compound;
+                    try {
+                        compound = CemsCompoundMapper.toCompound(candidate);
+                    } catch (IllegalArgumentException ex) {
+                        LOGGER.warn("Skipping CE-MS candidate {} due to invalid numeric fields: {}",
+                                candidate.getCompoundId(), ex.getMessage());
+                        continue;
+                    }
                     if (!matchesAlphabet(compound, allowedElements)) {
                         continue;
                     }
@@ -190,8 +199,21 @@ public class CemsSearchService {
         if (request.getMzTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz_tolerance must be greater than zero");
         }
+        if (request.getMzToleranceMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz_tolerance_mode is required");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getMzTolerance(), request.getMzToleranceMode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("mz_tolerance", request.getMzToleranceMode()));
+        }
         if (request.getEffectiveMobilityTolerance() <= 0d) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eff_mob_tolerance must be greater than zero");
+        }
+        if (request.getEffectiveMobilityToleranceMode() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eff_mob_tolerance_mode is required");
+        }
+        if (request.getPolarity() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "polarity is required");
         }
         if (request.getIonizationMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required");
@@ -202,12 +224,11 @@ public class CemsSearchService {
     }
 
     private double computeMassWindow(MzToleranceMode toleranceMode, double tolerance, double neutralMass) {
-        if (toleranceMode == MzToleranceMode.PPM) {
-            return Math.abs(neutralMass) * tolerance * 1e-6;
-        } else if (toleranceMode == MzToleranceMode.MDA) {
-            return tolerance * 0.001;
+        try {
+            return MzToleranceConverter.toDaltons(toleranceMode, tolerance, Math.abs(neutralMass));
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode, ex);
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported m/z tolerance mode: " + toleranceMode);
     }
 
     private double computeMobilityWindow(double effectiveMobility,

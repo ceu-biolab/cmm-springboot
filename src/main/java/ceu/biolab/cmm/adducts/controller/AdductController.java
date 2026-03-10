@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/get")
+@RequestMapping({"/api", "/api/get"})
 public class AdductController {
 
     @GetMapping("/adducts")

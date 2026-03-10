@@ -17,9 +17,8 @@ public class MSMSSearchController {
     @Autowired
     private MSMSSearchService msmsSearchService;
 
-    @PostMapping("/MSMSSearch")
+    @PostMapping({"/msms-search", "/MSMSSearch"})
     public MSMSSearchResponseDTO search(@Valid @RequestBody MSMSSearchRequestDTO request) {
         return msmsSearchService.search(request);
     }
 }
-

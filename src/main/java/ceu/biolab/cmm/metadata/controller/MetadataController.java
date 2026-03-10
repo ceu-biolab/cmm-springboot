@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/get")
+@RequestMapping({"/api/metadata", "/api/get"})
 public class MetadataController {
 
     private final MetadataService metadataService;

@@ -17,10 +17,9 @@ public class CompoundGCMSController {
     @Autowired
     private GCMSSearchService compoundGCMSService;
 
-    @PostMapping("/gcms")
+    @PostMapping({"/gcms-search", "/gcms"})
     public GCMSSearchResponseDTO getCompoundsByRITolerance(@Valid @RequestBody GCMSSearchRequestDTO request) {
 
         return compoundGCMSService.search(request);
     }
 }
-

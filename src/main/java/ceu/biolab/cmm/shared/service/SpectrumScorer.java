@@ -267,9 +267,7 @@ public class SpectrumScorer {
     }
 
     private double toleranceDa(double mzRef) {
-        return (tolMode == MzToleranceMode.PPM)
-                ? mzRef * tolValue / 1_000_000.0
-                : tolValue / 1000.0;
+        return MzToleranceConverter.toDaltons(tolMode, tolValue, mzRef);
     }
 
     private static final class MatchCandidate {

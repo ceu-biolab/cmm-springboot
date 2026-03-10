@@ -23,7 +23,9 @@ import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,10 @@ public class CcsSearchService {
         }
         if (request.getCcsTolerance() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ccsTolerance must be greater than zero.");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getMzTolerance(), request.getMzToleranceMode())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("mzTolerance", request.getMzToleranceMode()));
         }
         if (request.getCcsValues().size() != request.getMzValues().size()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of CCS values and m/z values must be equal.");
@@ -104,12 +110,13 @@ public class CcsSearchService {
                 double neutralMass = AdductService.neutralMassFromMz(mz, adduct);
 
                 double mzDifference;
-                if (mzToleranceMode == MzToleranceMode.PPM) {
-                    mzDifference = neutralMass * request.getMzTolerance() * 0.000001;
-                } else if (mzToleranceMode == MzToleranceMode.MDA) {
-                    mzDifference = request.getMzTolerance() * 0.001;
-                } else {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid mz tolerance mode: " + request.getMzToleranceMode());
+                try {
+                    mzDifference = MzToleranceConverter.toDaltons(
+                            mzToleranceMode,
+                            request.getMzTolerance(),
+                            Math.abs(neutralMass));
+                } catch (IllegalArgumentException ex) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid mz tolerance mode: " + request.getMzToleranceMode(), ex);
                 }
                 double massLower = neutralMass - mzDifference;
                 double massUpper = neutralMass + mzDifference;
@@ -161,8 +168,16 @@ public class CcsSearchService {
                                 }
                             }
 
-                            int chargeType = queryResult.getChargeType() != null ? queryResult.getChargeType() : 0;
-                            int chargeNumber = queryResult.getChargeNumber() != null ? queryResult.getChargeNumber() : 0;
+                            Integer chargeTypeValue = queryResult.getChargeType();
+                            Integer chargeNumberValue = queryResult.getChargeNumber();
+                            if (chargeTypeValue == null || chargeNumberValue == null) {
+                                LOGGER.warn("Skipping CCS candidate {} due to missing charge fields (chargeType={}, chargeNumber={})",
+                                        queryResult.getCompoundId(), chargeTypeValue, chargeNumberValue);
+                                continue;
+                            }
+
+                            int chargeType = chargeTypeValue;
+                            int chargeNumber = chargeNumberValue;
 
                             IMMSCompound.IMMSCompoundBuilder<?, ?> builder = IMMSCompound.builder()
                                     .compoundId(queryResult.getCompoundId())
