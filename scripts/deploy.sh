@@ -14,6 +14,8 @@ Options:
   --remote-tmp <path>         Remote temporary upload path (default: /tmp/<jar-name>)
   --remote-jar <path>         Final remote JAR path (default: /opt/cmm/cmm-springboot-be.jar)
   --service <name>            Systemd service name (default: cmm-springboot-be)
+  --ssh-tty                   Force SSH pseudo-tty allocation
+  --no-ssh-tty                Disable SSH pseudo-tty allocation
   --skip-build                Skip Maven build/repackage
   --dry-run                   Print commands without executing them
   -h, --help                  Show this help
@@ -31,6 +33,7 @@ LOCAL_JAR="${LOCAL_JAR:-target/cmm-1.0-SNAPSHOT.jar}"
 REMOTE_TMP_JAR="${REMOTE_TMP_JAR:-}"
 REMOTE_JAR_PATH="${REMOTE_JAR_PATH:-/opt/cmm/cmm-springboot-be.jar}"
 SYSTEMD_SERVICE="${SYSTEMD_SERVICE:-cmm-springboot-be}"
+SSH_TTY_MODE="${SSH_TTY_MODE:-auto}" # auto|always|never
 SKIP_BUILD=0
 DRY_RUN=0
 
@@ -63,6 +66,14 @@ while [[ $# -gt 0 ]]; do
     --service)
       SYSTEMD_SERVICE="${2:-}"
       shift 2
+      ;;
+    --ssh-tty)
+      SSH_TTY_MODE="always"
+      shift
+      ;;
+    --no-ssh-tty)
+      SSH_TTY_MODE="never"
+      shift
       ;;
     --skip-build)
       SKIP_BUILD=1
@@ -98,6 +109,24 @@ if [[ -z "$REMOTE_TMP_JAR" ]]; then
   REMOTE_TMP_JAR="/tmp/$(basename "$LOCAL_JAR")"
 fi
 
+SSH_CMD=(ssh)
+case "$SSH_TTY_MODE" in
+  always)
+    SSH_CMD+=(-tt)
+    ;;
+  never)
+    ;;
+  auto)
+    if [[ -t 0 ]]; then
+      SSH_CMD+=(-tt)
+    fi
+    ;;
+  *)
+    echo "Error: invalid SSH_TTY_MODE '$SSH_TTY_MODE' (expected auto|always|never)." >&2
+    exit 1
+    ;;
+esac
+
 run() {
   if [[ "$DRY_RUN" -eq 1 ]]; then
     echo "+ $*"
@@ -120,17 +149,18 @@ run scp "$LOCAL_JAR" "${UPLOAD_USER}@${SERVER_IP}:${REMOTE_TMP_JAR}"
 REMOTE_CMD=$(
   cat <<EOF
 set -euo pipefail
-mv "$REMOTE_TMP_JAR" "$REMOTE_JAR_PATH"
+sudo -v
+sudo mv "$REMOTE_TMP_JAR" "$REMOTE_JAR_PATH"
 sudo systemctl restart "$SYSTEMD_SERVICE"
 EOF
 )
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
-  echo "+ ssh ${SSH_USER}@${SERVER_IP} <<'REMOTE'"
+  echo "+ ${SSH_CMD[*]} ${SSH_USER}@${SERVER_IP} <<'REMOTE'"
   echo "$REMOTE_CMD"
   echo "REMOTE"
 else
-  ssh "${SSH_USER}@${SERVER_IP}" "$REMOTE_CMD"
+  "${SSH_CMD[@]}" "${SSH_USER}@${SERVER_IP}" "$REMOTE_CMD"
 fi
 
 echo "Deployment finished."
