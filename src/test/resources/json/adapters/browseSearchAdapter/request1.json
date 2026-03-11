@@ -1,0 +1,10 @@
+{
+    "name": "choline",
+    "exactName": false,
+    "formula": "C5H14NO",
+    "exactFormula": false,
+    "databases": [
+        "all-except-mine"
+    ],
+    "metabolites_type": "all-except-peptides"
+}

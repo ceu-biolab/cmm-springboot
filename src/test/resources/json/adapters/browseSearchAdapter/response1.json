@@ -1,0 +1,33 @@
+{
+    "results": [
+        {
+            "identifier": 117801,
+            "name": "Choline",
+            "formula": "C5H14NO",
+            "molecular_weight": 104.107539075,
+            "cas": "62-49-7",
+            "hmdb_compound": "HMDB0000097",
+            "hmdb_uri": "https://hmdb.ca/metabolites/HMDB0000097",
+            "metlin_compound": "",
+            "metlin_uri": "",
+            "lipidmaps_compound": "",
+            "lipidmaps_uri": "",
+            "kegg_compound": "C00114",
+            "kegg_uri": "https://www.kegg.jp/entry/C00114",
+            "pubchem_compound": "305",
+            "pubchem_uri": "https://pubchem.ncbi.nlm.nih.gov/compound/305",
+            "inChiKey": "OEYIOHPDSNJKLS-UHFFFAOYSA-N",
+            "pathways": [
+                { "pathwayId": 2, "pathwayName": "Glycine and Serine Metabolism", "pathwayMap": "map00260" },
+                { "pathwayId": 358, "pathwayName": "Choline metabolism in cancer", "pathwayMap": "map05231" },
+                { "pathwayId": 6, "pathwayName": "Methionine Metabolism", "pathwayMap": "map00270" },
+                { "pathwayId": 50, "pathwayName": "Phospholipid Biosynthesis", "pathwayMap": "map00564" },
+                { "pathwayId": 446, "pathwayName": "Teichoic acid biosynthesis", "pathwayMap": "map00552" },
+                { "pathwayId": 56, "pathwayName": "Bile secretion", "pathwayMap": "map04976" },
+                { "pathwayId": 60, "pathwayName": "Metabolic pathways", "pathwayMap": "map01100" },
+                { "pathwayId": 139, "pathwayName": "ABC transporters", "pathwayMap": "map02010" },
+                { "pathwayId": 105, "pathwayName": "Cholinergic synapse", "pathwayMap": "map04725" }
+            ]
+        }
+    ]
+}
