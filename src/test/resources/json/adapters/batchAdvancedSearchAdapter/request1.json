@@ -1,0 +1,37 @@
+{
+  "chemical_alphabet": "CHNOPS",
+  "deuterium": false,
+  "modifiers_type": "none",
+  "metabolites_type": "all-except-peptides",
+  "databases": ["hmdb"],
+  "masses_mode": "mz",
+  "ion_mode": "positive",
+  "adducts": ["all"],
+  "tolerance": 10.0,
+  "tolerance_mode": "ppm",
+  "masses": [400.3432, 356.2178, 288.2174],
+  "all_masses": [],
+  "retention_times": [18.842525, 9.456321, 4.021555],
+  "all_retention_times": [],
+  "composite_spectra": [
+    [
+      { "mz": 400.3432, "intensity": 307034.88 },
+      { "mz": 382.3310, "intensity": 58234.12 },
+      { "mz": 364.3205, "intensity": 21455.77 },
+      { "mz": 311.20145, "intensity": 400.03336 }
+    ],
+    [
+      { "mz": 356.2178, "intensity": 185230.55 },
+      { "mz": 338.2062, "intensity": 45210.33 },
+      { "mz": 320.1950, "intensity": 15340.91 },
+      { "mz": 292.1844, "intensity": 2200.45 }
+    ],
+    [
+      { "mz": 288.2174, "intensity": 96540.12 },
+      { "mz": 270.2060, "intensity": 28112.77 },
+      { "mz": 252.1945, "intensity": 8744.33 },
+      { "mz": 224.1839, "intensity": 1200.88 }
+    ]
+  ],
+  "all_composite_spectra": []
+}

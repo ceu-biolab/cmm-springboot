@@ -1,0 +1,14 @@
+{
+	"results": [
+		{
+			"spectral_display_tools": "Experimental",
+			"identifier": 1095,
+			"hmdb_compound": "HMDB0000305",
+			"hmdb_uri": "http://www.hmdb.ca/metabolites/HMDB0000305",
+			"name": "Retinol",
+			"formula": "C20H30O",
+			"mass": 286.229665582,
+			"score": 0.9999999999999998
+		}
+	]
+}

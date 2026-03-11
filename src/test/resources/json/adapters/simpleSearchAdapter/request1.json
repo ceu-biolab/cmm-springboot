@@ -1,0 +1,19 @@
+{
+    "mass": 757.5667,
+    "tolerance": 10.0,
+    "tolerance_mode": "ppm",
+    "ion_mode": "positive",
+    "masses_mode": "neutral",
+    "metabolites_type": "all-except-peptides",
+    "adducts": [
+        "M+H",
+        "M+2H",
+        "M+Na",
+        "M+K",
+        "M+NH4",
+        "M+H-H2O"
+    ],
+    "databases": [
+        "all-except-mine"
+    ]
+}
