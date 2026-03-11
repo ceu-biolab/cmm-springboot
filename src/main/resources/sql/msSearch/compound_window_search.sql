@@ -1,6 +1,6 @@
 SELECT
   cv.compound_id,
-  COALESCE(NULLIF(cv.cas_id, ''), cas_lookup.cas_id) AS cas_id,
+  c.cas_id AS cas_id,
   cv.compound_name,
   cv.formula,
   cv.mass,
@@ -38,13 +38,8 @@ SELECT
   cv.aspergillus_web_name,
   NULL::text AS mol2
 FROM compounds_view cv
-LEFT JOIN LATERAL (
-    SELECT cas_id
-    FROM compounds_cas
-    WHERE inchi_key = cv.inchi_key AND cas_id IS NOT NULL AND cas_id <> ''
-    ORDER BY length(cas_id), cas_id
-    LIMIT 1
-) cas_lookup ON TRUE
+JOIN compounds c
+  ON c.compound_id = cv.compound_id
 LEFT JOIN (
     SELECT
       clc.compound_id,

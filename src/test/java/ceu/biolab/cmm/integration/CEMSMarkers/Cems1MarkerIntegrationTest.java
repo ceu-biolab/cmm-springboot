@@ -35,7 +35,7 @@ class Cems1MarkerIntegrationTest {
         String requestJson = new String(requestResource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         JsonNode expected = objectMapper.readTree(responseResource.getInputStream());
 
-        MvcResult mvcResult = mockMvc.perform(post("/api/CEMS1Marker")
+        MvcResult mvcResult = mockMvc.perform(post("/api/cems-1-marker")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -43,5 +43,17 @@ class Cems1MarkerIntegrationTest {
 
         JsonNode actual = objectMapper.readTree(mvcResult.getResponse().getContentAsString());
         org.junit.jupiter.api.Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void cemsMarkersEndpointRejectsMzToleranceAbove100() throws Exception {
+        ClassPathResource requestResource = new ClassPathResource("json/cemsMarkers/CEMS1Marker_request1.json");
+        String requestJson = new String(requestResource.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
+                .replace("\"tolerance\": 10", "\"tolerance\": 101");
+
+        mockMvc.perform(post("/api/cems-1-marker")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest());
     }
 }

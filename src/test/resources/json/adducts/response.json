@@ -1,0 +1,4 @@
+{
+  "positive" : [ "[M+H]+", "[M+Na]+", "[M+NH4]+", "[M+K]+", "[M+2H]2+", "[M+H+Na]2+", "[M+H+K]2+", "[M+H+NH4]2+", "[M+3H]3+", "[M+2H+Na]3+", "[M+H+2Na]3+", "[M+3Na]3+", "[M+2Na]2+", "[M+ACN+H]+", "[M+ACN+Na]+", "[M+CH3OH+H]+", "[M+DMSO+H]+", "[M+IsoProp+H]+", "[M+IsoProp+Na+H]+", "[M+C3H9ONa]+", "[M+H+HCOONa]+", "[M+H-H2O]+", "[M+H-2H2O]+", "[M+NH4-H2O]+", "[M+Li]+", "[M+2Na-H]+", "[M+2K-H]+", "[M+ACN+2H]2+", "[M+2ACN+2H]2+", "[M+3ACN+2H]2+", "[M+2ACN+H]+", "[2M+H]+", "[2M+Na]+", "[2M+NH4]+", "[2M+K]+", "[2M+ACN+H]+", "[2M+ACN+Na]+", "[2M+H-H2O]+", "[2M+2H+3H2O]+" ],
+  "negative" : [ "[M-H]-", "[M+Cl]-", "[M+FA-H]-", "[M+Hac-H]-", "[M+CH3COO]-", "[M+Na-2H]-", "[M+K-2H]-", "[M-H-H2O]-", "[M-H2O-H]-", "[M-2H]2-", "[M-3H]3-", "[M+Br]-", "[M+TFA-H]-", "[2M-H]-", "[2M+FA-H]-", "[2M+Hac-H]-", "[2M+CH3COO]-", "[3M-H]-" ]
+}

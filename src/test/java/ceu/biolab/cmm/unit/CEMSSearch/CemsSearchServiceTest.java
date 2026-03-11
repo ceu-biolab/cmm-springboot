@@ -15,6 +15,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -48,6 +49,7 @@ class CemsSearchServiceTest {
         request.setMzToleranceMode("ppm");
         request.setMzTolerance(10.0);
         request.setEffectiveMobilityTolerance(5.0);
+        request.setEffMobToleranceMode("percentage");
         request.setTemperature(20d);
         return request;
     }
@@ -92,6 +94,15 @@ class CemsSearchServiceTest {
         request.setTemperature(null);
 
         assertThrows(ResponseStatusException.class, () -> service.search(request));
+    }
+
+    @Test
+    void searchRejectsNeutralIonizationMode() {
+        CemsSearchRequestDTO request = baseRequest();
+        request.setIonizationMode("neutral");
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(request));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     }
 
     @Test
@@ -174,5 +185,37 @@ class CemsSearchServiceTest {
 
         assertEquals(1500.0 - 25.0, query.getMobilityLower(), 1e-9);
         assertEquals(1500.0 + 25.0, query.getMobilityUpper(), 1e-9);
+    }
+
+    @Test
+    void searchSkipsCandidatesWithMissingChargeFields() throws Exception {
+        CemsSearchRequestDTO request = baseRequest();
+
+        CemsQueryResponseDTO malformed = candidate(10, "C3H6O3", 90.0, 1500.0);
+        malformed.setChargeType(null);
+        CemsQueryResponseDTO valid = candidate(11, "C4H8O4", 120.0, 1500.0);
+
+        when(repository.findMatchingCompounds(any(CemsFeatureQueryDTO.class)))
+                .thenReturn(List.of(malformed, valid));
+
+        CemsSearchResponseDTO response = service.search(request);
+        List<CeAnnotationDTO> annotations = response.getCeFeatures()
+                .get(0)
+                .getAnnotationsByAdducts()
+                .get(0)
+                .getAnnotations();
+
+        assertEquals(1, annotations.size());
+        assertEquals(11, annotations.get(0).getCompound().getCompoundId());
+    }
+
+    @Test
+    void searchRejectsMzToleranceAbove100() {
+        CemsSearchRequestDTO request = baseRequest();
+        request.setMzToleranceMode("ppm");
+        request.setMzTolerance(101.0);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(request));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchResponseDTO;
@@ -19,8 +20,8 @@ public class CemsSearchController {
         this.service = service;
     }
 
-    @PostMapping("/CEMSSearch")
-    public CemsSearchResponseDTO search(@RequestBody CemsSearchRequestDTO request) {
+    @PostMapping({"/cems-search", "/CEMSSearch"})
+    public CemsSearchResponseDTO search(@Valid @RequestBody CemsSearchRequestDTO request) {
         return service.search(request);
     }
 }

@@ -41,15 +41,15 @@ public class CompoundMapper {
                 rs.getInt("charge_type"),
                 rs.getInt("charge_number"),
                 compoundType,
-                rs.getDouble("logP"),
-                rs.getDouble("rt_pred"),
+                getNullableDouble(rs, "logP"),
+                getNullableDouble(rs, "rt_pred"),
                 rs.getString("inchi"),
                 rs.getString("inchi_key"),
                 rs.getString("smiles"),
                 rs.getString("lipid_type"),
-                rs.getInt("num_chains"),
-                rs.getInt("number_carbons"),
-                rs.getInt("double_bonds"),
+                getNullableInteger(rs, "num_chains"),
+                getNullableInteger(rs, "number_carbons"),
+                getNullableInteger(rs, "double_bonds"),
                 rs.getString("category"),
                 rs.getString("main_class"),
                 rs.getString("sub_class"),
@@ -61,14 +61,14 @@ public class CompoundMapper {
                 rs.getString("lm_id"),
                 rs.getString("hmdb_id"),
                 rs.getString("agilent_id"),
-                rs.getInt("pc_id"),
-                rs.getInt("chebi_id"),
+                getNullableInteger(rs, "pc_id"),
+                getNullableInteger(rs, "chebi_id"),
                 rs.getString("in_house_id"),
-                rs.getInt("aspergillus_id"),
+                getNullableInteger(rs, "aspergillus_id"),
                 rs.getString("knapsack_id"),
-                rs.getInt("npatlas_id"),
-                rs.getInt("fahfa_id"),
-                rs.getInt("oh_position"),
+                getNullableInteger(rs, "npatlas_id"),
+                getNullableInteger(rs, "fahfa_id"),
+                getNullableInteger(rs, "oh_position"),
                 rs.getString("aspergillus_web_name"),
                 rs.getString("mol2"),
                 pathways
@@ -113,5 +113,27 @@ public class CompoundMapper {
             compound.setFormulaType(FormulaType.inferFromFormula(compound.getFormula()).orElse(null));
         }
         return compound;
+    }
+
+    private static Integer getNullableInteger(ResultSet rs, String column) throws SQLException {
+        Object value = rs.getObject(column);
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number number) {
+            return number.intValue();
+        }
+        return Integer.valueOf(value.toString());
+    }
+
+    private static Double getNullableDouble(ResultSet rs, String column) throws SQLException {
+        Object value = rs.getObject(column);
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number number) {
+            return number.doubleValue();
+        }
+        return Double.valueOf(value.toString());
     }
 }

@@ -74,11 +74,31 @@ public class MSMSSearchServiceTest {
     }
 
     @Test
+    void search_throwsWhenIonModeNeutral() {
+        MSMSSearchRequestDTO req = validRequest();
+        req.setIonizationMode(IonizationMode.NEUTRAL);
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
     void search_throwsWhenCIDEnergyNull() {
         MSMSSearchRequestDTO req = validRequest();
         req.setCIDEnergy(null);
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
+    void search_acceptsMissingFragmentPrecursorMz() throws Exception {
+        MSMSSearchResponseDTO expected = new MSMSSearchResponseDTO();
+        when(repository.findMatchingCompoundsAndSpectra(any())).thenReturn(expected);
+
+        MSMSSearchRequestDTO req = validRequest();
+        req.getFragmentsMZsIntensities().setPrecursorMz(null);
+
+        MSMSSearchResponseDTO resp = service.search(req);
+        assertSame(expected, resp);
     }
 
     @Test
@@ -88,5 +108,25 @@ public class MSMSSearchServiceTest {
 
         MSMSSearchResponseDTO resp = service.search(validRequest());
         assertSame(expected, resp);
+    }
+
+    @Test
+    void search_throwsWhenPrecursorToleranceExceedsMaxForPpm() {
+        MSMSSearchRequestDTO req = validRequest();
+        req.setToleranceModePrecursorIon(MzToleranceMode.PPM);
+        req.setTolerancePrecursorIon(101.0);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
+    void search_throwsWhenFragmentToleranceExceedsMaxForMda() {
+        MSMSSearchRequestDTO req = validRequest();
+        req.setToleranceModeFragments(MzToleranceMode.MDA);
+        req.setToleranceFragments(101.0);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     }
 }

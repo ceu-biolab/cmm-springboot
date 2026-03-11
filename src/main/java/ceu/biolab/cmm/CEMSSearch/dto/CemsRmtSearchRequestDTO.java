@@ -1,6 +1,10 @@
 package ceu.biolab.cmm.CEMSSearch.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
 import ceu.biolab.cmm.CEMSSearch.domain.RmtToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
@@ -12,37 +16,50 @@ import lombok.Data;
 @Data
 public class CemsRmtSearchRequestDTO {
 
-    private List<Double> masses = new ArrayList<>();
+    @NotEmpty
+    private List<@NotNull @Positive Double> masses = new ArrayList<>();
 
+    @Positive
     private double tolerance;
 
-    private MzToleranceMode toleranceMode = MzToleranceMode.PPM;
+    @NotNull
+    private MzToleranceMode toleranceMode;
 
     @JsonProperty("rmt")
-    private List<Double> relativeMigrationTimes = new ArrayList<>();
+    @NotEmpty
+    private List<@NotNull @Positive Double> relativeMigrationTimes = new ArrayList<>();
 
     @JsonProperty("rmt_tolerance")
+    @Positive
     private double rmtTolerance;
 
-    private RmtToleranceMode rmtToleranceMode = RmtToleranceMode.PERCENTAGE;
+    @NotNull
+    private RmtToleranceMode rmtToleranceMode;
 
     @JsonProperty("buffer")
+    @NotBlank
     private String bufferCode;
 
+    @NotNull
+    @Positive
     private Double temperature;
 
-    private CePolarity polarity = CePolarity.DIRECT;
+    @NotNull
+    private CePolarity polarity;
 
     @JsonProperty("rmt_reference")
+    @NotBlank
     private String rmtReference;
 
     @JsonProperty("chemical_alphabet")
     private String chemicalAlphabet;
 
-    private IonizationMode ionMode = IonizationMode.POSITIVE;
+    @NotNull
+    private IonizationMode ionMode;
 
 
-    private List<String> adducts = new ArrayList<>();
+    @NotEmpty
+    private List<@NotBlank String> adducts = new ArrayList<>();
 
     @JsonProperty("ion_mode")
     public void setIonMode(String value) {

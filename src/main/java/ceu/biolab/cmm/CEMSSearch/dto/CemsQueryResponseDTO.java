@@ -13,6 +13,7 @@ public class CemsQueryResponseDTO {
     private Long chargeNumber;
     private String formulaType;
     private Integer compoundType;
+    private Integer formulaTypeInt;
     private Double logp;
     private Double rtPred;
     private String inchi;
@@ -25,6 +26,19 @@ public class CemsQueryResponseDTO {
     private String biologicalActivity;
     private String meshNomenclature;
     private String iupacClassification;
+    private String keggId;
+    private String lmId;
+    private String hmdbId;
+    private String agilentId;
+    private Integer pcId;
+    private Integer chebiId;
+    private String inHouseId;
+    private Integer aspergillusId;
+    private String knapsackId;
+    private Integer npatlasId;
+    private Integer fahfaId;
+    private Integer ohPosition;
+    private String aspergillusWebName;
     private Double experimentalMz;
     private Double experimentalEffMob;
     private Double mobility;

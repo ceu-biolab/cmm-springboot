@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -23,13 +24,13 @@ public class CemsMarkersController {
         this.cems2MarkerService = cems2MarkerService;
     }
 
-    @PostMapping("/CEMS1Marker")
-    public CemsSearchResponseDTO search(@RequestBody CemsMarkersRequestDTO request) {
+    @PostMapping({"/cems-1-marker", "/CEMS1Marker"})
+    public CemsSearchResponseDTO search(@Valid @RequestBody CemsMarkersRequestDTO request) {
         return cems1MarkerService.search(request);
     }
 
-    @PostMapping("/CEMS2Marker")
-    public CemsSearchResponseDTO searchTwoMarkers(@RequestBody CemsMarkersTwoRequestDTO request) {
+    @PostMapping({"/cems-2-marker", "/CEMS2Marker"})
+    public CemsSearchResponseDTO searchTwoMarkers(@Valid @RequestBody CemsMarkersTwoRequestDTO request) {
         return cems2MarkerService.search(request);
     }
 }

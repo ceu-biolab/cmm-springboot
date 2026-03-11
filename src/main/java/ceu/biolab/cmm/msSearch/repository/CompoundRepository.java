@@ -9,7 +9,9 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
@@ -54,6 +56,7 @@ public class CompoundRepository {
     private ResourceLoader resourceLoader;
 
     private String msSearchQueryTemplate;
+    private String compoundByIdQueryTemplate;
 
     /**
      * This method annotates the MS features
@@ -79,8 +82,18 @@ public class CompoundRepository {
         if (mz == null || tolerance == null || mzToleranceMode == null || ionizationMode == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz, tolerance, mzToleranceMode, and ionizationMode are required.");
         }
-        if (tolerance < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be non-negative.");
+        if (mz <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mz must be greater than zero.");
+        }
+        if (tolerance <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tolerance must be greater than zero.");
+        }
+        if (MzToleranceLimits.exceedsLimit(tolerance, mzToleranceMode)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("tolerance", mzToleranceMode));
+        }
+        if (ionizationMode == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
         }
         if (adductsString == null || adductsString.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided.");
@@ -150,15 +163,13 @@ public class CompoundRepository {
 
                 double monoIsotopicMassFromMZAndAdduct = AdductService.neutralMassFromMz(mz, adductDefinition);
 
-                // Calculate tolerance range based on PPM or DA
-                if (mzToleranceMode == MzToleranceMode.MDA) {
-                    lowerBound = monoIsotopicMassFromMZAndAdduct - tolerance/1000;
-                    upperBound = monoIsotopicMassFromMZAndAdduct + tolerance/1000;
-                } else { // PPM (Parts Per Million)
-                    double tolerancePPM = mz * tolerance / 1_000_000.0d;
-                    lowerBound = monoIsotopicMassFromMZAndAdduct - tolerancePPM;
-                    upperBound = monoIsotopicMassFromMZAndAdduct + tolerancePPM;
-                }
+                // Keep PPM conversion aligned with the rest of search endpoints: reference is neutral mass.
+                double delta = MzToleranceConverter.toDaltons(
+                        mzToleranceMode,
+                        tolerance,
+                        Math.abs(monoIsotopicMassFromMZAndAdduct));
+                lowerBound = monoIsotopicMassFromMZAndAdduct - delta;
+                upperBound = monoIsotopicMassFromMZAndAdduct + delta;
 
                 final CompoundType compoundTypeFinal = compoundType;
                 final double lowerBoundFinal = lowerBound;
@@ -220,6 +231,28 @@ public class CompoundRepository {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to annotate MS feature", e);
         }
         return annotatedMSFeature;
+    }
+
+    public Optional<Compound> findCompoundById(int compoundId) {
+        if (compoundId <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "compoundId must be greater than zero.");
+        }
+
+        String sql = loadCompoundByIdQueryTemplate();
+        List<Compound> compounds = jdbcTemplate.query(sql, ps -> ps.setInt(1, compoundId), (rs, _) -> {
+            CompoundDTO dto = CompoundMapper.fromResultSet(rs);
+            Compound compound = CompoundMapper.toCompound(dto);
+            normalizeLipidMapsClassification(compound);
+            return compound;
+        });
+
+        if (compounds.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Compound compound = compounds.get(0);
+        compound.setPathways(fetchPathwaysForCompound(compound.getCompoundId()));
+        return Optional.of(compound);
     }
 
     private Optional<Set<String>> resolveAllowedElements(Optional<FormulaType> formulaType) {
@@ -318,5 +351,17 @@ public class CompoundRepository {
             }
         }
         return msSearchQueryTemplate;
+    }
+
+    private String loadCompoundByIdQueryTemplate() {
+        if (compoundByIdQueryTemplate == null) {
+            Resource resource = resourceLoader.getResource("classpath:sql/msSearch/compound_by_id.sql");
+            try (InputStream is = resource.getInputStream()) {
+                compoundByIdQueryTemplate = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw new IllegalStateException("Unable to load compound by id SQL template", e);
+            }
+        }
+        return compoundByIdQueryTemplate;
     }
 }

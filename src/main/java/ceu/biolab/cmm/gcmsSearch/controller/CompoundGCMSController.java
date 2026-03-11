@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -16,11 +17,9 @@ public class CompoundGCMSController {
     @Autowired
     private GCMSSearchService compoundGCMSService;
 
-    @PostMapping("/gcms")
-    public GCMSSearchResponseDTO getCompoundsByRITolerance(@RequestBody GCMSSearchRequestDTO request) {
+    @PostMapping({"/gcms-search", "/gcms"})
+    public GCMSSearchResponseDTO getCompoundsByRITolerance(@Valid @RequestBody GCMSSearchRequestDTO request) {
 
         return compoundGCMSService.search(request);
     }
 }
-
-

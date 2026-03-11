@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = {"http://localhost:3000", "https://localhost:3000"}) // Allow frontend requests
 public class BatchAdvancedSearchController {
     private final BatchAdvancedSearchService batchAdvancedSearchService;
 
@@ -20,7 +19,7 @@ public class BatchAdvancedSearchController {
         this.batchAdvancedSearchService = batchAdvancedSearchService;
     }
 
-    @PostMapping("/batch-advanced-search")
+    @PostMapping({"/lcms-search", "/batch-advanced-search"})
     public ResponseEntity<List<AnnotatedFeature>> scoreAnnotatedMSFeature(@Valid @RequestBody BatchAdvancedSearchRequestDTO request) {
         List<AnnotatedFeature> annotatedScoredFeatures = batchAdvancedSearchService.annotateAndScoreCmpoundsByMz(request);
         return ResponseEntity.ok(annotatedScoredFeatures);

@@ -8,6 +8,8 @@ import org.springframework.web.server.ResponseStatusException;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.MSMSSearch.repository.MSMSSearchRepository;
+import ceu.biolab.cmm.shared.domain.IonizationMode;
+import ceu.biolab.cmm.shared.validation.MzToleranceLimits;
 
 @Service
 public class MSMSSearchService {
@@ -20,7 +22,7 @@ public class MSMSSearchService {
 
     public MSMSSearchResponseDTO search(MSMSSearchRequestDTO request) {
         // Validaciones básicas
-        if (request.getPrecursorIonMZ() == 0) {
+        if (request.getPrecursorIonMZ() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Precursor m/z is required.");
         }
 
@@ -31,9 +33,35 @@ public class MSMSSearchService {
         if (request.getIonizationMode() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ionization mode is required.");
         }
+        if (request.getIonizationMode() == IonizationMode.NEUTRAL) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neutral ionization mode is not supported.");
+        }
 
         if (request.getCIDEnergy() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CID energy is required.");
+        }
+        if (request.getScoreType() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Score type is required.");
+        }
+        if (request.getTolerancePrecursorIon() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Precursor tolerance must be greater than zero.");
+        }
+        if (request.getToleranceFragments() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fragment tolerance must be greater than zero.");
+        }
+        if (request.getToleranceModePrecursorIon() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Precursor tolerance mode is required.");
+        }
+        if (request.getToleranceModeFragments() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fragment tolerance mode is required.");
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getTolerancePrecursorIon(), request.getToleranceModePrecursorIon())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("tolerancePrecursorIon", request.getToleranceModePrecursorIon()));
+        }
+        if (MzToleranceLimits.exceedsLimit(request.getToleranceFragments(), request.getToleranceModeFragments())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    MzToleranceLimits.violationMessage("toleranceFragments", request.getToleranceModeFragments()));
         }
 
         if (request.getFragmentsMZsIntensities() == null

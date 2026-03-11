@@ -17,6 +17,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -125,5 +126,48 @@ class CemsRmtSearchServiceTest {
         request.setBufferCode(" ");
 
         assertThrows(ResponseStatusException.class, () -> service.search(request));
+    }
+
+    @Test
+    void searchRejectsNeutralIonizationMode() {
+        CemsRmtSearchRequestDTO request = baseRequest();
+        request.setIonMode("neutral");
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(request));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
+    void searchSkipsCandidatesWithMissingChargeFields() throws Exception {
+        CemsRmtSearchRequestDTO request = baseRequest();
+        when(repository.findReferenceCompoundId(request.getRmtReference()))
+                .thenReturn(OptionalLong.of(180838));
+
+        CemsQueryResponseDTO malformed = candidate(10, 291.0, 0.85);
+        malformed.setChargeNumber(null);
+        CemsQueryResponseDTO valid = candidate(11, 292.0, 0.85);
+
+        when(repository.findMatchingCompounds(any(CemsRmtFeatureQueryDTO.class)))
+                .thenReturn(List.of(malformed, valid));
+
+        CemsSearchResponseDTO response = service.search(request);
+        List<CeAnnotationDTO> annotations = response.getCeFeatures()
+                .get(0)
+                .getAnnotationsByAdducts()
+                .get(0)
+                .getAnnotations();
+
+        assertEquals(1, annotations.size());
+        assertEquals(11, annotations.get(0).getCompound().getCompoundId());
+    }
+
+    @Test
+    void searchRejectsMzToleranceAbove100() {
+        CemsRmtSearchRequestDTO request = baseRequest();
+        request.setToleranceMode("mda");
+        request.setTolerance(101.0);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(request));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     }
 }

@@ -11,7 +11,7 @@ SELECT cv.compound_id,
        cv.mass,
        cv.formula,
        cv.logp AS logP,
-       cv.cas_id,
+       c.cas_id,
        cv.charge_type,
        cv.charge_number,
        cv.compound_type,
@@ -41,6 +41,8 @@ INNER JOIN gc_column as col
 	ON rirt.gc_column_id = col.gc_column_id
 INNER JOIN compounds_view as cv
 	ON rirt.compound_id = cv.compound_id
+INNER JOIN compounds as c
+	ON cv.compound_id = c.compound_id
 INNER JOIN gcms_spectrum as s
 	ON rirt.compound_id = s.compound_id
 WHERE rirt.RI BETWEEN :RILower AND :RIUpper

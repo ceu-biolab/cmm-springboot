@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,5 +65,23 @@ public class AdductServiceTest {
         assertEquals(2, filtered.size());
         assertTrue(filtered.containsKey(100.0));
         assertTrue(filtered.containsKey(105.0));
+    }
+
+    @Test
+    void sortByPriorityPlacesMostCommonAdductsFirst() {
+        Set<AdductDefinition> positive = Set.of(
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+Na]+"),
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+H]+"),
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+K]+")
+        );
+        List<AdductDefinition> sortedPositive = AdductService.sortByPriority(positive, IonizationMode.POSITIVE);
+        assertEquals("[M+H]+", sortedPositive.get(0).canonical());
+
+        Set<AdductDefinition> negative = Set.of(
+                AdductService.requireDefinition(IonizationMode.NEGATIVE, "[M+Cl]-"),
+                AdductService.requireDefinition(IonizationMode.NEGATIVE, "[M-H]-")
+        );
+        List<AdductDefinition> sortedNegative = AdductService.sortByPriority(negative, IonizationMode.NEGATIVE);
+        assertEquals("[M-H]-", sortedNegative.get(0).canonical());
     }
 }

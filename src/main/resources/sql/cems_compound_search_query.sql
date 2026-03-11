@@ -1,6 +1,6 @@
 SELECT
   cv.compound_id AS compound_id,
-  cv.cas_id AS cas_id,
+  c.cas_id AS cas_id,
   cv.compound_name AS compound_name,
   cv.formula AS formula,
   cv.mass AS mass,
@@ -19,6 +19,20 @@ SELECT
   cv.biological_activity AS biological_activity,
   cv.mesh_nomenclature AS mesh_nomenclature,
   cv.iupac_classification AS iupac_classification,
+  cv.kegg_id AS kegg_id,
+  cv.lm_id AS lm_id,
+  cv.hmdb_id AS hmdb_id,
+  cv.agilent_id AS agilent_id,
+  cv.pc_id AS pc_id,
+  cv.chebi_id AS chebi_id,
+  cv.in_house_id AS in_house_id,
+  cv.aspergillus_id AS aspergillus_id,
+  cv.knapsack_id AS knapsack_id,
+  cv.npatlas_id AS npatlas_id,
+  cv.fahfa_id AS fahfa_id,
+  cv.oh_position AS oh_position,
+  cv.aspergillus_web_name AS aspergillus_web_name,
+  cv.formula_type_int AS formula_type_int,
   meta.experimental_mz AS experimental_mz,
   meta.exp_eff_mob AS experimental_eff_mob,
   em.eff_mobility AS mobility,
@@ -40,6 +54,8 @@ JOIN ce_buffer_type bt
   ON props.buffer = bt.buffer_id
 JOIN compounds_view cv
   ON meta.compound_id = cv.compound_id
+JOIN compounds c
+  ON c.compound_id = cv.compound_id
 WHERE
   bt.buffer_code = :bufferCode
   AND props.polarity = :polarityId

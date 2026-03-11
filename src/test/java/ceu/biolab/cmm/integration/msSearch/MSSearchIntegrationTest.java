@@ -17,7 +17,9 @@ import java.nio.charset.StandardCharsets;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -58,5 +60,45 @@ public class MSSearchIntegrationTest {
                 .andReturn();
         String actual = result.getResponse().getContentAsString();
         JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.STRICT);
+    }
+
+    @Test
+    void testMSSearchSimpleRejectsToleranceAbove100() throws Exception {
+        String requestJson = """
+                {
+                  "mz": 757.5667,
+                  "mzToleranceMode": "PPM",
+                  "tolerance": 101,
+                  "ionizationMode": "POSITIVE",
+                  "adductsString": ["[M+H]+"],
+                  "databases": ["ALL"],
+                  "metaboliteType": "ALL"
+                }
+                """;
+
+        mockMvc.perform(post("/api/compounds/simple-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testGetCompoundByIdEndpoint() throws Exception {
+        mockMvc.perform(get("/api/compounds/33"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.compoundId").value(33))
+                .andExpect(jsonPath("$.compoundName").value("Ochtodane skeleton"));
+    }
+
+    @Test
+    void testGetCompoundByIdEndpointNotFound() throws Exception {
+        mockMvc.perform(get("/api/compounds/999999999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetCompoundByIdEndpointInvalidId() throws Exception {
+        mockMvc.perform(get("/api/compounds/0"))
+                .andExpect(status().isBadRequest());
     }
 }

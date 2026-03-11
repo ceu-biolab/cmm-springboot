@@ -93,7 +93,7 @@ public class GCMSSearchRepository {
                     .mass(rs.getDouble("mass"))
                     .formula(rs.getString("formula"))
                     .formulaType(inferredFormulaType)
-                    .logP(rs.getDouble("logP"))
+                    .logP(getNullableDouble(rs, "logP"))
                     .casId(rs.getString("cas_id"))
                     .chargeType(rs.getInt("charge_type"))
                     .chargeNumber(rs.getInt("charge_number"))
@@ -342,6 +342,17 @@ public class GCMSSearchRepository {
         try (InputStream inputStream = resource.getInputStream()) {
             return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         }
+    }
+
+    private static Double getNullableDouble(java.sql.ResultSet rs, String column) throws java.sql.SQLException {
+        Object value = rs.getObject(column);
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number number) {
+            return number.doubleValue();
+        }
+        return Double.valueOf(value.toString());
     }
 
 }

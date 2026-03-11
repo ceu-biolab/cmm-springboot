@@ -10,18 +10,20 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Positive;
 
 
 public class CompoundSimpleSearchRequestDTO {
     @NotNull
+    @Positive
     private Double mz;
     @NotNull
     private MzToleranceMode mzToleranceMode;
     @NotNull
-    @PositiveOrZero
+    @Positive
     private Double tolerance;
     @NotNull
     private IonizationMode ionizationMode;
@@ -30,30 +32,30 @@ public class CompoundSimpleSearchRequestDTO {
     @NotNull
     private Optional<FormulaType> formulaType;
     @NotEmpty
-    private Set<String> adductsString;
+    private Set<@NotBlank String> adductsString;
     @NotEmpty
-    private Set<Database> databases;
+    private Set<@NotNull Database> databases;
     @NotNull
     private MetaboliteType metaboliteType;
 
     public CompoundSimpleSearchRequestDTO() {
         this.mz = 0.0;
-        this.mzToleranceMode = MzToleranceMode.PPM;
+        this.mzToleranceMode = null;
         this.tolerance = 0.0;
-        this.ionizationMode = IonizationMode.POSITIVE;
+        this.ionizationMode = null;
         this.detectedAdduct = Optional.empty();
         this.formulaType = Optional.empty();
         this.adductsString = new LinkedHashSet<>();
         this.databases = new LinkedHashSet<>();
-        this.metaboliteType = MetaboliteType.ALL;
+        this.metaboliteType = null;
     }
 
     public CompoundSimpleSearchRequestDTO(Double mz, MzToleranceMode mzToleranceMode, Double tolerance, IonizationMode ionizationMode,
                                           Set<String> adductsString, Optional<String> detectedAdduct, Optional<FormulaType> formulaType, Set<Database> databases, MetaboliteType metaboliteType) {
         this.mz = mz;
         this.mzToleranceMode = mzToleranceMode;
-        if (tolerance < 0) {
-            throw new IllegalArgumentException("mzTolerance must be non-negative");
+        if (tolerance <= 0) {
+            throw new IllegalArgumentException("mzTolerance must be greater than zero");
         }else {
             this.tolerance = tolerance;
         }
@@ -167,4 +169,3 @@ public class CompoundSimpleSearchRequestDTO {
                 '}';
     }
 }
-

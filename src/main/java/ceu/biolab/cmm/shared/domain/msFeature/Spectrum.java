@@ -2,6 +2,7 @@ package ceu.biolab.cmm.shared.domain.msFeature;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 @Data
 @SuperBuilder
 public class Spectrum {
+    @Valid
     private List<Peak> spectrum; //Peak has mz & intensity
     private int spectrumId;
 

@@ -189,7 +189,7 @@ public class MsmsSearchAdapterService {
             case MEDIUM:
                 return CIDEnergy.MED;
             case ALL:
-                throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "All ionization voltages not supported in this adapter");
+                return CIDEnergy.ALL;
             default:
                 return CIDEnergy.MED;
         }

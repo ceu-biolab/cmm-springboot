@@ -13,6 +13,7 @@ import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.msFeature.MSPeak;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.shared.service.SpectrumScorer;
+import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,14 +69,10 @@ public class MSMSSearchRepository {
 
             // Compute neutral mass and tolerance window
             double neutralMass = AdductService.neutralMassFromMz(queryData.getPrecursorIonMZ(), adductDefinition);
-            double delta;
-            if (queryData.getToleranceModePrecursorIon() == MzToleranceMode.PPM) {
-                // ppm to Da at neutral mass
-                delta = neutralMass * (queryData.getTolerancePrecursorIon() / 1_000_000.0);
-            } else {
-                // mDa to Da
-                delta = queryData.getTolerancePrecursorIon() / 1000.0;
-            }
+            double delta = MzToleranceConverter.toDaltons(
+                    queryData.getToleranceModePrecursorIon(),
+                    queryData.getTolerancePrecursorIon(),
+                    neutralMass);
             double lowerBound = neutralMass - delta ;
             double upperBound = neutralMass + delta ;
 
@@ -113,7 +110,7 @@ public class MSMSSearchRepository {
 
         matchedSpectra = selectBestPerCompound(new ArrayList<>(matchedSpectra));
         responseDTO.setMsmsList(new ArrayList<>(matchedSpectra));
-        responseDTO.setExperimentalSpectrum(copySpectrum(queryData.getFragmentsMZsIntensities()));
+        responseDTO.setExperimentalSpectrum(copySpectrum(querySpectrum));
         return responseDTO;
     }
 
@@ -141,8 +138,11 @@ public class MSMSSearchRepository {
             case NEGATIVE -> 2;
             case NEUTRAL  -> 3;
         };
+        String voltageFilterClause = voltage == CIDEnergy.ALL
+                ? ""
+                : "AND voltage_level = '" + voltage + "'";
         sql = sql.replace("(:ionization_mode)", String.valueOf(mode))
-                .replace("(:voltage_level)", voltage.toString());
+                .replace("(:voltage_filter_clause)", voltageFilterClause);
 
         Set<MSMSAnnotation> msmsSet = new HashSet<>();
         jdbcTemplate.query(sql, (rs, _) -> {
@@ -201,7 +201,7 @@ public class MSMSSearchRepository {
         Set<MSMSAnnotation> matched = new HashSet<>();
         for (MSMSAnnotation lib : libraryMsms) {
             Double libPrecursor = lib.getSpectrum() != null ? lib.getSpectrum().getPrecursorMz() : null;
-            Double queryPrecursor = queryMsms.getFragmentsMZsIntensities() != null ? queryMsms.getFragmentsMZsIntensities().getPrecursorMz() : null;
+            Double queryPrecursor = queryMsms.getPrecursorIonMZ();
             double score = comparator.compute(scoreType,
                     lib.getSpectrum().getPeaks(),
                     queryMsms.getFragmentsMZsIntensities().getPeaks(),

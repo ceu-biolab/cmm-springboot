@@ -4,6 +4,7 @@ import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.CcsToleranceMode;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CcsSearchRequestDTO {
     @NotEmpty
-    private List<Double> mzValues = new ArrayList<>();
+    private List<@NotNull @Positive Double> mzValues = new ArrayList<>();
 
     @Positive
     private double mzTolerance;
@@ -26,7 +27,7 @@ public class CcsSearchRequestDTO {
     private MzToleranceMode mzToleranceMode;
 
     @NotEmpty
-    private List<Double> ccsValues = new ArrayList<>();
+    private List<@NotNull @Positive Double> ccsValues = new ArrayList<>();
 
     @Positive
     private double ccsTolerance;
@@ -41,7 +42,7 @@ public class CcsSearchRequestDTO {
     private BufferGas bufferGas;
 
     @NotEmpty
-    private List<String> adducts = new ArrayList<>();
+    private List<@NotBlank String> adducts = new ArrayList<>();
 
     public CcsSearchRequestDTO(List<Double> mzValues,
                                double mzTolerance,

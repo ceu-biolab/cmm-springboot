@@ -1,6 +1,10 @@
 package ceu.biolab.cmm.CEMSMarkers.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -12,43 +16,59 @@ import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 @Data
 public class CemsMarkersRequestDTO {
 
-    private List<Double> masses = new ArrayList<>();
+    @NotEmpty
+    private List<@NotNull @Positive Double> masses = new ArrayList<>();
 
+    @Positive
     private double tolerance;
 
-    private MzToleranceMode toleranceMode = MzToleranceMode.PPM;
+    @NotNull
+    private MzToleranceMode toleranceMode;
 
     @JsonProperty("mt")
-    private List<Double> migrationTimes = new ArrayList<>();
+    @NotEmpty
+    private List<@NotNull @Positive Double> migrationTimes = new ArrayList<>();
 
     @JsonProperty("mt_tolerance")
+    @Positive
     private double migrationTimeTolerance;
 
-    private MtToleranceMode mtToleranceMode = MtToleranceMode.PERCENTAGE;
+    @NotNull
+    private MtToleranceMode mtToleranceMode;
 
+    @NotBlank
     private String buffer;
 
+    @NotNull
+    @Positive
     private Double temperature;
 
-    private CePolarity polarity = CePolarity.DIRECT;
+    @NotNull
+    private CePolarity polarity;
 
+    @NotBlank
     private String marker;
 
     @JsonProperty("marker_time")
+    @Positive
     private double markerTime;
 
     @JsonProperty("capillary_length")
+    @Positive
     private double capillaryLength;
 
     @JsonProperty("capillary_voltage")
+    @Positive
     private double capillaryVoltage;
 
     @JsonProperty("chemical_alphabet")
     private String chemicalAlphabet;
 
-    private IonizationMode ionMode = IonizationMode.POSITIVE;
+    @NotNull
+    private IonizationMode ionMode;
 
-    private List<String> adducts = new ArrayList<>();
+    @NotEmpty
+    private List<@NotBlank String> adducts = new ArrayList<>();
 
     @JsonProperty("tolerance_mode")
     public void setToleranceMode(String value) {
