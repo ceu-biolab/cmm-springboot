@@ -106,6 +106,8 @@ public class CcsSearchIntegrationTest {
         assertFalse(scores.isEmpty());
         JsonNode firstScore = scores.get(0);
         assertTrue(firstScore.isObject());
+        assertTrue(firstScore.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
+        assertTrue(firstScore.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
     }
 
     @Test
@@ -141,8 +143,10 @@ public class CcsSearchIntegrationTest {
                         continue;
                     }
                     JsonNode score = scores.get(0);
-                    JsonNode rtScoreMap = score.path("rtScoreMap");
-                    if (rtScoreMap.isObject() && rtScoreMap.size() > 0) {
+                    assertTrue(score.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
+                    assertTrue(score.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
+                    JsonNode rtScore = score.path("rtScore");
+                    if (rtScore.isNumber()) {
                         foundRetentionScore = true;
                         break;
                     }
@@ -192,10 +196,12 @@ public class CcsSearchIntegrationTest {
                         continue;
                     }
                     for (JsonNode score : scores) {
-                        JsonNode rtScoreMap = score.path("rtScoreMap");
+                        assertTrue(score.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
+                        assertTrue(score.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
+                        JsonNode rtScore = score.path("rtScore");
                         JsonNode ionizationScore = score.path("ionizationScore");
                         JsonNode adductRelationScore = score.path("adductRelationScore");
-                        if (rtScoreMap.isObject() && rtScoreMap.size() > 0
+                        if (rtScore.isNumber()
                                 && !ionizationScore.isNull()
                                 && !adductRelationScore.isNull()) {
                             foundScoreWithRetentionAdductAndIonization = true;

@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -92,18 +91,17 @@ class ScoreAnnotationsIntegrationTest {
         assertEquals(2, root.size());
 
         JsonNode fasterFeatureScores = root.get(0).path("annotationsByAdducts").get(0).path("annotations").get(0).path("scores").get(0);
-        assertTrue(fasterFeatureScores.path("rtScoreMap").isObject());
-        JsonNode rtScoresAgainstSlower = fasterFeatureScores.path("rtScoreMap").path("820.17.0");
-        assertNotNull(rtScoresAgainstSlower, "Expected retention-time comparison recorded against the slower feature");
-        assertTrue(rtScoresAgainstSlower.isArray());
-        assertEquals(1, rtScoresAgainstSlower.size());
-        assertFalse(rtScoresAgainstSlower.get(0).asBoolean(), "Higher double bonds should not have a higher retention time");
+        assertTrue(fasterFeatureScores.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
+        assertTrue(fasterFeatureScores.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
+        JsonNode fasterRtScore = fasterFeatureScores.path("rtScore");
+        assertTrue(fasterRtScore.isNumber());
+        assertEquals(0.05, fasterRtScore.asDouble(), 1e-9, "All-false RT evidence should floor to the mediator minimum");
 
         JsonNode slowerFeatureScores = root.get(1).path("annotationsByAdducts").get(0).path("annotations").get(0).path("scores").get(0);
-        JsonNode rtScoresAgainstFaster = slowerFeatureScores.path("rtScoreMap").path("820.15.0");
-        assertNotNull(rtScoresAgainstFaster, "Expected retention-time comparison recorded against the faster feature");
-        assertTrue(rtScoresAgainstFaster.isArray());
-        assertEquals(1, rtScoresAgainstFaster.size());
-        assertFalse(rtScoresAgainstFaster.get(0).asBoolean(), "Fewer double bonds should not have a lower retention time than their unsaturated pair");
+        assertTrue(slowerFeatureScores.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
+        assertTrue(slowerFeatureScores.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
+        JsonNode slowerRtScore = slowerFeatureScores.path("rtScore");
+        assertTrue(slowerRtScore.isNumber());
+        assertEquals(0.05, slowerRtScore.asDouble(), 1e-9, "All-false RT evidence should floor to the mediator minimum");
     }
 }

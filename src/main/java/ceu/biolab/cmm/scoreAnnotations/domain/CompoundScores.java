@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.scoreAnnotations.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,9 @@ import lombok.Data;
  */
 @Data
 public class CompoundScores implements IScore {
+    private static final double MIN_RETENTION_TIME_SCORE = 0.05d;
+
+    @JsonIgnore
     private Map<String, List<Boolean>> rtScoreMap;
     private Optional<Double> ionizationScore;
     private Optional<Double> adductRelationScore;
@@ -30,6 +35,7 @@ public class CompoundScores implements IScore {
         return String.valueOf(featureMzValue) + String.valueOf(featureRtValue);
     }
 
+    @JsonIgnore
     public Map<String, String> getScores() {
         Map<String, String> scores = new HashMap<>();
         scores.put("ionization", ionizationScore.isPresent() ? ionizationScore.get().toString() : "");
@@ -47,6 +53,38 @@ public class CompoundScores implements IScore {
 
     public void addRtScore(boolean value, double featureRtValue, double featureMzValue) {
         addRtScore(value, calculateFeatureKey(featureMzValue, featureRtValue));
+    }
+
+    public void calculateRtScore() {
+        if (rtScoreMap == null || rtScoreMap.isEmpty()) {
+            rtScore = Optional.empty();
+            return;
+        }
+
+        double accumulatedRtScore = 0.0d;
+
+        for (List<Boolean> relativeScores : rtScoreMap.values()) {
+            if (relativeScores == null || relativeScores.isEmpty()) {
+                continue;
+            }
+
+            int positives = 0;
+            for (Boolean relativeScore : relativeScores) {
+                if (Boolean.TRUE.equals(relativeScore)) {
+                    positives++;
+                }
+            }
+
+            // Mediator used integer division here, so any mixed comparison list collapsed to 0.
+            accumulatedRtScore += positives / relativeScores.size();
+        }
+
+        double calculatedRtScore = accumulatedRtScore / rtScoreMap.size();
+        if (calculatedRtScore < MIN_RETENTION_TIME_SCORE && calculatedRtScore >= 0.0d) {
+            calculatedRtScore = MIN_RETENTION_TIME_SCORE;
+        }
+
+        rtScore = Optional.of(calculatedRtScore);
     }
 
     public void setAdductRelationScore(double value) {
@@ -89,4 +127,3 @@ public class CompoundScores implements IScore {
         return getRtScoresComparedTo(calculateFeatureKey(featureMzValue, featureRtValue));
     }
 }
-

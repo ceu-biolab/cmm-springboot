@@ -99,6 +99,8 @@ public class ScoreAnnotationsServiceTest {
         assertTrue(pc36_4_compared.isPresent(), "PC 36:4 should have scores compared to PC 36:2");
         assertEquals(1, pc36_4_compared.get().size(), "PC 36:4 should have one score");
         assertTrue(pc36_4_compared.get().get(0), "PC 36:4 should have a true score against PC 36:2");
+        assertTrue(pc36_4_lipidScores.getRtScore().isPresent(), "PC 36:4 should have a scalar RT score");
+        assertEquals(1.0, pc36_4_lipidScores.getRtScore().get(), 1e-9, "A single passing RT comparison should produce an RT score of 1.0");
         
         // Check PC 36:2 (rt=6) is scored correctly - should have higher RT than PC 36:4 (rt=5)
         // Therefore should also have one true score against the rt=5 feature (rule 2)
@@ -111,6 +113,8 @@ public class ScoreAnnotationsServiceTest {
         assertTrue(pc36_2_compared.isPresent(), "PC 36:2 should have scores compared to PC 36:4");
         assertEquals(1, pc36_2_compared.get().size(), "PC 36:2 should have one score");
         assertTrue(pc36_2_compared.get().get(0), "PC 36:2 should have a true score against PC 36:4");
+        assertTrue(pc36_2_lipidScores.getRtScore().isPresent(), "PC 36:2 should have a scalar RT score");
+        assertEquals(1.0, pc36_2_lipidScores.getRtScore().get(), 1e-9, "A single passing RT comparison should produce an RT score of 1.0");
     }
 
     @Test
@@ -163,36 +167,47 @@ public class ScoreAnnotationsServiceTest {
         assertTrue(pc36_1.isPresent(), "Should find PC 36:1");
         LipidScores pc36_1_scores = (LipidScores) pc36_1.get().getScores().get(0);
         verifyScores(pc36_1_scores, expectedScoresF1_36_1);
+        assertTrue(pc36_1_scores.getRtScore().isPresent(), "PC 36:1 should have a scalar RT score");
+        assertEquals(1.0 / 3.0, pc36_1_scores.getRtScore().get(), 1e-9, "Mixed RT evidence should use mediator integer division before averaging");
         
         // Verify PC 36:2 scores
         Optional<Annotation> pc36_2 = findLipidAnnotation(features, "PC", 36, 2, 800.5, 7.0);
         assertTrue(pc36_2.isPresent(), "Should find PC 36:2");
         LipidScores pc36_2_scores = (LipidScores) pc36_2.get().getScores().get(0);
         verifyScores(pc36_2_scores, expectedScoresF1_36_2);
+        assertTrue(pc36_2_scores.getRtScore().isPresent(), "PC 36:2 should have a scalar RT score");
+        assertEquals(1.0 / 3.0, pc36_2_scores.getRtScore().get(), 1e-9, "Mixed RT evidence should use mediator integer division before averaging");
         
         // Verify PC 36:3 scores
         Optional<Annotation> pc36_3 = findLipidAnnotation(features, "PC", 36, 3, 804.5, 5.0);
         assertTrue(pc36_3.isPresent(), "Should find PC 36:3");
         LipidScores pc36_3_scores = (LipidScores) pc36_3.get().getScores().get(0);
         verifyScores(pc36_3_scores, expectedScoresF2_36_3);
+        assertTrue(pc36_3_scores.getRtScore().isPresent(), "PC 36:3 should have a scalar RT score");
+        assertEquals(0.5, pc36_3_scores.getRtScore().get(), 1e-9, "One full RT match out of two compared features should score 0.5");
         
         // Verify PE 36:5 scores
         Optional<Annotation> pe36_5 = findLipidAnnotation(features, "PE", 36, 5, 830.5, 9.0);
         assertTrue(pe36_5.isPresent(), "Should find PE 36:5");
         LipidScores pe36_5_scores = (LipidScores) pe36_5.get().getScores().get(0);
         verifyScores(pe36_5_scores, expectedScoresF3_36_5);
+        assertFalse(pe36_5_scores.getRtScore().isPresent(), "Annotations without RT comparisons should not have a scalar RT score");
         
         // Verify PC 36:0 scores
         Optional<Annotation> pc36_0 = findLipidAnnotation(features, "PC", 36, 0, 830.5, 9.0);
         assertTrue(pc36_0.isPresent(), "Should find PC 36:0");
         LipidScores pc36_0_scores = (LipidScores) pc36_0.get().getScores().get(0);
         verifyScores(pc36_0_scores, expectedScoresF3_36_0);
+        assertTrue(pc36_0_scores.getRtScore().isPresent(), "PC 36:0 should have a scalar RT score");
+        assertEquals(2.0 / 3.0, pc36_0_scores.getRtScore().get(), 1e-9, "Two fully passing compared features out of three should score two thirds");
         
         // Verify PC 36:8 scores
         Optional<Annotation> pc36_8 = findLipidAnnotation(features, "PC", 36, 8, 830.5, 9.0);
         assertTrue(pc36_8.isPresent(), "Should find PC 36:8");
         LipidScores pc36_8_scores = (LipidScores) pc36_8.get().getScores().get(0);
         verifyScores(pc36_8_scores, expectedScoresF3_36_8);
+        assertTrue(pc36_8_scores.getRtScore().isPresent(), "PC 36:8 should have a scalar RT score");
+        assertEquals(0.05, pc36_8_scores.getRtScore().get(), 1e-9, "All-false RT evidence should floor to the mediator minimum");
     }
 
     @Test
@@ -262,6 +277,7 @@ public class ScoreAnnotationsServiceTest {
 
             assertTrue(compoundScores.getAdductRelationScore().isPresent(), "Adduct relation score should be set");
             assertEquals(1.0, compoundScores.getAdductRelationScore().get(), 1e-6);
+            assertFalse(compoundScores.getRtScore().isPresent(), "No RT comparisons were evaluated for this test");
         }
     }
 
@@ -319,7 +335,8 @@ public class ScoreAnnotationsServiceTest {
         
         // Verify RT score if expected value provided
         if (expectedRtScore.isPresent()) {
-            assertEquals(expectedRtScore, lipidScores.getRtScore(), 
+            assertTrue(lipidScores.getRtScore().isPresent(), "RT score should be present");
+            assertEquals(expectedRtScore.get(), lipidScores.getRtScore().get(), 1e-9,
                     "RT score should match expected value");
         }
     }

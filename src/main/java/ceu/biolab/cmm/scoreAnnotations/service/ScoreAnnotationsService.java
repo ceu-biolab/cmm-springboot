@@ -102,6 +102,7 @@ public class ScoreAnnotationsService {
             kieSession.insert(experimentParameters.orElseGet(ExperimentParameters::empty));
 
             kieSession.fireAllRules();
+            finalizeScores(msFeatures);
         } catch (ResponseStatusException ex) {
             LOGGER.error("Scoring failed: {}", ex.getReason(), ex);
             throw ex;
@@ -111,6 +112,20 @@ public class ScoreAnnotationsService {
         } finally {
             if (kieSession != null) {
                 kieSession.dispose();
+            }
+        }
+    }
+
+    private static void finalizeScores(List<AnnotatedFeature> msFeatures) {
+        for (AnnotatedFeature msFeature : msFeatures) {
+            for (AnnotationsByAdduct annotationsByAdduct : msFeature.getAnnotationsByAdducts()) {
+                for (Annotation annotation : annotationsByAdduct.getAnnotations()) {
+                    for (var score : annotation.getScores()) {
+                        if (score instanceof CompoundScores compoundScores) {
+                            compoundScores.calculateRtScore();
+                        }
+                    }
+                }
             }
         }
     }
