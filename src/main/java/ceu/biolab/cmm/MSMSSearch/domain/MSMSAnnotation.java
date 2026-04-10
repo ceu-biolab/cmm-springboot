@@ -8,6 +8,7 @@ public class MSMSAnnotation {
     private int msmsId;
     private Compound compound;
     private String adduct;
+    private SpectrumSource spectrumSource;
     private Double deltaPpmPrecursorIon;
     private Double msmsCosineScore;
     private Double collisionEnergy;

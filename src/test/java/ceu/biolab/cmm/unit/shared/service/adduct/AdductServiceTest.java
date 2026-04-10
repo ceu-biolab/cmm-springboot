@@ -68,20 +68,34 @@ public class AdductServiceTest {
     }
 
     @Test
-    void sortByPriorityPlacesMostCommonAdductsFirst() {
+    void sortByPriorityAppliesUpdatedPositiveAndNegativeOrdering() {
         Set<AdductDefinition> positive = Set.of(
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+2H]2+"),
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[2M+H]+"),
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+H-H2O]+"),
+                AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+ACN+H]+"),
                 AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+Na]+"),
                 AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+H]+"),
                 AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+K]+")
         );
         List<AdductDefinition> sortedPositive = AdductService.sortByPriority(positive, IonizationMode.POSITIVE);
-        assertEquals("[M+H]+", sortedPositive.get(0).canonical());
+        assertEquals(
+                List.of("[M+H]+", "[M+Na]+", "[M+K]+", "[M+H-H2O]+", "[2M+H]+", "[M+ACN+H]+", "[M+2H]2+"),
+                sortedPositive.stream().map(AdductDefinition::canonical).toList()
+        );
 
         Set<AdductDefinition> negative = Set.of(
+                AdductService.requireDefinition(IonizationMode.NEGATIVE, "[M-H-H2O]-"),
+                AdductService.requireDefinition(IonizationMode.NEGATIVE, "[M-2H]2-"),
+                AdductService.requireDefinition(IonizationMode.NEGATIVE, "[2M-H]-"),
+                AdductService.requireDefinition(IonizationMode.NEGATIVE, "[M+FA-H]-"),
                 AdductService.requireDefinition(IonizationMode.NEGATIVE, "[M+Cl]-"),
                 AdductService.requireDefinition(IonizationMode.NEGATIVE, "[M-H]-")
         );
         List<AdductDefinition> sortedNegative = AdductService.sortByPriority(negative, IonizationMode.NEGATIVE);
-        assertEquals("[M-H]-", sortedNegative.get(0).canonical());
+        assertEquals(
+                List.of("[M-H]-", "[M+Cl]-", "[M-H-H2O]-", "[M-2H]2-", "[2M-H]-", "[M+FA-H]-"),
+                sortedNegative.stream().map(AdductDefinition::canonical).toList()
+        );
     }
 }

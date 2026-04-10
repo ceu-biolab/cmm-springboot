@@ -1,6 +1,7 @@
 package ceu.biolab.cmm.unit.MSMSSearch.service;
 
 import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
+import ceu.biolab.cmm.MSMSSearch.domain.SpectrumSource;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
@@ -85,6 +86,14 @@ public class MSMSSearchServiceTest {
     void search_throwsWhenCIDEnergyNull() {
         MSMSSearchRequestDTO req = validRequest();
         req.setCIDEnergy(null);
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
+    void search_throwsWhenSpectrumSourceNull() {
+        MSMSSearchRequestDTO req = validRequest();
+        req.setSpectrumSource(null);
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     }

@@ -22,5 +22,7 @@ class AdductControllerTest {
         assertTrue(response.negative().contains("[M-H]-"), "Negative adducts should include [M-H]-");
         assertEquals("[M+H]+", response.positive().get(0), "Most common positive adduct should be first");
         assertEquals("[M-H]-", response.negative().get(0), "Most common negative adduct should be first");
+        assertTrue(response.positive().indexOf("[M+H-H2O]+") < response.positive().indexOf("[M+2H]2+"));
+        assertTrue(response.negative().indexOf("[M-H-H2O]-") < response.negative().indexOf("[M+FA-H]-"));
     }
 }

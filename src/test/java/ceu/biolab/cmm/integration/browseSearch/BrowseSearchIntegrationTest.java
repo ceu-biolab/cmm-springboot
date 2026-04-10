@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.integration.browseSearch;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,10 +10,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -22,6 +29,9 @@ public class BrowseSearchIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private String loadJson(String path) throws IOException {
         Resource resource = new ClassPathResource(path);
@@ -90,4 +100,51 @@ public class BrowseSearchIntegrationTest {
                         .content(requestJson))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void testBrowseSearchFiltersByFormulaType() throws Exception {
+        String requestJson = """
+                {
+                  "compoundName": "chlor",
+                  "databases": ["ALL"],
+                  "metaboliteType": "ALL",
+                  "exactName": false,
+                  "formulaType": "CHNOPS"
+                }
+                """;
+
+        MvcResult result = mockMvc.perform(post("/api/browse-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        JsonNode compounds = objectMapper.readTree(result.getResponse().getContentAsString()).path("compoundlist");
+        org.junit.jupiter.api.Assertions.assertTrue(compounds.isArray());
+        org.junit.jupiter.api.Assertions.assertTrue(compounds.size() > 0);
+
+        boolean sawFormula = false;
+        for (JsonNode compound : compounds) {
+            String formula = compound.path("formula").asText("");
+            if (formula.isBlank()) {
+                continue;
+            }
+            sawFormula = true;
+            assertFormulaWithinAlphabet(formula, Set.of("C", "H", "N", "O", "P", "S"));
+        }
+
+        org.junit.jupiter.api.Assertions.assertTrue(sawFormula);
+    }
+
+    private void assertFormulaWithinAlphabet(String formula, Set<String> allowedElements) {
+        Matcher matcher = FORMULA_ELEMENT_PATTERN.matcher(formula);
+        while (matcher.find()) {
+            org.junit.jupiter.api.Assertions.assertTrue(
+                    allowedElements.contains(matcher.group(1)),
+                    () -> "Unexpected element " + matcher.group(1) + " in formula " + formula
+            );
+        }
+    }
+
+    private static final Pattern FORMULA_ELEMENT_PATTERN = Pattern.compile("([A-Z][a-z]?)");
 }

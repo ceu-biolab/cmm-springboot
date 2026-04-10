@@ -11,6 +11,7 @@ public enum FormulaType {
 
     private static final java.util.Map<FormulaType, java.util.Set<String>> ELEMENTS_BY_TYPE;
     private static final java.util.regex.Pattern FORMULA_ELEMENT_PATTERN = java.util.regex.Pattern.compile("([A-Z][a-z]?)");
+    private static final java.util.regex.Pattern ALPHABET_ELEMENT_PATTERN = java.util.regex.Pattern.compile("(CL|BR|[A-Z])");
 
     static {
         java.util.Map<FormulaType, java.util.Set<String>> map = new java.util.EnumMap<>(FormulaType.class);
@@ -112,6 +113,22 @@ public enum FormulaType {
         }
 
         return java.util.Optional.of(containsDeuterium ? ALLD : ALL);
+    }
+
+    public java.util.Optional<java.util.Set<String>> allowedElements() {
+        if (this == ALL || this == ALLD) {
+            return java.util.Optional.empty();
+        }
+
+        java.util.Set<String> elements = new java.util.LinkedHashSet<>();
+        java.util.regex.Matcher matcher = ALPHABET_ELEMENT_PATTERN.matcher(name());
+        while (matcher.find()) {
+            elements.add(matcher.group(1));
+        }
+        if (elements.isEmpty()) {
+            return java.util.Optional.empty();
+        }
+        return java.util.Optional.of(java.util.Collections.unmodifiableSet(elements));
     }
 
 }

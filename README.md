@@ -74,6 +74,12 @@ All endpoints live under the `/api` prefix. Most request DTOs use Jakarta Bean V
 
 When something goes wrong, services raise `ResponseStatusException`, ensuring clients receive a precise HTTP status code and message.
 
+## 🔎 Search Filters
+
+- `POST /api/compounds/simple-search`, `POST /api/compounds/batch-search`, and `POST /api/browse-search` accept an optional `formulaType` filter such as `CHNOPS` to restrict results to a chemical alphabet.
+- `POST /api/msms-search` accepts `spectrumSource` with `ALL`, `experimental`, or `predicted` to control which library spectra are searched.
+- Each `/api/msms-search` hit now includes its `spectrumSource` so clients can distinguish predicted from experimental matches.
+
 ## ✅ Validation & Error Handling
 
 - All public DTOs use Jakarta Bean Validation to guard against missing values and malformed data.

@@ -43,6 +43,9 @@ public class MSMSSearchService {
         if (request.getScoreType() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Score type is required.");
         }
+        if (request.getSpectrumSource() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Spectrum source is required.");
+        }
         if (request.getTolerancePrecursorIon() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Precursor tolerance must be greater than zero.");
         }

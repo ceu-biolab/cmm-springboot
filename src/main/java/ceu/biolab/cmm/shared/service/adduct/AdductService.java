@@ -19,8 +19,8 @@ import java.util.TreeMap;
  * Centralised adduct utilities backed exclusively by the CSV definitions.
  */
 public final class AdductService {
-    private static final Map<IonizationMode, Map<String, Integer>> PRIORITY = Map.of(
-            IonizationMode.POSITIVE, legacyPriority(
+    private static final Map<IonizationMode, Map<String, Integer>> LEGACY_PRIORITY = Map.of(
+            IonizationMode.POSITIVE, ranked(
                     "[M+H]+", "[M+Na]+", "[M+NH4]+", "[M+K]+",
                     "[M+2H]2+", "[M+H+Na]2+", "[M+H+K]2+", "[M+H+NH4]2+",
                     "[M+3H]3+", "[M+2H+Na]3+", "[M+H+2Na]3+", "[M+3Na]3+", "[M+2Na]2+",
@@ -31,11 +31,18 @@ public final class AdductService {
                     "[M+ACN+2H]2+", "[M+2ACN+2H]2+", "[M+3ACN+2H]2+", "[M+2ACN+H]+",
                     "[2M+H]+", "[2M+Na]+", "[2M+NH4]+", "[2M+K]+",
                     "[2M+ACN+H]+", "[2M+ACN+Na]+", "[2M+H-H2O]+", "[2M+2H+3H2O]+"),
-            IonizationMode.NEGATIVE, legacyPriority(
+            IonizationMode.NEGATIVE, ranked(
                     "[M-H]-", "[M+Cl]-", "[M+FA-H]-", "[M+Hac-H]-", "[M+CH3COO]-",
                     "[M+Na-2H]-", "[M+K-2H]-", "[M-H-H2O]-", "[M-H2O-H]-",
                     "[M-2H]2-", "[M-3H]3-", "[M+Br]-", "[M+TFA-H]-",
                     "[2M-H]-", "[2M+FA-H]-", "[2M+Hac-H]-", "[2M+CH3COO]-", "[3M-H]-")
+    );
+    private static final Map<IonizationMode, Map<String, Integer>> EXPLICIT_PRIORITY = Map.of(
+            IonizationMode.POSITIVE, ranked(
+                    "[M+H]+", "[M+Na]+", "[M+NH4]+", "[M+K]+",
+                    "[M+H-H2O]+", "[2M+H]+", "[M+ACN+H]+", "[M+H-2H2O]+", "[M+NH4-H2O]+"),
+            IonizationMode.NEGATIVE, ranked(
+                    "[M-H]-", "[M+Cl]-", "[M-H-H2O]-", "[M-2H]2-", "[2M-H]-")
     );
 
     private AdductService() {
@@ -120,9 +127,12 @@ public final class AdductService {
     }
 
     public static List<AdductDefinition> sortByPriority(Set<AdductDefinition> definitions, IonizationMode mode) {
-        Map<String, Integer> priorities = PRIORITY.getOrDefault(mode, Map.of());
+        Map<String, Integer> explicitPriorities = EXPLICIT_PRIORITY.getOrDefault(mode, Map.of());
+        Map<String, Integer> legacyPriorities = LEGACY_PRIORITY.getOrDefault(mode, Map.of());
         Comparator<AdductDefinition> comparator = Comparator
-                .comparingInt((AdductDefinition def) -> priorities.getOrDefault(def.canonical(), Integer.MAX_VALUE))
+                .comparingInt((AdductDefinition def) -> explicitPriorities.getOrDefault(def.canonical(), Integer.MAX_VALUE))
+                .thenComparingInt(AdductService::adductGroupPriority)
+                .thenComparingInt(def -> legacyPriorities.getOrDefault(def.canonical(), Integer.MAX_VALUE))
                 .thenComparing(AdductDefinition::canonical);
         return definitions.stream()
                 .sorted(comparator)
@@ -144,7 +154,23 @@ public final class AdductService {
         return new LinkedHashMap<>(AdductCatalog.definitionsFor(ionizationMode));
     }
 
-    private static Map<String, Integer> legacyPriority(String... canonicalOrder) {
+    private static int adductGroupPriority(AdductDefinition definition) {
+        if (definition.absoluteCharge() == 1 && definition.multimer() == 1) {
+            return 0;
+        }
+        if (definition.absoluteCharge() == 1) {
+            return 1;
+        }
+        if (definition.absoluteCharge() == 2) {
+            return 2;
+        }
+        if (definition.absoluteCharge() == 3) {
+            return 3;
+        }
+        return 4;
+    }
+
+    private static Map<String, Integer> ranked(String... canonicalOrder) {
         Map<String, Integer> priorities = new LinkedHashMap<>();
         for (int i = 0; i < canonicalOrder.length; i++) {
             priorities.put(canonicalOrder[i], i);

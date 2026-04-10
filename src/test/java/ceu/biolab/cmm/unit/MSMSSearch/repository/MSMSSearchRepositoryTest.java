@@ -2,6 +2,7 @@ package ceu.biolab.cmm.unit.MSMSSearch.repository;
 
 import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
 import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
+import ceu.biolab.cmm.MSMSSearch.domain.SpectrumSource;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.repository.MSMSSearchRepository;
@@ -158,11 +159,12 @@ public class MSMSSearchRepositoryTest {
         NamedParameterJdbcTemplate jdbcTemplate = mock(NamedParameterJdbcTemplate.class);
         ResourceLoader resourceLoader = mock(ResourceLoader.class);
         Resource sqlResource = new ByteArrayResource("""
-                SELECT msms_id, voltage AS ionization_voltage
+                SELECT msms_id, voltage AS ionization_voltage, predicted
                 FROM msms
                 WHERE compound_id = (:compound_id)
                   AND ionization_mode = (:ionization_mode)
                   (:voltage_filter_clause)
+                  (:spectrum_source_filter_clause)
                 """.getBytes(StandardCharsets.UTF_8));
 
         when(resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql")).thenReturn(sqlResource);
@@ -174,12 +176,14 @@ public class MSMSSearchRepositoryTest {
                 IonizationMode.POSITIVE,
                 CIDEnergy.ALL,
                 AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+H]+"),
-                100.0
+                100.0,
+                SpectrumSource.ALL
         );
 
         ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
         verify(jdbcTemplate).query(sqlCaptor.capture(), any(RowMapper.class));
         assertFalse(sqlCaptor.getValue().contains("voltage_level"));
+        assertFalse(sqlCaptor.getValue().contains("predicted ="));
     }
 
     @Test
@@ -187,11 +191,12 @@ public class MSMSSearchRepositoryTest {
         NamedParameterJdbcTemplate jdbcTemplate = mock(NamedParameterJdbcTemplate.class);
         ResourceLoader resourceLoader = mock(ResourceLoader.class);
         Resource sqlResource = new ByteArrayResource("""
-                SELECT msms_id, voltage AS ionization_voltage
+                SELECT msms_id, voltage AS ionization_voltage, predicted
                 FROM msms
                 WHERE compound_id = (:compound_id)
                   AND ionization_mode = (:ionization_mode)
                   (:voltage_filter_clause)
+                  (:spectrum_source_filter_clause)
                 """.getBytes(StandardCharsets.UTF_8));
 
         when(resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql")).thenReturn(sqlResource);
@@ -203,11 +208,13 @@ public class MSMSSearchRepositoryTest {
                 IonizationMode.POSITIVE,
                 CIDEnergy.MED,
                 AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+H]+"),
-                100.0
+                100.0,
+                SpectrumSource.PREDICTED
         );
 
         ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
         verify(jdbcTemplate).query(sqlCaptor.capture(), any(RowMapper.class));
         assertTrue(sqlCaptor.getValue().contains("AND voltage_level = 'med'"));
+        assertTrue(sqlCaptor.getValue().contains("AND predicted = 1"));
     }
 }

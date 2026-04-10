@@ -1,6 +1,7 @@
 package ceu.biolab.cmm.unit.MSMSSearch.dto;
 
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
+import ceu.biolab.cmm.MSMSSearch.domain.SpectrumSource;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,5 +18,6 @@ public class MSMSSearchRequestDTOTest {
         assertNull(dto.getToleranceModeFragments());
         assertNull(dto.getIonizationMode());
         assertNull(dto.getScoreType());
+        assertEquals(SpectrumSource.ALL, dto.getSpectrumSource());
     }
 }
