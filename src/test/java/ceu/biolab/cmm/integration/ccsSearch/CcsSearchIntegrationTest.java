@@ -160,6 +160,66 @@ public class CcsSearchIntegrationTest {
     }
 
     @Test
+    void testCcsSearchWithLcmsScoringProducesMeaningfulScores() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request_lcimms_score_with_meaningful_scores.json");
+
+        MvcResult result = mockMvc.perform(post("/api/lcimms-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        JsonNode root = objectMapper.readTree(result.getResponse().getContentAsString());
+        JsonNode features = root.path("imFeatures");
+        assertTrue(features.isArray());
+        assertFalse(features.isEmpty());
+
+        boolean foundScoreWithRetentionAdductAndIonization = false;
+
+        for (JsonNode feature : features) {
+            JsonNode annotationsByAdduct = feature.path("annotationsByAdducts");
+            if (!annotationsByAdduct.isArray()) {
+                continue;
+            }
+            for (JsonNode annotationsNode : annotationsByAdduct) {
+                JsonNode annotations = annotationsNode.path("annotations");
+                if (!annotations.isArray()) {
+                    continue;
+                }
+                for (JsonNode annotation : annotations) {
+                    JsonNode scores = annotation.path("scores");
+                    if (!scores.isArray() || scores.isEmpty()) {
+                        continue;
+                    }
+                    for (JsonNode score : scores) {
+                        JsonNode rtScoreMap = score.path("rtScoreMap");
+                        JsonNode ionizationScore = score.path("ionizationScore");
+                        JsonNode adductRelationScore = score.path("adductRelationScore");
+                        if (rtScoreMap.isObject() && rtScoreMap.size() > 0
+                                && !ionizationScore.isNull()
+                                && !adductRelationScore.isNull()) {
+                            foundScoreWithRetentionAdductAndIonization = true;
+                            break;
+                        }
+                    }
+                    if (foundScoreWithRetentionAdductAndIonization) {
+                        break;
+                    }
+                }
+                if (foundScoreWithRetentionAdductAndIonization) {
+                    break;
+                }
+            }
+            if (foundScoreWithRetentionAdductAndIonization) {
+                break;
+            }
+        }
+
+        assertTrue(foundScoreWithRetentionAdductAndIonization,
+                "Expected at least one annotation to carry RT, adduct-relation, and ionization scoring data");
+    }
+
+    @Test
     void testCcsSearchRejectsMzToleranceAbove100() throws Exception {
         String requestJson = loadJson("json/ccsSearch/request1.json")
                 .replace("\"mzTolerance\": 10", "\"mzTolerance\": 101");

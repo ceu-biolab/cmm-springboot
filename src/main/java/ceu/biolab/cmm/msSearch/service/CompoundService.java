@@ -40,7 +40,7 @@ public class CompoundService {
                     request.getMetaboliteType());
 
             for (AnnotatedFeature feature : results) {
-                response.addImFeature(feature);
+                response.addIMSFeature(feature);
             }
             return response;
         } catch (ResponseStatusException ex) {
