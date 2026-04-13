@@ -2,6 +2,8 @@ package ceu.biolab.cmm.integration.MSMSSearch;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,11 +18,11 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -65,6 +67,7 @@ public class MSMSSearchIntegrationTest {
     @Test
     void testMSMSSearchReturnsMultipleExperimentalIsobarMatches() throws Exception {
         String requestJson = loadJson("json/msmsSearch/request_multiple_matches.json");
+        String expectedResponse = loadJson("json/msmsSearch/response_multiple_matches.json");
 
         MvcResult result = mockMvc.perform(post("/api/msms-search")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,20 +75,20 @@ public class MSMSSearchIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        JsonNode response = objectMapper.readTree(result.getResponse().getContentAsString());
-        JsonNode msmsList = response.path("msmsList");
-        assertTrue(msmsList.isArray());
-        assertTrue(msmsList.size() > 1, "Expected the isobaric amino-acid request to return multiple matches");
-        assertEquals(9, response.path("experimentalSpectrum").path("peaks").size());
+        JsonNode expected = sortMsmsList(objectMapper.readTree(expectedResponse));
+        JsonNode actual = sortMsmsList(objectMapper.readTree(result.getResponse().getContentAsString()));
+        assertEquals(expected, actual);
+    }
 
-        Set<String> compoundNames = new HashSet<>();
-        for (JsonNode hit : msmsList) {
-            assertEquals("experimental", hit.path("spectrumSource").asText());
-            assertTrue(hit.path("msmsCosineScore").asDouble() >= 0.5);
-            compoundNames.add(hit.path("compound").path("compoundName").asText());
-        }
+    private JsonNode sortMsmsList(JsonNode response) {
+        ObjectNode sortedResponse = response.deepCopy();
+        List<JsonNode> hits = new ArrayList<>();
+        response.path("msmsList").forEach(hits::add);
+        hits.sort(Comparator.comparingInt(hit -> hit.path("msmsId").asInt()));
 
-        assertTrue(compoundNames.contains("L-Isoleucine"));
-        assertTrue(compoundNames.contains("L-Alloisoleucine") || compoundNames.contains("L-Norleucine"));
+        ArrayNode sortedHits = objectMapper.createArrayNode();
+        hits.forEach(sortedHits::add);
+        sortedResponse.set("msmsList", sortedHits);
+        return sortedResponse;
     }
 }
