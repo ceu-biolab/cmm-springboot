@@ -40,7 +40,8 @@ public final class AdductService {
     private static final Map<IonizationMode, Map<String, Integer>> EXPLICIT_PRIORITY = Map.of(
             IonizationMode.POSITIVE, ranked(
                     "[M+H]+", "[M+Na]+", "[M+NH4]+", "[M+K]+",
-                    "[M+H-H2O]+", "[2M+H]+", "[M+ACN+H]+", "[M+H-2H2O]+", "[M+NH4-H2O]+"),
+                    "[M+2H]2+", "[M+H-H2O]+", "[2M+H]+", "[M+ACN+H]+",
+                    "[M+H-2H2O]+", "[M+NH4-H2O]+"),
             IonizationMode.NEGATIVE, ranked(
                     "[M-H]-", "[M+Cl]-", "[M-H-H2O]-", "[M-2H]2-", "[2M-H]-")
     );

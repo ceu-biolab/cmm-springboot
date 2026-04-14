@@ -80,12 +80,12 @@ public class MSSearchIntegrationTest {
         JsonNode features = response.path("msfeatures");
         org.junit.jupiter.api.Assertions.assertEquals(2, features.size());
 
-        List<String> expectedAdductOrder = List.of("[M+H]+", "[M+Na]+", "[M+NH4]+", "[M+K]+", "[M+H-H2O]+", "[M+2H]2+");
+        List<String> expectedAdductOrder = List.of("[M+H]+", "[M+Na]+", "[M+NH4]+", "[M+K]+", "[M+2H]2+", "[M+H-H2O]+");
         org.junit.jupiter.api.Assertions.assertEquals(expectedAdductOrder, adductOrder(features.get(0)));
         org.junit.jupiter.api.Assertions.assertEquals(expectedAdductOrder, adductOrder(features.get(1)));
-        org.junit.jupiter.api.Assertions.assertEquals(15, features.get(0).path("annotationsByAdducts").get(0).path("annotations").size());
-        org.junit.jupiter.api.Assertions.assertEquals(9, features.get(1).path("annotationsByAdducts").get(1).path("annotations").size());
-        org.junit.jupiter.api.Assertions.assertEquals(66, features.get(1).path("annotationsByAdducts").get(4).path("annotations").size());
+        org.junit.jupiter.api.Assertions.assertEquals(15, annotationCountForAdduct(features.get(0), "[M+H]+"));
+        org.junit.jupiter.api.Assertions.assertEquals(9, annotationCountForAdduct(features.get(1), "[M+Na]+"));
+        org.junit.jupiter.api.Assertions.assertEquals(66, annotationCountForAdduct(features.get(1), "[M+H-H2O]+"));
     }
 
     @Test
@@ -189,6 +189,17 @@ public class MSSearchIntegrationTest {
             adducts.add(byAdduct.path("adduct").asText());
         }
         return adducts;
+    }
+
+    private int annotationCountForAdduct(JsonNode feature, String adduct) {
+        for (JsonNode byAdduct : feature.path("annotationsByAdducts")) {
+            if (adduct.equals(byAdduct.path("adduct").asText())) {
+                return byAdduct.path("annotations").size();
+            }
+        }
+
+        org.junit.jupiter.api.Assertions.fail("Missing annotations for adduct " + adduct);
+        return -1;
     }
 
     private static final Pattern FORMULA_ELEMENT_PATTERN = Pattern.compile("([A-Z][a-z]?)");

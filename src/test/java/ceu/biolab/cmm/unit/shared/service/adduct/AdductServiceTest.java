@@ -80,7 +80,7 @@ public class AdductServiceTest {
         );
         List<AdductDefinition> sortedPositive = AdductService.sortByPriority(positive, IonizationMode.POSITIVE);
         assertEquals(
-                List.of("[M+H]+", "[M+Na]+", "[M+K]+", "[M+H-H2O]+", "[2M+H]+", "[M+ACN+H]+", "[M+2H]2+"),
+                List.of("[M+H]+", "[M+Na]+", "[M+K]+", "[M+2H]2+", "[M+H-H2O]+", "[2M+H]+", "[M+ACN+H]+"),
                 sortedPositive.stream().map(AdductDefinition::canonical).toList()
         );
 
