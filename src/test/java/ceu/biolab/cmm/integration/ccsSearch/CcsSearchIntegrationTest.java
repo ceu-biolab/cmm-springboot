@@ -166,6 +166,7 @@ public class CcsSearchIntegrationTest {
     @Test
     void testCcsSearchWithLcmsScoringProducesMeaningfulScores() throws Exception {
         String requestJson = loadJson("json/ccsSearch/request_lcimms_score_with_meaningful_scores.json");
+        String expectedResponse = loadJson("json/ccsSearch/response_lcimms_score_with_meaningful_scores.json");
 
         MvcResult result = mockMvc.perform(post("/api/lcimms-search")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -173,7 +174,10 @@ public class CcsSearchIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        JsonNode root = objectMapper.readTree(result.getResponse().getContentAsString());
+        String actual = result.getResponse().getContentAsString();
+        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.STRICT);
+
+        JsonNode root = objectMapper.readTree(actual);
         JsonNode features = root.path("imFeatures");
         assertTrue(features.isArray());
         assertFalse(features.isEmpty());
