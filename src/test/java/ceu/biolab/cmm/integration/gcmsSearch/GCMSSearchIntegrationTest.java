@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -36,9 +37,11 @@ public class GCMSSearchIntegrationTest {
         String expectedResponse = loadJson("json/gcmsSearch/responseGCMSSearch.json");
 
         mockMvc.perform(post("/api/gcms-search")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.gcmsFeatures").doesNotExist())
+                .andExpect(jsonPath("$.gcmsAnnotations").isArray())
                 .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
     }
 

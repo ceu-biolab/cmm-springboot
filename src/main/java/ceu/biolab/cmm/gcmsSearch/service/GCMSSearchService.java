@@ -60,8 +60,6 @@ public class GCMSSearchService {
         }
         double RIToleranceFinal = RITolerance * 0.01;
 
-        GCMSSearchResponseDTO response = new GCMSSearchResponseDTO();
-
         double RIDifference = RI * RIToleranceFinal;
         double RILower = RI - RIDifference;
         double RIUpper = RI + RIDifference;
@@ -126,19 +124,11 @@ public class GCMSSearchService {
 
             gcmsAnnotationList.sort(Comparator.comparingDouble(GCMSAnnotation::getGcmsCosineScore).reversed());
 
-            GCMSFeature gcmsFeature = GCMSFeature.builder()
-                    .gcmsAnnotations(gcmsAnnotationList)
-                    .gcmsSpectrumExperimental(gcmsSpectrumExperimental)
-                    .RIExperimental(RI)
-                    .build();
-
-            response.addGcmsFeatures(gcmsFeature);
+            return new GCMSSearchResponseDTO(gcmsSpectrumExperimental, gcmsAnnotationList, RI);
 
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to execute GC-MS search", e);
         }
-
-        return response;
     }
 
     private List<MSPeak> toMsPeaks(Spectrum spectrum) {
