@@ -20,15 +20,20 @@ public class CompoundScores implements IScore {
 
     @JsonIgnore
     private Map<String, List<Boolean>> rtScoreMap;
+    @JsonIgnore
+    private int totalNumberRtScores;
     private Optional<Double> ionizationScore;
     private Optional<Double> adductRelationScore;
     private Optional<Double> rtScore;
+    private Optional<Double> finalScore;
 
     public CompoundScores() {
         this.rtScoreMap = new HashMap<>();
+        this.totalNumberRtScores = 0;
         this.ionizationScore = Optional.empty();
         this.adductRelationScore = Optional.empty();
         this.rtScore = Optional.empty();
+        this.finalScore = Optional.empty();
     }
 
     public static String calculateFeatureKey(double featureMzValue, double featureRtValue) {
@@ -41,6 +46,7 @@ public class CompoundScores implements IScore {
         scores.put("ionization", ionizationScore.isPresent() ? ionizationScore.get().toString() : "");
         scores.put("adduct", adductRelationScore.isPresent() ? adductRelationScore.get().toString() : "");
         scores.put("rt", rtScore.isPresent() ? rtScore.get().toString() : "");
+        scores.put("final", finalScore.isPresent() ? finalScore.get().toString() : "");
         return scores;
     }
 
@@ -57,10 +63,12 @@ public class CompoundScores implements IScore {
 
     public void calculateRtScore() {
         if (rtScoreMap == null || rtScoreMap.isEmpty()) {
+            totalNumberRtScores = 0;
             rtScore = Optional.empty();
             return;
         }
 
+        totalNumberRtScores = rtScoreMap.size();
         double accumulatedRtScore = 0.0d;
 
         for (List<Boolean> relativeScores : rtScoreMap.values()) {
@@ -87,6 +95,53 @@ public class CompoundScores implements IScore {
         rtScore = Optional.of(calculatedRtScore);
     }
 
+    public void calculateFinalScore(int maxNumberOfRtScoresApplied) {
+        double numeratorFinalScore = 0.0d;
+        double denominatorFinalScore = 0.0d;
+
+        if (ionizationScore.isPresent()) {
+            numeratorFinalScore += Math.log(ionizationScore.get()) * 1.0d;
+            denominatorFinalScore += 1.0d;
+        }
+
+        if (adductRelationScore.isPresent()) {
+            numeratorFinalScore += Math.log(adductRelationScore.get()) * 2.0d;
+            denominatorFinalScore += 2.0d;
+        }
+
+        if (rtScore.isPresent()) {
+            double rtWeight = calculateRtWeight(maxNumberOfRtScoresApplied);
+            if (rtWeight > 0.0d) {
+                numeratorFinalScore += Math.log(rtScore.get()) * rtWeight;
+                denominatorFinalScore += rtWeight;
+            }
+        }
+
+        if (Math.abs(denominatorFinalScore) < 0.000001d) {
+            finalScore = Optional.empty();
+            return;
+        }
+
+        finalScore = Optional.of(Math.exp(numeratorFinalScore / denominatorFinalScore));
+    }
+
+    private double calculateRtWeight(int maxNumberOfRtScoresApplied) {
+        if (totalNumberRtScores <= 0) {
+            return 0.0d;
+        }
+
+        int thresholdMaxWC = maxNumberOfRtScoresApplied / 2;
+        if (thresholdMaxWC <= 0) {
+            return 2.0d;
+        }
+
+        if (totalNumberRtScores > thresholdMaxWC) {
+            return 2.0d;
+        }
+
+        return 2.0d * totalNumberRtScores / (double) thresholdMaxWC;
+    }
+
     public void setAdductRelationScore(double value) {
         this.adductRelationScore = Optional.of(value);
     }
@@ -96,18 +151,10 @@ public class CompoundScores implements IScore {
     }
 
     public void setIonizationScore(double value) {
-        if (ionizationScore.isEmpty()) {
-            ionizationScore = Optional.of(0.0);
-        }
-
         if (value == -2.0) {
-            if (ionizationScore.get() != -1.0) {
-                ionizationScore = Optional.of(1.0);
-            }
+            ionizationScore = Optional.of(1.0);
         } else if (value == -3.0) {
-            if (ionizationScore.get() != -1.0) {
-                ionizationScore = Optional.of(0.1);
-            }
+            ionizationScore = Optional.of(0.1);
         } else {
             ionizationScore = Optional.of(value);
         }

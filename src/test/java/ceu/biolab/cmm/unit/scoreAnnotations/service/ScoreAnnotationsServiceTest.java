@@ -62,6 +62,7 @@ public class ScoreAnnotationsServiceTest {
         assertFalse(lipidScores.getIonizationScore().isPresent(), "Should have no ionization score");
         assertFalse(lipidScores.getAdductRelationScore().isPresent(), "Should have no adduct score");
         assertFalse(lipidScores.getRtScore().isPresent(), "Should have no RT score");
+        assertFalse(lipidScores.getFinalScore().isPresent(), "Should have no final score");
     }
     
     @Test
@@ -101,6 +102,8 @@ public class ScoreAnnotationsServiceTest {
         assertTrue(pc36_4_compared.get().get(0), "PC 36:4 should have a true score against PC 36:2");
         assertTrue(pc36_4_lipidScores.getRtScore().isPresent(), "PC 36:4 should have a scalar RT score");
         assertEquals(1.0, pc36_4_lipidScores.getRtScore().get(), 1e-9, "A single passing RT comparison should produce an RT score of 1.0");
+        assertTrue(pc36_4_lipidScores.getFinalScore().isPresent(), "PC 36:4 should have a final score");
+        assertEquals(1.0, pc36_4_lipidScores.getFinalScore().get(), 1e-9, "A pure RT score of 1.0 should yield a final score of 1.0");
         
         // Check PC 36:2 (rt=6) is scored correctly - should have higher RT than PC 36:4 (rt=5)
         // Therefore should also have one true score against the rt=5 feature (rule 2)
@@ -115,6 +118,8 @@ public class ScoreAnnotationsServiceTest {
         assertTrue(pc36_2_compared.get().get(0), "PC 36:2 should have a true score against PC 36:4");
         assertTrue(pc36_2_lipidScores.getRtScore().isPresent(), "PC 36:2 should have a scalar RT score");
         assertEquals(1.0, pc36_2_lipidScores.getRtScore().get(), 1e-9, "A single passing RT comparison should produce an RT score of 1.0");
+        assertTrue(pc36_2_lipidScores.getFinalScore().isPresent(), "PC 36:2 should have a final score");
+        assertEquals(1.0, pc36_2_lipidScores.getFinalScore().get(), 1e-9, "A pure RT score of 1.0 should yield a final score of 1.0");
     }
 
     @Test
@@ -169,6 +174,8 @@ public class ScoreAnnotationsServiceTest {
         verifyScores(pc36_1_scores, expectedScoresF1_36_1);
         assertTrue(pc36_1_scores.getRtScore().isPresent(), "PC 36:1 should have a scalar RT score");
         assertEquals(1.0 / 3.0, pc36_1_scores.getRtScore().get(), 1e-9, "Mixed RT evidence should use mediator integer division before averaging");
+        assertTrue(pc36_1_scores.getFinalScore().isPresent(), "PC 36:1 should have a final score");
+        assertEquals(1.0 / 3.0, pc36_1_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
         
         // Verify PC 36:2 scores
         Optional<Annotation> pc36_2 = findLipidAnnotation(features, "PC", 36, 2, 800.5, 7.0);
@@ -177,6 +184,8 @@ public class ScoreAnnotationsServiceTest {
         verifyScores(pc36_2_scores, expectedScoresF1_36_2);
         assertTrue(pc36_2_scores.getRtScore().isPresent(), "PC 36:2 should have a scalar RT score");
         assertEquals(1.0 / 3.0, pc36_2_scores.getRtScore().get(), 1e-9, "Mixed RT evidence should use mediator integer division before averaging");
+        assertTrue(pc36_2_scores.getFinalScore().isPresent(), "PC 36:2 should have a final score");
+        assertEquals(1.0 / 3.0, pc36_2_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
         
         // Verify PC 36:3 scores
         Optional<Annotation> pc36_3 = findLipidAnnotation(features, "PC", 36, 3, 804.5, 5.0);
@@ -185,6 +194,8 @@ public class ScoreAnnotationsServiceTest {
         verifyScores(pc36_3_scores, expectedScoresF2_36_3);
         assertTrue(pc36_3_scores.getRtScore().isPresent(), "PC 36:3 should have a scalar RT score");
         assertEquals(0.5, pc36_3_scores.getRtScore().get(), 1e-9, "One full RT match out of two compared features should score 0.5");
+        assertTrue(pc36_3_scores.getFinalScore().isPresent(), "PC 36:3 should have a final score");
+        assertEquals(0.5, pc36_3_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
         
         // Verify PE 36:5 scores
         Optional<Annotation> pe36_5 = findLipidAnnotation(features, "PE", 36, 5, 830.5, 9.0);
@@ -192,6 +203,7 @@ public class ScoreAnnotationsServiceTest {
         LipidScores pe36_5_scores = (LipidScores) pe36_5.get().getScores().get(0);
         verifyScores(pe36_5_scores, expectedScoresF3_36_5);
         assertFalse(pe36_5_scores.getRtScore().isPresent(), "Annotations without RT comparisons should not have a scalar RT score");
+        assertFalse(pe36_5_scores.getFinalScore().isPresent(), "Annotations without any partial score should not have a final score");
         
         // Verify PC 36:0 scores
         Optional<Annotation> pc36_0 = findLipidAnnotation(features, "PC", 36, 0, 830.5, 9.0);
@@ -200,6 +212,8 @@ public class ScoreAnnotationsServiceTest {
         verifyScores(pc36_0_scores, expectedScoresF3_36_0);
         assertTrue(pc36_0_scores.getRtScore().isPresent(), "PC 36:0 should have a scalar RT score");
         assertEquals(2.0 / 3.0, pc36_0_scores.getRtScore().get(), 1e-9, "Two fully passing compared features out of three should score two thirds");
+        assertTrue(pc36_0_scores.getFinalScore().isPresent(), "PC 36:0 should have a final score");
+        assertEquals(2.0 / 3.0, pc36_0_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
         
         // Verify PC 36:8 scores
         Optional<Annotation> pc36_8 = findLipidAnnotation(features, "PC", 36, 8, 830.5, 9.0);
@@ -208,6 +222,8 @@ public class ScoreAnnotationsServiceTest {
         verifyScores(pc36_8_scores, expectedScoresF3_36_8);
         assertTrue(pc36_8_scores.getRtScore().isPresent(), "PC 36:8 should have a scalar RT score");
         assertEquals(0.05, pc36_8_scores.getRtScore().get(), 1e-9, "All-false RT evidence should floor to the mediator minimum");
+        assertTrue(pc36_8_scores.getFinalScore().isPresent(), "PC 36:8 should have a final score");
+        assertEquals(0.05, pc36_8_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
     }
 
     @Test
@@ -236,7 +252,8 @@ public class ScoreAnnotationsServiceTest {
                 lipidScores,
                 1.0,  // expectedIonizationScore 
                 1.0,  // expectedAdductRelationScore
-                null  // expectedRtScore (not testing RT score here)
+                null, // expectedRtScore (not testing RT score here)
+                1.0   // expectedFinalScore
             );
             
             // Additional direct assertions
@@ -245,6 +262,8 @@ public class ScoreAnnotationsServiceTest {
             
             assertTrue(lipidScores.getAdductRelationScore().isPresent(), "Should have adduct relation score");
             assertEquals(1.0, lipidScores.getAdductRelationScore().get(), "Adduct relation score should be 1.0");
+            assertTrue(lipidScores.getFinalScore().isPresent(), "Should have final score");
+            assertEquals(1.0, lipidScores.getFinalScore().get(), 1e-9, "Two perfect partial scores should yield a final score of 1.0");
             
             // RT score map should be empty as this test focuses on adduct relations
             assertTrue(lipidScores.getRtScoreMap().isEmpty(), "RT score map should be empty");
@@ -278,6 +297,8 @@ public class ScoreAnnotationsServiceTest {
             assertTrue(compoundScores.getAdductRelationScore().isPresent(), "Adduct relation score should be set");
             assertEquals(1.0, compoundScores.getAdductRelationScore().get(), 1e-6);
             assertFalse(compoundScores.getRtScore().isPresent(), "No RT comparisons were evaluated for this test");
+            assertTrue(compoundScores.getFinalScore().isPresent(), "Final score should be set when partial scores exist");
+            assertEquals(1.0, compoundScores.getFinalScore().get(), 1e-6);
         }
     }
 
@@ -286,7 +307,8 @@ public class ScoreAnnotationsServiceTest {
                               Optional<Map<String, List<Boolean>>> expectedRtScores,
                               Optional<Double> expectedIonizationScore,
                               Optional<Double> expectedAdductRelationScore,
-                              Optional<Double> expectedRtScore) {
+                              Optional<Double> expectedRtScore,
+                              Optional<Double> expectedFinalScore) {
         
         // Verify RT score map if expected values provided
         if (expectedRtScores.isPresent()) {
@@ -339,24 +361,32 @@ public class ScoreAnnotationsServiceTest {
             assertEquals(expectedRtScore.get(), lipidScores.getRtScore().get(), 1e-9,
                     "RT score should match expected value");
         }
+
+        if (expectedFinalScore.isPresent()) {
+            assertTrue(lipidScores.getFinalScore().isPresent(), "Final score should be present");
+            assertEquals(expectedFinalScore.get(), lipidScores.getFinalScore().get(), 1e-9,
+                    "Final score should match expected value");
+        }
     }
     
     // Convenience overloads
     private void verifyScores(LipidScores lipidScores, Map<String, List<Boolean>> expectedRtScores) {
-        verifyScores(lipidScores, Optional.of(expectedRtScores), Optional.empty(), Optional.empty(), Optional.empty());
+        verifyScores(lipidScores, Optional.of(expectedRtScores), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     // New overload for verifying only specific scores without RT map
     private void verifyScores(LipidScores lipidScores, 
                               Double expectedIonizationScore,
                               Double expectedAdductRelationScore,
-                              Double expectedRtScore) {
+                              Double expectedRtScore,
+                              Double expectedFinalScore) {
         verifyScores(
             lipidScores, 
             Optional.empty(),
             expectedIonizationScore != null ? Optional.of(expectedIonizationScore) : Optional.empty(),
             expectedAdductRelationScore != null ? Optional.of(expectedAdductRelationScore) : Optional.empty(),
-            expectedRtScore != null ? Optional.of(expectedRtScore) : Optional.empty()
+            expectedRtScore != null ? Optional.of(expectedRtScore) : Optional.empty(),
+            expectedFinalScore != null ? Optional.of(expectedFinalScore) : Optional.empty()
         );
     }
 

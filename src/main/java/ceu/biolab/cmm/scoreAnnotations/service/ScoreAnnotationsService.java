@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.scoreAnnotations.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -117,16 +118,25 @@ public class ScoreAnnotationsService {
     }
 
     private static void finalizeScores(List<AnnotatedFeature> msFeatures) {
+        List<CompoundScores> allScores = new ArrayList<>();
+        int maxNumberOfRtScoresApplied = 0;
+
         for (AnnotatedFeature msFeature : msFeatures) {
             for (AnnotationsByAdduct annotationsByAdduct : msFeature.getAnnotationsByAdducts()) {
                 for (Annotation annotation : annotationsByAdduct.getAnnotations()) {
                     for (var score : annotation.getScores()) {
                         if (score instanceof CompoundScores compoundScores) {
                             compoundScores.calculateRtScore();
+                            maxNumberOfRtScoresApplied = Math.max(maxNumberOfRtScoresApplied, compoundScores.getTotalNumberRtScores());
+                            allScores.add(compoundScores);
                         }
                     }
                 }
             }
+        }
+
+        for (CompoundScores score : allScores) {
+            score.calculateFinalScore(maxNumberOfRtScoresApplied);
         }
     }
 }

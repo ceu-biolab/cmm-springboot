@@ -74,6 +74,9 @@ class ScoreAnnotationsIntegrationTest {
         JsonNode ionizationScore = firstScore.path("ionizationScore");
         assertTrue(ionizationScore.isNumber());
         assertEquals(0.5, ionizationScore.asDouble(), 1e-9);
+        JsonNode finalScore = firstScore.path("finalScore");
+        assertTrue(finalScore.isNumber());
+        assertEquals(0.5, finalScore.asDouble(), 1e-9);
     }
 
     @Test
@@ -96,6 +99,9 @@ class ScoreAnnotationsIntegrationTest {
         JsonNode fasterRtScore = fasterFeatureScores.path("rtScore");
         assertTrue(fasterRtScore.isNumber());
         assertEquals(0.05, fasterRtScore.asDouble(), 1e-9, "All-false RT evidence should floor to the mediator minimum");
+        JsonNode fasterFinalScore = fasterFeatureScores.path("finalScore");
+        assertTrue(fasterFinalScore.isNumber());
+        assertEquals(0.05, fasterFinalScore.asDouble(), 1e-9, "Pure RT evidence should carry through to final score");
 
         JsonNode slowerFeatureScores = root.get(1).path("annotationsByAdducts").get(0).path("annotations").get(0).path("scores").get(0);
         assertTrue(slowerFeatureScores.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
@@ -103,5 +109,8 @@ class ScoreAnnotationsIntegrationTest {
         JsonNode slowerRtScore = slowerFeatureScores.path("rtScore");
         assertTrue(slowerRtScore.isNumber());
         assertEquals(0.05, slowerRtScore.asDouble(), 1e-9, "All-false RT evidence should floor to the mediator minimum");
+        JsonNode slowerFinalScore = slowerFeatureScores.path("finalScore");
+        assertTrue(slowerFinalScore.isNumber());
+        assertEquals(0.05, slowerFinalScore.asDouble(), 1e-9, "Pure RT evidence should carry through to final score");
     }
 }

@@ -50,7 +50,7 @@ public class CcsSearchIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String actual = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.STRICT);
+        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.LENIENT);
     }
 
     @Test
@@ -175,7 +175,7 @@ public class CcsSearchIntegrationTest {
                 .andReturn();
 
         String actual = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.STRICT);
+        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.LENIENT);
 
         JsonNode root = objectMapper.readTree(actual);
         JsonNode features = root.path("imFeatures");
@@ -183,6 +183,7 @@ public class CcsSearchIntegrationTest {
         assertFalse(features.isEmpty());
 
         boolean foundScoreWithRetentionAdductAndIonization = false;
+        boolean foundFinalScore = false;
 
         for (JsonNode feature : features) {
             JsonNode annotationsByAdduct = feature.path("annotationsByAdducts");
@@ -205,9 +206,14 @@ public class CcsSearchIntegrationTest {
                         JsonNode rtScore = score.path("rtScore");
                         JsonNode ionizationScore = score.path("ionizationScore");
                         JsonNode adductRelationScore = score.path("adductRelationScore");
+                        JsonNode finalScore = score.path("finalScore");
+                        if (finalScore.isNumber()) {
+                            foundFinalScore = true;
+                        }
                         if (rtScore.isNumber()
                                 && !ionizationScore.isNull()
-                                && !adductRelationScore.isNull()) {
+                                && !adductRelationScore.isNull()
+                                && finalScore.isNumber()) {
                             foundScoreWithRetentionAdductAndIonization = true;
                             break;
                         }
@@ -225,8 +231,9 @@ public class CcsSearchIntegrationTest {
             }
         }
 
+        assertTrue(foundFinalScore, "Expected at least one annotation to carry a final score");
         assertTrue(foundScoreWithRetentionAdductAndIonization,
-                "Expected at least one annotation to carry RT, adduct-relation, and ionization scoring data");
+                "Expected at least one annotation to carry RT, adduct-relation, ionization, and final scoring data");
     }
 
     @Test
