@@ -66,7 +66,7 @@ All endpoints live under the `/api` prefix. Most request DTOs use Jakarta Bean V
 | `POST /api/imms-search` | Collisional cross-section search. |
 | `POST /api/lcimms-search` | CCS search enriched with LC retention data and lipid scoring. |
 | `POST /api/msms-search` | MS/MS search (tandem mass spectra matching). |
-| `POST /api/lcmsms-search` | MS/MS search enriched with LC retention-time scoring. |
+| `POST /api/lcmsms-search` | MS/MS search enriched with LC retention-time scoring for one or many features. |
 | `POST /api/cems-search` | Capillary electrophoresis search by effective mobility and m/z. |
 | `POST /api/cems-rmt-search` | CE search using relative migration time. |
 | `POST /api/cems-1-marker` / `POST /api/cems-2-marker` | One- and two-marker CE guided searches. |
@@ -80,7 +80,7 @@ When something goes wrong, services raise `ResponseStatusException`, ensuring cl
 - `POST /api/compounds/simple-search`, `POST /api/compounds/batch-search`, and `POST /api/browse-search` accept an optional `formulaType` filter such as `CHNOPS` to restrict results to a chemical alphabet.
 - `POST /api/msms-search` accepts `spectrumSource` with `ALL`, `experimental`, or `predicted` to control which library spectra are searched.
 - Each `/api/msms-search` hit now includes its `spectrumSource` so clients can distinguish predicted from experimental matches.
-- `POST /api/lcmsms-search` accepts the same MS/MS payload plus `rtValue` and optional `experimentParameters`, and returns the same MS/MS hits enriched with LC scores when available.
+- `POST /api/lcmsms-search` accepts the same MS/MS search settings plus either a single `precursorIonMZ`/`fragmentsMZsIntensities`/`rtValue` feature or batched `precursorIonMZValues`/`fragmentsMZsIntensitiesList`/`rtValues`, with optional `experimentParameters`. It returns `msmsFeatures` in request order and preserves the legacy top-level `msmsList` payload when a single feature is submitted.
 
 ## ✅ Validation & Error Handling
 

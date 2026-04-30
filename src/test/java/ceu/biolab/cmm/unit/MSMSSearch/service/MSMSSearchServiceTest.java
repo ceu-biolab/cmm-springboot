@@ -1,8 +1,10 @@
 package ceu.biolab.cmm.unit.MSMSSearch.service;
 
 import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
+import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
 import ceu.biolab.cmm.MSMSSearch.domain.SpectrumSource;
 import ceu.biolab.cmm.MSMSSearch.dto.LCMSMSSearchRequestDTO;
+import ceu.biolab.cmm.MSMSSearch.dto.LCMSMSSearchResponseDTO;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
@@ -19,9 +21,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class MSMSSearchServiceTest {
@@ -144,6 +149,74 @@ public class MSMSSearchServiceTest {
     void searchWithLcmsScoring_throwsWhenRtMissing() {
         LCMSMSSearchRequestDTO req = new LCMSMSSearchRequestDTO();
         req.setCIDEnergy(CIDEnergy.MED);
+        req.setTolerancePrecursorIon(10.0);
+        req.setToleranceModePrecursorIon(MzToleranceMode.PPM);
+        req.setToleranceFragments(50.0);
+        req.setToleranceModeFragments(MzToleranceMode.MDA);
+        req.setIonizationMode(IonizationMode.POSITIVE);
+        req.setAdducts(List.of("[M+H]+"));
+        req.setFragmentsMZsIntensities(new Spectrum(500.0, List.of(new MSPeak(100.0, 10.0))));
+        req.setPrecursorIonMZ(500.0);
+        req.setScoreType(ScoreType.COSINE);
+        req.setSpectrumSource(SpectrumSource.ALL);
+        req.setRtValue(null);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.searchWithLcmsScoring(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
+    void searchWithLcmsScoring_throwsWhenBatchLengthsDiffer() {
+        LCMSMSSearchRequestDTO req = validLcmsmsRequest();
+        req.setPrecursorIonMZ(null);
+        req.setFragmentsMZsIntensities(null);
+        req.setRtValue(null);
+        req.setPrecursorIonMZValues(List.of(500.0, 600.0));
+        req.setFragmentsMZsIntensitiesList(List.of(
+                new Spectrum(500.0, List.of(new MSPeak(100.0, 10.0))),
+                new Spectrum(600.0, List.of(new MSPeak(120.0, 20.0)))
+        ));
+        req.setRtValues(List.of(5.1));
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.searchWithLcmsScoring(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
+    void searchWithLcmsScoring_supportsBatchedFeatures() throws Exception {
+        when(repository.findMatchingCompoundsAndSpectra(any())).thenAnswer(invocation -> {
+            MSMSSearchRequestDTO request = invocation.getArgument(0);
+            MSMSSearchResponseDTO response = new MSMSSearchResponseDTO(new ArrayList<MSMSAnnotation>());
+            response.setExperimentalSpectrum(request.getFragmentsMZsIntensities());
+            return response;
+        });
+
+        LCMSMSSearchRequestDTO req = validLcmsmsRequest();
+        req.setPrecursorIonMZ(null);
+        req.setFragmentsMZsIntensities(null);
+        req.setRtValue(null);
+        req.setPrecursorIonMZValues(List.of(500.0, 600.0));
+        req.setFragmentsMZsIntensitiesList(List.of(
+                new Spectrum(500.0, List.of(new MSPeak(100.0, 10.0))),
+                new Spectrum(600.0, List.of(new MSPeak(120.0, 20.0)))
+        ));
+        req.setRtValues(List.of(5.1, 6.2));
+
+        LCMSMSSearchResponseDTO response = service.searchWithLcmsScoring(req);
+
+        assertEquals(2, response.getMsmsFeatures().size());
+        assertNull(response.getMsmsList());
+        assertNull(response.getExperimentalSpectrum());
+        assertEquals(500.0, response.getMsmsFeatures().get(0).getFeature().getMzValue());
+        assertEquals(5.1, response.getMsmsFeatures().get(0).getFeature().getRtValue());
+        assertEquals(600.0, response.getMsmsFeatures().get(1).getFeature().getMzValue());
+        assertEquals(6.2, response.getMsmsFeatures().get(1).getFeature().getRtValue());
+        verify(repository, times(2)).findMatchingCompoundsAndSpectra(any());
+    }
+
+    private LCMSMSSearchRequestDTO validLcmsmsRequest() {
+        LCMSMSSearchRequestDTO req = new LCMSMSSearchRequestDTO();
+        req.setCIDEnergy(CIDEnergy.MED);
         req.setPrecursorIonMZ(500.0);
         req.setTolerancePrecursorIon(10.0);
         req.setToleranceModePrecursorIon(MzToleranceMode.PPM);
@@ -154,9 +227,7 @@ public class MSMSSearchServiceTest {
         req.setFragmentsMZsIntensities(new Spectrum(500.0, List.of(new MSPeak(100.0, 10.0))));
         req.setScoreType(ScoreType.COSINE);
         req.setSpectrumSource(SpectrumSource.ALL);
-        req.setRtValue(null);
-
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.searchWithLcmsScoring(req));
-        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+        req.setRtValue(5.0);
+        return req;
     }
 }

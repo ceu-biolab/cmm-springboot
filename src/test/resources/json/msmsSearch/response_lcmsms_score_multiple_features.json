@@ -297,296 +297,309 @@
         "intensity" : 9.494
       } ]
     }
-  } ],
-  "msmsList" : [ {
-    "msmsId" : 1671,
-    "compound" : {
-      "compoundId" : 27408,
-      "casId" : "327-57-1",
-      "compoundName" : "L-Norleucine",
-      "formula" : "C6H13NO2",
-      "mass" : 131.094628665,
-      "chargeType" : 0,
-      "chargeNumber" : 0,
-      "formulaType" : "CHNOPS",
-      "compoundType" : "LIPID",
-      "logP" : null,
-      "rtPred" : -2.512694380710904,
-      "inchi" : "InChI=1S/C6H13NO2/c1-2-3-4-5(7)6(8)9/h5H,2-4,7H2,1H3,(H,8,9)/t5-/m0/s1",
-      "inchiKey" : "LRQKBLKVPFOOQJ-YFKPBYRVSA-N",
-      "smiles" : "CCCC[C@H](N)C(O)=O",
-      "lipidType" : null,
-      "numChains" : null,
-      "numCarbons" : null,
-      "doubleBonds" : null,
-      "lipidMapsClassifications" : [ {
-        "category" : "FA",
-        "mainClass" : "FA01",
-        "subClass" : "FA0110",
-        "classLevel4" : ""
-      } ],
-      "biologicalActivity" : null,
-      "meshNomenclature" : null,
-      "iupacClassification" : null,
-      "mol2" : null,
-      "pathways" : [ ],
-      "keggID" : "C01933",
-      "lmID" : "LMFA01100042",
-      "hmdbID" : "HMDB0001645",
-      "agilentID" : "6334",
-      "pcID" : 6991974,
-      "chebiID" : 18347,
-      "inHouseID" : null,
-      "aspergillusID" : null,
-      "knapsackID" : null,
-      "npatlasID" : null,
-      "fahfaID" : null,
-      "ohPositionID" : null,
-      "aspergillusWebName" : null
-    },
-    "adduct" : "[M+H]+",
-    "spectrumSource" : "experimental",
-    "deltaPpmPrecursorIon" : 0.002535921119411484,
-    "msmsCosineScore" : 0.6642007377805266,
-    "collisionEnergy" : 40.0,
-    "spectrum" : {
-      "precursorMz" : 132.10190466499998,
-      "peaks" : [ {
-        "mz" : 41.297,
-        "intensity" : 1.0
-      }, {
-        "mz" : 43.295,
-        "intensity" : 0.57862
-      }, {
-        "mz" : 44.442,
-        "intensity" : 0.12579
-      }, {
-        "mz" : 45.355,
-        "intensity" : 0.053849999999999995
-      }, {
-        "mz" : 55.188,
-        "intensity" : 0.19182
-      }, {
-        "mz" : 57.162,
-        "intensity" : 0.05503
-      }, {
-        "mz" : 69.111,
-        "intensity" : 0.1195
-      }, {
-        "mz" : 85.985,
-        "intensity" : 0.3522
-      }, {
-        "mz" : 132.041,
-        "intensity" : 0.04285
-      } ]
-    },
-    "scores" : [ {
-      "ionizationScore" : 1.0,
-      "adductRelationScore" : null,
-      "rtScore" : null,
-      "finalScore" : 1.0
-    } ]
   }, {
-    "msmsId" : 781,
-    "compound" : {
-      "compoundId" : 89469,
-      "casId" : "1509-34-8",
-      "compoundName" : "L-Alloisoleucine",
-      "formula" : "C6H13NO2",
-      "mass" : 131.094628665,
-      "chargeType" : 0,
-      "chargeNumber" : 0,
-      "formulaType" : "CHNOPS",
-      "compoundType" : "LIPID",
-      "logP" : null,
-      "rtPred" : -2.4552741019487763,
-      "inchi" : "InChI=1S/C6H13NO2/c1-3-4(2)5(7)6(8)9/h4-5H,3,7H2,1-2H3,(H,8,9)/t4-,5+/m1/s1",
-      "inchiKey" : "AGPKZVBTJJNPAG-UHNVWZDZSA-N",
-      "smiles" : "CC[C@@H](C)[C@H](N)C(O)=O",
-      "lipidType" : null,
-      "numChains" : null,
-      "numCarbons" : null,
-      "doubleBonds" : null,
-      "lipidMapsClassifications" : [ ],
-      "biologicalActivity" : null,
-      "meshNomenclature" : null,
-      "iupacClassification" : null,
-      "mol2" : null,
-      "pathways" : [ ],
-      "keggID" : "C21096",
-      "lmID" : null,
-      "hmdbID" : "HMDB0000557",
-      "agilentID" : "58006",
-      "pcID" : 6950182,
-      "chebiID" : null,
-      "inHouseID" : null,
-      "aspergillusID" : null,
-      "knapsackID" : null,
-      "npatlasID" : null,
-      "fahfaID" : null,
-      "ohPositionID" : null,
-      "aspergillusWebName" : null
+    "feature" : {
+      "mzValue" : 287.236,
+      "intensity" : null,
+      "rtValue" : 6.8,
+      "retentionTime" : 6.8
     },
-    "adduct" : "[M+H]+",
-    "spectrumSource" : "experimental",
-    "deltaPpmPrecursorIon" : 0.002535921119411484,
-    "msmsCosineScore" : 0.9145034991982632,
-    "collisionEnergy" : 40.0,
-    "spectrum" : {
-      "precursorMz" : 132.10190466499998,
-      "peaks" : [ {
-        "mz" : 41.353,
-        "intensity" : 1.0
-      }, {
-        "mz" : 44.218,
-        "intensity" : 0.6266700000000001
-      }, {
-        "mz" : 45.42,
-        "intensity" : 0.16417
-      }, {
-        "mz" : 56.015,
-        "intensity" : 0.53667
-      }, {
-        "mz" : 57.358,
-        "intensity" : 0.43
-      }, {
-        "mz" : 58.427,
-        "intensity" : 0.10667
-      }, {
-        "mz" : 69.108,
-        "intensity" : 0.34
-      }, {
-        "mz" : 86.081,
-        "intensity" : 0.42
-      }, {
-        "mz" : 132.155,
-        "intensity" : 0.09583
+    "msmsList" : [ {
+      "msmsId" : 521,
+      "compound" : {
+        "compoundId" : 1095,
+        "casId" : null,
+        "compoundName" : "Retinol",
+        "formula" : "C20H30O",
+        "mass" : 286.229665582,
+        "chargeType" : 0,
+        "chargeNumber" : 0,
+        "formulaType" : "CHNOPS",
+        "compoundType" : "LIPID",
+        "logP" : null,
+        "rtPred" : 0.1321357114325395,
+        "inchi" : "InChI=1S/C20H30O/c1-16(8-6-9-17(2)13-15-21)11-12-19-18(3)10-7-14-20(19,4)5/h6,8-9,11-13,21H,7,10,14-15H2,1-5H3/b9-6+,12-11+,16-8+,17-13+",
+        "inchiKey" : "FPIPGXGPPPQFEQ-OVSJKPMPSA-N",
+        "smiles" : "C\\C(=C/CO)\\C=C\\C=C(/C)\\C=C\\C1=C(C)CCCC1(C)C",
+        "lipidType" : null,
+        "numChains" : null,
+        "numCarbons" : null,
+        "doubleBonds" : null,
+        "lipidMapsClassifications" : [ {
+          "category" : "PR",
+          "mainClass" : "PR01",
+          "subClass" : "PR0109",
+          "classLevel4" : ""
+        } ],
+        "biologicalActivity" : null,
+        "meshNomenclature" : null,
+        "iupacClassification" : null,
+        "mol2" : null,
+        "pathways" : [ ],
+        "keggID" : "C17276",
+        "lmID" : "LMPR01090001",
+        "hmdbID" : "HMDB0000305",
+        "agilentID" : "215",
+        "pcID" : 9904001,
+        "chebiID" : 17336,
+        "inHouseID" : null,
+        "aspergillusID" : null,
+        "knapsackID" : null,
+        "npatlasID" : null,
+        "fahfaID" : null,
+        "ohPositionID" : null,
+        "aspergillusWebName" : null
+      },
+      "adduct" : "[M+H]+",
+      "spectrumSource" : "experimental",
+      "deltaPpmPrecursorIon" : -3.2780672110277,
+      "msmsCosineScore" : 0.6020236512147293,
+      "collisionEnergy" : 40.0,
+      "spectrum" : {
+        "precursorMz" : 287.236941582,
+        "peaks" : [ {
+          "mz" : 41.383,
+          "intensity" : 0.24670999999999998
+        }, {
+          "mz" : 43.311,
+          "intensity" : 0.7302599999999999
+        }, {
+          "mz" : 55.231,
+          "intensity" : 0.43421
+        }, {
+          "mz" : 67.19,
+          "intensity" : 0.55921
+        }, {
+          "mz" : 69.142,
+          "intensity" : 0.63158
+        }, {
+          "mz" : 77.128,
+          "intensity" : 0.43421
+        }, {
+          "mz" : 79.189,
+          "intensity" : 0.6447400000000001
+        }, {
+          "mz" : 81.063,
+          "intensity" : 0.5131600000000001
+        }, {
+          "mz" : 83.163,
+          "intensity" : 0.125
+        }, {
+          "mz" : 91.079,
+          "intensity" : 0.83553
+        }, {
+          "mz" : 93.124,
+          "intensity" : 0.61842
+        }, {
+          "mz" : 95.138,
+          "intensity" : 0.41941
+        }, {
+          "mz" : 97.067,
+          "intensity" : 0.125
+        }, {
+          "mz" : 105.077,
+          "intensity" : 1.0
+        }, {
+          "mz" : 105.771,
+          "intensity" : 0.11842000000000001
+        }, {
+          "mz" : 107.036,
+          "intensity" : 0.34375
+        }, {
+          "mz" : 109.05,
+          "intensity" : 0.30921
+        }, {
+          "mz" : 110.932,
+          "intensity" : 0.12171
+        }, {
+          "mz" : 117.037,
+          "intensity" : 0.13816
+        }, {
+          "mz" : 119.067,
+          "intensity" : 0.38651
+        }, {
+          "mz" : 121.042,
+          "intensity" : 0.5
+        }, {
+          "mz" : 121.932,
+          "intensity" : 0.16118
+        }, {
+          "mz" : 127.983,
+          "intensity" : 0.14474
+        }, {
+          "mz" : 128.998,
+          "intensity" : 0.17434000000000002
+        }, {
+          "mz" : 131.02,
+          "intensity" : 0.18257
+        }, {
+          "mz" : 132.925,
+          "intensity" : 0.21545999999999998
+        }, {
+          "mz" : 135.158,
+          "intensity" : 0.12171
+        }, {
+          "mz" : 136.907,
+          "intensity" : 0.15954000000000002
+        }, {
+          "mz" : 141.092,
+          "intensity" : 0.15789
+        }, {
+          "mz" : 142.092,
+          "intensity" : 0.19572
+        }, {
+          "mz" : 143.091,
+          "intensity" : 0.16118
+        }, {
+          "mz" : 144.449,
+          "intensity" : 0.13487
+        }, {
+          "mz" : 150.946,
+          "intensity" : 0.13487
+        }, {
+          "mz" : 155.685,
+          "intensity" : 0.12664
+        }, {
+          "mz" : 157.309,
+          "intensity" : 0.13322
+        }, {
+          "mz" : 159.199,
+          "intensity" : 0.12664
+        }, {
+          "mz" : 174.948,
+          "intensity" : 0.125
+        } ]
+      },
+      "scores" : [ {
+        "ionizationScore" : null,
+        "adductRelationScore" : null,
+        "rtScore" : null,
+        "finalScore" : null
       } ]
-    },
-    "scores" : [ {
-      "ionizationScore" : null,
-      "adductRelationScore" : null,
-      "rtScore" : null,
-      "finalScore" : null
-    } ]
-  }, {
-    "msmsId" : 273,
-    "compound" : {
-      "compoundId" : 27412,
-      "casId" : "73-32-5",
-      "compoundName" : "L-Isoleucine",
-      "formula" : "C6H13NO2",
-      "mass" : 131.094628665,
-      "chargeType" : 0,
-      "chargeNumber" : 0,
-      "formulaType" : "CHNOPS",
-      "compoundType" : "LIPID",
-      "logP" : null,
-      "rtPred" : -2.4552741019487763,
-      "inchi" : "InChI=1S/C6H13NO2/c1-3-4(2)5(7)6(8)9/h4-5H,3,7H2,1-2H3,(H,8,9)/t4-,5-/m0/s1",
-      "inchiKey" : "AGPKZVBTJJNPAG-WHFBIAKZSA-N",
-      "smiles" : "CC[C@H](C)[C@H](N)C(O)=O",
-      "lipidType" : null,
-      "numChains" : null,
-      "numCarbons" : null,
-      "doubleBonds" : null,
-      "lipidMapsClassifications" : [ {
-        "category" : "FA",
-        "mainClass" : "FA01",
-        "subClass" : "FA0110",
-        "classLevel4" : ""
-      } ],
-      "biologicalActivity" : null,
-      "meshNomenclature" : null,
-      "iupacClassification" : null,
-      "mol2" : null,
-      "pathways" : [ ],
-      "keggID" : "C00407",
-      "lmID" : "LMFA01100047",
-      "hmdbID" : "HMDB0000172",
-      "agilentID" : "23",
-      "pcID" : 7043901,
-      "chebiID" : 17191,
-      "inHouseID" : null,
-      "aspergillusID" : null,
-      "knapsackID" : null,
-      "npatlasID" : null,
-      "fahfaID" : null,
-      "ohPositionID" : null,
-      "aspergillusWebName" : null
-    },
-    "adduct" : "[M+H]+",
-    "spectrumSource" : "experimental",
-    "deltaPpmPrecursorIon" : 0.002535921119411484,
-    "msmsCosineScore" : 1.0,
-    "collisionEnergy" : 40.0,
-    "spectrum" : {
-      "precursorMz" : 132.10190466499998,
+    } ],
+    "experimentalSpectrum" : {
+      "precursorMz" : 287.236,
       "peaks" : [ {
-        "mz" : 41.305,
-        "intensity" : 1.0
+        "mz" : 55.301,
+        "intensity" : 12.753
       }, {
-        "mz" : 44.161,
-        "intensity" : 0.64873
+        "mz" : 67.237,
+        "intensity" : 14.611
       }, {
-        "mz" : 45.378,
-        "intensity" : 0.17722000000000002
+        "mz" : 69.204,
+        "intensity" : 39.189
       }, {
-        "mz" : 55.961,
-        "intensity" : 0.44937
+        "mz" : 79.134,
+        "intensity" : 14.527
       }, {
-        "mz" : 57.303,
-        "intensity" : 0.42089
+        "mz" : 81.102,
+        "intensity" : 26.351
       }, {
-        "mz" : 58.388,
-        "intensity" : 0.10206
+        "mz" : 83.17,
+        "intensity" : 13.007
       }, {
-        "mz" : 69.072,
-        "intensity" : 0.33543999999999996
+        "mz" : 91.118,
+        "intensity" : 12.331
       }, {
-        "mz" : 85.977,
-        "intensity" : 0.43354
+        "mz" : 93.14,
+        "intensity" : 30.405
       }, {
-        "mz" : 132.064,
-        "intensity" : 0.09494
+        "mz" : 95.091,
+        "intensity" : 50.0
+      }, {
+        "mz" : 96.871,
+        "intensity" : 15.034
+      }, {
+        "mz" : 105.084,
+        "intensity" : 27.365
+      }, {
+        "mz" : 107.052,
+        "intensity" : 25.0
+      }, {
+        "mz" : 109.035,
+        "intensity" : 31.757
+      }, {
+        "mz" : 111.057,
+        "intensity" : 18.074
+      }, {
+        "mz" : 119.012,
+        "intensity" : 20.777
+      }, {
+        "mz" : 121.035,
+        "intensity" : 100.0
+      }, {
+        "mz" : 121.722,
+        "intensity" : 11.318
+      }, {
+        "mz" : 122.549,
+        "intensity" : 15.456
+      }, {
+        "mz" : 124.954,
+        "intensity" : 15.203
+      }, {
+        "mz" : 130.958,
+        "intensity" : 10.98
+      }, {
+        "mz" : 132.972,
+        "intensity" : 31.419
+      }, {
+        "mz" : 134.987,
+        "intensity" : 21.199
+      }, {
+        "mz" : 137.048,
+        "intensity" : 26.689
+      }, {
+        "mz" : 143.036,
+        "intensity" : 9.544
+      }, {
+        "mz" : 145.113,
+        "intensity" : 14.949
+      }, {
+        "mz" : 146.854,
+        "intensity" : 15.034
+      }, {
+        "mz" : 148.939,
+        "intensity" : 11.74
+      }, {
+        "mz" : 150.992,
+        "intensity" : 27.027
+      }, {
+        "mz" : 157.2,
+        "intensity" : 13.851
+      }, {
+        "mz" : 159.066,
+        "intensity" : 16.639
+      }, {
+        "mz" : 161.08,
+        "intensity" : 16.639
+      }, {
+        "mz" : 163.149,
+        "intensity" : 12.078
+      }, {
+        "mz" : 165.094,
+        "intensity" : 8.108
+      }, {
+        "mz" : 171.028,
+        "intensity" : 12.331
+      }, {
+        "mz" : 173.152,
+        "intensity" : 10.557
+      }, {
+        "mz" : 174.916,
+        "intensity" : 12.584
+      }, {
+        "mz" : 185.099,
+        "intensity" : 12.5
+      }, {
+        "mz" : 199.295,
+        "intensity" : 8.024
+      }, {
+        "mz" : 216.966,
+        "intensity" : 12.078
+      }, {
+        "mz" : 244.947,
+        "intensity" : 13.936
       } ]
-    },
-    "scores" : [ {
-      "ionizationScore" : 1.0,
-      "adductRelationScore" : null,
-      "rtScore" : null,
-      "finalScore" : 1.0
-    } ]
-  } ],
-  "experimentalSpectrum" : {
-    "precursorMz" : 132.101905,
-    "peaks" : [ {
-      "mz" : 41.305,
-      "intensity" : 100.0
-    }, {
-      "mz" : 44.161,
-      "intensity" : 64.873
-    }, {
-      "mz" : 45.378,
-      "intensity" : 17.722
-    }, {
-      "mz" : 55.961,
-      "intensity" : 44.937
-    }, {
-      "mz" : 57.303,
-      "intensity" : 42.089
-    }, {
-      "mz" : 58.388,
-      "intensity" : 10.206
-    }, {
-      "mz" : 69.072,
-      "intensity" : 33.544
-    }, {
-      "mz" : 85.977,
-      "intensity" : 43.354
-    }, {
-      "mz" : 132.064,
-      "intensity" : 9.494
-    } ]
-  }
+    }
+  } ]
 }
