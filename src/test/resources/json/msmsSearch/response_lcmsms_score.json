@@ -1,0 +1,254 @@
+{
+  "msmsList" : [ {
+    "msmsId" : 273,
+    "compound" : {
+      "compoundId" : 27412,
+      "casId" : "73-32-5",
+      "compoundName" : "L-Isoleucine",
+      "formula" : "C6H13NO2",
+      "mass" : 131.094628665,
+      "chargeType" : 0,
+      "chargeNumber" : 0,
+      "formulaType" : "CHNOPS",
+      "compoundType" : "LIPID",
+      "logP" : null,
+      "rtPred" : -2.4552741019487763,
+      "inchi" : "InChI=1S/C6H13NO2/c1-3-4(2)5(7)6(8)9/h4-5H,3,7H2,1-2H3,(H,8,9)/t4-,5-/m0/s1",
+      "inchiKey" : "AGPKZVBTJJNPAG-WHFBIAKZSA-N",
+      "smiles" : "CC[C@H](C)[C@H](N)C(O)=O",
+      "lipidType" : null,
+      "numChains" : null,
+      "numCarbons" : null,
+      "doubleBonds" : null,
+      "lipidMapsClassifications" : [ {
+        "category" : "FA",
+        "mainClass" : "FA01",
+        "subClass" : "FA0110",
+        "classLevel4" : ""
+      } ],
+      "biologicalActivity" : null,
+      "meshNomenclature" : null,
+      "iupacClassification" : null,
+      "mol2" : null,
+      "pathways" : [ ]
+    },
+    "adduct" : "[M+H]+",
+    "spectrumSource" : "experimental",
+    "deltaPpmPrecursorIon" : 0.002535921119411484,
+    "msmsCosineScore" : 1.0,
+    "collisionEnergy" : 40.0,
+    "spectrum" : {
+      "precursorMz" : 132.10190466499998,
+      "peaks" : [ {
+        "mz" : 41.305,
+        "intensity" : 1.0
+      }, {
+        "mz" : 44.161,
+        "intensity" : 0.64873
+      }, {
+        "mz" : 45.378,
+        "intensity" : 0.17722000000000002
+      }, {
+        "mz" : 55.961,
+        "intensity" : 0.44937
+      }, {
+        "mz" : 57.303,
+        "intensity" : 0.42089
+      }, {
+        "mz" : 58.388,
+        "intensity" : 0.10206
+      }, {
+        "mz" : 69.072,
+        "intensity" : 0.33543999999999996
+      }, {
+        "mz" : 85.977,
+        "intensity" : 0.43354
+      }, {
+        "mz" : 132.064,
+        "intensity" : 0.09494
+      } ]
+    },
+    "scores" : [ {
+      "ionizationScore" : 1.0,
+      "adductRelationScore" : null,
+      "rtScore" : null,
+      "finalScore" : 1.0
+    } ]
+  }, {
+    "msmsId" : 1671,
+    "compound" : {
+      "compoundId" : 27408,
+      "casId" : "327-57-1",
+      "compoundName" : "L-Norleucine",
+      "formula" : "C6H13NO2",
+      "mass" : 131.094628665,
+      "chargeType" : 0,
+      "chargeNumber" : 0,
+      "formulaType" : "CHNOPS",
+      "compoundType" : "LIPID",
+      "logP" : null,
+      "rtPred" : -2.512694380710904,
+      "inchi" : "InChI=1S/C6H13NO2/c1-2-3-4-5(7)6(8)9/h5H,2-4,7H2,1H3,(H,8,9)/t5-/m0/s1",
+      "inchiKey" : "LRQKBLKVPFOOQJ-YFKPBYRVSA-N",
+      "smiles" : "CCCC[C@H](N)C(O)=O",
+      "lipidType" : null,
+      "numChains" : null,
+      "numCarbons" : null,
+      "doubleBonds" : null,
+      "lipidMapsClassifications" : [ {
+        "category" : "FA",
+        "mainClass" : "FA01",
+        "subClass" : "FA0110",
+        "classLevel4" : ""
+      } ],
+      "biologicalActivity" : null,
+      "meshNomenclature" : null,
+      "iupacClassification" : null,
+      "mol2" : null,
+      "pathways" : [ ]
+    },
+    "adduct" : "[M+H]+",
+    "spectrumSource" : "experimental",
+    "deltaPpmPrecursorIon" : 0.002535921119411484,
+    "msmsCosineScore" : 0.6642007377805266,
+    "collisionEnergy" : 40.0,
+    "spectrum" : {
+      "precursorMz" : 132.10190466499998,
+      "peaks" : [ {
+        "mz" : 41.297,
+        "intensity" : 1.0
+      }, {
+        "mz" : 43.295,
+        "intensity" : 0.57862
+      }, {
+        "mz" : 44.442,
+        "intensity" : 0.12579
+      }, {
+        "mz" : 45.355,
+        "intensity" : 0.053849999999999995
+      }, {
+        "mz" : 55.188,
+        "intensity" : 0.19182
+      }, {
+        "mz" : 57.162,
+        "intensity" : 0.05503
+      }, {
+        "mz" : 69.111,
+        "intensity" : 0.1195
+      }, {
+        "mz" : 85.985,
+        "intensity" : 0.3522
+      }, {
+        "mz" : 132.041,
+        "intensity" : 0.04285
+      } ]
+    },
+    "scores" : [ {
+      "ionizationScore" : 1.0,
+      "adductRelationScore" : null,
+      "rtScore" : null,
+      "finalScore" : 1.0
+    } ]
+  }, {
+    "msmsId" : 781,
+    "compound" : {
+      "compoundId" : 89469,
+      "casId" : "1509-34-8",
+      "compoundName" : "L-Alloisoleucine",
+      "formula" : "C6H13NO2",
+      "mass" : 131.094628665,
+      "chargeType" : 0,
+      "chargeNumber" : 0,
+      "formulaType" : "CHNOPS",
+      "compoundType" : "LIPID",
+      "logP" : null,
+      "rtPred" : -2.4552741019487763,
+      "inchi" : "InChI=1S/C6H13NO2/c1-3-4(2)5(7)6(8)9/h4-5H,3,7H2,1-2H3,(H,8,9)/t4-,5+/m1/s1",
+      "inchiKey" : "AGPKZVBTJJNPAG-UHNVWZDZSA-N",
+      "smiles" : "CC[C@@H](C)[C@H](N)C(O)=O",
+      "lipidType" : null,
+      "numChains" : null,
+      "numCarbons" : null,
+      "doubleBonds" : null,
+      "lipidMapsClassifications" : [ ],
+      "biologicalActivity" : null,
+      "meshNomenclature" : null,
+      "iupacClassification" : null,
+      "mol2" : null,
+      "pathways" : [ ]
+    },
+    "adduct" : "[M+H]+",
+    "spectrumSource" : "experimental",
+    "deltaPpmPrecursorIon" : 0.002535921119411484,
+    "msmsCosineScore" : 0.9145034991982632,
+    "collisionEnergy" : 40.0,
+    "spectrum" : {
+      "precursorMz" : 132.10190466499998,
+      "peaks" : [ {
+        "mz" : 41.353,
+        "intensity" : 1.0
+      }, {
+        "mz" : 44.218,
+        "intensity" : 0.6266700000000001
+      }, {
+        "mz" : 45.42,
+        "intensity" : 0.16417
+      }, {
+        "mz" : 56.015,
+        "intensity" : 0.53667
+      }, {
+        "mz" : 57.358,
+        "intensity" : 0.43
+      }, {
+        "mz" : 58.427,
+        "intensity" : 0.10667
+      }, {
+        "mz" : 69.108,
+        "intensity" : 0.34
+      }, {
+        "mz" : 86.081,
+        "intensity" : 0.42
+      }, {
+        "mz" : 132.155,
+        "intensity" : 0.09583
+      } ]
+    },
+    "scores" : [ {
+      "ionizationScore" : null,
+      "adductRelationScore" : null,
+      "rtScore" : null,
+      "finalScore" : null
+    } ]
+  } ],
+  "experimentalSpectrum" : {
+    "precursorMz" : 132.101905,
+    "peaks" : [ {
+      "mz" : 41.305,
+      "intensity" : 100.0
+    }, {
+      "mz" : 44.161,
+      "intensity" : 64.873
+    }, {
+      "mz" : 45.378,
+      "intensity" : 17.722
+    }, {
+      "mz" : 55.961,
+      "intensity" : 44.937
+    }, {
+      "mz" : 57.303,
+      "intensity" : 42.089
+    }, {
+      "mz" : 58.388,
+      "intensity" : 10.206
+    }, {
+      "mz" : 69.072,
+      "intensity" : 33.544
+    }, {
+      "mz" : 85.977,
+      "intensity" : 43.354
+    }, {
+      "mz" : 132.064,
+      "intensity" : 9.494
+    } ]
+  }
+}

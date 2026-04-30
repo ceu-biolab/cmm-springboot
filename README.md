@@ -9,7 +9,7 @@ This repository contains the development-phase backend for **CEU Mass Mediator (
 CEU Mass Mediator (CMM) helps scientists in the field of metabolomics match experimental results against curated compound databases. This backend currently powers:
 
 - **MS search** – simple and batch compound searches by m/z (`/api/compounds/simple-search`, `/api/compounds/batch-search`).
-- **MS/MS search** – tandem mass spectra matching (`/api/msms-search`).
+- **MS/MS search** – tandem mass spectra matching (`/api/msms-search`) and LC-enriched scoring (`/api/lcmsms-search`).
 - **LC-MS batch search** – annotate and score multiple features (`/api/lcms-search`).
 - **GC-MS search** – match GC-MS spectra to reference libraries (`/api/gcms-search`).
 - **CCS search** – query compounds by collisional cross-section (`/api/imms-search`).
@@ -66,6 +66,7 @@ All endpoints live under the `/api` prefix. Most request DTOs use Jakarta Bean V
 | `POST /api/imms-search` | Collisional cross-section search. |
 | `POST /api/lcimms-search` | CCS search enriched with LC retention data and lipid scoring. |
 | `POST /api/msms-search` | MS/MS search (tandem mass spectra matching). |
+| `POST /api/lcmsms-search` | MS/MS search enriched with LC retention-time scoring. |
 | `POST /api/cems-search` | Capillary electrophoresis search by effective mobility and m/z. |
 | `POST /api/cems-rmt-search` | CE search using relative migration time. |
 | `POST /api/cems-1-marker` / `POST /api/cems-2-marker` | One- and two-marker CE guided searches. |
@@ -79,6 +80,7 @@ When something goes wrong, services raise `ResponseStatusException`, ensuring cl
 - `POST /api/compounds/simple-search`, `POST /api/compounds/batch-search`, and `POST /api/browse-search` accept an optional `formulaType` filter such as `CHNOPS` to restrict results to a chemical alphabet.
 - `POST /api/msms-search` accepts `spectrumSource` with `ALL`, `experimental`, or `predicted` to control which library spectra are searched.
 - Each `/api/msms-search` hit now includes its `spectrumSource` so clients can distinguish predicted from experimental matches.
+- `POST /api/lcmsms-search` accepts the same MS/MS payload plus `rtValue` and optional `experimentParameters`, and returns the same MS/MS hits enriched with LC scores when available.
 
 ## ✅ Validation & Error Handling
 

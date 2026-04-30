@@ -2,6 +2,7 @@ package ceu.biolab.cmm.unit.MSMSSearch.service;
 
 import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
 import ceu.biolab.cmm.MSMSSearch.domain.SpectrumSource;
+import ceu.biolab.cmm.MSMSSearch.dto.LCMSMSSearchRequestDTO;
 import ceu.biolab.cmm.shared.domain.msFeature.ScoreType;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
@@ -136,6 +137,26 @@ public class MSMSSearchServiceTest {
         req.setToleranceFragments(101.0);
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.search(req));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    }
+
+    @Test
+    void searchWithLcmsScoring_throwsWhenRtMissing() {
+        LCMSMSSearchRequestDTO req = new LCMSMSSearchRequestDTO();
+        req.setCIDEnergy(CIDEnergy.MED);
+        req.setPrecursorIonMZ(500.0);
+        req.setTolerancePrecursorIon(10.0);
+        req.setToleranceModePrecursorIon(MzToleranceMode.PPM);
+        req.setToleranceFragments(50.0);
+        req.setToleranceModeFragments(MzToleranceMode.MDA);
+        req.setIonizationMode(IonizationMode.POSITIVE);
+        req.setAdducts(List.of("[M+H]+"));
+        req.setFragmentsMZsIntensities(new Spectrum(500.0, List.of(new MSPeak(100.0, 10.0))));
+        req.setScoreType(ScoreType.COSINE);
+        req.setSpectrumSource(SpectrumSource.ALL);
+        req.setRtValue(null);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.searchWithLcmsScoring(req));
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     }
 }

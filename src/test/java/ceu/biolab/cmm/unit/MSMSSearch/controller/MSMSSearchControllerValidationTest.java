@@ -3,6 +3,7 @@ package ceu.biolab.cmm.unit.MSMSSearch.controller;
 import ceu.biolab.cmm.MSMSSearch.controller.MSMSSearchController;
 import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
 import ceu.biolab.cmm.MSMSSearch.domain.SpectrumSource;
+import ceu.biolab.cmm.MSMSSearch.dto.LCMSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.MSMSSearch.service.MSMSSearchService;
@@ -105,6 +106,29 @@ class MSMSSearchControllerValidationTest {
         verifyNoInteractions(msmsSearchService);
     }
 
+    @Test
+    void searchWithLcmsScoring_rejectsMissingRtValue() throws Exception {
+        mockMvc.perform(post("/api/lcmsms-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(validPayloadWithoutRtValue()))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(msmsSearchService);
+    }
+
+    @Test
+    void searchWithLcmsScoring_acceptsValidPayload() throws Exception {
+        when(msmsSearchService.searchWithLcmsScoring(any(LCMSMSSearchRequestDTO.class)))
+                .thenReturn(new MSMSSearchResponseDTO(new ArrayList<>()));
+
+        mockMvc.perform(post("/api/lcmsms-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(validPayloadWithRtValue()))
+                .andExpect(status().isOk());
+
+        verify(msmsSearchService).searchWithLcmsScoring(any(LCMSMSSearchRequestDTO.class));
+    }
+
     private String validPayloadWithCidEnergy(String cidEnergy) {
         return payloadWithCustomCidEnergyField("CIDEnergy", cidEnergy);
     }
@@ -158,6 +182,53 @@ class MSMSSearchControllerValidationTest {
     private String validPayloadWithoutCidEnergy() {
         return """
                 {
+                  "precursorIonMZ": 287.236,
+                  "tolerancePrecursorIon": 10.0,
+                  "toleranceModePrecursorIon": "PPM",
+                  "toleranceFragments": 30.0,
+                  "toleranceModeFragments": "PPM",
+                  "ionizationMode": "POSITIVE",
+                  "adducts": ["[M+H]+"],
+                  "fragmentsMZsIntensities": {
+                    "precursorMz": 287.236,
+                    "peaks": [
+                      { "mz": 121.035, "intensity": 100.0 }
+                    ]
+                  },
+                  "scoreType": "COSINE",
+                  "spectrumSource": "ALL"
+                }
+                """;
+    }
+
+    private String validPayloadWithRtValue() {
+        return """
+                {
+                  "CIDEnergy": "ALL",
+                  "precursorIonMZ": 287.236,
+                  "tolerancePrecursorIon": 10.0,
+                  "toleranceModePrecursorIon": "PPM",
+                  "toleranceFragments": 30.0,
+                  "toleranceModeFragments": "PPM",
+                  "ionizationMode": "POSITIVE",
+                  "adducts": ["[M+H]+"],
+                  "fragmentsMZsIntensities": {
+                    "precursorMz": 287.236,
+                    "peaks": [
+                      { "mz": 121.035, "intensity": 100.0 }
+                    ]
+                  },
+                  "scoreType": "COSINE",
+                  "spectrumSource": "ALL",
+                  "rtValue": 5.2
+                }
+                """;
+    }
+
+    private String validPayloadWithoutRtValue() {
+        return """
+                {
+                  "CIDEnergy": "ALL",
                   "precursorIonMZ": 287.236,
                   "tolerancePrecursorIon": 10.0,
                   "toleranceModePrecursorIon": "PPM",

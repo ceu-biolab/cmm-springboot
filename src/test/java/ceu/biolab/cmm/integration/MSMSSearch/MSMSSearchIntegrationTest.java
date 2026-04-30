@@ -80,6 +80,22 @@ public class MSMSSearchIntegrationTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void testLcmsmsSearchAddsScoresToMsmsHits() throws Exception {
+        String requestJson = loadJson("json/msmsSearch/request_lcmsms_score.json");
+        String expectedResponse = loadJson("json/msmsSearch/response_lcmsms_score.json");
+
+        MvcResult result = mockMvc.perform(post("/api/lcmsms-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        JsonNode expected = sortMsmsList(objectMapper.readTree(expectedResponse));
+        JsonNode actual = sortMsmsList(objectMapper.readTree(result.getResponse().getContentAsString()));
+        assertEquals(expected, actual);
+    }
+
     private JsonNode sortMsmsList(JsonNode response) {
         ObjectNode sortedResponse = response.deepCopy();
         List<JsonNode> hits = new ArrayList<>();
