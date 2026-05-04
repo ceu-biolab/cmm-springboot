@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.metadata.controller;
 
-import ceu.biolab.cmm.metadata.dto.CcsAdductCatalogResponse;
+import ceu.biolab.cmm.metadata.dto.AdductCatalogResponse;
 import ceu.biolab.cmm.metadata.dto.CeMsBufferOption;
 import ceu.biolab.cmm.metadata.dto.CeMsOptionsResponse;
 import ceu.biolab.cmm.metadata.dto.DatabaseStatsResponse;
@@ -22,7 +22,7 @@ public class MetadataController {
     }
 
     @GetMapping("/ccs-adducts")
-    public CcsAdductCatalogResponse getCcsAdducts() {
+    public AdductCatalogResponse getCcsAdducts() {
         return metadataService.getCcsAdductCatalog();
     }
 

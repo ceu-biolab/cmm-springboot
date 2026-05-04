@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.integration.adducts;
+package ceu.biolab.cmm.integration.metadata;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -28,6 +28,15 @@ class AdductsIntegrationTest {
         String expectedResponse = loadJson("json/metadata/adducts_response.json");
 
         mockMvc.perform(get("/api/adducts"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
+    }
+
+    @Test
+    void getMetadataAdductsReturnsExpectedCatalog() throws Exception {
+        String expectedResponse = loadJson("json/metadata/adducts_response.json");
+
+        mockMvc.perform(get("/api/metadata/adducts"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse, JsonCompareMode.STRICT));
     }

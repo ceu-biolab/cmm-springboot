@@ -2,7 +2,7 @@ package ceu.biolab.cmm.metadata.service;
 
 import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
-import ceu.biolab.cmm.metadata.dto.CcsAdductCatalogResponse;
+import ceu.biolab.cmm.metadata.dto.AdductCatalogResponse;
 import ceu.biolab.cmm.metadata.dto.CeMsBufferOption;
 import ceu.biolab.cmm.metadata.dto.CeMsCompoundOption;
 import ceu.biolab.cmm.metadata.dto.CeMsConditionOptions;
@@ -33,7 +33,7 @@ public class MetadataService {
         this.metadataRepository = metadataRepository;
     }
 
-    public CcsAdductCatalogResponse getCcsAdductCatalog() {
+    public AdductCatalogResponse getCcsAdductCatalog() {
         Set<AdductDefinition> positiveDefinitions = new LinkedHashSet<>();
         Set<AdductDefinition> negativeDefinitions = new LinkedHashSet<>();
 
@@ -62,7 +62,7 @@ public class MetadataService {
                 .map(AdductDefinition::canonical)
                 .toList();
 
-        return new CcsAdductCatalogResponse(positive, negative);
+        return new AdductCatalogResponse(positive, negative);
     }
 
     public List<CeMsBufferOption> getCeMsBuffers() {

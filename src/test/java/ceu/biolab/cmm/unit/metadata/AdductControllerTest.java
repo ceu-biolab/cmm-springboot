@@ -1,11 +1,11 @@
-package ceu.biolab.cmm.unit.adducts;
+package ceu.biolab.cmm.unit.metadata;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import ceu.biolab.cmm.adducts.controller.AdductController;
-import ceu.biolab.cmm.adducts.dto.AdductCatalogResponse;
+import ceu.biolab.cmm.metadata.controller.AdductController;
+import ceu.biolab.cmm.metadata.dto.AdductCatalogResponse;
 import org.junit.jupiter.api.Test;
 
 class AdductControllerTest {
