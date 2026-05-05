@@ -4,6 +4,7 @@ import ceu.biolab.cmm.CEMSMarkers.domain.MtToleranceMode;
 import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
 import ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode;
+import ceu.biolab.cmm.CEMSSearch.domain.RmtToleranceMode;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsSearchRequestDTO;
 import ceu.biolab.cmm.CEMSSearch.service.CemsSearchService;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
@@ -50,6 +51,28 @@ abstract class AbstractCemsMarkerService {
         }
     }
 
+    protected void validateMassesAndRmt(List<Double> masses,
+                                        List<Double> relativeMigrationTimes,
+                                        List<String> adducts) {
+        int massesSize = masses == null ? 0 : masses.size();
+        int rmtSize = relativeMigrationTimes == null ? 0 : relativeMigrationTimes.size();
+        if (massesSize == 0 || rmtSize == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Both masses and rmt arrays must contain at least one value");
+        }
+        if (massesSize != rmtSize) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The number of masses must match the number of rmt values");
+        }
+        if (adducts == null || adducts.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one adduct must be provided");
+        }
+        if (masses.stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "masses must contain positive numbers only");
+        }
+        if (relativeMigrationTimes.stream().anyMatch(value -> value == null || value <= 0d)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rmt values must contain positive numbers only");
+        }
+    }
+
     protected String ensureChemicalAlphabet(String chemicalAlphabet) {
         return chemicalAlphabet == null ? "ALL" : chemicalAlphabet;
     }
@@ -76,6 +99,39 @@ abstract class AbstractCemsMarkerService {
             }
             double upperTime = baseTime + delta;
             double lowerTime = Math.max(baseTime - delta, MIN_TIME_MINUTES);
+            double upperMobility = mobilityFunction.applyAsDouble(upperTime);
+            double lowerMobility = mobilityFunction.applyAsDouble(lowerTime);
+            double fracUpper = Math.abs(upperMobility - baseMobility) / Math.abs(baseMobility);
+            double fracLower = Math.abs(lowerMobility - baseMobility) / Math.abs(baseMobility);
+            maxFraction = Math.max(maxFraction, Math.max(fracUpper, fracLower));
+        }
+        return maxFraction * 100d;
+    }
+
+    protected double computeMobilityTolerancePercentFromRmt(List<Double> relativeMigrationTimes,
+                                                            double rmtTolerance,
+                                                            RmtToleranceMode toleranceMode,
+                                                            double referenceMigrationTime,
+                                                            DoubleUnaryOperator mobilityFunction) {
+        if (rmtTolerance <= 0) {
+            return 0d;
+        }
+        double maxFraction = 0d;
+        for (double baseRmt : relativeMigrationTimes) {
+            double delta = switch (toleranceMode) {
+                case PERCENTAGE -> baseRmt * (rmtTolerance * 0.01d);
+                case ABSOLUTE -> rmtTolerance;
+            };
+            if (delta <= 0) {
+                continue;
+            }
+            double baseTime = referenceMigrationTime * baseRmt;
+            double baseMobility = mobilityFunction.applyAsDouble(baseTime);
+            if (baseMobility == 0d) {
+                continue;
+            }
+            double upperTime = referenceMigrationTime * (baseRmt + delta);
+            double lowerTime = referenceMigrationTime * Math.max(baseRmt - delta, MIN_TIME_MINUTES);
             double upperMobility = mobilityFunction.applyAsDouble(upperTime);
             double lowerMobility = mobilityFunction.applyAsDouble(lowerTime);
             double fracUpper = Math.abs(upperMobility - baseMobility) / Math.abs(baseMobility);
