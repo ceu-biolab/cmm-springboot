@@ -1,0 +1,32 @@
+{
+  "mzValues": [
+    790.63203
+  ],
+  "ccsValues": [
+    291.175
+  ],
+  "rtValues": [
+    6.0
+  ],
+  "mzToleranceMode": "PPM",
+  "mzTolerance": 5,
+  "ccsToleranceMode": "PERCENTAGE",
+  "ccsTolerance": 1.5,
+  "ionizationMode": "POSITIVE",
+  "bufferGas": "N2",
+  "adducts": [
+    "[M+Na]+",
+    "[M+H]+"
+  ],
+  "compositeSpectrum": [
+    {
+      "790.63203": 100.0,
+      "812.61397": 42.0
+    }
+  ],
+  "formulaType": "CHNOPS",
+  "experimentParameters": {
+    "ionMode": "POSITIVE",
+    "modifierType": "NONE"
+  }
+}

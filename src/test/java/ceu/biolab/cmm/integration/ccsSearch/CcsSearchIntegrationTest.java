@@ -21,6 +21,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -234,6 +235,27 @@ public class CcsSearchIntegrationTest {
         assertTrue(foundFinalScore, "Expected at least one annotation to carry a final score");
         assertTrue(foundScoreWithRetentionAdductAndIonization,
                 "Expected at least one annotation to carry RT, adduct-relation, ionization, and final scoring data");
+    }
+
+    @Test
+    void testCcsSearchWithLcmsScoringAcceptsCompositeSpectrumFixture() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request_lcimms_score_with_composite_spectrum.json");
+
+        MvcResult result = mockMvc.perform(post("/api/lcimms-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        JsonNode root = objectMapper.readTree(result.getResponse().getContentAsString());
+        JsonNode features = root.path("imFeatures");
+        assertTrue(features.isArray());
+        assertFalse(features.isEmpty());
+
+        JsonNode annotationsByAdduct = features.get(0).path("annotationsByAdducts");
+        assertTrue(annotationsByAdduct.isArray());
+        assertFalse(annotationsByAdduct.isEmpty());
+        assertEquals("[M+H]+", annotationsByAdduct.get(0).path("adduct").asText());
     }
 
     @Test
