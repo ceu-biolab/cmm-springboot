@@ -3,6 +3,7 @@ package ceu.biolab.cmm.unit.metadata;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import ceu.biolab.cmm.metadata.dto.AdductCatalogResponse;
 import ceu.biolab.cmm.metadata.dto.CeMsBufferOption;
 import ceu.biolab.cmm.metadata.dto.CeMsConditionOptions;
 import ceu.biolab.cmm.metadata.repository.MetadataRepository;
@@ -22,6 +23,17 @@ class MetadataServiceTest {
 
     @InjectMocks
     private MetadataService metadataService;
+
+    @Test
+    void getCcsAdductCatalogMapsLegacyWaterLossAliasToCanonicalAdduct() {
+        when(metadataRepository.findCcsAdductsInUse()).thenReturn(List.of(
+                new MetadataRepository.CcsAdductRow(2, "M-H2O-H")
+        ));
+
+        AdductCatalogResponse response = metadataService.getCcsAdductCatalog();
+
+        assertEquals(List.of("[M-H-H2O]-"), response.negative());
+    }
 
     @Test
     void getCeMsBuffersSortsByFamilyPriorityThenAlphabetically() {

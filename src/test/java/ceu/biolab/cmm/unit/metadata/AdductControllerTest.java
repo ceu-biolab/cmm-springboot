@@ -20,6 +20,7 @@ class AdductControllerTest {
         assertFalse(response.negative().isEmpty(), "Negative adduct list should not be empty");
         assertTrue(response.positive().contains("[M+H]+"), "Positive adducts should include [M+H]+");
         assertTrue(response.negative().contains("[M-H]-"), "Negative adducts should include [M-H]-");
+        assertFalse(response.negative().contains("[M-H2O-H]-"), "Duplicate water-loss negative adduct should not be exposed");
         assertEquals("[M+H]+", response.positive().get(0), "Most common positive adduct should be first");
         assertEquals("[M-H]-", response.negative().get(0), "Most common negative adduct should be first");
         assertTrue(response.positive().indexOf("[M+2H]2+") < response.positive().indexOf("[M+H-H2O]+"));

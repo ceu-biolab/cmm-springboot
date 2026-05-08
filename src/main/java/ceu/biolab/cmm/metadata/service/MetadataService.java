@@ -28,6 +28,9 @@ import org.springframework.web.server.ResponseStatusException;
 public class MetadataService {
 
     private final MetadataRepository metadataRepository;
+    private static final Map<String, String> LEGACY_ADDUCT_ALIASES = Map.of(
+            "M-H2O-H", "[M-H-H2O]-"
+    );
 
     public MetadataService(MetadataRepository metadataRepository) {
         this.metadataRepository = metadataRepository;
@@ -112,8 +115,13 @@ public class MetadataService {
         if (legacyKey == null || legacyKey.isBlank()) {
             return Optional.empty();
         }
+        String normalizedLegacyKey = legacyKey.trim();
+        String aliasedCanonical = LEGACY_ADDUCT_ALIASES.get(normalizedLegacyKey);
+        if (aliasedCanonical != null) {
+            return Optional.of(AdductService.requireDefinition(mode, aliasedCanonical));
+        }
         return AdductService.definitionMap(mode).values().stream()
-                .filter(definition -> definition.legacyKey().equalsIgnoreCase(legacyKey.trim()))
+                .filter(definition -> definition.legacyKey().equalsIgnoreCase(normalizedLegacyKey))
                 .findFirst();
     }
 

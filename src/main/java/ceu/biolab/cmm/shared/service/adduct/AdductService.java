@@ -33,7 +33,7 @@ public final class AdductService {
                     "[2M+ACN+H]+", "[2M+ACN+Na]+", "[2M+H-H2O]+", "[2M+2H+3H2O]+"),
             IonizationMode.NEGATIVE, ranked(
                     "[M-H]-", "[M+Cl]-", "[M+FA-H]-", "[M+Hac-H]-", "[M+CH3COO]-",
-                    "[M+Na-2H]-", "[M+K-2H]-", "[M-H-H2O]-", "[M-H2O-H]-",
+                    "[M+Na-2H]-", "[M+K-2H]-", "[M-H-H2O]-",
                     "[M-2H]2-", "[M-3H]3-", "[M+Br]-", "[M+TFA-H]-",
                     "[2M-H]-", "[2M+FA-H]-", "[2M+Hac-H]-", "[2M+CH3COO]-", "[3M-H]-")
     );
