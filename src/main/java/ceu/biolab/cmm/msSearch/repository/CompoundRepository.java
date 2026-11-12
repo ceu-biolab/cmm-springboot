@@ -8,6 +8,7 @@ import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.adduct.AdductDefinition;
+import ceu.biolab.cmm.shared.service.FormulaTypeFilter;
 import ceu.biolab.cmm.shared.service.MassErrorTools;
 import ceu.biolab.cmm.shared.service.MzToleranceConverter;
 import ceu.biolab.cmm.shared.service.adduct.AdductService;
@@ -106,7 +107,7 @@ public class CompoundRepository {
             compoundType = CompoundType.LIPID;
         }
 
-        Optional<Set<String>> allowedElements = resolveAllowedElements(formulaType);
+        Optional<Set<String>> allowedElements = FormulaTypeFilter.allowedElements(formulaType);
 
         double lowerBound, upperBound;
 
@@ -207,7 +208,7 @@ public class CompoundRepository {
 
                 Set<Compound> filteredCompounds = compounds.stream()
                         .peek(this::normalizeLipidMapsClassification)
-                        .filter(comp -> matchesRequestedAlphabet(comp, allowedElements))
+                        .filter(comp -> FormulaTypeFilter.matches(comp, allowedElements))
                         .collect(Collectors.toCollection(LinkedHashSet::new));
 
                 List<Annotation> annotations = new ArrayList<>();
@@ -253,41 +254,6 @@ public class CompoundRepository {
         Compound compound = compounds.get(0);
         compound.setPathways(fetchPathwaysForCompound(compound.getCompoundId()));
         return Optional.of(compound);
-    }
-
-    private Optional<Set<String>> resolveAllowedElements(Optional<FormulaType> formulaType) {
-        if (formulaType == null || formulaType.isEmpty()) {
-            return Optional.empty();
-        }
-        FormulaType requested = formulaType.get();
-        if (requested == FormulaType.ALL || requested == FormulaType.ALLD) {
-            return Optional.empty();
-        }
-        return Optional.of(parseAlphabetToElements(requested.name()));
-    }
-
-    private boolean matchesRequestedAlphabet(Compound compound, Optional<Set<String>> allowedElements) {
-        if (allowedElements == null || allowedElements.isEmpty()) {
-            return true;
-        }
-        Optional<Set<String>> compoundElements = compound.formulaElements();
-        if (compoundElements.isEmpty()) {
-            // Compounds without a formula should be included for all requested alphabets.
-            return true;
-        }
-        return allowedElements.get().containsAll(compoundElements.get());
-    }
-
-    private Set<String> parseAlphabetToElements(String alphabet) {
-        Set<String> elements = new LinkedHashSet<>();
-        if (alphabet == null) {
-            return elements;
-        }
-        Matcher matcher = ALPHABET_PATTERN.matcher(alphabet.toUpperCase());
-        while (matcher.find()) {
-            elements.add(matcher.group(1));
-        }
-        return elements;
     }
 
     /**
@@ -338,7 +304,6 @@ public class CompoundRepository {
         }
     }
 
-    private static final Pattern ALPHABET_PATTERN = Pattern.compile("([A-Z][a-z]?)");
     private static final Pattern BRACKET_CODE_PATTERN = Pattern.compile(".*\\[(.+?)\\].*");
 
     private String loadMsSearchQueryTemplate() {

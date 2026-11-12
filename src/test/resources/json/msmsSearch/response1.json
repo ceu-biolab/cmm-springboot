@@ -49,6 +49,7 @@
                 "aspergillusWebName": null
             },
             "adduct": "[M+H]+",
+            "spectrumSource": "experimental",
             "deltaPpmPrecursorIon": -3.2780672110277,
             "msmsCosineScore": 0.9999999999999998,
             "collisionEnergy": 25.0,

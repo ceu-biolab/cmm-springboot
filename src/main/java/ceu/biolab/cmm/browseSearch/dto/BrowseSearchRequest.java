@@ -1,6 +1,7 @@
 package ceu.biolab.cmm.browseSearch.dto;
 
 import ceu.biolab.cmm.shared.domain.Database;
+import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ public class BrowseSearchRequest {
     @NotNull
     private MetaboliteType metaboliteType;
     private boolean exactName;
+    private FormulaType formulaType;
 
     public BrowseSearchRequest(String searchTerm, String searchFormula, Set<Database> databases, MetaboliteType metaboliteType, boolean exactName) {
         this.compoundName = (searchTerm == null || searchTerm.isEmpty()) ? "" : searchTerm;
@@ -24,6 +26,17 @@ public class BrowseSearchRequest {
         this.databases = databases;
         this.metaboliteType = metaboliteType;
         this.exactName = exactName;
+        this.formulaType = null;
+    }
+
+    public BrowseSearchRequest(String searchTerm,
+                               String searchFormula,
+                               Set<Database> databases,
+                               MetaboliteType metaboliteType,
+                               boolean exactName,
+                               FormulaType formulaType) {
+        this(searchTerm, searchFormula, databases, metaboliteType, exactName);
+        this.formulaType = formulaType;
     }
 
     public BrowseSearchRequest() {
@@ -32,6 +45,7 @@ public class BrowseSearchRequest {
         this.databases = new HashSet<>();
         this.metaboliteType = MetaboliteType.ALL;
         this.exactName = false;
+        this.formulaType = null;
     }
 
     public void setCompoundName(String compound_name) {

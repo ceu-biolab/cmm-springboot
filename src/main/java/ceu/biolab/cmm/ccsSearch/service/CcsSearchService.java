@@ -38,8 +38,10 @@ import java.util.List;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CcsSearchService {
@@ -50,6 +52,7 @@ public class CcsSearchService {
     private CcsSearchRepository ccsSearchRepository;
 
     public CcsSearchResponseDTO search(CcsSearchRequestDTO request) {
+        validateCompositeSpectraIfPresent(request);
         if (request.getMzTolerance() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mzTolerance must be greater than zero.");
         }
@@ -105,8 +108,9 @@ public class CcsSearchService {
             double ccs = request.getCcsValues().get(i);
             IMFeature feature = new IMFeature(mz, ccs);
             AnnotatedFeature imAnnotatedFeature = new AnnotatedFeature(feature);
+            List<AdductDefinition> featureAdducts = adductsForFeature(request, effectiveAdducts, ionizationMode, mz, i);
 
-            for (AdductDefinition adduct : effectiveAdducts) {
+            for (AdductDefinition adduct : featureAdducts) {
                 double neutralMass = AdductService.neutralMassFromMz(mz, adduct);
 
                 double mzDifference;
@@ -246,6 +250,69 @@ public class CcsSearchService {
         }
 
         return response;
+    }
+
+    private List<AdductDefinition> adductsForFeature(CcsSearchRequestDTO request,
+                                                     List<AdductDefinition> effectiveAdducts,
+                                                     IonizationMode ionizationMode,
+                                                     double observedMz,
+                                                     int featureIndex) {
+        Map<Double, Double> compositeSpectrum = compositeSpectrumAt(request, featureIndex);
+        if (compositeSpectrum == null || compositeSpectrum.isEmpty()) {
+            return effectiveAdducts;
+        }
+
+        Set<String> candidates = effectiveAdducts.stream()
+                .map(AdductDefinition::canonical)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        return AdductService.detectAdduct(ionizationMode, observedMz, candidates, compositeSpectrum)
+                .map(detectedAdduct -> {
+                    List<AdductDefinition> ordered = new ArrayList<>();
+                    ordered.add(detectedAdduct);
+                    for (AdductDefinition adduct : effectiveAdducts) {
+                        if (!adduct.equals(detectedAdduct)) {
+                            ordered.add(adduct);
+                        }
+                    }
+                    return ordered;
+                })
+                .orElse(effectiveAdducts);
+    }
+
+    private Map<Double, Double> compositeSpectrumAt(CcsSearchRequestDTO request, int featureIndex) {
+        if (!(request instanceof CcsScoringRequestDTO scoringRequest)) {
+            return null;
+        }
+        List<Map<Double, Double>> compositeSpectra = scoringRequest.getCompositeSpectrum();
+        if (compositeSpectra == null || compositeSpectra.isEmpty()) {
+            return null;
+        }
+        return compositeSpectra.get(featureIndex);
+    }
+
+    private void validateCompositeSpectraIfPresent(CcsSearchRequestDTO request) {
+        if (!(request instanceof CcsScoringRequestDTO scoringRequest)) {
+            return;
+        }
+        List<Map<Double, Double>> compositeSpectra = scoringRequest.getCompositeSpectrum();
+        if (compositeSpectra == null || compositeSpectra.isEmpty()) {
+            return;
+        }
+        if (request.getMzValues() == null || compositeSpectra.size() != request.getMzValues().size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Number of composite spectra must match the number of m/z values.");
+        }
+        if (compositeSpectra.stream().anyMatch(spectrum -> spectrum == null || spectrum.isEmpty())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Each composite spectrum must contain peaks.");
+        }
+        if (compositeSpectra.stream().anyMatch(spectrum -> spectrum.keySet().contains(null) || spectrum.values().contains(null))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Composite spectra must not contain null m/z or intensity values.");
+        }
+        if (compositeSpectra.stream().anyMatch(spectrum -> spectrum.keySet().stream().anyMatch(mz -> mz <= 0))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Composite spectrum m/z values must be greater than zero.");
+        }
+        if (compositeSpectra.stream().anyMatch(spectrum -> spectrum.values().stream().anyMatch(intensity -> intensity < 0))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Composite spectrum intensity values must be greater than or equal to zero.");
+        }
     }
 
     public CcsSearchResponseDTO searchWithLcmsScoring(CcsScoringRequestDTO request) {

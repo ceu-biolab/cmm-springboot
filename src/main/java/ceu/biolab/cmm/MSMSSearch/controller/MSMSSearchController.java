@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
+import ceu.biolab.cmm.MSMSSearch.dto.LCMSMSSearchRequestDTO;
+import ceu.biolab.cmm.MSMSSearch.dto.LCMSMSSearchResponseDTO;
 import ceu.biolab.cmm.MSMSSearch.service.MSMSSearchService;
 
 @RestController
@@ -20,5 +22,10 @@ public class MSMSSearchController {
     @PostMapping({"/msms-search", "/MSMSSearch"})
     public MSMSSearchResponseDTO search(@Valid @RequestBody MSMSSearchRequestDTO request) {
         return msmsSearchService.search(request);
+    }
+
+    @PostMapping("/lcmsms-search")
+    public LCMSMSSearchResponseDTO searchWithLcmsScoring(@Valid @RequestBody LCMSMSSearchRequestDTO request) {
+        return msmsSearchService.searchWithLcmsScoring(request);
     }
 }

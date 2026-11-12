@@ -53,5 +53,6 @@
         { "mz": 244.947, "intensity": 13.936 }
     ]
   },
-  "scoreType": "COSINE"
+  "scoreType": "COSINE",
+  "spectrumSource": "ALL"
 }

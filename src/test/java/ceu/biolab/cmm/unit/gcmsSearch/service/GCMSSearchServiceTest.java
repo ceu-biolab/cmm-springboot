@@ -1,10 +1,11 @@
-package ceu.biolab.cmm.gcmsSearch.service;
+package ceu.biolab.cmm.unit.gcmsSearch.service;
+
+import ceu.biolab.cmm.gcmsSearch.service.GCMSSearchService;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
 
 class GCMSSearchServiceTest {
 
@@ -13,7 +14,8 @@ class GCMSSearchServiceTest {
         GCMSSearchService service = new GCMSSearchService();
         ReflectionTestUtils.setField(service, "gcmsScoreThreshold", 1.1d);
 
-        assertThrows(IllegalStateException.class, service::validateConfiguration);
+        assertThrows(IllegalStateException.class, () ->
+                ReflectionTestUtils.invokeMethod(service, "validateConfiguration"));
     }
 
     @Test
@@ -21,6 +23,7 @@ class GCMSSearchServiceTest {
         GCMSSearchService service = new GCMSSearchService();
         ReflectionTestUtils.setField(service, "gcmsScoreThreshold", 0.5d);
 
-        assertDoesNotThrow(service::validateConfiguration);
+        assertDoesNotThrow(() ->
+                ReflectionTestUtils.invokeMethod(service, "validateConfiguration"));
     }
 }

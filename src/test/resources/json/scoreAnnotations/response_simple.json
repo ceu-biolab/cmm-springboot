@@ -26,16 +26,9 @@
             },
             "scores": [
               {
-                "rtScoreMap": {
-                  "800.55.0": [true]
-                },
                 "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
-                "scores": {
-                  "rt": "",
-                  "adduct": "1.0",
-                  "ionization": "1.0"
-                }
+                "rtScore": 1.0
               }
             ]
           }
@@ -62,16 +55,9 @@
             },
             "scores": [
               {
-                "rtScoreMap": {
-                  "800.55.0": [true]
-                },
                 "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
-                "scores": {
-                  "rt": "",
-                  "adduct": "1.0",
-                  "ionization": "1.0"
-                }
+                "rtScore": 1.0
               }
             ]
           }
@@ -106,16 +92,9 @@
             },
             "scores": [
               {
-                "rtScoreMap": {
-                  "800.56.0": [true, true]
-                },
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "scores": {
-                  "rt": "",
-                  "adduct": "",
-                  "ionization": ""
-                }
+                "rtScore": 1.0
               }
             ]
           }

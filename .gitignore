@@ -9,3 +9,4 @@ mykeystore.jks
 .venv/
 DEPLOYMENT.md
 __temp
+mediator/

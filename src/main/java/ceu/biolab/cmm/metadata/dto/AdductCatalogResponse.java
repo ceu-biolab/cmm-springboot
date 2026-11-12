@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.adducts.dto;
+package ceu.biolab.cmm.metadata.dto;
 
 import java.util.List;
 

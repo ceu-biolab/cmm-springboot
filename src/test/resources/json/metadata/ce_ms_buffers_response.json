@@ -1,0 +1,57 @@
+[
+  {
+    "id": 3,
+    "code": "FORMIC_ACID_0DOT1M",
+    "description": "Formic Acid 0.1 M"
+  },
+  {
+    "id": 5,
+    "code": "FORMIC_ACID_0DOT26M",
+    "description": "Formic Acid 0.26 M"
+  },
+  {
+    "id": 7,
+    "code": "FORMIC_ACID_0DOT5PERCENT_METHANOL_5PERCENT",
+    "description": "Formic Acid 0.5% + Methanol 5%"
+  },
+  {
+    "id": 1,
+    "code": "FORMIC_ACID_1M",
+    "description": "Formic Acid 1 M"
+  },
+  {
+    "id": 10,
+    "code": "FORMIC_ACID_1M_ACN_15PERCENT",
+    "description": "Formic Acid 1 M + Acetonitrile 15%"
+  },
+  {
+    "id": 11,
+    "code": "AMMONIUM_ACETATE_35mM_ACETONITRILE_70PERCENT_METHANOL_15PERCENT_H2O_10PERCENT_2PROPANOL_5PERCENT",
+    "description": "Ammonium Acetate 35 mM in 70% acetonitrile, 15% methanol, 10% water, 5% 2-propanol"
+  },
+  {
+    "id": 4,
+    "code": "AMMONIUM_ACETATE_50mM",
+    "description": "Ammonium Acetate 50 mM"
+  },
+  {
+    "id": 9,
+    "code": "AMMONIUM_ACETATE_50mM_METHANOL_5PERCENT",
+    "description": "Ammonium Acetate 50 mM + Methanol 5%"
+  },
+  {
+    "id": 6,
+    "code": "AMMONIUM_BICARBONATE_20mM",
+    "description": "Ammonium Bicarbonate 20 mM"
+  },
+  {
+    "id": 8,
+    "code": "AMMONIUM_BICARBONATE_50mM",
+    "description": "Ammonium Bicarbonate 50 mM"
+  },
+  {
+    "id": 2,
+    "code": "ACETIC_ACID_10PERCENT",
+    "description": "Acetic Acid 10%"
+  }
+]

@@ -3,6 +3,7 @@ package ceu.biolab.cmm.MSMSSearch.repository;
 import ceu.biolab.cmm.MSMSSearch.domain.CIDEnergy;
 import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
 import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
+import ceu.biolab.cmm.MSMSSearch.domain.SpectrumSource;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
@@ -95,7 +96,13 @@ public class MSMSSearchRepository {
 
             Set<MSMSAnnotation> libSpectra= new HashSet<>();
             for (Compound compound : compoundsSet) {
-                libSpectra.addAll(getSpectraForCompounds(compound, queryData.getIonizationMode(), queryData.getCIDEnergy(), adductDefinition, querySpectrum.getPrecursorMz()));
+                libSpectra.addAll(getSpectraForCompounds(
+                        compound,
+                        queryData.getIonizationMode(),
+                        queryData.getCIDEnergy(),
+                        adductDefinition,
+                        querySpectrum.getPrecursorMz(),
+                        queryData.getSpectrumSource()));
             }
             matchedSpectra.addAll(
                     getMSMSWithScores(
@@ -115,8 +122,11 @@ public class MSMSSearchRepository {
     }
 
     public List<MSMSAnnotation> getSpectraForCompounds(Compound compound, IonizationMode ionizationMode,
-                                                      CIDEnergy voltageEnergy, AdductDefinition adduct, Double queryMz) throws IOException {
-        Set<MSMSAnnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy, adduct, queryMz);
+                                                      CIDEnergy voltageEnergy,
+                                                      AdductDefinition adduct,
+                                                      Double queryMz,
+                                                      SpectrumSource spectrumSource) throws IOException {
+        Set<MSMSAnnotation> msmsSet = getMsmsForCompound(compound, ionizationMode, voltageEnergy, adduct, queryMz, spectrumSource);
         List<MSMSAnnotation> spectra = new ArrayList<>();
         for (MSMSAnnotation msms : msmsSet) {
             // Fetch precursor m/z and peaks
@@ -128,7 +138,10 @@ public class MSMSSearchRepository {
     }
 
     public Set<MSMSAnnotation> getMsmsForCompound(Compound compound, IonizationMode ionMode,
-                                                 CIDEnergy voltage, AdductDefinition adduct, Double queryMz) throws IOException {
+                                                 CIDEnergy voltage,
+                                                 AdductDefinition adduct,
+                                                 Double queryMz,
+                                                 SpectrumSource spectrumSource) throws IOException {
         Resource rsrc = resourceLoader.getResource("classpath:sql/MSMS/MSMSSearch.sql");
         String sql = loadSql(rsrc);
         sql = sql.replace("(:compound_id)", String.valueOf(compound.getCompoundId()));
@@ -141,14 +154,20 @@ public class MSMSSearchRepository {
         String voltageFilterClause = voltage == CIDEnergy.ALL
                 ? ""
                 : "AND voltage_level = '" + voltage + "'";
+        String sourceFilterClause = spectrumSource == null ? "" : spectrumSource.sqlFilterClause();
         sql = sql.replace("(:ionization_mode)", String.valueOf(mode))
-                .replace("(:voltage_filter_clause)", voltageFilterClause);
+                .replace("(:voltage_filter_clause)", voltageFilterClause)
+                .replace("(:spectrum_source_filter_clause)", sourceFilterClause);
 
         Set<MSMSAnnotation> msmsSet = new HashSet<>();
         jdbcTemplate.query(sql, (rs, _) -> {
             MSMSAnnotation msms = new MSMSAnnotation();
             msms.setCompound(compound);
             msms.setMsmsId(rs.getInt("msms_id"));
+            long predictedFlag = rs.getLong("predicted");
+            msms.setSpectrumSource(rs.wasNull()
+                    ? SpectrumSource.EXPERIMENTAL
+                    : SpectrumSource.fromPredictedFlag(predictedFlag));
             try {
                 double ce = rs.getDouble("ionization_voltage");
                 if (!rs.wasNull()) {

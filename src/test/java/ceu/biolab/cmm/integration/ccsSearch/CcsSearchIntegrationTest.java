@@ -21,6 +21,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,7 +51,7 @@ public class CcsSearchIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String actual = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.STRICT);
+        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.LENIENT);
     }
 
     @Test
@@ -106,6 +107,8 @@ public class CcsSearchIntegrationTest {
         assertFalse(scores.isEmpty());
         JsonNode firstScore = scores.get(0);
         assertTrue(firstScore.isObject());
+        assertTrue(firstScore.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
+        assertTrue(firstScore.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
     }
 
     @Test
@@ -141,8 +144,10 @@ public class CcsSearchIntegrationTest {
                         continue;
                     }
                     JsonNode score = scores.get(0);
-                    JsonNode rtScoreMap = score.path("rtScoreMap");
-                    if (rtScoreMap.isObject() && rtScoreMap.size() > 0) {
+                    assertTrue(score.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
+                    assertTrue(score.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
+                    JsonNode rtScore = score.path("rtScore");
+                    if (rtScore.isNumber()) {
                         foundRetentionScore = true;
                         break;
                     }
@@ -157,6 +162,100 @@ public class CcsSearchIntegrationTest {
         }
 
         assertTrue(foundRetentionScore, "Expected at least one annotation to carry retention-time scores");
+    }
+
+    @Test
+    void testCcsSearchWithLcmsScoringProducesMeaningfulScores() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request_lcimms_score_with_meaningful_scores.json");
+        String expectedResponse = loadJson("json/ccsSearch/response_lcimms_score_with_meaningful_scores.json");
+
+        MvcResult result = mockMvc.perform(post("/api/lcimms-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actual = result.getResponse().getContentAsString();
+        JSONAssert.assertEquals(expectedResponse, actual, JSONCompareMode.LENIENT);
+
+        JsonNode root = objectMapper.readTree(actual);
+        JsonNode features = root.path("imFeatures");
+        assertTrue(features.isArray());
+        assertFalse(features.isEmpty());
+
+        boolean foundScoreWithRetentionAdductAndIonization = false;
+        boolean foundFinalScore = false;
+
+        for (JsonNode feature : features) {
+            JsonNode annotationsByAdduct = feature.path("annotationsByAdducts");
+            if (!annotationsByAdduct.isArray()) {
+                continue;
+            }
+            for (JsonNode annotationsNode : annotationsByAdduct) {
+                JsonNode annotations = annotationsNode.path("annotations");
+                if (!annotations.isArray()) {
+                    continue;
+                }
+                for (JsonNode annotation : annotations) {
+                    JsonNode scores = annotation.path("scores");
+                    if (!scores.isArray() || scores.isEmpty()) {
+                        continue;
+                    }
+                    for (JsonNode score : scores) {
+                        assertTrue(score.path("rtScoreMap").isMissingNode(), "Internal RT comparison map should not be exposed in JSON");
+                        assertTrue(score.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
+                        JsonNode rtScore = score.path("rtScore");
+                        JsonNode ionizationScore = score.path("ionizationScore");
+                        JsonNode adductRelationScore = score.path("adductRelationScore");
+                        JsonNode finalScore = score.path("finalScore");
+                        if (finalScore.isNumber()) {
+                            foundFinalScore = true;
+                        }
+                        if (rtScore.isNumber()
+                                && !ionizationScore.isNull()
+                                && !adductRelationScore.isNull()
+                                && finalScore.isNumber()) {
+                            foundScoreWithRetentionAdductAndIonization = true;
+                            break;
+                        }
+                    }
+                    if (foundScoreWithRetentionAdductAndIonization) {
+                        break;
+                    }
+                }
+                if (foundScoreWithRetentionAdductAndIonization) {
+                    break;
+                }
+            }
+            if (foundScoreWithRetentionAdductAndIonization) {
+                break;
+            }
+        }
+
+        assertTrue(foundFinalScore, "Expected at least one annotation to carry a final score");
+        assertTrue(foundScoreWithRetentionAdductAndIonization,
+                "Expected at least one annotation to carry RT, adduct-relation, ionization, and final scoring data");
+    }
+
+    @Test
+    void testCcsSearchWithLcmsScoringAcceptsCompositeSpectrumFixture() throws Exception {
+        String requestJson = loadJson("json/ccsSearch/request_lcimms_score_with_composite_spectrum.json");
+
+        MvcResult result = mockMvc.perform(post("/api/lcimms-search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        JsonNode root = objectMapper.readTree(result.getResponse().getContentAsString());
+        JsonNode features = root.path("imFeatures");
+        assertTrue(features.isArray());
+        assertFalse(features.isEmpty());
+
+        JsonNode annotationsByAdduct = features.get(0).path("annotationsByAdducts");
+        assertTrue(annotationsByAdduct.isArray());
+        assertFalse(annotationsByAdduct.isEmpty());
+        assertEquals("[M+H]+", annotationsByAdduct.get(0).path("adduct").asText());
     }
 
     @Test

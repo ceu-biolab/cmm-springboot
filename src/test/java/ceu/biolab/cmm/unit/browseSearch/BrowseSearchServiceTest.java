@@ -105,4 +105,18 @@ class BrowseSearchServiceTest {
         assertEquals("Glucose", request.getCompoundName());
         assertEquals("C6H12O6", request.getFormula());
     }
+
+    @Test
+    void constructorKeepsProvidedFormulaType() {
+        BrowseSearchRequest request = new BrowseSearchRequest(
+                "Chlorogenic acid",
+                "",
+                Set.of(Database.ALL),
+                MetaboliteType.ALL,
+                false,
+                FormulaType.CHNOPS
+        );
+
+        assertEquals(FormulaType.CHNOPS, request.getFormulaType());
+    }
 }

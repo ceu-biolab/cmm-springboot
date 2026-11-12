@@ -12,9 +12,9 @@ public class RTSearchResponseDTO {
         this.msFeatures = new ArrayList<>();
     }
 
-    public void addImFeature(AnnotatedFeature imFeature) {
-        if (imFeature != null) {
-            this.msFeatures.add(imFeature);
+    public void addIMSFeature(AnnotatedFeature imsFeature) {
+        if (imsFeature != null) {
+            this.msFeatures.add(imsFeature);
         }
     }
 

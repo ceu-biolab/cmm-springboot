@@ -39,6 +39,8 @@ public class MSMSSearchRequestDTO {
     private Spectrum fragmentsMZsIntensities;   // List of mz-intensity pairs
     @NotNull
     private ScoreType scoreType;
+    @NotNull
+    private SpectrumSource spectrumSource;
 
     public MSMSSearchRequestDTO(CIDEnergy CIDEnergy, double precursorIonMZ, double tolerancePrecursorIon, MzToleranceMode toleranceModePrecursorIon,
                                 double toleranceFragments, MzToleranceMode toleranceModeFragments, IonizationMode ionizationMode,
@@ -53,6 +55,7 @@ public class MSMSSearchRequestDTO {
         this.adducts = adducts;
         this.fragmentsMZsIntensities = fragmentsMZsIntensities;
         this.scoreType = scoreType;
+        this.spectrumSource = SpectrumSource.ALL;
     }
 
     public MSMSSearchRequestDTO() {
@@ -66,6 +69,7 @@ public class MSMSSearchRequestDTO {
         this.adducts = new ArrayList<>();
         this.fragmentsMZsIntensities = new Spectrum();
         this.scoreType = null;
+        this.spectrumSource = SpectrumSource.ALL;
     }
 
 }

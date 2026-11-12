@@ -1,41 +1,34 @@
 package ceu.biolab.cmm.gcmsSearch.dto;
 
-import ceu.biolab.cmm.gcmsSearch.domain.GCMSFeature;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import ceu.biolab.cmm.gcmsSearch.domain.GCMSAnnotation;
+import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class GCMSSearchResponseDTO {
-    private List<GCMSFeature> gcmsFeatures;
+    private Spectrum gcmsSpectrumExperimental;
+    private List<GCMSAnnotation> gcmsAnnotations = new ArrayList<>();
+    @JsonProperty("riexperimental")
+    private double riExperimental;
 
-    public GCMSSearchResponseDTO() {
-        this.gcmsFeatures = new ArrayList<>();
-    }
-
-    public GCMSSearchResponseDTO(List<GCMSFeature> gcmsFeatures) {
-        this.gcmsFeatures = gcmsFeatures != null ? gcmsFeatures : new ArrayList<>();
-    }
-
-    /**
-     * Adds the new GCMSFeatures
-     * @param gcmsFeature
-     */
-    public void addGcmsFeatures(GCMSFeature gcmsFeature) {
-        if (gcmsFeature != null) {
-            this.gcmsFeatures.add(gcmsFeature);
-        }
-    }
-
-    public void setGcmsFeatures(List<GCMSFeature> gcmsFeatures) {
-        this.gcmsFeatures = gcmsFeatures != null ? gcmsFeatures : new ArrayList<>();
+    public GCMSSearchResponseDTO(Spectrum gcmsSpectrumExperimental, List<GCMSAnnotation> gcmsAnnotations, double riExperimental) {
+        this.gcmsSpectrumExperimental = gcmsSpectrumExperimental;
+        this.gcmsAnnotations = gcmsAnnotations != null ? gcmsAnnotations : new ArrayList<>();
+        this.riExperimental = riExperimental;
     }
 
     @Override
     public String toString() {
         return "GcmsSearchResponseDTO{" +
-                "gcmsFeatures=" + gcmsFeatures +
+                "gcmsSpectrumExperimental=" + gcmsSpectrumExperimental +
+                ", gcmsAnnotations=" + gcmsAnnotations +
+                ", riExperimental=" + riExperimental +
                 '}';
     }
 }
