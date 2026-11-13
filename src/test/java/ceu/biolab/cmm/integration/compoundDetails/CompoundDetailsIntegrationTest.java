@@ -44,4 +44,10 @@ class CompoundDetailsIntegrationTest {
         assertEquals("3",hierarchy.get(0).path("id").asText());
         assertEquals(1,hierarchy.get(hierarchy.size()-1).path("level").asInt());
     }
+    @ParameterizedTest @CsvSource({"/compounds/257,identifier,257", "/classyfire/chemontid:0000152,node_id,0000152",
+            "/ontology/7659,ontology_term_id,7659", "/references/1,reference_id,1", "/organisms/3,organism_id,3"})
+    void legacyDetailsMapTheSameDatabaseRecords(String path,String property,String expected) throws Exception {
+        var result = mvc.perform(get("/api/v3"+path)).andExpect(status().isOk()).andReturn();
+        assertEquals(expected,json.readTree(result.getResponse().getContentAsString()).path(property).asText());
+    }
 }
