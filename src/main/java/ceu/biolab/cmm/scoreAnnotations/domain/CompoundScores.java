@@ -37,7 +37,7 @@ public class CompoundScores implements IScore {
     }
 
     public static String calculateFeatureKey(double featureMzValue, double featureRtValue) {
-        return String.valueOf(featureMzValue) + String.valueOf(featureRtValue);
+        return featureMzValue + "_" + featureRtValue;
     }
 
     @JsonIgnore
@@ -152,9 +152,13 @@ public class CompoundScores implements IScore {
 
     public void setIonizationScore(double value) {
         if (value == -2.0) {
-            ionizationScore = Optional.of(1.0);
+            if (ionizationScore.isPresent()) {
+                ionizationScore = Optional.of(1.0);
+            }
         } else if (value == -3.0) {
-            ionizationScore = Optional.of(0.1);
+            if (ionizationScore.isPresent()) {
+                ionizationScore = Optional.of(0.1);
+            }
         } else {
             ionizationScore = Optional.of(value);
         }

@@ -102,7 +102,11 @@ public class ScoreAnnotationsService {
 
             kieSession.insert(experimentParameters.orElseGet(ExperimentParameters::empty));
 
-            kieSession.fireAllRules();
+            // Preserve mediator's order: relationships adjust an existing ionization baseline.
+            for (String phase : List.of("ionization", "adduct-relation", "missing-adduct", "retention-time")) {
+                kieSession.getAgenda().getAgendaGroup(phase).setFocus();
+                kieSession.fireAllRules();
+            }
             finalizeScores(msFeatures);
         } catch (ResponseStatusException ex) {
             LOGGER.error("Scoring failed: {}", ex.getReason(), ex);

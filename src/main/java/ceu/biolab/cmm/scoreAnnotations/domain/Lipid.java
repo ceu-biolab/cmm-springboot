@@ -13,9 +13,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class Lipid extends Compound {
     public String lipidType;
-    public int numberChains;
-    public int numberCarbons;
-    public int numberDoubleBonds;
+    public Integer numberChains;
+    public Integer numberCarbons;
+    public Integer numberDoubleBonds;
     // Classification implicitly contains the category, main class, subclass and class level 4 if present
     // e.g. "PR010405": "PR" is category, "PR01" main class, "PR0104" subclass, "PR010405" class level 4
     public String classificationCode;
@@ -26,9 +26,9 @@ public class Lipid extends Compound {
             throw new IllegalArgumentException("Lipid wrapper expects a lipid compound, but found: " + compound.getCompoundType());
         }
         this.lipidType = compound.getLipidType();
-        this.numberChains = Optional.ofNullable(compound.getNumChains()).orElse(0);
-        this.numberCarbons = Optional.ofNullable(compound.getNumCarbons()).orElse(0);
-        this.numberDoubleBonds = Optional.ofNullable(compound.getDoubleBonds()).orElse(0);
+        this.numberChains = compound.getNumChains();
+        this.numberCarbons = compound.getNumCarbons();
+        this.numberDoubleBonds = compound.getDoubleBonds();
         this.classificationCode = compound.getLipidMapsClassifications().stream()
             .findFirst()
             .map(lmc -> {

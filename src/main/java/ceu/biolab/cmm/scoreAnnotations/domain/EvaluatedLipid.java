@@ -28,11 +28,18 @@ public class EvaluatedLipid extends EvaluatedCompound {
     }
 
     public int getNumberCarbons() {
-        return lipid.getNumberCarbons();
+        return lipid.getNumberCarbons() == null ? -1 : lipid.getNumberCarbons();
     }
 
     public int getNumberDoubleBonds() {
-        return lipid.getNumberDoubleBonds();
+        return lipid.getNumberDoubleBonds() == null ? -1 : lipid.getNumberDoubleBonds();
+    }
+
+    public boolean isRtComparable() {
+        return lipid.getLipidType() != null && !lipid.getLipidType().isBlank()
+                && lipid.getNumberChains() != null && lipid.getNumberChains() > 0
+                && lipid.getNumberCarbons() != null && lipid.getNumberCarbons() > 0
+                && lipid.getNumberDoubleBonds() != null && lipid.getNumberDoubleBonds() >= 0;
     }
 
     public String getLipidType() {
