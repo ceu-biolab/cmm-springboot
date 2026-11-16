@@ -84,6 +84,10 @@ When something goes wrong, services raise `ResponseStatusException`, ensuring cl
 
 ## ✅ Validation & Error Handling
 
+LC annotation scoring follows the legacy CMM order: ionization compatibility, supporting adduct relationships, missing-adduct rules, and retention-time comparisons. Adduct relationships adjust an ionization score only when a baseline ionization rule applies. Alternative candidates for the same m/z and retention time do not count as independent RT evidence. Missing lipid chain, carbon, or double-bond counts are preserved as unknown and exclude the candidate from structural RT comparisons; a known double-bond count of zero remains valid.
+
+These scoring corrections retain the endpoint paths and JSON fields. Scores can change, including remaining `null` where the experimental information or applicable rules do not support a score.
+
 - All public DTOs use Jakarta Bean Validation to guard against missing values and malformed data.
 - Controllers annotate request bodies with `@Valid`, so invalid requests never reach the service layer.
 - Services and repositories convert domain failures into `ResponseStatusException`, providing predictable error responses.

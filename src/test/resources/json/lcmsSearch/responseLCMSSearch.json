@@ -3736,7 +3736,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 0.75
               }
@@ -3792,7 +3792,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 0.75
               }
@@ -3864,7 +3864,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 0.75
               }
@@ -3913,7 +3913,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -3962,7 +3962,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -4011,7 +4011,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -4427,7 +4427,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 0.75
               }
@@ -4483,7 +4483,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 0.75
               }
@@ -4555,7 +4555,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 0.75
               }
@@ -4604,7 +4604,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -4653,7 +4653,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -4702,7 +4702,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -4758,7 +4758,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -6529,7 +6529,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -6585,7 +6585,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -6634,7 +6634,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -6683,7 +6683,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -6732,7 +6732,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -6788,7 +6788,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -6917,7 +6917,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -6973,7 +6973,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -7022,7 +7022,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -7071,7 +7071,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -7120,7 +7120,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -7176,7 +7176,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -9866,7 +9866,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5138445898389319
@@ -9922,7 +9922,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -9978,7 +9978,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10034,7 +10034,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10090,7 +10090,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10202,7 +10202,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10258,7 +10258,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10314,7 +10314,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10370,7 +10370,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10475,7 +10475,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10531,7 +10531,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128882679352094
@@ -10587,7 +10587,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10643,7 +10643,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128811312802706
@@ -10699,7 +10699,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10755,7 +10755,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10811,7 +10811,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10867,7 +10867,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -10923,7 +10923,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128882679352094
@@ -10979,7 +10979,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11035,7 +11035,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11091,7 +11091,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11147,7 +11147,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11203,7 +11203,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11259,7 +11259,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11315,7 +11315,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11371,7 +11371,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11427,7 +11427,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11483,7 +11483,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11539,7 +11539,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128811312802706
@@ -11595,7 +11595,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11651,7 +11651,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11756,7 +11756,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11812,7 +11812,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11868,7 +11868,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11924,7 +11924,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -11980,7 +11980,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12036,7 +12036,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12092,7 +12092,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12148,7 +12148,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12204,7 +12204,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12260,7 +12260,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12316,7 +12316,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12372,7 +12372,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12428,7 +12428,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12484,7 +12484,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12540,7 +12540,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12596,7 +12596,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12652,7 +12652,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12708,7 +12708,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12764,7 +12764,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12820,7 +12820,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128811312802706
@@ -12876,7 +12876,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12932,7 +12932,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -12988,7 +12988,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13044,7 +13044,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13100,7 +13100,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13156,7 +13156,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13212,7 +13212,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13268,7 +13268,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13366,7 +13366,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128939774214311
@@ -13422,7 +13422,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13478,7 +13478,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13534,7 +13534,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13590,7 +13590,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13646,7 +13646,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13702,7 +13702,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13758,7 +13758,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13814,7 +13814,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -13876,7 +13876,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128882679352094
@@ -13932,7 +13932,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128882679352094
@@ -14014,7 +14014,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128882679352094
@@ -14070,7 +14070,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -14126,7 +14126,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -14182,7 +14182,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128882679352094
@@ -14294,7 +14294,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128811312802706
@@ -14350,7 +14350,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128882679352094
@@ -14406,7 +14406,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -14518,7 +14518,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -14574,7 +14574,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5138445898389319
@@ -14679,7 +14679,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -14784,7 +14784,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5138445898389319
@@ -14896,7 +14896,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15113,7 +15113,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15169,7 +15169,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15225,7 +15225,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5138445898389319
@@ -15281,7 +15281,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15386,7 +15386,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5138445898389319
@@ -15442,7 +15442,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5138445898389319
@@ -15498,7 +15498,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15554,7 +15554,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15610,7 +15610,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15666,7 +15666,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15722,7 +15722,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15778,7 +15778,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15834,7 +15834,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15890,7 +15890,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -15946,7 +15946,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16058,7 +16058,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16114,7 +16114,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16170,7 +16170,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16226,7 +16226,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16282,7 +16282,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16338,7 +16338,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16394,7 +16394,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16450,7 +16450,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16506,7 +16506,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16562,7 +16562,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16618,7 +16618,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128811312802706
@@ -16730,7 +16730,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5102762246415772
@@ -16842,7 +16842,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5128882679352094
@@ -17003,7 +17003,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.5138445898389319
@@ -17285,7 +17285,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.1845627598377256
@@ -17341,7 +17341,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -17397,7 +17397,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.1845627598377256
@@ -17453,7 +17453,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -17509,7 +17509,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -17565,7 +17565,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.1845627598377256
@@ -17677,7 +17677,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.1845627598377256
@@ -17950,7 +17950,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18055,7 +18055,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18111,7 +18111,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.1845627598377256
@@ -18223,7 +18223,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18279,7 +18279,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18335,7 +18335,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18391,7 +18391,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18447,7 +18447,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18559,7 +18559,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18615,7 +18615,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18671,7 +18671,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18440852735765415
@@ -18727,7 +18727,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18783,7 +18783,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18839,7 +18839,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -18944,7 +18944,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19056,7 +19056,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19112,7 +19112,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19224,7 +19224,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18440852735765415
@@ -19329,7 +19329,7 @@
               {
                 "ionizationScore": 1.0,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19385,7 +19385,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19441,7 +19441,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19497,7 +19497,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19553,7 +19553,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19615,7 +19615,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19671,7 +19671,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18440852735765415
@@ -19727,7 +19727,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19783,7 +19783,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19901,7 +19901,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -19957,7 +19957,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20013,7 +20013,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20069,7 +20069,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20181,7 +20181,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20237,7 +20237,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20293,7 +20293,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20349,7 +20349,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20405,7 +20405,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20461,7 +20461,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20517,7 +20517,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20573,7 +20573,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20629,7 +20629,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20685,7 +20685,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20741,7 +20741,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20797,7 +20797,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20853,7 +20853,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20909,7 +20909,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -20965,7 +20965,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -21021,7 +21021,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -21077,7 +21077,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -21133,7 +21133,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -21245,7 +21245,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -21301,7 +21301,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -21357,7 +21357,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -21413,7 +21413,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -21469,7 +21469,7 @@
               {
                 "ionizationScore": null,
                 "adductRelationScore": null,
-                "rtScore": 0.05
+                "rtScore": null
               }
             ],
             "massErrorPpm": -0.18105564505245622
@@ -22988,7 +22988,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -23205,7 +23205,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -23254,7 +23254,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -23508,7 +23508,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -23557,7 +23557,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -23613,7 +23613,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -23669,7 +23669,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -23725,7 +23725,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -23774,7 +23774,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -23823,7 +23823,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -23879,7 +23879,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -23941,7 +23941,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -38393,7 +38393,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -38505,7 +38505,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -38617,7 +38617,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -38942,7 +38942,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -38998,7 +38998,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -39054,7 +39054,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -39110,7 +39110,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -39166,7 +39166,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -39222,7 +39222,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -41204,7 +41204,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -41716,7 +41716,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -41765,7 +41765,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -41821,7 +41821,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -45537,7 +45537,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 0.05
               }
@@ -45593,7 +45593,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 0.05
               }
@@ -45649,7 +45649,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": 1
               }
@@ -45705,7 +45705,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -46491,7 +46491,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -47160,7 +47160,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 0.5,
+                "ionizationScore": 1.0,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }
@@ -47216,7 +47216,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": null
               }

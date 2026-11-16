@@ -26,7 +26,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 1.0
               }
@@ -55,7 +55,7 @@
             },
             "scores": [
               {
-                "ionizationScore": 1.0,
+                "ionizationScore": null,
                 "adductRelationScore": 1.0,
                 "rtScore": 1.0
               }
