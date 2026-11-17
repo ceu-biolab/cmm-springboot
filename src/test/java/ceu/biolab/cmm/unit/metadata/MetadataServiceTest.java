@@ -85,8 +85,8 @@ class MetadataServiceTest {
                         73414, "Paracetamol")
         );
 
-        when(metadataRepository.findCeMsMarkerOptions("FORMIC_ACID_1M", 20L, 1, 1)).thenReturn(markerRows);
-        when(metadataRepository.findCeMsRmtReferenceOptions("FORMIC_ACID_1M", 20L, 1, 1)).thenReturn(rmtReferenceRows);
+        when(metadataRepository.findCeMsMarkerOptions(null, null, null, null)).thenReturn(markerRows);
+        when(metadataRepository.findCeMsRmtReferenceOptions(null, null, null, null)).thenReturn(rmtReferenceRows);
 
         List<CeMsConditionOptions> conditions = metadataService
                 .getCeMsOptions("formic_acid_1m", 20L, "Direct", "Positive")
@@ -103,4 +103,22 @@ class MetadataServiceTest {
         assertEquals(List.of("L-Methionine sulfone", "Paracetamol"),
                 condition.rmtReferenceCompounds().stream().map(option -> option.name()).toList());
     }
+    @Test
+    void cacheCatalogAcrossFiltersButValidateEachRequest() {
+        when(metadataRepository.findCeMsMarkerOptions(null, null, null, null)).thenReturn(List.of(
+                new MetadataRepository.CeMsCompoundOptionRow(1, "FORMIC_ACID_1M", "Formic", 20, 1, 1, 1, "A"),
+                new MetadataRepository.CeMsCompoundOptionRow(2, "ACETIC_ACID_10PERCENT", "Acetic", 25, 2, 2, 2, "B")));
+        when(metadataRepository.findCeMsRmtReferenceOptions(null, null, null, null)).thenReturn(List.of());
+        assertEquals(2, metadataService.getCeMsOptions(null, null, null, null).conditions().size());
+        assertEquals("B", metadataService.getCeMsOptions("acetic_acid_10percent", 25L, "Reverse", "Negative")
+                .conditions().getFirst().markerCompounds().getFirst().name());
+        assertEquals(0, metadataService.getCeMsOptions(null, 30L, null, null).conditions().size());
+        org.junit.jupiter.api.Assertions.assertThrows(org.springframework.web.server.ResponseStatusException.class,
+                () -> metadataService.getCeMsOptions(null, null, "invalid", null));
+        org.mockito.Mockito.verify(metadataRepository, org.mockito.Mockito.times(1))
+                .findCeMsMarkerOptions(null, null, null, null);
+        org.mockito.Mockito.verify(metadataRepository, org.mockito.Mockito.times(1))
+                .findCeMsRmtReferenceOptions(null, null, null, null);
+    }
+
 }

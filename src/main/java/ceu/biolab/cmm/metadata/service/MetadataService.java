@@ -1,5 +1,9 @@
 package ceu.biolab.cmm.metadata.service;
 
+import org.springframework.beans.factory.annotation.Value;
+import jakarta.annotation.PostConstruct;
+import java.time.Duration;
+
 import ceu.biolab.cmm.CEMSSearch.domain.CeIonizationModeMapper;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
 import ceu.biolab.cmm.metadata.dto.AdductCatalogResponse;
@@ -28,6 +32,20 @@ import org.springframework.web.server.ResponseStatusException;
 public class MetadataService {
 
     private final MetadataRepository metadataRepository;
+    @Value("${cmm.metadata.cache-ttl:PT5M}")
+    private Duration cacheTtl = Duration.ofMinutes(5);
+    private final TimedCache<AdductCatalogResponse> ccsCatalog = new TimedCache<>();
+    private final TimedCache<List<CeMsBufferOption>> buffers = new TimedCache<>();
+    private final TimedCache<List<MetadataRepository.CeMsCompoundOptionRow>> markers = new TimedCache<>();
+    private final TimedCache<List<MetadataRepository.CeMsCompoundOptionRow>> references = new TimedCache<>();
+    private final TimedCache<DatabaseStatsResponse> stats = new TimedCache<>();
+
+    @PostConstruct
+    void validateConfiguration() {
+        if (cacheTtl.isNegative()) throw new IllegalStateException("cmm.metadata.cache-ttl must not be negative");
+        cacheTtl.toNanos();
+    }
+
     private static final Map<String, String> LEGACY_ADDUCT_ALIASES = Map.of(
             "M-H2O-H", "[M-H-H2O]-"
     );
@@ -37,6 +55,10 @@ public class MetadataService {
     }
 
     public AdductCatalogResponse getCcsAdductCatalog() {
+        return ccsCatalog.get(cacheTtl, this::loadCcsAdductCatalog);
+    }
+
+    private AdductCatalogResponse loadCcsAdductCatalog() {
         Set<AdductDefinition> positiveDefinitions = new LinkedHashSet<>();
         Set<AdductDefinition> negativeDefinitions = new LinkedHashSet<>();
 
@@ -69,6 +91,10 @@ public class MetadataService {
     }
 
     public List<CeMsBufferOption> getCeMsBuffers() {
+        return buffers.get(cacheTtl, this::loadCeMsBuffers);
+    }
+
+    private List<CeMsBufferOption> loadCeMsBuffers() {
         return metadataRepository.findCeMsBuffers().stream()
                 .sorted(Comparator
                         .comparingInt((CeMsBufferOption option) -> bufferGroupPriority(option.code()))
@@ -85,13 +111,15 @@ public class MetadataService {
         Integer ionizationModeId = parseIonizationModeId(ionizationMode);
 
         Map<String, CeMsConditionAccumulator> conditions = new LinkedHashMap<>();
-        for (MetadataRepository.CeMsCompoundOptionRow row : metadataRepository.findCeMsMarkerOptions(
-                normalizedBufferCode, temperature, polarityId, ionizationModeId)) {
-            accumulatorFor(conditions, row).addMarker(row);
+        for (MetadataRepository.CeMsCompoundOptionRow row : markers.get(cacheTtl, () -> List.copyOf(metadataRepository.findCeMsMarkerOptions(null, null, null, null)))) {
+            if (matches(row, normalizedBufferCode, temperature, polarityId, ionizationModeId)) {
+                accumulatorFor(conditions, row).addMarker(row);
+            }
         }
-        for (MetadataRepository.CeMsCompoundOptionRow row : metadataRepository.findCeMsRmtReferenceOptions(
-                normalizedBufferCode, temperature, polarityId, ionizationModeId)) {
-            accumulatorFor(conditions, row).addRmtReference(row);
+        for (MetadataRepository.CeMsCompoundOptionRow row : references.get(cacheTtl, () -> List.copyOf(metadataRepository.findCeMsRmtReferenceOptions(null, null, null, null)))) {
+            if (matches(row, normalizedBufferCode, temperature, polarityId, ionizationModeId)) {
+                accumulatorFor(conditions, row).addRmtReference(row);
+            }
         }
 
         List<CeMsConditionOptions> sortedConditions = conditions.values().stream()
@@ -108,7 +136,15 @@ public class MetadataService {
     }
 
     public DatabaseStatsResponse getDatabaseStats() {
-        return metadataRepository.fetchDatabaseStats();
+        return stats.get(cacheTtl, metadataRepository::fetchDatabaseStats);
+    }
+
+    private boolean matches(MetadataRepository.CeMsCompoundOptionRow row, String buffer, Long temperature,
+                            Integer polarity, Integer ionizationMode) {
+        return (buffer == null || buffer.equals(row.bufferCode() == null ? null : row.bufferCode().trim()))
+                && (temperature == null || row.temperature() == temperature)
+                && (polarity == null || row.polarityId() == polarity)
+                && (ionizationMode == null || row.ionizationModeId() == ionizationMode);
     }
 
     private Optional<AdductDefinition> resolveByLegacyKey(IonizationMode mode, String legacyKey) {

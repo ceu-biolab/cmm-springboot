@@ -102,6 +102,12 @@ Workload limits (features per batch, peaks per spectrum, browse result limits an
 - Controllers annotate request bodies with `@Valid`, so invalid requests never reach the service layer.
 - Services and repositories convert domain failures into `ResponseStatusException`, providing predictable error responses.
 
+## Search performance and metadata caching
+
+Searches batch pathway and spectrum reads, and reuse compiled scoring rules with an isolated session per request. Metadata statistics and catalogs refresh lazily every five minutes; set `cmm.metadata.cache-ttl` (for example `PT1M`, or `PT0S` to disable caching) to change this interval. Search results are not cached across requests.
+
+See [performance measurements and reproduction instructions](docs/PERFORMANCE.md) for before/after query counts, timings and remaining opportunities.
+
 ## 🧪 Testing
 
 The project includes unit tests for core services and integration tests that exercise each endpoint. Run them with:
