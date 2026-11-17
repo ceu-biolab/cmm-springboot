@@ -1,5 +1,8 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +11,10 @@ import lombok.Data;
 
 @Data
 public class AnnotationsByAdduct {
+    @NotBlank
     private String adduct;
-    private List<Annotation> annotations;
+    @NotNull
+    private List<@NotNull @Valid Annotation> annotations;
 
     // no-arg constructor for Jackson
     public AnnotationsByAdduct() {

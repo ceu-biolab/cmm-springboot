@@ -106,6 +106,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleUnexpectedException(Exception ex, HttpServletRequest request) {
+        // Preserve framework statuses (405, 415, 404, etc.) instead of converting
+        // ordinary HTTP errors into internal failures through this catch-all.
+        if (ex instanceof org.springframework.web.ErrorResponse error) {
+            return ResponseEntity.status(error.getStatusCode()).headers(error.getHeaders()).body(error.getBody());
+        }
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setTitle("Internal server error");
         problemDetail.setDetail("Unexpected server error");

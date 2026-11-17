@@ -4,8 +4,6 @@ spring:
 ---
 spring:
   config:
+    import: optional:file:./src/main/resources/application-local.yml
     activate:
       on-profile: local
-
-  datasource:
-    initialization-mode: always
