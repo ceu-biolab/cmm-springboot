@@ -1,12 +1,11 @@
 package ceu.biolab.cmm.CEMSSearch.repository;
 
+import ceu.biolab.cmm.shared.repository.SqlQueryLoader;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,17 +19,16 @@ import ceu.biolab.cmm.CEMSSearch.dto.CemsQueryResponseDTO;
 public class CemsSearchRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final ResourceLoader resourceLoader;
+    private final SqlQueryLoader sqlQueries;
 
     @Autowired
     public CemsSearchRepository(NamedParameterJdbcTemplate jdbcTemplate, ResourceLoader resourceLoader) {
         this.jdbcTemplate = jdbcTemplate;
-        this.resourceLoader = resourceLoader;
+        this.sqlQueries = new SqlQueryLoader(resourceLoader);
     }
 
     public List<CemsQueryResponseDTO> findMatchingCompounds(CemsFeatureQueryDTO queryData) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:sql/cems_compound_search_query.sql");
-        String sql = loadSql(resource);
+        String sql = sqlQueries.load("classpath:sql/cems_compound_search_query.sql");
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("massLower", queryData.getMassLower());
@@ -45,9 +43,4 @@ public class CemsSearchRepository {
         return jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(CemsQueryResponseDTO.class));
     }
 
-    private String loadSql(Resource resource) throws IOException {
-        try (InputStream inputStream = resource.getInputStream()) {
-            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        }
-    }
 }

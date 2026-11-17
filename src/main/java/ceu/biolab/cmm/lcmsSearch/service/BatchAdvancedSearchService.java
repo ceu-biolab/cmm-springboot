@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.lcmsSearch.service;
 
+import ceu.biolab.cmm.msSearch.repository.CompoundRepository;
+
 import ceu.biolab.cmm.lcmsSearch.dto.BatchAdvancedSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
@@ -63,7 +65,7 @@ public class BatchAdvancedSearchService {
 
         List<AnnotatedFeature> allAnnotatedFeatures = new ArrayList<>();
 
-        var context = new ceu.biolab.cmm.msSearch.repository.CompoundRepository.SearchContext();
+        var context = new CompoundRepository.SearchContext();
         for (int i = 0; i < mzs.size(); i++) {
             double mz = mzs.get(i);
             double rt = retentionTimes.get(i);

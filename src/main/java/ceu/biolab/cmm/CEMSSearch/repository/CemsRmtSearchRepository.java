@@ -1,14 +1,13 @@
 package ceu.biolab.cmm.CEMSSearch.repository;
 
+import ceu.biolab.cmm.shared.repository.SqlQueryLoader;
+
 import ceu.biolab.cmm.CEMSSearch.dto.CemsQueryResponseDTO;
 import ceu.biolab.cmm.CEMSSearch.dto.CemsRmtFeatureQueryDTO;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.OptionalLong;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,12 +18,12 @@ import org.springframework.stereotype.Repository;
 public class CemsRmtSearchRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final ResourceLoader resourceLoader;
+    private final SqlQueryLoader sqlQueries;
 
     @Autowired
     public CemsRmtSearchRepository(NamedParameterJdbcTemplate jdbcTemplate, ResourceLoader resourceLoader) {
         this.jdbcTemplate = jdbcTemplate;
-        this.resourceLoader = resourceLoader;
+        this.sqlQueries = new SqlQueryLoader(resourceLoader);
     }
 
     public OptionalLong findReferenceCompoundId(String referenceName) {
@@ -42,8 +41,7 @@ public class CemsRmtSearchRepository {
     }
 
     public List<CemsQueryResponseDTO> findMatchingCompounds(CemsRmtFeatureQueryDTO queryData) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:sql/cems_rmt_compound_search_query.sql");
-        String sql = Files.readString(Paths.get(resource.getURI()));
+        String sql = sqlQueries.load("classpath:sql/cems_rmt_compound_search_query.sql");
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("massLower", queryData.getMassLower());

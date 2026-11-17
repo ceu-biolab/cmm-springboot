@@ -33,6 +33,39 @@ public class SpectrumScorer {
         };
     }
 
+    /** An isolated snapshot, already sorted, collapsed and normalized for this tolerance. */
+    public static final class PreparedSpectrum {
+        private final List<MSPeak> peaks;
+        private final double normSquared;
+        private final MzToleranceMode mode;
+        private final double tolerance;
+
+        private PreparedSpectrum(List<MSPeak> peaks, MzToleranceMode mode, double tolerance) {
+            this.peaks = peaks;
+            this.mode = mode;
+            this.tolerance = tolerance;
+            double norm = 0;
+            for (MSPeak peak : peaks) norm += peak.getIntensity() * peak.getIntensity();
+            this.normSquared = norm;
+        }
+    }
+
+    public PreparedSpectrum prepare(List<MSPeak> peaks) {
+        return new PreparedSpectrum(getNormalizedPeaks(peaks), tolMode, tolValue);
+    }
+
+    public double computePrepared(ScoreType type, PreparedSpectrum first, PreparedSpectrum second,
+                                  Double precursor1, Double precursor2) {
+        if (first.mode != tolMode || second.mode != tolMode
+                || Double.compare(first.tolerance, tolValue) != 0 || Double.compare(second.tolerance, tolValue) != 0) {
+            throw new IllegalArgumentException("Prepared spectra must use the scorer's tolerance");
+        }
+        return switch (type) {
+            case COSINE -> cosinePrepared(first, second);
+            case MODIFIED_COSINE -> modifiedPrepared(first, precursor1, second, precursor2);
+        };
+    }
+
     public Pair<double[], double[]> padMSPeaks(List<MSPeak> specA, List<MSPeak> specB) {
         List<MSPeak> a = getNormalizedPeaks(specA);
         List<MSPeak> b = getNormalizedPeaks(specB);
@@ -75,19 +108,14 @@ public class SpectrumScorer {
     }
 
     public double cosineScore(List<MSPeak> specA, List<MSPeak> specB) {
-        List<MSPeak> a = getNormalizedPeaks(specA);
-        List<MSPeak> b = getNormalizedPeaks(specB);
-        a.sort(Comparator.comparingDouble(MSPeak::getMz));
-        b.sort(Comparator.comparingDouble(MSPeak::getMz));
+        return computePrepared(ScoreType.COSINE, prepare(specA), prepare(specB), null, null);
+    }
 
-        double normA = 0.0;
-        double normB = 0.0;
-        for (MSPeak p : a) {
-            normA += p.getIntensity() * p.getIntensity();
-        }
-        for (MSPeak p : b) {
-            normB += p.getIntensity() * p.getIntensity();
-        }
+    private double cosinePrepared(PreparedSpectrum specA, PreparedSpectrum specB) {
+        List<MSPeak> a = specA.peaks;
+        List<MSPeak> b = specB.peaks;
+        double normA = specA.normSquared;
+        double normB = specB.normSquared;
         if (normA == 0.0 || normB == 0.0) {
             return 0.0;
         }
@@ -121,20 +149,14 @@ public class SpectrumScorer {
     }
 
     public double modifiedCosine(List<MSPeak> specA, Double precursorA, List<MSPeak> specB, Double precursorB) {
-        List<MSPeak> a = getNormalizedPeaks(specA);
-        List<MSPeak> b = getNormalizedPeaks(specB);
-        if (a.isEmpty() || b.isEmpty()) {
-            return 0.0;
-        }
+        return computePrepared(ScoreType.MODIFIED_COSINE, prepare(specA), prepare(specB), precursorA, precursorB);
+    }
 
-        double normA = 0.0;
-        double normB = 0.0;
-        for (MSPeak p : a) {
-            normA += p.getIntensity() * p.getIntensity();
-        }
-        for (MSPeak p : b) {
-            normB += p.getIntensity() * p.getIntensity();
-        }
+    private double modifiedPrepared(PreparedSpectrum specA, Double precursorA, PreparedSpectrum specB, Double precursorB) {
+        List<MSPeak> a = specA.peaks;
+        List<MSPeak> b = specB.peaks;
+        double normA = specA.normSquared;
+        double normB = specB.normSquared;
         if (normA == 0.0 || normB == 0.0) {
             return 0.0;
         }

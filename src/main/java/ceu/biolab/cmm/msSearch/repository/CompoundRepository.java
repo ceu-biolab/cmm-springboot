@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.msSearch.repository;
 
+import ceu.biolab.cmm.shared.repository.CompoundPathways;
+
 import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 
@@ -230,7 +232,7 @@ public class CompoundRepository {
                         .filter(comp -> FormulaTypeFilter.matches(comp, allowedElements))
                         .collect(Collectors.toCollection(LinkedHashSet::new));
 
-                ceu.biolab.cmm.shared.repository.CompoundPathways.hydrate(jdbcTemplate, filteredCompounds, context.pathways);
+                CompoundPathways.hydrate(jdbcTemplate, filteredCompounds, context.pathways);
                 List<Annotation> annotations = new ArrayList<>();
                 for (Compound compound : filteredCompounds) {
                     Annotation annotation = new Annotation(compound);

@@ -1,5 +1,8 @@
 package ceu.biolab.cmm.gcmsSearch.repository;
 
+import ceu.biolab.cmm.shared.repository.SqlQueryLoader;
+import ceu.biolab.cmm.shared.repository.JdbcBatches;
+
 import ceu.biolab.cmm.gcmsSearch.domain.ColumnType;
 import ceu.biolab.cmm.gcmsSearch.domain.DerivatizationMethod;
 import ceu.biolab.cmm.gcmsSearch.domain.GCMSCompound;
@@ -10,7 +13,6 @@ import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.msFeature.Peak;
 import ceu.biolab.cmm.shared.domain.msFeature.Spectrum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,20 +21,18 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class GCMSSearchRepository {
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private ResourceLoader resourceLoader;
+    private final SqlQueryLoader sqlQueries;
 
     @Autowired
     public GCMSSearchRepository(NamedParameterJdbcTemplate jdbcTemplate, ResourceLoader resourceLoader) {
         this.jdbcTemplate = jdbcTemplate;
-        this.resourceLoader = resourceLoader;
+        this.sqlQueries = new SqlQueryLoader(resourceLoader);
     }
 
     /**
@@ -44,8 +44,7 @@ public class GCMSSearchRepository {
      * @throws IOException
      */
     private List<GCMSCompound> getCompoundInformation(GCMSFeatureQueryDTO queryData) throws IOException {
-        Resource resource1 = resourceLoader.getResource("classpath:sql/gcms_compound_information.sql");
-        String sql1 = loadSql(resource1);
+        String sql1 = sqlQueries.load("classpath:sql/gcms_compound_information.sql");
 
         MapSqlParameterSource params1 = new MapSqlParameterSource();
         params1.addValue("RILower", queryData.getMinRI());
@@ -135,102 +134,24 @@ public class GCMSSearchRepository {
         return gcmsCompoundList;
     }
 
-    /**
-     * From a list of GCMSCompound, gets the ids of each spectrum of the compounds
-     * @param gcmsCompoundsList  list of GCMSCompound
-     * @return a list with all the spectrum ids of the compounds
-     */
-    private List<Integer> listAllSpectrumIdsCompounds (List<GCMSCompound> gcmsCompoundsList){
-        List<Integer> listId = new ArrayList<>();
-
-        int compoundListSize = gcmsCompoundsList.size();
-
-        for(int i=0; i<compoundListSize; i++){
-            int spectrumListSize = gcmsCompoundsList.get(i).getGCMSSpectrum().size(); //Size of the Spectra
-            for(int j=0; j<spectrumListSize; j++){
-                int spectrumId = gcmsCompoundsList.get(i).getGCMSSpectrum().get(j).getSpectrumId(); //Gets the id of each Spectrum
-                listId.add(spectrumId);
-            }
+    /** Fetch each spectrum once, then attach peaks by ID in linear time. */
+    private void getSpectrumInformation(List<GCMSCompound> compounds) {
+        java.util.Set<Integer> ids = new java.util.LinkedHashSet<>();
+        for (GCMSCompound compound : compounds) {
+            for (Spectrum spectrum : compound.getGCMSSpectrum()) ids.add(spectrum.getSpectrumId());
         }
-        return listId;
-    }
-
-    /**
-     * It is a ResultSetExtractor, that for each spectrum id, it accesses the database and
-     * stores the information in the Spectrum and Peak
-     *
-     * @param spectrumId is the database spectrum id and is used for the creation of a Spectrum
-     * @return a spectrum with all its peaks
-     */
-    private ResultSetExtractor<Spectrum> spectrumPeaksExtractor(int spectrumId) {
-        return rs -> {
-            Spectrum spectrum = new Spectrum();
-            while (rs.next()) {
-
-                //IF spectrum DOES NOT HAVE THE DATA OF THE DATABASE IT WILL BE CREATED
-                if(spectrum.getSpectrumId() == -1) {
-                    spectrum = Spectrum.builder()
-                                .spectrumId(spectrumId)
-                                .spectrum(new ArrayList<>())
-                                .build();
-                }
-                //CREATION OF EACH Peak
-                Peak peak = Peak.builder()
-                        .mzValue(rs.getDouble("mz"))
-                        .intensity(rs.getDouble("intensity"))
-                        .build();
-                //ADDS EACH peak TO spectrum
-                spectrum.getSpectrum().add(peak);
-            }
-            return spectrum;
-        };
-    }
-
-    /**
-     * Using a query and the spectrum id, it searches for the Peaks of the spectrum in the database.
-     *
-     * @param spectrumId
-     * @return the Spectrum of an id
-     * @throws IOException
-     */
-    private Spectrum spectrumWithPeaksFromDB(int spectrumId) throws IOException {
-        Resource resource2 = resourceLoader.getResource("classpath:sql/gcms_spectrum_information.sql");
-        String sql2 = loadSql(resource2);
-
-        MapSqlParameterSource params2 = new MapSqlParameterSource();
-        params2.addValue("SpectrumId", spectrumId);
-
-        Spectrum spectrum = jdbcTemplate.query(sql2, params2, spectrumPeaksExtractor(spectrumId));
-        return spectrum;
-    }
-
-    /**
-     * For each of the spectrumId, using a query, searches for the Spectrum information (list of Peaks).
-     * Then assigns the spectrum to the compound with the same spectrumId
-     *
-     * @param gcmsCompoundList  GCMSCompound List that contains GCMSCompound information
-     * @throws IOException
-     */
-    private void getSpectrumInformation(List<GCMSCompound> gcmsCompoundList) throws IOException {
-
-        List<Integer> completeListSpectrumIds =  listAllSpectrumIdsCompounds(gcmsCompoundList);
-        int sizeIdList = completeListSpectrumIds.size();
-        int sizeCompoundList = gcmsCompoundList.size();
-
-        for(int i=0; i<sizeIdList; i++){
-            int spectrumId = completeListSpectrumIds.get(i);
-
-            Spectrum spectrum = spectrumWithPeaksFromDB(spectrumId);
-
-            for(int j=0; j<sizeCompoundList; j++){
-                int sizeGCMSSpectrumList = gcmsCompoundList.get(j).getGCMSSpectrum().size();
-                for(int k=0; k<sizeGCMSSpectrumList; k++){
-                    int spectrumIdFromCompound = gcmsCompoundList.get(j).getGCMSSpectrum().get(k).getSpectrumId();
-
-                    if(spectrumId == spectrumIdFromCompound){
-                        gcmsCompoundList.get(j).getGCMSSpectrum().get(k).setSpectrum(spectrum.getSpectrum());
-                    }
-                }
+        if (ids.isEmpty()) return;
+        java.util.Map<Integer, List<Peak>> peaks = new java.util.HashMap<>();
+        for (var batch : JdbcBatches.partition(ids)) jdbcTemplate.query("""
+                SELECT p.gcms_spectrum_id, p.mz, p.intensity
+                FROM gcms_spectrum s JOIN gcms_peaks p ON s.gcms_spectrum_id = p.gcms_spectrum_id
+                WHERE s.gcms_spectrum_id IN (:ids)
+                """, java.util.Map.of("ids", batch), (org.springframework.jdbc.core.RowCallbackHandler) rs ->
+                peaks.computeIfAbsent(rs.getInt("gcms_spectrum_id"), ignored -> new ArrayList<>())
+                        .add(Peak.builder().mzValue(rs.getDouble("mz")).intensity(rs.getDouble("intensity")).build()));
+        for (GCMSCompound compound : compounds) {
+            for (Spectrum spectrum : compound.getGCMSSpectrum()) {
+                spectrum.setSpectrum(new ArrayList<>(peaks.getOrDefault(spectrum.getSpectrumId(), List.of())));
             }
         }
     }
@@ -338,11 +259,6 @@ public class GCMSSearchRepository {
         return infoAllRelevantCompounds;
     }
 
-    private String loadSql(Resource resource) throws IOException {
-        try (InputStream inputStream = resource.getInputStream()) {
-            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        }
-    }
 
     private static Double getNullableDouble(java.sql.ResultSet rs, String column) throws java.sql.SQLException {
         Object value = rs.getObject(column);

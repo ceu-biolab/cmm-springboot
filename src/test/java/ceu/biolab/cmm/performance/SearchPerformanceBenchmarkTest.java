@@ -67,9 +67,44 @@ class SearchPerformanceBenchmarkTest {
                     read("browseSearch/request1.json", BrowseSearchRequest.class)));
             measure(directory, measurements, queries, "stats", metadata::getDatabaseStats);
             mapper.writerWithDefaultPrettyPrinter().writeValue(directory.resolve("measurements.json").toFile(), measurements);
+            inspectDatabase(directory);
         } finally {
             jdbc.setDataSource(original);
         }
+    }
+
+    private void inspectDatabase(Path directory) throws Exception {
+        Map<String, Object> diagnostics = new LinkedHashMap<>();
+        diagnostics.put("indexes", jdbc.queryForList("""
+                SELECT tablename, indexname, indexdef FROM pg_indexes
+                WHERE schemaname = current_schema() AND tablename IN
+                    ('compounds', 'compounds_view', 'compounds_pathways', 'compounds_lm_classification',
+                     'msms', 'msms_peaks', 'gcms_peaks', 'compound_ccs', 'eff_mob')
+                ORDER BY tablename, indexname
+                """));
+        String window;
+        try (var input = new ClassPathResource("sql/msSearch/compound_window_search.sql").getInputStream()) {
+            window = new String(input.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+        }
+        window = window.replace("(:lowerBound)", "?").replace("(:upperBound)", "?")
+                .replace("(:compoundTypeFilter)", "").replace("(:databaseFilterCondition)", " AND cv.hmdb_id IS NOT NULL");
+        diagnostics.put("massWindow", jdbc.queryForList("EXPLAIN (ANALYZE, BUFFERS) " + window, String.class, 399.3d, 399.4d));
+        diagnostics.put("pathways", jdbc.queryForList("""
+                EXPLAIN (ANALYZE, BUFFERS)
+                SELECT cp.compound_id, p.pathway_id, p.pathway_map, p.pathway_name
+                FROM compounds_pathways cp JOIN pathways p ON p.pathway_id = cp.pathway_id
+                WHERE cp.compound_id IN (SELECT compound_id FROM compounds WHERE mass BETWEEN 399.3 AND 399.4)
+                """, String.class));
+        diagnostics.put("msmsPeaks", jdbc.queryForList("""
+                EXPLAIN (ANALYZE, BUFFERS) SELECT msms_id, mz, intensity FROM msms_peaks
+                WHERE msms_id IN (SELECT msms_id FROM msms ORDER BY msms_id LIMIT 20)
+                """, String.class));
+        diagnostics.put("gcmsPeaks", jdbc.queryForList("""
+                EXPLAIN (ANALYZE, BUFFERS) SELECT p.gcms_spectrum_id, p.mz, p.intensity
+                FROM gcms_spectrum s JOIN gcms_peaks p ON s.gcms_spectrum_id = p.gcms_spectrum_id
+                WHERE s.gcms_spectrum_id IN (SELECT gcms_spectrum_id FROM gcms_spectrum ORDER BY gcms_spectrum_id LIMIT 1)
+                """, String.class));
+        mapper.writerWithDefaultPrettyPrinter().writeValue(directory.resolve("database-plans.json").toFile(), diagnostics);
     }
 
     private <T> T read(String path, Class<T> type) throws Exception {
@@ -94,6 +129,11 @@ class SearchPerformanceBenchmarkTest {
             else assertEquals(reference, actual, name + " must return the same content on repeated calls");
         }
         mapper.writerWithDefaultPrettyPrinter().writeValue(directory.resolve(name + "-response.json").toFile(), reference);
+        String baseline = System.getProperty("cmm.benchmark.reference");
+        if (baseline != null) {
+            assertEquals(mapper.readTree(Path.of(baseline, name + "-response.json").toFile()), mapper.readTree(reference.toString()),
+                    name + " content must match the baseline");
+        }
         List<Double> warm = times.subList(1, times.size()).stream().sorted().toList();
         measurements.put(name, Map.of("milliseconds", times, "queries", counts, "warmMedianMs", warm.get(1)));
         System.out.println("PERF " + name + " milliseconds=" + times + " queries=" + counts);

@@ -1,5 +1,8 @@
 package ceu.biolab.cmm.browseSearch.repository;
 
+import ceu.biolab.cmm.shared.repository.SqlQueryLoader;
+import ceu.biolab.cmm.shared.repository.CompoundPathways;
+
 import ceu.biolab.cmm.browseSearch.dto.BrowseQueryResponse;
 import ceu.biolab.cmm.browseSearch.dto.BrowseSearchRequest;
 import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
@@ -8,20 +11,16 @@ import ceu.biolab.cmm.shared.domain.Database;
 import ceu.biolab.cmm.shared.domain.MetaboliteType;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
-import ceu.biolab.cmm.shared.domain.compound.Pathway;
 import ceu.biolab.cmm.shared.service.FormulaTypeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,33 +33,27 @@ public class BrowseSearchRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(BrowseSearchRepository.class);
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final ResourceLoader resourceLoader;
+    private final SqlQueryLoader sqlQueries;
 
     @Autowired
     public BrowseSearchRepository(NamedParameterJdbcTemplate jdbcTemplate, ResourceLoader resourceLoader) {
         this.jdbcTemplate = jdbcTemplate;
-        this.resourceLoader = resourceLoader;
+        this.sqlQueries = new SqlQueryLoader(resourceLoader);
     }
 
     public BrowseQueryResponse findMatchingCompounds(BrowseSearchRequest queryData) throws IOException {
-        String sqlTemplate = loadSqlQuery("classpath:sql/browse_compound_search_query.sql");
+        String sqlTemplate = sqlQueries.load("classpath:sql/browse_compound_search_query.sql");
         QueryParts queryParts = buildQuery(sqlTemplate, queryData);
         List<Compound> compounds = executeQuery(queryParts);
         Optional<Set<String>> allowedElements = FormulaTypeFilter.allowedElements(queryData.getFormulaType());
         List<Compound> filteredCompounds = compounds.stream()
                 .filter(compound -> FormulaTypeFilter.matches(compound, allowedElements))
                 .collect(Collectors.toCollection(ArrayList::new));
-        ceu.biolab.cmm.shared.repository.CompoundPathways.hydrate(
+        CompoundPathways.hydrate(
                 jdbcTemplate.getJdbcTemplate(), filteredCompounds, new java.util.HashMap<>());
         return new BrowseQueryResponse(filteredCompounds);
     }
 
-    private String loadSqlQuery(String resourcePath) throws IOException {
-        Resource resource = resourceLoader.getResource(resourcePath);
-        try (InputStream inputStream = resource.getInputStream()) {
-            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        }
-    }
 
     private QueryParts buildQuery(String sqlTemplate, BrowseSearchRequest request) {
         MapSqlParameterSource params = new MapSqlParameterSource();

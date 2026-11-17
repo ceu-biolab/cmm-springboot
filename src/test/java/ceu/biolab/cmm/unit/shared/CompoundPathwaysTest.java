@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.unit.browseSearch;
+package ceu.biolab.cmm.unit.shared;
 
 import ceu.biolab.cmm.shared.repository.CompoundPathways;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class BrowseSearchRepositoryTest {
+class CompoundPathwaysTest {
     @Test
     void bulkPathwaysCachesMissingRowsAndCopiesMutableValues() throws Exception {
         JdbcTemplate jdbc = mock(JdbcTemplate.class);

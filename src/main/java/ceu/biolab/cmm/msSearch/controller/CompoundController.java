@@ -1,4 +1,6 @@
 package ceu.biolab.cmm.msSearch.controller;
+
+import ceu.biolab.cmm.msSearch.repository.CompoundRepository;
 import ceu.biolab.cmm.msSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
@@ -40,7 +42,7 @@ public class CompoundController {
 
         RTSearchResponseDTO response = new RTSearchResponseDTO();
 
-        var context = new ceu.biolab.cmm.msSearch.repository.CompoundRepository.SearchContext();
+        var context = new CompoundRepository.SearchContext();
         for (Double mz : request.getMzValues()) {
             CompoundSimpleSearchRequestDTO simpleRequest = new CompoundSimpleSearchRequestDTO(
                     mz,

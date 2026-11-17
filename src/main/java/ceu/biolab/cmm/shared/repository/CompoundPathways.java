@@ -20,12 +20,13 @@ public final class CompoundPathways {
         if (!missing.isEmpty()) {
             Map<Integer, Set<Pathway>> loaded = new HashMap<>();
             for (Integer id : missing) loaded.put(id, new HashSet<>());
-            new NamedParameterJdbcTemplate(jdbc).query("""
+            var namedJdbc = new NamedParameterJdbcTemplate(jdbc);
+            for (var batch : JdbcBatches.partition(missing)) namedJdbc.query("""
                     SELECT cp.compound_id, p.pathway_id, p.pathway_map, p.pathway_name
                     FROM compounds_pathways cp
                     JOIN pathways p ON p.pathway_id = cp.pathway_id
                     WHERE cp.compound_id IN (:ids)
-                    """, Map.of("ids", missing), (org.springframework.jdbc.core.RowCallbackHandler) rs -> {
+                    """, Map.of("ids", batch), (org.springframework.jdbc.core.RowCallbackHandler) rs -> {
                 Pathway pathway = new Pathway();
                 pathway.setPathwayId(rs.getInt("pathway_id"));
                 pathway.setPathwayMap(rs.getString("pathway_map"));
