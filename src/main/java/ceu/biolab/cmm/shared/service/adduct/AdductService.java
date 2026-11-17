@@ -81,7 +81,7 @@ public final class AdductService {
     public static Map<Double, Double> filterIsotopes(Map<Double, Double> groupedPeaks) {
         Map<Double, Double> deisotoped = new TreeMap<>();
         double previousPeak = 0d;
-        for (Map.Entry<Double, Double> entry : groupedPeaks.entrySet()) {
+        for (Map.Entry<Double, Double> entry : new TreeMap<>(groupedPeaks).entrySet()) {
             double mz = entry.getKey();
             double intensity = entry.getValue();
             if (previousPeak == 0d

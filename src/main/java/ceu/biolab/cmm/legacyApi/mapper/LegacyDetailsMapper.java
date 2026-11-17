@@ -2,7 +2,7 @@ package ceu.biolab.cmm.legacyApi.mapper;
 
 import ceu.biolab.cmm.compoundDetails.dto.*;
 import ceu.biolab.cmm.legacyApi.dto.LegacyDetailsRows.*;
-import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
+import ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
@@ -39,7 +39,7 @@ public class LegacyDetailsMapper {
                         .thenComparing(LipidMapsClassification::getSubClass,Comparator.nullsFirst(Comparator.naturalOrder()))
                         .thenComparing(LipidMapsClassification::getClassLevel4,Comparator.nullsFirst(Comparator.naturalOrder())))
                 .findFirst().orElse(null);
-        String charge = switch(c.getChargeType()) { case 1 -> "positive"; case 2 -> "negative"; default -> "neutral"; };
+        String charge = c.getChargeType() == null ? null : switch(c.getChargeType()) { case 1 -> "positive"; case 2 -> "negative"; default -> "neutral"; };
         return new CompoundInfo(c.getCompoundId(),c.getCasId(),c.getCompoundName(),c.getFormula(),c.getMass(),charge,c.getChargeNumber(),
                 c.getLogP(),ids == null ? null : ids.getKeggID(),ids == null ? null : ids.getLmID(),ids == null ? null : ids.getHmdbID(),
                 null,ids == null ? null : ids.getPcID(),ids == null ? null : ids.getAspergillusWebName(),ids == null ? null : ids.getChebiID(),

@@ -7,7 +7,7 @@ import ceu.biolab.cmm.MSMSSearch.domain.SpectrumSource;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchRequestDTO;
 import ceu.biolab.cmm.MSMSSearch.dto.MSMSSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
-import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
+import ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.IonizationMode;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
@@ -204,14 +204,15 @@ public class MSMSSearchRepository {
         jdbcTemplate.query(sql, (rs, _) -> {
             double mz = rs.getDouble("mz");
             double intensity = rs.getDouble("intensity");
-            if (intensity > 1.0) {
-                intensity = intensity / 100.0;
-            }
             MSPeak pk = new MSPeak(mz, intensity);
             peaks.add(pk);
             return null;
         });
 
+        double maximum = peaks.stream().mapToDouble(MSPeak::getIntensity).max().orElse(0d);
+        if (maximum > 0d) {
+            peaks.forEach(peak -> peak.setIntensity(peak.getIntensity() / maximum));
+        }
         return new Spectrum(precursorMz, peaks);
     }
 

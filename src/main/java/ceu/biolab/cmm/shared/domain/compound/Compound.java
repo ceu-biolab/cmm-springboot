@@ -1,7 +1,8 @@
 package ceu.biolab.cmm.shared.domain.compound;
 
+import jakarta.validation.constraints.NotNull;
 import ceu.biolab.cmm.shared.domain.FormulaType;
-import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
+import ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification;
 import lombok.Data;
 import lombok.Builder.Default;
 import lombok.experimental.SuperBuilder;
@@ -22,8 +23,8 @@ public class Compound {
     private String compoundName;
     private String formula;
     private double mass;
-    private int chargeType;
-    private int chargeNumber;
+    private Integer chargeType;
+    private Integer chargeNumber;
     private FormulaType formulaType;
     private CompoundType compoundType;
     private Double logP;
@@ -36,7 +37,8 @@ public class Compound {
     private Integer numCarbons;
     private Integer doubleBonds;
     @Default
-    private Set<LipidMapsClassification> lipidMapsClassifications = new HashSet<>();
+    @NotNull
+    private Set<@NotNull LipidMapsClassification> lipidMapsClassifications = new HashSet<>();
     private String biologicalActivity;
     private String meshNomenclature;
     private String iupacClassification;
@@ -72,7 +74,7 @@ public class Compound {
     }
 
     public Compound(int compoundId, String casId, String compoundName, String formula, double mass,
-                    int chargeType, int chargeNumber, FormulaType formulaType, CompoundType compoundType,
+                    Integer chargeType, Integer chargeNumber, FormulaType formulaType, CompoundType compoundType,
                     Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
                     Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
                     String meshNomenclature, String iupacClassification, String mol2, Set<Pathway> pathways) {
@@ -122,11 +124,11 @@ public class Compound {
         return mass;
     }
 
-    public int getChargeType() {
+    public Integer getChargeType() {
         return chargeType;
     }
 
-    public int getChargeNumber() {
+    public Integer getChargeNumber() {
         return chargeNumber;
     }
 

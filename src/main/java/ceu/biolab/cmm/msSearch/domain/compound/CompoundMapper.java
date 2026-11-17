@@ -1,6 +1,7 @@
 package ceu.biolab.cmm.msSearch.domain.compound;
 
 import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
+import ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.compound.CMMCompound;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
@@ -38,8 +39,8 @@ public class CompoundMapper {
                 rs.getString("compound_name"),
                 rs.getString("formula"),
                 rs.getDouble("mass"),
-                rs.getInt("charge_type"),
-                rs.getInt("charge_number"),
+                getNullableInteger(rs, "charge_type"),
+                getNullableInteger(rs, "charge_number"),
                 compoundType,
                 getNullableDouble(rs, "logP"),
                 getNullableDouble(rs, "rt_pred"),

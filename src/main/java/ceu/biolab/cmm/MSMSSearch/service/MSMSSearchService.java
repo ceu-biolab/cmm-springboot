@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.MSMSSearch.service;
 
+import java.util.IdentityHashMap;
 import ceu.biolab.cmm.MSMSSearch.domain.MSMSAnnotation;
 import ceu.biolab.cmm.MSMSSearch.domain.Spectrum;
 import ceu.biolab.cmm.MSMSSearch.dto.LCMSMSFeatureResponseDTO;
@@ -50,9 +51,10 @@ public class MSMSSearchService {
         LCMSMSSearchResponseDTO response = new LCMSMSSearchResponseDTO();
         for (LCMSMSFeatureInput featureInput : featureInputs) {
             MSMSSearchResponseDTO searchResponse = executeSearch(toMsmsSearchRequest(request, featureInput));
-            enrichWithLcmsScores(searchResponse, featureInput.rtValue(), featureInput.precursorIonMz(), request);
             response.addMsmsFeature(toFeatureResponse(searchResponse, featureInput));
         }
+
+        enrichWithLcmsScores(response.getMsmsFeatures(), request);
 
         if (response.getMsmsFeatures().size() == 1) {
             LCMSMSFeatureResponseDTO feature = response.getMsmsFeatures().getFirst();
@@ -133,53 +135,29 @@ public class MSMSSearchService {
         }
     }
 
-    private void enrichWithLcmsScores(MSMSSearchResponseDTO response, double rtValue, double precursorIonMz, LCMSMSSearchRequestDTO request) {
-        if (response == null || response.getMsmsList() == null || response.getMsmsList().isEmpty()) {
-            return;
-        }
-
-        AnnotatedFeature scoredFeature = new AnnotatedFeature(new LCMSFeature(rtValue, precursorIonMz));
-        Map<String, MSMSAnnotation> hitByCompoundAndAdduct = new LinkedHashMap<>();
-        Map<String, AnnotationsByAdduct> annotationsByAdduct = new LinkedHashMap<>();
-
-        for (MSMSAnnotation hit : response.getMsmsList()) {
-            if (hit.getCompound() == null) {
-                continue;
-            }
-
-            String adduct = hit.getAdduct() == null ? "" : hit.getAdduct();
-            String key = annotationKey(hit.getCompound().getCompoundId(), adduct);
-            hitByCompoundAndAdduct.put(key, hit);
-
-            Annotation annotation = new Annotation(hit.getCompound());
-            annotationsByAdduct
-                    .computeIfAbsent(adduct, AnnotationsByAdduct::new)
-                    .addAnnotation(annotation);
-        }
-
-        if (annotationsByAdduct.isEmpty()) {
-            return;
-        }
-
-        scoredFeature.setAnnotationsByAdducts(new ArrayList<>(annotationsByAdduct.values()));
-        ScoreAnnotationsService.scoreAnnotations(
-                List.of(scoredFeature),
-                Optional.of(resolveExperimentParameters(request))
-        );
-
-        for (AnnotationsByAdduct annotationsForAdduct : scoredFeature.getAnnotationsByAdducts()) {
-            String adduct = annotationsForAdduct.getAdduct() == null ? "" : annotationsForAdduct.getAdduct();
-            for (Annotation scoredAnnotation : annotationsForAdduct.getAnnotations()) {
-                if (scoredAnnotation.getCompound() == null) {
+    private void enrichWithLcmsScores(List<LCMSMSFeatureResponseDTO> features, LCMSMSSearchRequestDTO request) {
+        List<AnnotatedFeature> scoredFeatures = new ArrayList<>();
+        Map<Annotation, MSMSAnnotation> hits = new IdentityHashMap<>();
+        for (LCMSMSFeatureResponseDTO feature : features) {
+            AnnotatedFeature scoredFeature = new AnnotatedFeature(feature.getFeature());
+            Map<String, AnnotationsByAdduct> groups = new LinkedHashMap<>();
+            for (MSMSAnnotation hit : feature.getMsmsList()) {
+                if (hit.getCompound() == null) {
                     continue;
                 }
-                MSMSAnnotation originalHit = hitByCompoundAndAdduct.get(
-                        annotationKey(scoredAnnotation.getCompound().getCompoundId(), adduct)
-                );
-                if (originalHit != null) {
-                    originalHit.setScores(scoredAnnotation.getScores());
-                }
+                String adduct = hit.getAdduct() == null ? "" : hit.getAdduct();
+                Annotation annotation = new Annotation(hit.getCompound());
+                groups.computeIfAbsent(adduct, AnnotationsByAdduct::new).addAnnotation(annotation);
+                hits.put(annotation, hit);
             }
+            if (!groups.isEmpty()) {
+                scoredFeature.setAnnotationsByAdducts(new ArrayList<>(groups.values()));
+                scoredFeatures.add(scoredFeature);
+            }
+        }
+        if (!scoredFeatures.isEmpty()) {
+            ScoreAnnotationsService.scoreAnnotations(scoredFeatures, Optional.of(resolveExperimentParameters(request)));
+            hits.forEach((annotation, hit) -> hit.setScores(annotation.getScores()));
         }
     }
 
@@ -190,10 +168,6 @@ public class MSMSSearchService {
             experimentParameters.setIonMode(Optional.ofNullable(request.getIonizationMode()));
         }
         return experimentParameters;
-    }
-
-    private String annotationKey(int compoundId, String adduct) {
-        return compoundId + "|" + adduct;
     }
 
     private void validateLcmsmsRequest(LCMSMSSearchRequestDTO request, List<LCMSMSFeatureInput> featureInputs) {

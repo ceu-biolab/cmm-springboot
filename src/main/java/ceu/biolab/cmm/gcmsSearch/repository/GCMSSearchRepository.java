@@ -95,8 +95,8 @@ public class GCMSSearchRepository {
                     .formulaType(inferredFormulaType)
                     .logP(getNullableDouble(rs, "logP"))
                     .casId(rs.getString("cas_id"))
-                    .chargeType(rs.getInt("charge_type"))
-                    .chargeNumber(rs.getInt("charge_number"))
+                    .chargeType(getNullableInteger(rs, "charge_type"))
+                    .chargeNumber(getNullableInteger(rs, "charge_number"))
                     .compoundType(compoundType)
                     .inchi(rs.getString("inchi"))
                     .inchiKey(rs.getString("inchi_key"))
@@ -255,8 +255,8 @@ public class GCMSSearchRepository {
             Double logP = gcmsCompoundList.get(i).getLogP();
             String casId = gcmsCompoundList.get(i).getCasId();
 
-            int chargeType = gcmsCompoundList.get(i).getChargeType();
-            int chargeNumber = gcmsCompoundList.get(i).getChargeNumber();
+            Integer chargeType = gcmsCompoundList.get(i).getChargeType();
+            Integer chargeNumber = gcmsCompoundList.get(i).getChargeNumber();
             CompoundType compoundType = gcmsCompoundList.get(i).getCompoundType();
 
             String inchi = gcmsCompoundList.get(i).getInchi();
@@ -353,6 +353,11 @@ public class GCMSSearchRepository {
             return number.doubleValue();
         }
         return Double.valueOf(value.toString());
+    }
+
+    private static Integer getNullableInteger(java.sql.ResultSet rs, String column) throws java.sql.SQLException {
+        Number value = (Number) rs.getObject(column);
+        return value == null ? null : Math.toIntExact(value.longValue());
     }
 
 }

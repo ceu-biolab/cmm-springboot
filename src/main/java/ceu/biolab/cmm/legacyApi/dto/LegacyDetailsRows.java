@@ -18,7 +18,7 @@ public final class LegacyDetailsRows {
             List<NumberedLink> organism_hierarchy, List<Link> compounds, List<Link> references,
             String created, String last_updated) {}
     public record CompoundInfo(int identifier, String cas_id, String name, String formula, double mass,
-            String charge_type, int charge_number, Double logP, String kegg_id, String lm_id, String hmdb_id,
+            String charge_type, Integer charge_number, Double logP, String kegg_id, String lm_id, String hmdb_id,
             String metlin_id, Integer pc_id, String aspergillus_web_name, Integer chebi_id, Integer aspergillus_id,
             String knapsack_id, Integer npatlas_id, Integer oh_position, String biological_activity,
             String mesh_nomenclature, String iupac_classification, String inchi, String inchi_key, String smiles,

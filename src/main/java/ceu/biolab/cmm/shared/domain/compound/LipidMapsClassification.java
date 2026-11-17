@@ -1,4 +1,4 @@
-package ceu.biolab.cmm.msSearch.domain.compound;
+package ceu.biolab.cmm.shared.domain.compound;
 
 public class LipidMapsClassification {
     protected String category;

@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.unit.scoreAnnotations.service;
 
-import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
+import ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.scoreAnnotations.domain.CompoundScores;
 import ceu.biolab.cmm.scoreAnnotations.domain.Lipid;
 import ceu.biolab.cmm.scoreAnnotations.service.ScoreAnnotationsService;

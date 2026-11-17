@@ -23,7 +23,7 @@ public class CMMCompound extends Compound implements Comparable<CMMCompound> {
     private final String aspergillusWebName;
 
     public CMMCompound(int compoundId, String casId, String compoundName, String formula, double mass,
-                       int chargeType, int chargeNumber, FormulaType formulaType, CompoundType compoundType,
+                       Integer chargeType, Integer chargeNumber, FormulaType formulaType, CompoundType compoundType,
                        Double logP, Double rtPred, String inchi, String inchiKey, String smiles, String lipidType,
                        Integer numChains, Integer numCarbons, Integer doubleBonds, String biologicalActivity,
                        String meshNomenclature, String iupacClassification, String mol2, Set<Pathway> pathwaySet, String keggID, String lmID, String hmdbID, String agilentID, Integer pcID, Integer chebiID, String inHouseID,

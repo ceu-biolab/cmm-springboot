@@ -160,6 +160,12 @@ public class CompoundRepository {
                     annotatedFeature.getAnnotationsByAdducts().add(annotationsByAdduct);
                 }
 
+                if (detectedAdduct.isPresent() && !detectedAdduct.get().isBlank()
+                        && !adductString.equals(AdductService.requireDefinition(ionizationMode, detectedAdduct.get()).canonical())) {
+                    // Preserve empty alternative groups, as in legacy CMM, without querying them.
+                    continue;
+                }
+
                 List<String> databaseConditions = Database.databaseConditions(databases);
 
                 double monoIsotopicMassFromMZAndAdduct = AdductService.neutralMassFromMz(mz, adductDefinition);
@@ -293,7 +299,7 @@ public class CompoundRepository {
         if (compound == null || compound.getLipidMapsClassifications() == null) {
             return;
         }
-        for (ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification classification : compound.getLipidMapsClassifications()) {
+        for (ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification classification : compound.getLipidMapsClassifications()) {
             if (classification == null) {
                 continue;
             }

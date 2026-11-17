@@ -80,8 +80,8 @@ public class BrowseSearchRepository {
 
         String compoundName = request.getCompoundName();
         if (compoundName != null && compoundName.trim().length() >= 3) {
-            String operator = request.isExactName() ? "LIKE" : "ILIKE";
-            String value = request.isExactName() ? compoundName : "%" + compoundName + "%";
+            String operator = request.isExactName() ? "=" : "ILIKE";
+            String value = request.isExactName() ? compoundName.trim() : "%" + escapeLike(compoundName.trim()) + "%";
             sql = sql.replace("(:compoundNameFilter)", "(c.compound_name " + operator + " :compoundName)");
             params.addValue("compoundName", value);
         } else {
@@ -90,7 +90,7 @@ public class BrowseSearchRepository {
 
         String formula = request.getFormula();
         if (formula != null && !formula.isBlank()) {
-            sql = sql.replace("(:formulaFilter)", " AND c.formula LIKE :formula");
+            sql = sql.replace("(:formulaFilter)", " AND c.formula = :formula");
             params.addValue("formula", formula.trim());
         } else {
             sql = sql.replace("(:formulaFilter)", "");
@@ -133,6 +133,10 @@ public class BrowseSearchRepository {
         });
 
         return new HashSet<>(pathwayList);
+    }
+
+    private static String escapeLike(String value) {
+        return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
     }
 
     private record QueryParts(String sql, MapSqlParameterSource params) {}
