@@ -92,14 +92,29 @@ class Cems1MarkerServiceTest {
                     "Effective mobility mismatch at index " + i);
         }
 
-        assertEquals(41.75025529945909, forwarded.getEffectiveMobilityTolerance(), 1e-9);
+        assertEquals(forwarded.getMzValues().size(), forwarded.getMobilityBounds().size());
+        for (int i = 0; i < sampleRequest.getMigrationTimes().size(); i++) {
+            double time = sampleRequest.getMigrationTimes().get(i);
+            double factor = sampleRequest.getCapillaryLength() * sampleRequest.getCapillaryLength()
+                    / sampleRequest.getCapillaryVoltage();
+            double lower = 774.7394 + factor * (1 / (time * 1.1) - 1 / sampleRequest.getMarkerTime());
+            double upper = 774.7394 + factor * (1 / (time * 0.9) - 1 / sampleRequest.getMarkerTime());
+            assertEquals(lower, forwarded.getMobilityBounds().get(i).lower(), 1e-8);
+            assertEquals(upper, forwarded.getMobilityBounds().get(i).upper(), 1e-8);
+        }
+        for (int i = 0; i < forwarded.getMobilityBounds().size(); i++) {
+            org.junit.jupiter.api.Assertions.assertTrue(forwarded.getMobilityBounds().get(i).lower()
+                    < forwarded.getEffectiveMobilities().get(i));
+            org.junit.jupiter.api.Assertions.assertTrue(forwarded.getMobilityBounds().get(i).upper()
+                    > forwarded.getEffectiveMobilities().get(i));
+        }
         assertEquals(sampleRequest.getMasses(), forwarded.getMzValues());
         assertEquals(sampleRequest.getAdducts(), forwarded.getAdducts());
         assertEquals("FORMIC_ACID_1M", forwarded.getBufferCode());
         assertEquals(10d, forwarded.getMzTolerance());
         assertEquals(MzToleranceMode.MDA, forwarded.getMzToleranceMode());
         assertEquals(sampleRequest.getTemperature(), forwarded.getTemperature());
-        assertEquals(ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode.PERCENTAGE,
+        assertEquals(ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode.ABSOLUTE,
                 forwarded.getEffectiveMobilityToleranceMode());
     }
 

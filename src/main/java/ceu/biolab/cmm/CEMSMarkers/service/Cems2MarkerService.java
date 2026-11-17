@@ -60,7 +60,7 @@ public class Cems2MarkerService extends AbstractCemsMarkerService {
             effectiveMobilities.add(calculateEffectiveMobility(mu1, mu2, marker1Time, marker2Time, migrationTime));
         }
 
-        double mobilityTolerancePercent = computeMobilityTolerancePercent(
+        var mobilityBounds = computeMobilityBounds(
                 request.getMigrationTimes(),
                 request.getMigrationTimeTolerance(),
                 request.getMtToleranceMode(),
@@ -76,7 +76,7 @@ public class Cems2MarkerService extends AbstractCemsMarkerService {
                 request.getTolerance(),
                 request.getToleranceMode(),
                 request.getTemperature(),
-                mobilityTolerancePercent,
+                mobilityBounds,
                 request.getPolarity(),
                 request.getIonMode()
         ));

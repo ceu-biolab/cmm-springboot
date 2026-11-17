@@ -28,6 +28,26 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CemsSearchServiceTest {
 
+    @Test
+    void markerBoundsAreAppliedIndividuallyAndCannotBeSuppliedViaJson() throws Exception {
+        var request = baseRequest();
+        request.setMzValues(List.of(100.0, 101.0));
+        request.setEffectiveMobilities(List.of(1500.0, 1000.0));
+        request.setMobilityBounds(List.of(new ceu.biolab.cmm.CEMSSearch.domain.MobilityBounds(1400, 1550),
+                new ceu.biolab.cmm.CEMSSearch.domain.MobilityBounds(990, 1100)));
+        when(repository.findMatchingCompounds(any())).thenReturn(List.of());
+        service.search(request);
+        org.mockito.Mockito.verify(repository, org.mockito.Mockito.times(2)).findMatchingCompounds(queryCaptor.capture());
+        assertEquals(1400, queryCaptor.getAllValues().getFirst().getMobilityLower());
+        assertEquals(1550, queryCaptor.getAllValues().getFirst().getMobilityUpper());
+        assertEquals(990, queryCaptor.getAllValues().getLast().getMobilityLower());
+        assertEquals(1100, queryCaptor.getAllValues().getLast().getMobilityUpper());
+        var mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        var untrusted = mapper.readValue("{\"mobilityBounds\":[{\"lower\":0,\"upper\":99999}]}", CemsSearchRequestDTO.class);
+        assertTrue(untrusted.getMobilityBounds().isEmpty());
+        assertFalse(mapper.writeValueAsString(request).contains("mobilityBounds"));
+    }
+
     @Mock
     private CemsSearchRepository repository;
 

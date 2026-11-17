@@ -93,14 +93,20 @@ class Cems2MarkerServiceTest {
                     "Effective mobility mismatch at index " + i);
         }
 
-        assertEquals(31.15094534757435, forwarded.getEffectiveMobilityTolerance(), 1e-9);
+        assertEquals(forwarded.getMzValues().size(), forwarded.getMobilityBounds().size());
+        for (int i = 0; i < forwarded.getMobilityBounds().size(); i++) {
+            org.junit.jupiter.api.Assertions.assertTrue(forwarded.getMobilityBounds().get(i).lower()
+                    < forwarded.getEffectiveMobilities().get(i));
+            org.junit.jupiter.api.Assertions.assertTrue(forwarded.getMobilityBounds().get(i).upper()
+                    > forwarded.getEffectiveMobilities().get(i));
+        }
         assertEquals(sampleRequest.getMasses(), forwarded.getMzValues());
         assertEquals(sampleRequest.getAdducts(), forwarded.getAdducts());
         assertEquals("FORMIC_ACID_1M", forwarded.getBufferCode());
         assertEquals(10d, forwarded.getMzTolerance());
         assertEquals(MzToleranceMode.MDA, forwarded.getMzToleranceMode());
         assertEquals(sampleRequest.getTemperature(), forwarded.getTemperature());
-        assertEquals(ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode.PERCENTAGE,
+        assertEquals(ceu.biolab.cmm.CEMSSearch.domain.EffMobToleranceMode.ABSOLUTE,
                 forwarded.getEffectiveMobilityToleranceMode());
     }
 
