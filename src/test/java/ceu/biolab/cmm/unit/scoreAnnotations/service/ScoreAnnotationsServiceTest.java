@@ -30,6 +30,25 @@ public class ScoreAnnotationsServiceTest {
     }
     
     @Test
+    void concurrentScoringSessionsDoNotShareFacts() throws Exception {
+        try (var executor = java.util.concurrent.Executors.newFixedThreadPool(4)) {
+            var tasks = new ArrayList<java.util.concurrent.Callable<Void>>();
+            for (int i = 0; i < 12; i++) {
+                tasks.add(() -> {
+                    AnnotatedFeature feature = createEmptyAnnotatedFeature(800.5, 5.0);
+                    addRTLipidToAnnotations(feature, "PC", 36, 2);
+                    ScoreAnnotationsService.scoreAnnotations(List.of(feature), Optional.empty());
+                    var scores = (LipidScores) extractAnnotations(List.of(feature)).getFirst().getScores().getFirst();
+                    assertTrue(scores.getRtScoreMap().isEmpty());
+                    assertEquals(1, extractAnnotations(List.of(feature)).getFirst().getScores().size());
+                    return null;
+                });
+            }
+            for (var result : executor.invokeAll(tasks)) result.get();
+        }
+    }
+
+    @Test
     void testScoreEmptyInput() {
         // Test handling of empty input list
         List<AnnotatedFeature> features = new ArrayList<>();

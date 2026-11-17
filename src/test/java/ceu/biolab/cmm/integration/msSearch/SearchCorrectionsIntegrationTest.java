@@ -63,4 +63,24 @@ class SearchCorrectionsIntegrationTest {
         assertFalse(groups.stream().filter(g -> g.getAdduct().equals("[M+H]+"))
                 .findFirst().orElseThrow().getAnnotations().isEmpty());
     }
+    @Test
+    void requestCacheDoesNotShareMutableAnnotationsCompoundsOrPathways() {
+        var context = new CompoundRepository.SearchContext();
+        var first = repository.annotateMSFeature(400.3432, MzToleranceMode.PPM, 50d,
+                IonizationMode.POSITIVE, Optional.of("[M+H]+"), Optional.empty(),
+                Set.of("[M+H]+"), Set.of(Database.HMDB), MetaboliteType.ALL, context);
+        var annotation = first.getFirst().getAnnotationsByAdducts().getFirst().getAnnotations().getFirst();
+        String name = annotation.getCompound().getCompoundName();
+        annotation.getCompound().setCompoundName("mutated");
+        annotation.getCompound().getPathways().clear();
+        var second = repository.annotateMSFeature(400.3432, MzToleranceMode.PPM, 50d,
+                IonizationMode.POSITIVE, Optional.of("[M+H]+"), Optional.empty(),
+                Set.of("[M+H]+"), Set.of(Database.HMDB), MetaboliteType.ALL, context);
+        var fresh = second.getFirst().getAnnotationsByAdducts().getFirst().getAnnotations().getFirst();
+        assertNotSame(annotation, fresh);
+        assertNotSame(annotation.getCompound(), fresh.getCompound());
+        assertNotSame(annotation.getCompound().getPathways(), fresh.getCompound().getPathways());
+        assertEquals(name, fresh.getCompound().getCompoundName());
+    }
+
 }

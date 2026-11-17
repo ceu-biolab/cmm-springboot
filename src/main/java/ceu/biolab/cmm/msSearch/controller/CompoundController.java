@@ -40,6 +40,7 @@ public class CompoundController {
 
         RTSearchResponseDTO response = new RTSearchResponseDTO();
 
+        var context = new ceu.biolab.cmm.msSearch.repository.CompoundRepository.SearchContext();
         for (Double mz : request.getMzValues()) {
             CompoundSimpleSearchRequestDTO simpleRequest = new CompoundSimpleSearchRequestDTO(
                     mz,
@@ -53,7 +54,7 @@ public class CompoundController {
                     request.getMetaboliteType()
             );
 
-            RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest);
+            RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest, context);
             response.getMSFeatures().addAll(result.getMSFeatures());
         }
 

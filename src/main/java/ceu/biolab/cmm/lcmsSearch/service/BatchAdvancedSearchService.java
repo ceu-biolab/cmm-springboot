@@ -63,6 +63,7 @@ public class BatchAdvancedSearchService {
 
         List<AnnotatedFeature> allAnnotatedFeatures = new ArrayList<>();
 
+        var context = new ceu.biolab.cmm.msSearch.repository.CompoundRepository.SearchContext();
         for (int i = 0; i < mzs.size(); i++) {
             double mz = mzs.get(i);
             double rt = retentionTimes.get(i);
@@ -77,14 +78,14 @@ public class BatchAdvancedSearchService {
                     .orElse("");
 
             // 2. Simple search with detected Adduct
-            logger.info("detected adduct : {}", detectedAdduct);
-            logger.info("adducts formatted : {}", request.getAdductsString());
+            logger.debug("detected adduct : {}", detectedAdduct);
+            logger.debug("adducts formatted : {}", request.getAdductsString());
             CompoundSimpleSearchRequestDTO compoundSimpleSearchRequestDTO = new CompoundSimpleSearchRequestDTO(mz,
                     request.getMzToleranceMode(), request.getTolerance(), request.getIonizationMode(),
                     canonicalAdducts, Optional.ofNullable(detectedAdduct).filter(s -> !s.isEmpty()),
                     formulaTypeOptional, request.getDatabases(), request.getMetaboliteType());
 
-            RTSearchResponseDTO response = compoundService.findCompoundsByMz(compoundSimpleSearchRequestDTO);
+            RTSearchResponseDTO response = compoundService.findCompoundsByMz(compoundSimpleSearchRequestDTO, context);
             List<AnnotatedFeature> annotatedFeatures = response.getMSFeatures();
 
             for (AnnotatedFeature feature : annotatedFeatures) {

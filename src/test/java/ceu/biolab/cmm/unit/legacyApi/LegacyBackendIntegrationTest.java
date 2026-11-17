@@ -53,7 +53,7 @@ class LegacyBackendIntegrationTest {
         var repository=mock(CompoundRepository.class);
         var c=LegacyResponseMapperTest.compound();
         var feature=new AnnotatedFeature(101d);feature.addCompoundForAdduct("[M+H]+",c);
-        when(repository.annotateMSFeature(any(),any(),any(),any(),any(),any(),any(),any(),any())).thenReturn(List.of(feature));
+        when(repository.annotateMSFeature(any(),any(),any(),any(),any(),any(),any(),any(),any(),any())).thenReturn(List.of(feature));
         var compounds=new CompoundService();ReflectionTestUtils.setField(compounds,"compoundRepository",repository);
         var ms=new LegacyMsSearchService(compounds,null,null,options,responses);
         var lcms=new BatchAdvancedSearchService();ReflectionTestUtils.setField(lcms,"compoundService",compounds);

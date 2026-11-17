@@ -50,6 +50,8 @@ public class BrowseSearchRepository {
         List<Compound> filteredCompounds = compounds.stream()
                 .filter(compound -> FormulaTypeFilter.matches(compound, allowedElements))
                 .collect(Collectors.toCollection(ArrayList::new));
+        ceu.biolab.cmm.shared.repository.CompoundPathways.hydrate(
+                jdbcTemplate.getJdbcTemplate(), filteredCompounds, new java.util.HashMap<>());
         return new BrowseQueryResponse(filteredCompounds);
     }
 
@@ -106,33 +108,14 @@ public class BrowseSearchRepository {
                 while (rs.next()) {
                     CompoundDTO dto = CompoundMapper.fromResultSet(rs);
                     Compound compound = CompoundMapper.toCompound(dto);
-                    compound.setPathways(fetchPathwaysForCompound(compound.getCompoundId()));
                     compoundsSet.add(compound);
                 }
                 return compoundsSet;
         });
 
-        LOGGER.info("browseSearch executed; matched {} compounds", compoundsSet.size());
+        LOGGER.debug("browseSearch executed; matched {} compounds", compoundsSet.size());
 
         return new ArrayList<>(compoundsSet);
-    }
-
-    private Set<Pathway> fetchPathwaysForCompound(int compoundId) {
-        String sql = """
-                SELECT p.* FROM pathways p
-                INNER JOIN compounds_pathways cp ON cp.pathway_id = p.pathway_id
-                WHERE cp.compound_id = ?
-                """;
-
-        List<Pathway> pathwayList = jdbcTemplate.getJdbcTemplate().query(sql, ps -> ps.setInt(1, compoundId), (rs, _) -> {
-            Pathway pathway = new Pathway();
-            pathway.setPathwayId(rs.getInt("pathway_id"));
-            pathway.setPathwayMap(rs.getString("pathway_map"));
-            pathway.setPathwayName(rs.getString("pathway_name"));
-            return pathway;
-        });
-
-        return new HashSet<>(pathwayList);
     }
 
     private static String escapeLike(String value) {
