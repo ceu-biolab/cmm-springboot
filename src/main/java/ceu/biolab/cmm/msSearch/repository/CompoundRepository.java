@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.msSearch.repository;
 
+import ceu.biolab.cmm.shared.repository.CompoundPathways;
+
 import ceu.biolab.cmm.msSearch.dto.CompoundDTO;
 import ceu.biolab.cmm.msSearch.domain.compound.CompoundMapper;
 
@@ -59,6 +61,21 @@ public class CompoundRepository {
     private String msSearchQueryTemplate;
     private String compoundByIdQueryTemplate;
 
+    /** Request-owned data only; annotations, compounds and scores are always created afresh. */
+    public static final class SearchContext {
+        private final Map<QueryKey, List<CompoundDTO>> windows = new java.util.HashMap<>();
+        private final Map<Integer, Set<Pathway>> pathways = new java.util.HashMap<>();
+    }
+
+    private record QueryKey(String sql, double lower, double upper) {}
+
+    public List<AnnotatedFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
+            Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct, Optional<FormulaType> formulaType,
+            Set<String> adductsString, Set<Database> databases, MetaboliteType metaboliteType) {
+        return annotateMSFeature(mz, mzToleranceMode, tolerance, ionizationMode, detectedAdduct,
+                formulaType, adductsString, databases, metaboliteType, new SearchContext());
+    }
+
     /**
      * This method annotates the MS features
      * @param mz the experimental mass to search
@@ -75,9 +92,9 @@ public class CompoundRepository {
     public List<AnnotatedFeature> annotateMSFeature(Double mz, MzToleranceMode mzToleranceMode,
                                             Double tolerance, IonizationMode ionizationMode, Optional<String> detectedAdduct, Optional<FormulaType> formulaType,
                                             Set<String> adductsString, Set<Database> databases,
-                                            MetaboliteType metaboliteType) {
+                                            MetaboliteType metaboliteType, SearchContext context) {
         List<AnnotatedFeature> annotatedMSFeature = new ArrayList<>();
-        logger.info("request: {}", detectedAdduct);
+        logger.debug("request: {}", detectedAdduct);
         CompoundType compoundType = null;
 
         if (mz == null || tolerance == null || mzToleranceMode == null || ionizationMode == null) {
@@ -118,8 +135,8 @@ public class CompoundRepository {
             AnnotatedFeature annotatedFeature = new AnnotatedFeature(msFeature);
             Map<String, AdductDefinition> adductsToProcess = new LinkedHashMap<>();
 
-            logger.info("detected adduct: {}", detectedAdduct);
-            logger.info(" adductS: {}", adductsString);
+            logger.debug("detected adduct: {}", detectedAdduct);
+            logger.debug(" adductS: {}", adductsString);
 
             detectedAdduct = detectedAdduct == null ? Optional.empty() : detectedAdduct;
 
@@ -132,14 +149,14 @@ public class CompoundRepository {
                 adductsToProcess.putIfAbsent(definition.canonical(), definition);
             }
 
-            logger.info(" adductS process: {}", adductsToProcess);
+            logger.debug(" adductS process: {}", adductsToProcess);
             if (adductsToProcess.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No valid adducts supplied for the selected ionization mode.");
             }
 
             List<AdductDefinition> orderedAdducts = AdductService.sortByPriority(
                     new LinkedHashSet<>(adductsToProcess.values()), ionizationMode);
-            logger.info("ordered adducts: {}", orderedAdducts.stream().map(AdductDefinition::canonical).toList());
+            logger.debug("ordered adducts: {}", orderedAdducts.stream().map(AdductDefinition::canonical).toList());
 
             for (AdductDefinition adductDefinition : orderedAdducts) {
                 String adductString = adductDefinition.canonical();
@@ -158,6 +175,12 @@ public class CompoundRepository {
                 if (annotationsByAdduct == null) {
                     annotationsByAdduct = new AnnotationsByAdduct(adductString, new ArrayList<>());
                     annotatedFeature.getAnnotationsByAdducts().add(annotationsByAdduct);
+                }
+
+                if (detectedAdduct.isPresent() && !detectedAdduct.get().isBlank()
+                        && !adductString.equals(AdductService.requireDefinition(ionizationMode, detectedAdduct.get()).canonical())) {
+                    // Preserve empty alternative groups, as in legacy CMM, without querying them.
+                    continue;
                 }
 
                 List<String> databaseConditions = Database.databaseConditions(databases);
@@ -188,29 +211,28 @@ public class CompoundRepository {
                 }
 
                 String finalSql = sqlTemplate
-                        .replace("(:lowerBound)", String.valueOf(lowerBoundFinal))
-                        .replace("(:upperBound)", String.valueOf(upperBoundFinal))
+                        .replace("(:lowerBound)", "?")
+                        .replace("(:upperBound)", "?")
                         .replace("(:compoundTypeFilter)", compoundTypeClause)
                         .replace("(:databaseFilterCondition)", databaseClause);
 
-                Set<Compound> compounds = jdbcTemplate.query(
-                        finalSql, rs -> {
-                            while (rs.next()) {
-                                CompoundDTO dto = CompoundMapper.fromResultSet(rs);
-                                Compound compound = CompoundMapper.toCompound(dto);
-                                compound.setPathways(fetchPathwaysForCompound(compound.getCompoundId()));
-                                compoundsSet.add(compound);
-                            }
-                            return compoundsSet;
-                        });
+                QueryKey key = new QueryKey(finalSql, lowerBoundFinal, upperBoundFinal);
+                List<CompoundDTO> rows = context.windows.computeIfAbsent(key, ignored ->
+                        jdbcTemplate.query(finalSql, ps -> {
+                            ps.setDouble(1, lowerBoundFinal);
+                            ps.setDouble(2, upperBoundFinal);
+                        }, (rs, rowNum) -> CompoundMapper.fromResultSet(rs)));
+                Set<Compound> compounds = rows.stream().map(CompoundMapper::toCompound)
+                        .collect(Collectors.toCollection(HashSet::new));
 
-                logger.info("QUERY: {} ", finalSql);
+                logger.debug("QUERY: {} ", finalSql);
 
                 Set<Compound> filteredCompounds = compounds.stream()
                         .peek(this::normalizeLipidMapsClassification)
                         .filter(comp -> FormulaTypeFilter.matches(comp, allowedElements))
                         .collect(Collectors.toCollection(LinkedHashSet::new));
 
+                CompoundPathways.hydrate(jdbcTemplate, filteredCompounds, context.pathways);
                 List<Annotation> annotations = new ArrayList<>();
                 for (Compound compound : filteredCompounds) {
                     Annotation annotation = new Annotation(compound);
@@ -293,7 +315,7 @@ public class CompoundRepository {
         if (compound == null || compound.getLipidMapsClassifications() == null) {
             return;
         }
-        for (ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification classification : compound.getLipidMapsClassifications()) {
+        for (ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification classification : compound.getLipidMapsClassifications()) {
             if (classification == null) {
                 continue;
             }

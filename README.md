@@ -23,7 +23,7 @@ CEU Mass Mediator (CMM) helps scientists in the field of metabolomics match expe
 
 ### Requirements
 
-- **Java 24**
+- **Java 25**
 - **Maven**
 - **PostgreSQL** database populated with the internal CEU Mass Mediator schema. As of right now you have to run it locally.
 
@@ -42,6 +42,8 @@ CEU Mass Mediator (CMM) helps scientists in the field of metabolomics match expe
    ```
 
 > 🔐 Contact us for details on how to set up the database.
+
+The local profile imports `src/main/resources/application-local.yml` from the working directory during development. That file and its template are excluded from packaged JARs, including incremental builds. Run production with `SPRING_PROFILES_ACTIVE=prod` and set `CMM_DB_URL`, `CMM_DB_USERNAME`, and `CMM_DB_PASSWORD` in the deployment environment (for example, the systemd service environment). Build release artifacts with `mvn clean package spring-boot:repackage`.
 
 ---
 
@@ -80,13 +82,31 @@ When something goes wrong, services raise `ResponseStatusException`, ensuring cl
 - `POST /api/compounds/simple-search`, `POST /api/compounds/batch-search`, and `POST /api/browse-search` accept an optional `formulaType` filter such as `CHNOPS` to restrict results to a chemical alphabet.
 - `POST /api/msms-search` accepts `spectrumSource` with `ALL`, `experimental`, or `predicted` to control which library spectra are searched.
 - Each `/api/msms-search` hit now includes its `spectrumSource` so clients can distinguish predicted from experimental matches.
+- Browse names are literal case-insensitive substrings, or literal case-sensitive names when `exactName` is true. Formulas use literal equality. `%`, `_`, and backslashes are never user-supplied wildcards.
+- Automatic adduct detection restricts LC-MS candidate searches to the detected adduct; alternative adduct groups remain empty. Without detection, all requested adducts are searched.
+- A compound with multiple CCS measurements uses the measurement closest to the requested CCS (ties use the lower value). Marker-based CE searches transform each feature's time interval into its own mobility bounds.
+- SQL NULL charge values remain `null` in compound responses, distinct from a known numeric zero.
 - `POST /api/lcmsms-search` accepts the same MS/MS search settings plus either a single `precursorIonMZ`/`fragmentsMZsIntensities`/`rtValue` feature or batched `precursorIonMZValues`/`fragmentsMZsIntensitiesList`/`rtValues`, with optional `experimentParameters`. It returns `msmsFeatures` in request order and preserves the legacy top-level `msmsList` payload when a single feature is submitted.
 
 ## ✅ Validation & Error Handling
 
+LC annotation scoring follows the legacy CMM order: ionization compatibility, supporting adduct relationships, missing-adduct rules, and retention-time comparisons. Adduct relationships adjust an ionization score only when a baseline ionization rule applies. Alternative candidates for the same m/z and retention time do not count as independent RT evidence. Missing lipid chain, carbon, or double-bond counts are preserved as unknown and exclude the candidate from structural RT comparisons; a known double-bond count of zero remains valid.
+
+These scoring corrections retain the endpoint paths and JSON fields. Scores can change, including remaining `null` where the experimental information or applicable rules do not support a score.
+
+LC-MS/MS batches are scored together so their features can supply RT and adduct evidence for one another. Classification queries select one complete LIPID MAPS row using the lowest classification ID, rather than combining fields from different rows.
+
+Workload limits (features per batch, peaks per spectrum, browse result limits and pagination) remain an open decision before public release. No new numerical limits are enforced yet.
+
 - All public DTOs use Jakarta Bean Validation to guard against missing values and malformed data.
 - Controllers annotate request bodies with `@Valid`, so invalid requests never reach the service layer.
 - Services and repositories convert domain failures into `ResponseStatusException`, providing predictable error responses.
+
+## Search performance and metadata caching
+
+Searches batch pathway and spectrum reads, and reuse compiled scoring rules with an isolated session per request. Metadata statistics and catalogs refresh lazily every five minutes; set `cmm.metadata.cache-ttl` (for example `PT1M`, or `PT0S` to disable caching) to change this interval. Search results are not cached across requests.
+
+See [performance measurements and reproduction instructions](docs/PERFORMANCE.md) for before/after query counts, timings and remaining opportunities.
 
 ## 🧪 Testing
 

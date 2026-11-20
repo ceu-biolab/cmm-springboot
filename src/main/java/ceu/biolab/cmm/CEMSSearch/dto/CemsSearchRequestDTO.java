@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.CEMSSearch.dto;
 
+import ceu.biolab.cmm.CEMSSearch.domain.MobilityBounds;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,10 @@ import lombok.Data;
 
 @Data
 public class CemsSearchRequestDTO {
+
+    // Internal marker calibration metadata, never accepted from the public API.
+    @JsonIgnore
+    private List<MobilityBounds> mobilityBounds = List.of();
 
     @JsonProperty("buffer_code")
     @NotBlank

@@ -23,8 +23,8 @@ public class GCMSQueryResponseDTO {
     private FormulaType formulaType;
     private Double logP;
     private String casId;
-    private int charge_type;
-    private int charge_number;
+    private Integer charge_type;
+    private Integer charge_number;
     private CompoundType compound_type;
 
     private String inchi;

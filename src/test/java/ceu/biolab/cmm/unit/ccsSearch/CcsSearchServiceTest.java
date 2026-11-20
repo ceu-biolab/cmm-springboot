@@ -139,4 +139,22 @@ class CcsSearchServiceTest {
         dto.setPathwayMap("map00010");
         return dto;
     }
+
+    @Test
+    void closestCcsMeasurementIsIndependentOfRowOrderAndKeepsPathways() throws Exception {
+        var farther = candidate(10, 1, 1);
+        farther.setDbCcs(148.5);
+        farther.setPathwayId(1);
+        var closest = candidate(10, 1, 1);
+        closest.setDbCcs(150.1);
+        closest.setPathwayId(2);
+        when(repository.findMatchingCompounds(any())).thenReturn(List.of(farther, closest), List.of(closest, farther));
+        for (int i = 0; i < 2; i++) {
+            var annotation = service.search(baseRequest()).getImFeatures().getFirst()
+                    .getAnnotationsByAdducts().getFirst().getAnnotations().getFirst();
+            var compound = (ceu.biolab.cmm.ccsSearch.domain.IMMSCompound) annotation.getCompound();
+            assertEquals(150.1, compound.getDbCcs());
+            assertEquals(2, compound.getPathways().size());
+        }
+    }
 }

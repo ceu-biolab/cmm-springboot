@@ -1,6 +1,6 @@
 package ceu.biolab.cmm.msSearch.dto;
 
-import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
+import ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.FormulaType;
 import ceu.biolab.cmm.shared.domain.compound.CompoundType;
 import ceu.biolab.cmm.shared.domain.compound.Pathway;
@@ -18,8 +18,8 @@ public class CompoundDTO {
     private final String compoundName;
     private final String formula;
     private final double mass;
-    private final int chargeType;
-    private final int chargeNumber;
+    private final Integer chargeType;
+    private final Integer chargeNumber;
     private final FormulaType formulaType;
     private final CompoundType compoundType;
     private final Double logP;
@@ -51,7 +51,7 @@ public class CompoundDTO {
     private final String mol2;
     private Set<Pathway> pathways;
 
-    public CompoundDTO(int compoundId, String casId, String compoundName, String formula, double mass, int chargeType, int chargeNumber,
+    public CompoundDTO(int compoundId, String casId, String compoundName, String formula, double mass, Integer chargeType, Integer chargeNumber,
                        CompoundType compoundType, Double logP, Double rtPred, String inchi,
                        String inchiKey, String smiles, String lipidType, Integer numChains, Integer numberCarbons, Integer doubleBonds, String category,
                        String mainClass, String subClass, String classLevel4, String biologicalActivity, String meshNomenclature, String iupacClassification,
@@ -105,8 +105,8 @@ public class CompoundDTO {
         this.compoundName = rs.getString("compound_name");
         this.formula = rs.getString("formula");
         this.mass = rs.getDouble("mass");
-        this.chargeType = rs.getInt("charge_type");
-        this.chargeNumber = rs.getInt("charge_number");
+        this.chargeType = getNullableInteger(rs, "charge_type");
+        this.chargeNumber = getNullableInteger(rs, "charge_number");
         Integer compoundTypeValue = null;
         Object compoundTypeRaw = rs.getObject("compound_type");
         if (compoundTypeRaw instanceof Number number) {

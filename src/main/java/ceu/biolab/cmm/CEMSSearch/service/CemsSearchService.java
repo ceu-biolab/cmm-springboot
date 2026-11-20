@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.CEMSSearch.service;
 
+import ceu.biolab.cmm.CEMSSearch.domain.MobilityBounds;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -56,6 +57,10 @@ public class CemsSearchService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request payload cannot be null");
         }
         validateRequest(request);
+        if (request.getMobilityBounds() == null || (!request.getMobilityBounds().isEmpty()
+                && request.getMobilityBounds().size() != request.getMzValues().size())) {
+            throw new IllegalArgumentException("Marker mobility bounds must match features");
+        }
 
         String bufferCode = normalizeBufferCode(request.getBufferCode());
         if (bufferCode == null) {
@@ -110,11 +115,14 @@ public class CemsSearchService {
                         request.getEffectiveMobilityToleranceMode(),
                         request.getEffectiveMobilityTolerance());
 
+                var mobilityBounds = request.getMobilityBounds().isEmpty()
+                        ? new MobilityBounds(effMob - mobilityWindow, effMob + mobilityWindow)
+                        : request.getMobilityBounds().get(i);
                 CemsFeatureQueryDTO query = CemsFeatureQueryDTO.builder()
                         .massLower(neutralMass - massWindow)
                         .massUpper(neutralMass + massWindow)
-                        .mobilityLower(effMob - mobilityWindow)
-                        .mobilityUpper(effMob + mobilityWindow)
+                        .mobilityLower(mobilityBounds.lower())
+                        .mobilityUpper(mobilityBounds.upper())
                         .bufferCode(bufferCode)
                         .temperature(temperature)
                         .polarityId(polarityId)

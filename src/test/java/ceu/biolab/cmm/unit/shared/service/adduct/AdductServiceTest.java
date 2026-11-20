@@ -16,6 +16,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AdductServiceTest {
 
     @Test
+    void isotopeFilteringIsIndependentOfInputOrder() {
+        Map<Double, Double> ordered = new LinkedHashMap<>();
+        ordered.put(100.0, 10.0);
+        ordered.put(101.0, 1.0);
+        ordered.put(104.0, 5.0);
+        Map<Double, Double> reversed = new LinkedHashMap<>();
+        reversed.put(104.0, 5.0);
+        reversed.put(101.0, 1.0);
+        reversed.put(100.0, 10.0);
+        assertEquals(AdductService.filterIsotopes(ordered), AdductService.filterIsotopes(reversed));
+        assertTrue(AdductService.filterIsotopes(reversed).containsKey(100.0));
+    }
+
+    @Test
     void requireDefinitionLoadsCanonicalAdduct() {
         AdductDefinition definition = AdductService.requireDefinition(IonizationMode.POSITIVE, "[M+H]+");
         assertEquals("[M+H]+", definition.canonical());

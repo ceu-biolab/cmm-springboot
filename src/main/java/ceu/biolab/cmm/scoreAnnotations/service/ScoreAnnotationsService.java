@@ -33,6 +33,11 @@ public class ScoreAnnotationsService {
         // utility
     }
 
+    // Compiled rules are shared; each request owns and disposes its stateful session.
+    private static final class Rules {
+        private static final KieContainer CONTAINER = KieServices.Factory.get().newKieClasspathContainer();
+    }
+
     public static void scoreAnnotations(List<AnnotatedFeature> msFeatures, Optional<ExperimentParameters> experimentParameters) {
         KieSession kieSession = null;
         try {
@@ -43,11 +48,8 @@ public class ScoreAnnotationsService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Feature list must not contain null entries.");
             }
 
-            KieServices kieServices = KieServices.Factory.get();
-            KieContainer kieContainer = kieServices.newKieClasspathContainer();
-
             try {
-                kieSession = kieContainer.newKieSession("lipidKSession");
+                kieSession = Rules.CONTAINER.newKieSession("lipidKSession");
             } catch (Exception e) {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to create scoring session", e);
             }
@@ -102,7 +104,11 @@ public class ScoreAnnotationsService {
 
             kieSession.insert(experimentParameters.orElseGet(ExperimentParameters::empty));
 
-            kieSession.fireAllRules();
+            // Preserve mediator's order: relationships adjust an existing ionization baseline.
+            for (String phase : List.of("ionization", "adduct-relation", "missing-adduct", "retention-time")) {
+                kieSession.getAgenda().getAgendaGroup(phase).setFocus();
+                kieSession.fireAllRules();
+            }
             finalizeScores(msFeatures);
         } catch (ResponseStatusException ex) {
             LOGGER.error("Scoring failed: {}", ex.getReason(), ex);

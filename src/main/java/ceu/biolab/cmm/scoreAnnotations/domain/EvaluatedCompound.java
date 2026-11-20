@@ -72,11 +72,14 @@ public class EvaluatedCompound {
     }
 
     public void addRtScore(boolean value, String featKey) {
-        scores.addRtScore(value, featKey);
+        // Alternative annotations of one feature are hypotheses, not independent RT evidence.
+        if (!featureKey.equals(featKey)) {
+            scores.addRtScore(value, featKey);
+        }
     }
 
     public void addRtScore(boolean value, double featureRtValue, double featureMzValue) {
-        scores.addRtScore(value, featureRtValue, featureMzValue);
+        addRtScore(value, CompoundScores.calculateFeatureKey(featureMzValue, featureRtValue));
     }
 }
 

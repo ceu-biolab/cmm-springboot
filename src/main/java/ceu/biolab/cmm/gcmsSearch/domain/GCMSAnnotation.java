@@ -25,6 +25,10 @@ public class GCMSAnnotation {
             return this.gcmsCosineScore;
         }
 
+        return computePreparedCosineScore(scorer.prepare(experimentalPeaks), scorer);
+    }
+
+    public double computePreparedCosineScore(SpectrumScorer.PreparedSpectrum experimental, SpectrumScorer scorer) {
         double bestScore = 0.0;
         if (gcmsCompound != null && gcmsCompound.getGCMSSpectrum() != null) {
             for (Spectrum librarySpectrum : gcmsCompound.getGCMSSpectrum()) {
@@ -32,7 +36,8 @@ public class GCMSAnnotation {
                 if (libraryPeaks.isEmpty()) {
                     continue;
                 }
-                double score = scorer.cosineScore(experimentalPeaks, libraryPeaks);
+                double score = scorer.computePrepared(ceu.biolab.cmm.shared.domain.msFeature.ScoreType.COSINE,
+                        experimental, scorer.prepare(libraryPeaks), null, null);
                 if (score > bestScore) {
                     bestScore = score;
                 }

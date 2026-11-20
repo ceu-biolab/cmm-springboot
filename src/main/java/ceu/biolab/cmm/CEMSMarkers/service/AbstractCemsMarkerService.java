@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.CEMSMarkers.service;
 
+import ceu.biolab.cmm.CEMSSearch.domain.MobilityBounds;
 import ceu.biolab.cmm.CEMSMarkers.domain.MtToleranceMode;
 import ceu.biolab.cmm.CEMSMarkers.repository.CemsMarkersRepository;
 import ceu.biolab.cmm.CEMSSearch.domain.CePolarity;
@@ -77,68 +78,34 @@ abstract class AbstractCemsMarkerService {
         return chemicalAlphabet == null ? "ALL" : chemicalAlphabet;
     }
 
-    protected double computeMobilityTolerancePercent(List<Double> migrationTimes,
-                                                     double mtTolerance,
-                                                     MtToleranceMode toleranceMode,
-                                                     DoubleUnaryOperator mobilityFunction) {
-        if (mtTolerance <= 0) {
-            return 0d;
+    protected List<MobilityBounds> computeMobilityBounds(
+            List<Double> migrationTimes, double tolerance, MtToleranceMode mode,
+            DoubleUnaryOperator mobilityFunction) {
+        List<MobilityBounds> bounds = new ArrayList<>();
+        for (double time : migrationTimes) {
+            double delta = mode == MtToleranceMode.PERCENTAGE ? time * tolerance / 100d : tolerance;
+            bounds.add(transformedBounds(Math.max(time - delta, MIN_TIME_MINUTES), time + delta, mobilityFunction));
         }
-        double maxFraction = 0d;
-        for (double baseTime : migrationTimes) {
-            double delta = switch (toleranceMode) {
-                case PERCENTAGE -> baseTime * (mtTolerance * 0.01d);
-                case ABSOLUTE -> mtTolerance;
-            };
-            if (delta <= 0) {
-                continue;
-            }
-            double baseMobility = mobilityFunction.applyAsDouble(baseTime);
-            if (baseMobility == 0d) {
-                continue;
-            }
-            double upperTime = baseTime + delta;
-            double lowerTime = Math.max(baseTime - delta, MIN_TIME_MINUTES);
-            double upperMobility = mobilityFunction.applyAsDouble(upperTime);
-            double lowerMobility = mobilityFunction.applyAsDouble(lowerTime);
-            double fracUpper = Math.abs(upperMobility - baseMobility) / Math.abs(baseMobility);
-            double fracLower = Math.abs(lowerMobility - baseMobility) / Math.abs(baseMobility);
-            maxFraction = Math.max(maxFraction, Math.max(fracUpper, fracLower));
-        }
-        return maxFraction * 100d;
+        return bounds;
     }
 
-    protected double computeMobilityTolerancePercentFromRmt(List<Double> relativeMigrationTimes,
-                                                            double rmtTolerance,
-                                                            RmtToleranceMode toleranceMode,
-                                                            double referenceMigrationTime,
-                                                            DoubleUnaryOperator mobilityFunction) {
-        if (rmtTolerance <= 0) {
-            return 0d;
+    protected List<MobilityBounds> computeMobilityBoundsFromRmt(
+            List<Double> relativeTimes, double tolerance, RmtToleranceMode mode,
+            double referenceMigrationTime, DoubleUnaryOperator mobilityFunction) {
+        List<MobilityBounds> bounds = new ArrayList<>();
+        for (double rmt : relativeTimes) {
+            double delta = mode == RmtToleranceMode.PERCENTAGE ? rmt * tolerance / 100d : tolerance;
+            bounds.add(transformedBounds(referenceMigrationTime * Math.max(rmt - delta, MIN_TIME_MINUTES),
+                    referenceMigrationTime * (rmt + delta), mobilityFunction));
         }
-        double maxFraction = 0d;
-        for (double baseRmt : relativeMigrationTimes) {
-            double delta = switch (toleranceMode) {
-                case PERCENTAGE -> baseRmt * (rmtTolerance * 0.01d);
-                case ABSOLUTE -> rmtTolerance;
-            };
-            if (delta <= 0) {
-                continue;
-            }
-            double baseTime = referenceMigrationTime * baseRmt;
-            double baseMobility = mobilityFunction.applyAsDouble(baseTime);
-            if (baseMobility == 0d) {
-                continue;
-            }
-            double upperTime = referenceMigrationTime * (baseRmt + delta);
-            double lowerTime = referenceMigrationTime * Math.max(baseRmt - delta, MIN_TIME_MINUTES);
-            double upperMobility = mobilityFunction.applyAsDouble(upperTime);
-            double lowerMobility = mobilityFunction.applyAsDouble(lowerTime);
-            double fracUpper = Math.abs(upperMobility - baseMobility) / Math.abs(baseMobility);
-            double fracLower = Math.abs(lowerMobility - baseMobility) / Math.abs(baseMobility);
-            maxFraction = Math.max(maxFraction, Math.max(fracUpper, fracLower));
-        }
-        return maxFraction * 100d;
+        return bounds;
+    }
+
+    private MobilityBounds transformedBounds(
+            double lowerTime, double upperTime, DoubleUnaryOperator mobilityFunction) {
+        double first = mobilityFunction.applyAsDouble(lowerTime);
+        double second = mobilityFunction.applyAsDouble(upperTime);
+        return new MobilityBounds(Math.min(first, second), Math.max(first, second));
     }
 
     protected CemsSearchRequestDTO buildCemsSearchRequest(List<Double> masses,
@@ -149,7 +116,7 @@ abstract class AbstractCemsMarkerService {
                                                           double mzTolerance,
                                                           MzToleranceMode toleranceMode,
                                                           Double temperature,
-                                                          double mobilityTolerancePercent,
+                                                          List<MobilityBounds> mobilityBounds,
                                                           CePolarity polarity,
                                                           IonizationMode ionMode) {
         CemsSearchRequestDTO requestDTO = new CemsSearchRequestDTO();
@@ -162,9 +129,12 @@ abstract class AbstractCemsMarkerService {
         requestDTO.setEffectiveMobilities(effectiveMobilities);
         requestDTO.setMzTolerance(mzTolerance);
         requestDTO.setMzToleranceMode(toleranceMode.name());
-        requestDTO.setEffectiveMobilityTolerance(mobilityTolerancePercent);
+        // Marker searches supply exact internal bounds; the public tolerance fields
+        // remain populated for compatibility with the common request validator.
+        requestDTO.setEffectiveMobilityTolerance(1d);
+        requestDTO.setMobilityBounds(mobilityBounds);
         requestDTO.setTemperature(temperature);
-        requestDTO.setEffectiveMobilityToleranceMode(EffMobToleranceMode.PERCENTAGE);
+        requestDTO.setEffectiveMobilityToleranceMode(EffMobToleranceMode.ABSOLUTE);
         return requestDTO;
     }
 }

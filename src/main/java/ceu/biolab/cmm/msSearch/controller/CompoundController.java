@@ -1,9 +1,12 @@
 package ceu.biolab.cmm.msSearch.controller;
+
+import ceu.biolab.cmm.msSearch.repository.CompoundRepository;
 import ceu.biolab.cmm.msSearch.dto.CompoundBatchSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.CompoundSimpleSearchRequestDTO;
 import ceu.biolab.cmm.msSearch.dto.RTSearchResponseDTO;
 import ceu.biolab.cmm.msSearch.service.CompoundService;
-import ceu.biolab.cmm.shared.domain.compound.Compound;
+import ceu.biolab.cmm.compoundDetails.dto.CompoundDetailsResponse;
+import ceu.biolab.cmm.compoundDetails.service.CompoundDetailsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
@@ -18,10 +21,12 @@ import java.util.Objects;
 @Validated
 public class CompoundController {
     private final CompoundService compoundService;
+    private final CompoundDetailsService compoundDetailsService;
     // private static final Logger logger = LoggerFactory.getLogger(CompoundController.class);
 
-    public CompoundController(CompoundService compoundService) {
+    public CompoundController(CompoundService compoundService, CompoundDetailsService compoundDetailsService) {
         this.compoundService = compoundService;
+        this.compoundDetailsService = compoundDetailsService;
     }
 
     @PostMapping("/simple-search")
@@ -37,6 +42,7 @@ public class CompoundController {
 
         RTSearchResponseDTO response = new RTSearchResponseDTO();
 
+        var context = new CompoundRepository.SearchContext();
         for (Double mz : request.getMzValues()) {
             CompoundSimpleSearchRequestDTO simpleRequest = new CompoundSimpleSearchRequestDTO(
                     mz,
@@ -50,7 +56,7 @@ public class CompoundController {
                     request.getMetaboliteType()
             );
 
-            RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest);
+            RTSearchResponseDTO result = compoundService.findCompoundsByMz(simpleRequest, context);
             response.getMSFeatures().addAll(result.getMSFeatures());
         }
 
@@ -58,8 +64,8 @@ public class CompoundController {
     }
 
     @GetMapping("/{compoundId}")
-    public Compound getCompoundById(@PathVariable @Positive int compoundId) {
-        return compoundService.getCompoundById(compoundId);
+    public CompoundDetailsResponse getCompoundById(@PathVariable @Positive int compoundId) {
+        return compoundDetailsService.compound(compoundId);
     }
 
 }

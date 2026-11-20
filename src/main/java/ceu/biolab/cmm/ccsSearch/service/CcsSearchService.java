@@ -1,5 +1,6 @@
 package ceu.biolab.cmm.ccsSearch.service;
 
+import java.util.LinkedHashMap;
 import ceu.biolab.cmm.ccsSearch.dto.CcsFeatureQueryDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsQueryResponseDTO;
 import ceu.biolab.cmm.ccsSearch.dto.CcsSearchRequestDTO;
@@ -11,7 +12,7 @@ import ceu.biolab.cmm.ccsSearch.domain.IMFeature;
 import ceu.biolab.cmm.ccsSearch.domain.BufferGas;
 import ceu.biolab.cmm.ccsSearch.domain.IMMSCompound;
 import ceu.biolab.cmm.ccsSearch.domain.IMLCMSFeature;
-import ceu.biolab.cmm.msSearch.domain.compound.LipidMapsClassification;
+import ceu.biolab.cmm.shared.domain.compound.LipidMapsClassification;
 import ceu.biolab.cmm.shared.domain.msFeature.AnnotationsByAdduct;
 import ceu.biolab.cmm.shared.domain.MzToleranceMode;
 import ceu.biolab.cmm.shared.domain.compound.Compound;
@@ -142,18 +143,19 @@ public class CcsSearchService {
                     // QueryResults may have duplicate results where the same compound is found with different pathways.
                     // We need to merge these results.
                     List<Annotation> annotations = new ArrayList<>();
+                    Map<Integer, IMMSCompound> compoundsById = new LinkedHashMap<>();
                     for (CcsQueryResponseDTO queryResult : queryResults) {
                         Pathway pathway = new Pathway(queryResult.getPathwayId(), queryResult.getPathwayName(), queryResult.getPathwayMap());
 
-                        boolean found = false;
-                        for (Annotation annotation : annotations) {
-                            Compound compound = annotation.getCompound();
-                            if (compound instanceof IMMSCompound imCompound) {
-                                if (imCompound.getCompoundId() == queryResult.getCompoundId()) {
-                                    imCompound.addPathway(pathway);
-                                    found = true;
-                                    break;
-                                }
+                        IMMSCompound existing = compoundsById.get(queryResult.getCompoundId());
+                        boolean found = existing != null;
+                        if (existing != null) {
+                            existing.addPathway(pathway);
+                            double candidateDistance = Math.abs(queryResult.getDbCcs() - ccs);
+                            double currentDistance = Math.abs(existing.getDbCcs() - ccs);
+                            if (candidateDistance < currentDistance
+                                    || (candidateDistance == currentDistance && queryResult.getDbCcs() < existing.getDbCcs())) {
+                                existing.setDbCcs(queryResult.getDbCcs());
                             }
                         }
                         if (!found) {
@@ -232,6 +234,7 @@ public class CcsSearchService {
                             }
 
                             IMMSCompound imCompound = builder.build();
+                            compoundsById.put(imCompound.getCompoundId(), imCompound);
                             imCompound.addPathway(pathway);
                             Annotation annotation = new Annotation(imCompound);
                             Double massErrorPpm = MassErrorTools.computePpm(imCompound.getMass(), neutralMass);

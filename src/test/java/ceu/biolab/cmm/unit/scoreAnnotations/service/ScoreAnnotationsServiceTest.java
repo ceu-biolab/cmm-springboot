@@ -30,6 +30,25 @@ public class ScoreAnnotationsServiceTest {
     }
     
     @Test
+    void concurrentScoringSessionsDoNotShareFacts() throws Exception {
+        try (var executor = java.util.concurrent.Executors.newFixedThreadPool(4)) {
+            var tasks = new ArrayList<java.util.concurrent.Callable<Void>>();
+            for (int i = 0; i < 12; i++) {
+                tasks.add(() -> {
+                    AnnotatedFeature feature = createEmptyAnnotatedFeature(800.5, 5.0);
+                    addRTLipidToAnnotations(feature, "PC", 36, 2);
+                    ScoreAnnotationsService.scoreAnnotations(List.of(feature), Optional.empty());
+                    var scores = (LipidScores) extractAnnotations(List.of(feature)).getFirst().getScores().getFirst();
+                    assertTrue(scores.getRtScoreMap().isEmpty());
+                    assertEquals(1, extractAnnotations(List.of(feature)).getFirst().getScores().size());
+                    return null;
+                });
+            }
+            for (var result : executor.invokeAll(tasks)) result.get();
+        }
+    }
+
+    @Test
     void testScoreEmptyInput() {
         // Test handling of empty input list
         List<AnnotatedFeature> features = new ArrayList<>();
@@ -129,22 +148,20 @@ public class ScoreAnnotationsServiceTest {
         AnnotatedFeature feature1 = createEmptyAnnotatedFeature(800.5, 7.0);
         addRTLipidToAnnotations(feature1, "PC", 36, 1);
         Map<String, List<Boolean>> expectedScoresF1_36_1 = Map.of(
-            "800.57.0", List.of(false),
-            "804.55.0", List.of(true),
-            "830.59.0", List.of(true, false)
+            "804.5_5.0", List.of(true),
+            "830.5_9.0", List.of(true, false)
         );
         addRTLipidToAnnotations(feature1, "PC", 36, 2);
         Map<String, List<Boolean>> expectedScoresF1_36_2 = Map.of(
-            "800.57.0", List.of(false),
-            "804.55.0", List.of(true),
-            "830.59.0", List.of(true, false)
+            "804.5_5.0", List.of(true),
+            "830.5_9.0", List.of(true, false)
         );
         
         AnnotatedFeature feature2 = createEmptyAnnotatedFeature(804.5, 5.0);
         addRTLipidToAnnotations(feature2, "PC", 36, 3);
         Map<String, List<Boolean>> expectedScoresF2_36_3 = Map.of(
-            "800.57.0", List.of(true, true),
-            "830.59.0", List.of(true, false)
+            "800.5_7.0", List.of(true, true),
+            "830.5_9.0", List.of(true, false)
         );
         
         AnnotatedFeature feature3 = createEmptyAnnotatedFeature(830.5, 9.0);
@@ -152,15 +169,13 @@ public class ScoreAnnotationsServiceTest {
         Map<String, List<Boolean>> expectedScoresF3_36_5 = Map.of();
         addRTLipidToAnnotations(feature3, "PC", 36, 0);
         Map<String, List<Boolean>> expectedScoresF3_36_0 = Map.of(
-            "800.57.0", List.of(true, true),
-            "804.55.0", List.of(true),
-            "830.59.0", List.of(false)
+            "800.5_7.0", List.of(true, true),
+            "804.5_5.0", List.of(true)
         );
         addRTLipidToAnnotations(feature3, "PC", 36, 8);
         Map<String, List<Boolean>> expectedScoresF3_36_8 = Map.of(
-            "800.57.0", List.of(false, false),
-            "804.55.0", List.of(false),
-            "830.59.0", List.of(false)
+            "800.5_7.0", List.of(false, false),
+            "804.5_5.0", List.of(false)
         );
         
         List<AnnotatedFeature> features = List.of(feature1, feature2, feature3);
@@ -173,9 +188,9 @@ public class ScoreAnnotationsServiceTest {
         LipidScores pc36_1_scores = (LipidScores) pc36_1.get().getScores().get(0);
         verifyScores(pc36_1_scores, expectedScoresF1_36_1);
         assertTrue(pc36_1_scores.getRtScore().isPresent(), "PC 36:1 should have a scalar RT score");
-        assertEquals(1.0 / 3.0, pc36_1_scores.getRtScore().get(), 1e-9, "Mixed RT evidence should use mediator integer division before averaging");
+        assertEquals(0.5, pc36_1_scores.getRtScore().get(), 1e-9, "Mixed RT evidence should use mediator integer division before averaging");
         assertTrue(pc36_1_scores.getFinalScore().isPresent(), "PC 36:1 should have a final score");
-        assertEquals(1.0 / 3.0, pc36_1_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
+        assertEquals(0.5, pc36_1_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
         
         // Verify PC 36:2 scores
         Optional<Annotation> pc36_2 = findLipidAnnotation(features, "PC", 36, 2, 800.5, 7.0);
@@ -183,9 +198,9 @@ public class ScoreAnnotationsServiceTest {
         LipidScores pc36_2_scores = (LipidScores) pc36_2.get().getScores().get(0);
         verifyScores(pc36_2_scores, expectedScoresF1_36_2);
         assertTrue(pc36_2_scores.getRtScore().isPresent(), "PC 36:2 should have a scalar RT score");
-        assertEquals(1.0 / 3.0, pc36_2_scores.getRtScore().get(), 1e-9, "Mixed RT evidence should use mediator integer division before averaging");
+        assertEquals(0.5, pc36_2_scores.getRtScore().get(), 1e-9, "Mixed RT evidence should use mediator integer division before averaging");
         assertTrue(pc36_2_scores.getFinalScore().isPresent(), "PC 36:2 should have a final score");
-        assertEquals(1.0 / 3.0, pc36_2_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
+        assertEquals(0.5, pc36_2_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
         
         // Verify PC 36:3 scores
         Optional<Annotation> pc36_3 = findLipidAnnotation(features, "PC", 36, 3, 804.5, 5.0);
@@ -211,9 +226,9 @@ public class ScoreAnnotationsServiceTest {
         LipidScores pc36_0_scores = (LipidScores) pc36_0.get().getScores().get(0);
         verifyScores(pc36_0_scores, expectedScoresF3_36_0);
         assertTrue(pc36_0_scores.getRtScore().isPresent(), "PC 36:0 should have a scalar RT score");
-        assertEquals(2.0 / 3.0, pc36_0_scores.getRtScore().get(), 1e-9, "Two fully passing compared features out of three should score two thirds");
+        assertEquals(1.0, pc36_0_scores.getRtScore().get(), 1e-9, "Both other features provide fully passing comparisons");
         assertTrue(pc36_0_scores.getFinalScore().isPresent(), "PC 36:0 should have a final score");
-        assertEquals(2.0 / 3.0, pc36_0_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
+        assertEquals(1.0, pc36_0_scores.getFinalScore().get(), 1e-9, "Pure RT evidence should carry through to final score");
         
         // Verify PC 36:8 scores
         Optional<Annotation> pc36_8 = findLipidAnnotation(features, "PC", 36, 8, 830.5, 9.0);
@@ -238,7 +253,7 @@ public class ScoreAnnotationsServiceTest {
 
         ScoreAnnotationsService.scoreAnnotations(features, Optional.empty());
         
-        // Verify both lipids received expected scores (ionization=1.0, adductRelation=1.0)
+        // Supporting adducts provide evidence but cannot invent an unknown ionization baseline.
         assertEquals(2, extractAnnotations(features).size(), "Should have two annotations");
         
         // Get annotations for both features
@@ -250,20 +265,19 @@ public class ScoreAnnotationsServiceTest {
             // Verify expected scores using our helper method
             verifyScores(
                 lipidScores,
-                1.0,  // expectedIonizationScore 
+                null, // no baseline ionization rule applies
                 1.0,  // expectedAdductRelationScore
                 null, // expectedRtScore (not testing RT score here)
                 1.0   // expectedFinalScore
             );
             
             // Additional direct assertions
-            assertTrue(lipidScores.getIonizationScore().isPresent(), "Should have ionization score");
-            assertEquals(1.0, lipidScores.getIonizationScore().get(), "Ionization score should be 1.0");
+            assertTrue(lipidScores.getIonizationScore().isEmpty(), "An unknown ionization score must remain unknown");
             
             assertTrue(lipidScores.getAdductRelationScore().isPresent(), "Should have adduct relation score");
             assertEquals(1.0, lipidScores.getAdductRelationScore().get(), "Adduct relation score should be 1.0");
             assertTrue(lipidScores.getFinalScore().isPresent(), "Should have final score");
-            assertEquals(1.0, lipidScores.getFinalScore().get(), 1e-9, "Two perfect partial scores should yield a final score of 1.0");
+            assertEquals(1.0, lipidScores.getFinalScore().get(), 1e-9, "Perfect adduct evidence alone should yield a final score of 1.0");
             
             // RT score map should be empty as this test focuses on adduct relations
             assertTrue(lipidScores.getRtScoreMap().isEmpty(), "RT score map should be empty");
@@ -291,8 +305,7 @@ public class ScoreAnnotationsServiceTest {
             assertTrue(annotation.getScores().get(0) instanceof CompoundScores, "Scores should be CompoundScores for non-lipids");
 
             CompoundScores compoundScores = (CompoundScores) annotation.getScores().get(0);
-            assertTrue(compoundScores.getIonizationScore().isPresent(), "Ionization score should be set");
-            assertEquals(1.0, compoundScores.getIonizationScore().get(), 1e-6);
+            assertTrue(compoundScores.getIonizationScore().isEmpty(), "Adduct relations must not invent an ionization baseline");
 
             assertTrue(compoundScores.getAdductRelationScore().isPresent(), "Adduct relation score should be set");
             assertEquals(1.0, compoundScores.getAdductRelationScore().get(), 1e-6);
@@ -323,8 +336,9 @@ public class ScoreAnnotationsServiceTest {
                     List<Boolean> expectedRtScoresList = entry.getValue();
                     
                     // Parse the key to get RT and MZ
-                    double mz = Double.parseDouble(key.substring(0, 5));
-                    double rt = Double.parseDouble(key.substring(5));
+                    String[] coordinates = key.split("_");
+                    double mz = Double.parseDouble(coordinates[0]);
+                    double rt = Double.parseDouble(coordinates[1]);
                     
                     // Get scores for the specific feature comparison
                     Optional<List<Boolean>> actualScores = lipidScores.getRtScoresComparedTo(rt, mz);

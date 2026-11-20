@@ -38,6 +38,29 @@ import static org.mockito.Mockito.when;
 
 public class MSMSSearchRepositoryTest {
 
+    @Test
+    @SuppressWarnings("unchecked")
+    void libraryNormalizationPreservesWeakPeakRatios() throws Exception {
+        var jdbc = mock(NamedParameterJdbcTemplate.class);
+        var loader = mock(ResourceLoader.class);
+        when(loader.getResource(anyString())).thenReturn(new ByteArrayResource("SELECT mz, intensity FROM peaks".getBytes(StandardCharsets.UTF_8)));
+        when(jdbc.query(anyString(), any(RowMapper.class))).thenAnswer(call -> {
+            RowMapper<?> mapper = call.getArgument(1);
+            double[] intensities = {100, 1, 0.5};
+            for (int i = 0; i < intensities.length; i++) {
+                var rs = mock(java.sql.ResultSet.class);
+                when(rs.getDouble("mz")).thenReturn(100.0 + i);
+                when(rs.getDouble("intensity")).thenReturn(intensities[i]);
+                mapper.mapRow(rs, i);
+            }
+            return List.of();
+        });
+        var spectrum = new MSMSSearchRepository(jdbc, loader).getPeaksForMsms(1, 500.0);
+        assertEquals(1.0, spectrum.getPeaks().get(0).getIntensity());
+        assertEquals(0.01, spectrum.getPeaks().get(1).getIntensity());
+        assertEquals(0.005, spectrum.getPeaks().get(2).getIntensity());
+    }
+
     private Compound dummyCompound(int id) {
         return new Compound(
                 id, "cas", "name", "H2O", 18.0,

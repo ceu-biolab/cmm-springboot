@@ -15,6 +15,23 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SpectrumScorerTest {
 
     @Test
+    void preparedSpectrumIsIsolatedFromSubsequentInputMutation() {
+        var scorer = new SpectrumScorer(MzToleranceMode.MDA, 10d);
+        var peaks = new java.util.ArrayList<>(java.util.List.of(new MSPeak(100d, 8d), new MSPeak(50d, 4d)));
+        var prepared = scorer.prepare(peaks);
+        peaks.getFirst().setIntensity(0d);
+        peaks.clear();
+        var same = scorer.prepare(java.util.List.of(new MSPeak(50d, 4d), new MSPeak(100d, 8d)));
+        assertEquals(1d, scorer.computePrepared(ScoreType.COSINE, prepared, same, null, null), 1e-12);
+        var shifted = scorer.prepare(java.util.List.of(new MSPeak(60d, 4d), new MSPeak(110d, 8d)));
+        assertEquals(1d, scorer.computePrepared(ScoreType.MODIFIED_COSINE, prepared, shifted, 200d, 210d), 1e-12);
+        assertEquals(0d, scorer.computePrepared(ScoreType.COSINE, prepared, shifted, null, null));
+        var otherTolerance = new SpectrumScorer(MzToleranceMode.PPM, 10d);
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
+                () -> otherTolerance.computePrepared(ScoreType.COSINE, prepared, same, null, null));
+    }
+
+    @Test
     void normalizeIntensities_scalesToUnitMax() {
         Spectrum s = new Spectrum();
         s.getPeaks().addAll(Arrays.asList(

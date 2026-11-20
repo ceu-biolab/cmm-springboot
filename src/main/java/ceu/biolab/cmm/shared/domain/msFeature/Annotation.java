@@ -1,5 +1,7 @@
 package ceu.biolab.cmm.shared.domain.msFeature;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +10,11 @@ import lombok.Data;
 
 @Data
 public class Annotation {
+    @NotNull
+    @Valid
     private Compound compound;
-    private List<IScore> scores;
+    @NotNull
+    private List<@NotNull IScore> scores;
     private Double massErrorPpm;
 
     // no-arg constructor for Jackson

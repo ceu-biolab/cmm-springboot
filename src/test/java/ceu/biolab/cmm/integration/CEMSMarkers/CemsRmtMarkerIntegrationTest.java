@@ -42,7 +42,7 @@ class CemsRmtMarkerIntegrationTest {
                 .andReturn();
 
         JsonNode actual = objectMapper.readTree(mvcResult.getResponse().getContentAsString());
-        assertFixtureShape(actual, 5, 5);
+        assertFixtureShape(actual, 5, 4);
         assertEquals(82106, firstHitCompoundId(actual));
         JSONAssert.assertEquals(expectedJson, actual.toString(), JSONCompareMode.STRICT);
     }

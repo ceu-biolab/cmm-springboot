@@ -25,6 +25,11 @@ public class CompoundService {
      * @return a RT Search Response DTO which contains a list of features
      */
     public RTSearchResponseDTO findCompoundsByMz(CompoundSimpleSearchRequestDTO request) {
+        return findCompoundsByMz(request, new CompoundRepository.SearchContext());
+    }
+
+    public RTSearchResponseDTO findCompoundsByMz(CompoundSimpleSearchRequestDTO request,
+                                                CompoundRepository.SearchContext context) {
         RTSearchResponseDTO response = new RTSearchResponseDTO();
 
         try {
@@ -37,7 +42,7 @@ public class CompoundService {
                     request.getFormulaType(),
                     request.getAdductsString(),
                     request.getDatabases(),
-                    request.getMetaboliteType());
+                    request.getMetaboliteType(), context);
 
             for (AnnotatedFeature feature : results) {
                 response.addIMSFeature(feature);

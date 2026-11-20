@@ -51,7 +51,7 @@ public class CemsRmt1MarkerService extends AbstractCemsMarkerService {
                     markerEffectiveMobility, lengthOverField, markerTime, referenceMigrationTime * rmt));
         }
 
-        double mobilityTolerancePercent = computeMobilityTolerancePercentFromRmt(
+        var mobilityBounds = computeMobilityBoundsFromRmt(
                 request.getRelativeMigrationTimes(),
                 request.getRmtTolerance(),
                 request.getRmtToleranceMode(),
@@ -68,7 +68,7 @@ public class CemsRmt1MarkerService extends AbstractCemsMarkerService {
                 request.getTolerance(),
                 request.getToleranceMode(),
                 request.getTemperature(),
-                mobilityTolerancePercent,
+                mobilityBounds,
                 request.getPolarity(),
                 request.getIonMode()
         ));

@@ -230,4 +230,37 @@ public class MSMSSearchServiceTest {
         req.setRtValue(5.0);
         return req;
     }
+
+    @Test
+    void batchFeaturesShareRetentionTimeEvidenceAndKeepRequestOrder() throws Exception {
+        when(repository.findMatchingCompoundsAndSpectra(any())).thenAnswer(invocation -> {
+            var input = (MSMSSearchRequestDTO) invocation.getArgument(0);
+            boolean first = input.getPrecursorIonMZ() == 800.0;
+            var hit = new MSMSAnnotation();
+            hit.setAdduct("[M+H]+");
+            hit.setCompound(ceu.biolab.cmm.shared.domain.compound.Compound.builder()
+                    .compoundId(first ? 1 : 2)
+                    .compoundType(ceu.biolab.cmm.shared.domain.compound.CompoundType.LIPID)
+                    .lipidType("PC").numChains(2).numCarbons(36).doubleBonds(first ? 2 : 4).build());
+            return new MSMSSearchResponseDTO(new ArrayList<>(List.of(hit)));
+        });
+        var request = validLcmsmsRequest();
+        request.setPrecursorIonMZ(null);
+        request.setRtValue(null);
+        request.setFragmentsMZsIntensities(null);
+        request.setPrecursorIonMZValues(List.of(800.0, 802.0));
+        request.setRtValues(List.of(6.0, 5.0));
+        request.setFragmentsMZsIntensitiesList(List.of(new Spectrum(800.0, List.of(new MSPeak(100, 1))),
+                new Spectrum(802.0, List.of(new MSPeak(100, 1)))));
+
+        var response = service.searchWithLcmsScoring(request);
+
+        assertEquals(800.0, response.getMsmsFeatures().getFirst().getFeature().getMzValue());
+        assertEquals(802.0, response.getMsmsFeatures().getLast().getFeature().getMzValue());
+        for (var feature : response.getMsmsFeatures()) {
+            var scores = (ceu.biolab.cmm.scoreAnnotations.domain.CompoundScores)
+                    feature.getMsmsList().getFirst().getScores().getFirst();
+            assertEquals(java.util.Optional.of(1.0), scores.getRtScore());
+        }
+    }
 }

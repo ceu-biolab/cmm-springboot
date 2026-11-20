@@ -183,7 +183,7 @@ public class CcsSearchIntegrationTest {
         assertTrue(features.isArray());
         assertFalse(features.isEmpty());
 
-        boolean foundScoreWithRetentionAdductAndIonization = false;
+        boolean foundScoreWithRetentionAndAdduct = false;
         boolean foundFinalScore = false;
 
         for (JsonNode feature : features) {
@@ -206,35 +206,36 @@ public class CcsSearchIntegrationTest {
                         assertTrue(score.path("scores").isMissingNode(), "Nested scalar score map should not be exposed in JSON");
                         JsonNode rtScore = score.path("rtScore");
                         JsonNode ionizationScore = score.path("ionizationScore");
+                        assertTrue(ionizationScore.isNull(),
+                                "This fixture's classifications have no ionization baseline; adduct support must not create one");
                         JsonNode adductRelationScore = score.path("adductRelationScore");
                         JsonNode finalScore = score.path("finalScore");
                         if (finalScore.isNumber()) {
                             foundFinalScore = true;
                         }
                         if (rtScore.isNumber()
-                                && !ionizationScore.isNull()
                                 && !adductRelationScore.isNull()
                                 && finalScore.isNumber()) {
-                            foundScoreWithRetentionAdductAndIonization = true;
+                            foundScoreWithRetentionAndAdduct = true;
                             break;
                         }
                     }
-                    if (foundScoreWithRetentionAdductAndIonization) {
+                    if (foundScoreWithRetentionAndAdduct) {
                         break;
                     }
                 }
-                if (foundScoreWithRetentionAdductAndIonization) {
+                if (foundScoreWithRetentionAndAdduct) {
                     break;
                 }
             }
-            if (foundScoreWithRetentionAdductAndIonization) {
+            if (foundScoreWithRetentionAndAdduct) {
                 break;
             }
         }
 
         assertTrue(foundFinalScore, "Expected at least one annotation to carry a final score");
-        assertTrue(foundScoreWithRetentionAdductAndIonization,
-                "Expected at least one annotation to carry RT, adduct-relation, ionization, and final scoring data");
+        assertTrue(foundScoreWithRetentionAndAdduct,
+                "Expected at least one annotation to carry RT, adduct-relation, and final scoring data");
     }
 
     @Test

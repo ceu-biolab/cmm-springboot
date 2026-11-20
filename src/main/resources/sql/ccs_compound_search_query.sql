@@ -56,17 +56,14 @@ LEFT JOIN compounds_pathways as cp
   ON cv.compound_id = cp.compound_id 
 LEFT JOIN pathways as p
   ON p.pathway_id = cp.pathway_id
-LEFT JOIN (
-    SELECT
-      clc.compound_id,
-      max(lm.category) AS category,
-      max(lm.main_class) AS main_class,
-      max(lm.subclass) AS sub_class,
-      max(lm.class_level4) AS class_level4
+LEFT JOIN LATERAL (
+    SELECT lm.category, lm.main_class, lm.subclass AS sub_class, lm.class_level4
     FROM compounds_lm_classification clc
     JOIN lm_classification lm ON lm.lm_classification_id = clc.lm_classification_id
-    GROUP BY clc.compound_id
-) lmc ON lmc.compound_id = cv.compound_id
+    WHERE clc.compound_id = cv.compound_id
+    ORDER BY clc.lm_classification_id
+    LIMIT 1
+) lmc ON TRUE
 WHERE
   cv.mass BETWEEN :massLower AND :massUpper
   AND cc.ccs_value BETWEEN :ccsLower AND :ccsUpper

@@ -47,6 +47,7 @@ public class GCMSSearchService {
         List<MSPeak> experimentalPeaks = toMsPeaks(gcmsSpectrumExperimental);
         SpectrumScorer spectrumScorer = new SpectrumScorer(MzToleranceMode.MDA, GCMS_MZ_TOLERANCE_MDA);
 
+        var preparedExperimental = spectrumScorer.prepare(experimentalPeaks);
         ColumnType columnType = request.getColumnType();
         DerivatizationMethod derivatizationMethod = request.getDerivatizationMethod();
         double RI = request.getRetentionIndex();
@@ -115,7 +116,7 @@ public class GCMSSearchService {
                         .experimentalRI(RI).deltaRI(deltaRI)
                         .build();
 
-                double score = gcmsAnnotation.computeCosineScore(experimentalPeaks, spectrumScorer);
+                double score = gcmsAnnotation.computePreparedCosineScore(preparedExperimental, spectrumScorer);
                 if (score >= gcmsScoreThreshold) {
                     gcmsAnnotationList.add(gcmsAnnotation);
                 }
